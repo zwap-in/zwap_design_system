@@ -6,3 +6,9 @@ The Zwap design system kit
 
 This repository is a simple package to get the base design asset system kit for any flutter projects with the graphic like zwap.in
 
+## Index
+
+- Layouts
+    - VerticalScroll: Use this component to rendering a vertical scroll component
+    - HorizontalScroll: Use this component to rendering an horizontal scroll component
+ 

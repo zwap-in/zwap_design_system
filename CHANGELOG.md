@@ -5,3 +5,8 @@
 ## 0.0.2
 
 * Added default text styles
+
+
+## 0.0.3
+
+* Added all the main components
