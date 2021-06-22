@@ -18,3 +18,7 @@
 ## 0.0.5
 
 * Fixed some package problems
+
+## 0.0.6
+
+* Added calendar picker
