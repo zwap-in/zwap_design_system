@@ -14,3 +14,7 @@
 ## 0.0.4
 
 * Fixed pubspec.yaml
+
+## 0.0.5
+
+* Fixed some package problems
