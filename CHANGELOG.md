@@ -10,3 +10,7 @@
 ## 0.0.3
 
 * Added all the main components
+
+## 0.0.4
+
+* Fixed pubspec.yaml

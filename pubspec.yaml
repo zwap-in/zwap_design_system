@@ -1,6 +1,6 @@
 name: zwap_design_system
 description: This is a package to build a standard design system kit for any zwap projects
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/zwap-in/zwap_design_system
 
 environment:
@@ -19,7 +19,7 @@ dependencies:
 
   # The following add the the package to manage the font awesome icons in any flutter projects
   # Use to add font awesome icons
-  font_awesome_flutter: 9.1.0
+  font_awesome_flutter: ^9.1.0
 
   flutter_rating_bar: ^4.0.0
 
