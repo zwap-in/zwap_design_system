@@ -17,7 +17,7 @@ class LocalizationClass {
   /// Translation mapping
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
-      'signupTitle': '',
+      'signupTitle': 'ssssss',
       'signupSubtitle': '',
       'signupGoogle': '',
       'useEmail': '',

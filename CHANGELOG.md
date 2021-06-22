@@ -22,3 +22,7 @@
 ## 0.0.6
 
 * Added calendar picker
+
+## 0.0.7
+
+* Added infinite scroll component
