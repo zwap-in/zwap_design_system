@@ -98,7 +98,10 @@ class TitleItem extends StatelessWidget{
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: IconText(
                 icon: Icons.timer,
-                text: "Ultimo meeting - ${this.lastMeeting.day} ${this.lastMeeting.month} ${this.lastMeeting.year}",
+                text: BaseText(
+                  texts: ["Ultimo meeting - ${this.lastMeeting.day} ${this.lastMeeting.month} ${this.lastMeeting.year}"],
+                  baseTextsType: [BaseTextType.normal],
+                ),
               ),
             ),
           flex: 0,

@@ -4,50 +4,58 @@ import 'package:flutter/cupertino.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// The suggested users column card
+class SuggestedRow extends StatelessWidget{
 
-/// Custom card to retrieve info about any suggested profile
-class SuggestedCard extends StatelessWidget{
+  /// The suggested users
+  final List<User> users;
 
-  /// The profile data about any suggested user
-  final User profileData;
+  /// custom callBack function to view the profile
+  final Function() viewProfile;
 
-  SuggestedCard({Key? key,
-    required this.profileData
-  }): super(key: key);
+  SuggestedRow({Key? key,
+    required this.users,
+    required this.viewProfile
+  });
+
+  /// It retrieves the suggested users elements
+  List<Widget> _getChildrenColumn(){
+    List<Widget> finals = [];
+    this.users.forEach((User element) {
+      finals.add(
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: SuggestedCard(profileData: element, viewProfile: (){},),
+            ),
+            flex: 0,
+          )
+      );
+    });
+    return finals;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+
+    return Column(
       children: [
-        Flexible(
-            child: Padding(
-              padding: EdgeInsets.only(right: 10),
-              child: AvatarCircle(imagePath: this.profileData.customData["profilePic"]),
-            ),
-          flex: 0,
-        ),
-        Flexible(
-          child: Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BaseText(
-                  texts: ["${this.profileData.firstName} ${this.profileData.lastName}"],
-                  baseTextsType: [BaseTextType.title],
-                ),
-                BaseText(
-                  texts: ["${this.profileData.customData['role']} @${this.profileData.customData["company"]}"],
-                  baseTextsType: [BaseTextType.normal],
-                  textsColor: [DesignColors.greyPrimary],
-                )
-              ],
-            ),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: BaseText(
+            texts: [LocalizationClass.of(context).dynamicValue("suggestedUsersTitle")],
+            baseTextsType: [BaseTextType.title],
           ),
-          flex: 0,
         ),
+        HorizontalScroll(
+          child: Row(
+            children: this._getChildrenColumn(),
+          ),
+        )
       ],
     );
   }
+
+
 
 }

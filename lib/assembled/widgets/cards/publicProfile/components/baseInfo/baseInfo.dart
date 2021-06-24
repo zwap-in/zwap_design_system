@@ -15,20 +15,42 @@ class BaseInfo extends StatelessWidget{
   /// A boolean flag to check if the user to show is the current logged user
   final bool isCurrentProfile;
 
+  /// The callBack function to edit custom data
+  final Function()? editCustomData;
+
+  /// The callBack function to show the inviter
+  final Function()? showInviter;
+
   BaseInfo({Key? key,
     required this.customData,
     this.isCurrentProfile = true,
-  }): super(key: key);
-
-  /// Go to edit profile data
-  void _callBackFunction(){
-    /// TODO check if is current profile
+    this.editCustomData,
+    this.showInviter
+  }): super(key: key){
+    if(this.isCurrentProfile){
+      assert(this.editCustomData != null, "Edit custom data callBack function could not be null on currentProfile flag");
+    }
+    else{
+      assert(this.editCustomData == null, "Edit custom data callBack function must be null on currentProfile flag");
+    }
+    if(this.customData.containsKey("invited_by")){
+      assert(this.showInviter != null, "Show inviter function callBack must be not null on invited by not null");
+    }
+    else{
+      assert(this.showInviter == null, "Show inviter function callBack must be null on invited by null");
+    }
   }
 
   /// It retrieves the custom data
   String _getCustomData(String key, String keyPlaceholder){
     return this.customData[key] ?? keyPlaceholder;
   }
+
+  /// It checks if its possible to click on that text
+  bool _canClickItem(String dynamicKey, dynamic dynamicData, BuildContext context){
+    return this.isCurrentProfile && dynamicData == LocalizationClass.of(context).dynamicValue(dynamicKey);
+  }
+
 
   Widget _getCityCompanyResponsive(BuildContext context){
     String cityData = this._getCustomData("city", LocalizationClass.of(context).dynamicValue("cityPlaceholder"));
@@ -39,21 +61,31 @@ class BaseInfo extends StatelessWidget{
         Flexible(
           child: Padding(
             padding: EdgeInsets.only(right: 5),
-            child:  IconText(text: cityData, icon: Icons.location_on_sharp, canClick: cityData == LocalizationClass.of(context).dynamicValue("cityPlaceholder"), ),
+            child:  IconText(text: BaseText(
+              texts: [cityData],
+              baseTextsType: [BaseTextType.normal],
+            ), icon: Icons.location_on_sharp,
+                canClick: _canClickItem("cityPlaceholder", cityData, context) , callBackFunction: _canClickItem("cityPlaceholder", cityData, context) ? () => this.editCustomData!() : null),
           ),
           flex: 0,
         ),
         Flexible(
           child: Padding(
             padding: EdgeInsets.only(left: 5, right: 1),
-            child: IconText(text: roleData, icon: Icons.group_add, canClick: roleData == LocalizationClass.of(context).dynamicValue("rolePlaceholder"), ),
+            child: IconText(text: BaseText(
+              texts: [roleData],
+              baseTextsType: [BaseTextType.normal],
+            ), icon: Icons.business, canClick: _canClickItem("rolePlaceholder", roleData, context) , callBackFunction: _canClickItem("rolePlaceholder", roleData, context) ? () => this.editCustomData!() : null ),
           ),
           flex: 0,
         ),
         Flexible(
           child: Padding(
             padding: EdgeInsets.only(left: 5, right: 1),
-            child: IconText(text: companyData, icon: Icons.group_add, canClick: companyData == LocalizationClass.of(context).dynamicValue("companyPlaceholder"), ),
+            child: IconText(text: BaseText(
+              texts: [companyData],
+              baseTextsType: [BaseTextType.normal],
+            ), icon: Icons.alternate_email, canClick: _canClickItem("companyPlaceholder", companyData, context) , callBackFunction: _canClickItem("companyPlaceholder", companyData, context) ? () => this.editCustomData!() : null ),
           ),
           flex: 0,
         ),
@@ -67,25 +99,31 @@ class BaseInfo extends StatelessWidget{
         Flexible(
           child: Padding(
             padding: EdgeInsets.only(right: 5),
-            child: BaseText(
-              texts: [this._getCustomData("nMeetings", "0"), " meetings"],
+            child: IconText(text: BaseText(
+              texts: ["0", " Meeting"],
               baseTextsType: [BaseTextType.normal, BaseTextType.normal],
               textsColor: [DesignColors.bluePrimary, DesignColors.blackPrimary],
-            ),
+            ), icon: Icons.video_call, iconColor: DesignColors.bluePrimary,),
           ),
           flex: 0,
         ),
         Flexible(
           child: Padding(
             padding: EdgeInsets.only(left: 5, right: 1),
-            child: IconText(text: "", icon: FontAwesomeIcons.linkedinIn),
+            child: IconText(text: BaseText(
+              texts: [""],
+              baseTextsType: [BaseTextType.normal, ],
+            ), icon: FontAwesomeIcons.linkedinIn, iconColor: DesignColors.linkedinColor,),
           ),
           flex: 0,
         ),
         Flexible(
           child: Padding(
             padding: EdgeInsets.only(left: 5),
-            child: IconText(text: "", icon: FontAwesomeIcons.twitter),
+            child: IconText(text: BaseText(
+              texts: [""],
+              baseTextsType: [BaseTextType.normal, ],
+            ), icon: FontAwesomeIcons.twitter, iconColor: DesignColors.twitterColor,),
           ),
           flex: 0,
         ),
@@ -107,7 +145,13 @@ class BaseInfo extends StatelessWidget{
           child: Row(
             children: [
               Flexible(
-                child: IconText(text: "${LocalizationClass.of(context).dynamicValue("invitedByPlaceholder")} ${this.customData['invited_by']}", icon: Icons.insert_invitation,),
+                child: IconText(text: BaseText(
+                  texts: ["${LocalizationClass.of(context).dynamicValue("invitedByPlaceholder")}", " ${this.customData['invited_by']}"],
+                  baseTextsType: [BaseTextType.normal, BaseTextType.normalBold],
+                  textsColor: [DesignColors.blackPrimary, DesignColors.bluePrimary],
+                  hasClick: [false, true],
+                  callBacksClick: [null, () => this.showInviter!()],
+                ), icon: FontAwesomeIcons.globe,),
                 flex: 0,
               ),
             ],

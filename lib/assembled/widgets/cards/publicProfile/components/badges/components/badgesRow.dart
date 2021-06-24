@@ -15,6 +15,7 @@ class BadgesRow extends StatelessWidget{
     required this.badgesMappingInfo
   }): super(key: key);
 
+  /// It retrieves the badges components
   Widget _getBadgeChild(String imagePath, bool isInternal){
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 5),

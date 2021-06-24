@@ -53,7 +53,10 @@ class NetworkItemCard extends StatelessWidget{
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: IconText(
                     iconImage: "assets/images/assets/linkedin.png",
-                    text: "Linkedin",
+                    text: BaseText(
+                      texts: ["Linkedin"],
+                      baseTextsType: [BaseTextType.normal],
+                    ),
                   ),
                 ),
                 flex: 0,
@@ -63,7 +66,10 @@ class NetworkItemCard extends StatelessWidget{
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: IconText(
                     iconImage: "assets/images/assets/gmail.png",
-                    text: "Mail Threads",
+                    text: BaseText(
+                      texts: ["Email thread"],
+                      baseTextsType: [BaseTextType.normal],
+                    ),
                   ),
                 ),
                 flex: 0,
@@ -73,7 +79,10 @@ class NetworkItemCard extends StatelessWidget{
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: IconText(
                     iconImage: "assets/images/assets/contact.png",
-                    text: "${this.userData.customData["commonPeople"] ?? "0"} ${LocalizationClass.of(context).dynamicValue("alreadyCommonPeople")}",
+                    text: BaseText(
+                      texts: ["${this.userData.customData["commonPeople"] ?? "0"} ${LocalizationClass.of(context).dynamicValue("alreadyCommonPeople")}"],
+                      baseTextsType: [BaseTextType.normal],
+                    ),
                   ),
                 ),
                 flex: 0,

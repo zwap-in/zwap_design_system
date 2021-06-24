@@ -14,9 +14,13 @@ class SuggestedColumn extends StatelessWidget{
   /// The card width
   final double cardWidth;
 
+  /// custom callBack function to view the profile
+  final Function() viewProfile;
+
   SuggestedColumn({Key? key,
     required this.cardWidth,
-    required this.users
+    required this.users,
+    required this.viewProfile
   });
 
   /// It retrieves the suggested users elements
@@ -25,8 +29,12 @@ class SuggestedColumn extends StatelessWidget{
     this.users.forEach((User element) {
       finals.add(
           Padding(
-            padding: EdgeInsets.all(20),
-            child: SuggestedCard(profileData: element),
+            padding: EdgeInsets.all(15),
+            child: SuggestedCard(
+              profileData: element,
+              isCard: false,
+              viewProfile: () => this.viewProfile(),
+            ),
           )
       );
     });
@@ -48,12 +56,14 @@ class SuggestedColumn extends StatelessWidget{
 
     _children.addAll(this._getChildrenColumn());
 
-    return VerticalScroll(childComponent: CustomCard(
-      cardWidth: this.cardWidth,
-      childComponent: Column(
-        children: _children,
-      ),
-    ));
+    return VerticalScroll(
+        childComponent: CustomCard(
+            cardWidth: this.cardWidth,
+            childComponent: Column(
+              children: _children,
+            ),
+        )
+    );
   }
 
 

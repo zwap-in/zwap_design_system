@@ -39,6 +39,7 @@ class TagElement extends StatelessWidget{
           texts: [this.tagText],
           baseTextsType: [BaseTextType.normal],
           textsColor: [this.tagStyleType == TagStyleType.blueTag ? DesignColors.bluePrimary : Colors.white],
+          textAlignment: Alignment.center,
         ),
       ),
     );

@@ -32,6 +32,7 @@ class DesignColors{
   /// The social colors
   static const Color googleColor = Color(0xFF4086F4);
   static const Color linkedinColor = Color(0xFF0077B5);
+  static const Color twitterColor = Color(0xFF03A9F4);
 
 
 

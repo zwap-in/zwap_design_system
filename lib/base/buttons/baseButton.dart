@@ -153,17 +153,20 @@ class BaseButton extends StatelessWidget{
   Widget build(BuildContext context) {
 
     return TextButton(
-      child: Row(
-        children: [
-          Flexible(
-            child: this.iconWidget(),
-            flex: 0,
-          ),
-          Flexible(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        child:  Row(
+          children: [
+            Flexible(
+              child: this.iconWidget(),
+              flex: 0,
+            ),
+            Flexible(
               child: this.textWidget(),
-            flex: 1,
-          )
-        ],
+              flex: 0,
+            )
+          ],
+        ),
       ),
       style: this._getButtonStyle(),
       onPressed: () => this.onPressedCallback(),

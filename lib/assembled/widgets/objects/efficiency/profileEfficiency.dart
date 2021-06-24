@@ -13,16 +13,16 @@ class ProfileEfficiency extends StatelessWidget{
   final double percent;
 
   /// The card width
-  final double cardWidth;
+  final double? cardWidth;
 
   ProfileEfficiency({Key? key,
     required this.percent,
-    required this.cardWidth
+    this.cardWidth
   }): super(key: key);
 
   Widget _desktopLayout(BuildContext context){
     return CustomCard(
-        cardWidth: this.cardWidth,
+        cardWidth: this.cardWidth!,
         childComponent: Padding(
           padding: EdgeInsets.all(20),
           child: Column(

@@ -8,10 +8,13 @@ import 'package:zwap_design_system/zwap_design_system.dart';
 class IconText extends StatelessWidget{
 
   /// The text to display with the icon aside
-  final String text;
+  final BaseText text;
 
   /// The icon to display with text aside
   final IconData? icon;
+
+  /// The icon color
+  final Color? iconColor;
 
   /// The icon image path
   final String? iconImage;
@@ -27,6 +30,7 @@ class IconText extends StatelessWidget{
     this.icon,
     this.iconImage,
     this.canClick = false,
+    this.iconColor,
     this.callBackFunction,
   }) : super(key: key) {
     if(this.canClick){
@@ -37,6 +41,7 @@ class IconText extends StatelessWidget{
     }
     if(this.icon == null){
       assert(this.iconImage != null, "Icon image could not be null on icon data null");
+      assert(this.iconColor == null, "Icon color must be null on icon equals to null");
     }
     else{
       assert(this.iconImage == null, "Icon image must bu null on icon data not null");
@@ -50,16 +55,14 @@ class IconText extends StatelessWidget{
         Flexible(
           child: this.iconImage != null ?
           CustomAsset(assetPathUrl: this.iconImage!, imageHeight: 30, imageWidth: 30,) : CustomIcon(
+            iconColor: this.iconColor,
             callBackPressedFunction: () {  },
             icon: this.icon!,
           ),
           flex: 0,
         ),
         Flexible(
-          child: BaseText(
-            texts: [this.text],
-            baseTextsType: [BaseTextType.normal],
-          ),
+          child: this.text,
           flex: 0,
         )
       ],
