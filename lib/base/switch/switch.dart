@@ -3,40 +3,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// Define custom switch
-class CustomSwitch extends StatefulWidget{
+class CustomSwitchState extends ChangeNotifier{
 
-  /// Handle the change of the value inside the switch button
-  final Function(bool newValue) changeValue;
+  /// The value of this state
+  bool value;
 
-  /// The value to show inside this switch
-  final bool? isActive;
+  CustomSwitchState({required this.value});
 
-  CustomSwitch({Key? key,
-    required this.changeValue,
-    this.isActive,
-  }): super(key: key);
-
-  _CustomSwitchState createState() => _CustomSwitchState();
+  /// Change the state inside this switch
+  void changeState(bool value){
+   this.value = value;
+   notifyListeners();
+  }
 
 }
 
-class _CustomSwitchState extends State<CustomSwitch>{
+/// Custom widget to display a switch component
+class CustomSwitch extends StatelessWidget{
 
-  /// Is the switch active or not?
-  bool _isOn = false;
+  /// The provider to handle change and the current state
+  final CustomSwitchState provider;
 
-  /// Init the state
-  _CustomSwitchState(){
-   this._isOn = widget.isActive ?? false;
-  }
-
-  /// Change the state inside this switch
-  void _changeState(bool value){
-    setState(() {
-      this._isOn = value;
-    });
-    this._changeState(value);
-  }
+  CustomSwitch({Key? key,
+    required this.provider
+  }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +34,10 @@ class _CustomSwitchState extends State<CustomSwitch>{
       child: ListTile(
         title: Container(),
         trailing: CupertinoSwitch(
-          value: this._isOn,
-          onChanged: (bool value) => this._changeState(value),
+          value: this.provider.value,
+          onChanged: (bool value) => this.provider.changeState(value),
         ),
-        onTap: () => this._changeState(!this._isOn),
+        onTap: () => this.provider.changeState(!this.provider.value),
       ),
     );
   }

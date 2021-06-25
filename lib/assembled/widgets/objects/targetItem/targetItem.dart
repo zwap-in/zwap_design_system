@@ -16,6 +16,7 @@ class TargetItem extends StatelessWidget{
   /// Is this target to add or to remove
   final bool isToAdd;
 
+  /// The callBack function to trigger on click on the button inside the target item
   final Function() buttonTriggered;
 
   TargetItem({Key? key,

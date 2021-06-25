@@ -1,6 +1,8 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -11,13 +13,17 @@ class SettingsCard extends StatelessWidget{
   /// The settings list to display inside this card dynamically
   final List<SettingElement> settingsList;
 
+  /// The callBack function to handle any social connections
+  final Function(String name)? socialConnect;
+
   SettingsCard({Key? key,
-    required this.settingsList
+    required this.settingsList,
+    this.socialConnect,
   }): super(key: key);
 
 
   /// It retrieves the right element to insert into this settings card
-  Widget _retrieveRightElement(SettingElement element){
+  Widget _retrieveRightElement(SettingElement element, BuildContext context){
     switch(element.settingsType){
       case SettingsType.SettingsInputText:
         return BaseInput(
@@ -30,21 +36,26 @@ class SettingsCard extends StatelessWidget{
         );
       case SettingsType.SettingsSocialGoogle:
         return BaseButton(
-            buttonText: "",
-            imagePath: "",
+            buttonText: LocalizationClass.of(context).dynamicValue("connectToGoogle"),
+            imagePath: "assets/images/socials/google.png",
             buttonTypeStyle: ButtonTypeStyle.socialButtonGoogle,
-            onPressedCallback: () => {}
+            onPressedCallback: () => this.socialConnect!("google")
         );
       case SettingsType.SettingsSocialLinkedin:
         return BaseButton(
-            buttonText: "",
-            imagePath: "",
+            buttonText: LocalizationClass.of(context).dynamicValue("connectToLinkedin"),
+            imagePath: "assets/images/socials/linkedin.png",
             buttonTypeStyle: ButtonTypeStyle.socialButtonLinkedin,
-            onPressedCallback: () => {}
+            onPressedCallback: () => this.socialConnect!("linkedin")
         );
       case SettingsType.SettingsSwitch:
-        return CustomSwitch(
-          changeValue: (bool value) => {},
+        return ChangeNotifierProvider<CustomSwitchState>(
+          create: (context) => CustomSwitchState(value: false),
+          child: Consumer<CustomSwitchState>(
+            builder: (context, provider, child){
+              return CustomSwitch(provider: provider);
+            }
+          )
         );
       case SettingsType.SettingsInputNumber:
         return BaseInput(
@@ -64,19 +75,19 @@ class SettingsCard extends StatelessWidget{
   }
 
   /// It retrieve the line setting
-  Widget _retrieveSetting(SettingElement settingElement){
+  Widget _retrieveSetting(SettingElement settingElement, BuildContext context){
     return LineSettings(
         title: settingElement.settingsTitle,
         subTitle: settingElement.settingsSubTitle,
-        rightElement: this._retrieveRightElement(settingElement)
+        rightElement: this._retrieveRightElement(settingElement, context)
     );
   }
 
   /// Iterate each settings to display all the settings inside this card
-  List<Widget> _settingsListForm(){
+  List<Widget> _settingsListForm(BuildContext context){
     List<Widget> finals = [];
     this.settingsList.forEach((SettingElement value) {
-      finals.add(this._retrieveSetting(value));
+      finals.add(this._retrieveSetting(value, context));
     });
     return finals;
   }
@@ -84,7 +95,9 @@ class SettingsCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    List<Widget> _children = this._settingsListForm();
+    int _deviceType = DeviceInherit.of(context).deviceType;
+
+    List<Widget> _children = this._settingsListForm(context);
     _children.add(
         BottomButtons(
             continueButtonText: LocalizationClass.of(context).dynamicValue("saveButton"),
@@ -95,7 +108,7 @@ class SettingsCard extends StatelessWidget{
 
     return CustomCard(
         childComponent: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+          padding: EdgeInsets.symmetric(horizontal: 10.0 * _deviceType, vertical: 40),
           child: Column(
             children: _children,
           ),

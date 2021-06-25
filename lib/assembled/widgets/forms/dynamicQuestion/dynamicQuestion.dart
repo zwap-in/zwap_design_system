@@ -20,8 +20,11 @@ class DynamicQuestion extends StatelessWidget{
   }): super(key: key);
 
   /// Validate input
-  bool validateInput(dynamic value){
-    return false;
+  bool validateInput(dynamic value, QuestionElement questionElement){
+      if(questionElement.questionType != QuestionType.InputDropdown && questionElement.regexValidate != null){
+        return RegExp(questionElement.regexValidate!).hasMatch(value.toString());
+      }
+      return true;
   }
 
   /// Define a const padding inside this form input
@@ -40,7 +43,7 @@ class DynamicQuestion extends StatelessWidget{
             changeValue: (dynamic value){
               this.handleChangeValue(questionElement.questionTitleValue, value);
             },
-            validateValue: (dynamic value) => this.validateInput(value),
+            validateValue: (dynamic value) => this.validateInput(value, questionElement),
             inputType: InputType.inputNumber,
           ),
         );
@@ -60,7 +63,7 @@ class DynamicQuestion extends StatelessWidget{
             changeValue: (dynamic value) => this.handleChangeValue(questionElement.questionTitleValue, value),
             inputType: InputType.inputArea,
             maxLines: 3,
-            validateValue: (dynamic value) => this.validateInput(value),
+            validateValue: (dynamic value) => this.validateInput(value, questionElement),
             placeholderText: questionElement.questionPlaceholder,
           ),
         );
@@ -70,7 +73,7 @@ class DynamicQuestion extends StatelessWidget{
           child: BaseInput(
             changeValue: (value) => this.handleChangeValue(questionElement.questionTitleValue, value),
             inputType: InputType.inputArea,
-            validateValue: (dynamic value) => this.validateInput(value),
+            validateValue: (dynamic value) => this.validateInput(value, questionElement),
             placeholderText: questionElement.questionPlaceholder,
           ),
         );

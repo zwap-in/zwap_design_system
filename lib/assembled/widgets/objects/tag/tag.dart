@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// The kind of tag type for the style
 enum TagStyleType{
   pinkyTag,
   blueTag

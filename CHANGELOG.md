@@ -30,3 +30,7 @@
 ## 0.0.8
 
 * Adjusted the profile components
+
+## 0.0.9
+
+* Adjusted some general components

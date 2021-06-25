@@ -30,6 +30,8 @@ class QuestionElement{
   /// The list of the options to show inside question with questionType == InputDropdown
   final List<String>? questionOptions;
 
+  final String? regexValidate;
+
   QuestionElement({
     required this.questionTitle,
     required this.questionTitleValue,
@@ -38,12 +40,15 @@ class QuestionElement{
     required this.questionAlert,
     required this.questionType,
     this.questionOptions,
+    this.regexValidate
   }){
     if(this.questionType == QuestionType.InputDropdown){
       assert(this.questionOptions != null && this.questionOptions!.length != 0, "Input dropdown must have question options");
+      assert(this.regexValidate == null, "Regex validation must be null on input dropdown");
     }
     else{
       assert(this.questionOptions == null || this.questionOptions!.length == 0, "Input dropdown cannot have question options");
+      assert(this.regexValidate != null, "Regex validation must be not null on input type not equal to dropdown");
     }
   }
 

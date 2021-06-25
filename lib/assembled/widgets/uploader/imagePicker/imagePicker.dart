@@ -19,6 +19,7 @@ class ImagePickerState extends ChangeNotifier{
 
   /// This functions pick the image from local storage
   Future getImage() async {
+    print("SI");
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       _image = File(pickedFile.path);

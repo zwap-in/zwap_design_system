@@ -1,6 +1,7 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -30,7 +31,14 @@ class EditProfile extends StatelessWidget{
                   childrenStack: [
                     FractionalTranslation(
                       translation: const Offset(0.0, 0.5),
-                      child: Container(),
+                      child: ChangeNotifierProvider<ImagePickerState>(
+                          create: (context) => ImagePickerState(),
+                          child: Consumer<ImagePickerState>(
+                              builder: (context, provider, child){
+                                return PickImage(provider: provider);
+                              }
+                          )
+                      ),
                     )
                   ],
                   headerHeight: 80,

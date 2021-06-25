@@ -1,6 +1,7 @@
 /// IMPORTING THE THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -13,6 +14,7 @@ enum ButtonTypeStyle{
   socialButtonGoogle,
   socialButtonLinkedin,
   baseInputButton,
+  greyButton,
 }
 
 /// This is the base structure for each button
@@ -36,6 +38,8 @@ class BaseButton extends StatelessWidget{
   /// The order to display the icon and text inside the button. Default = 0
   final int orderKind;
 
+  final Color? iconColor;
+
   BaseButton({Key? key,
     required this.buttonText,
     required this.buttonTypeStyle,
@@ -43,6 +47,7 @@ class BaseButton extends StatelessWidget{
     this.iconButton,
     this.orderKind = 0,
     this.imagePath,
+    this.iconColor,
   }) : super(key: key){
     if(this.iconButton != null){
       assert(this.imagePath == null, "Image must be null if icon button is not equal to None");
@@ -59,7 +64,7 @@ class BaseButton extends StatelessWidget{
       padding: EdgeInsets.only(right: 4),
       child: this.iconButton != null ? CustomIcon(
         icon: this.iconButton!,
-        iconColor: Colors.white,
+        iconColor: this.iconColor,
         callBackPressedFunction: () {  },
       ) : CustomAsset(assetPathUrl: this.imagePath!, isInternal: true,),
     ) : Container();
@@ -96,6 +101,11 @@ class BaseButton extends StatelessWidget{
       case ButtonTypeStyle.baseInputButton:
         backgroundColor = DesignColors.pinkyPrimary;
         borderColor = DesignColors.pinkyPrimary;
+        break;
+      case ButtonTypeStyle.greyButton:
+        backgroundColor = DesignColors.whiteCard;
+        borderColor = DesignColors.greyPrimary;
+        break;
     }
     return ButtonStyle(
         backgroundColor: MaterialStateProperty.all(backgroundColor),
@@ -131,6 +141,8 @@ class BaseButton extends StatelessWidget{
         return DesignColors.googleColor;
       case ButtonTypeStyle.socialButtonLinkedin:
         return DesignColors.linkedinColor;
+      case ButtonTypeStyle.greyButton:
+        return DesignColors.blackPrimary;
     }
   }
 
@@ -152,18 +164,26 @@ class BaseButton extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
+    int _deviceSize = DeviceInherit.of(context).deviceType;
+
     return TextButton(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child:  Row(
-          children: [
+          mainAxisSize: MainAxisSize.min,
+          children: _deviceSize < 3 && (this.imagePath != null || this.iconButton != null) ?
+          [
+            Expanded(
+              child: this.iconWidget(),
+            )
+          ] : [
             Flexible(
               child: this.iconWidget(),
               flex: 0,
             ),
             Flexible(
               child: this.textWidget(),
-              flex: 0,
+              flex: 1,
             )
           ],
         ),
