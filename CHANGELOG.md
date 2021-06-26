@@ -38,3 +38,7 @@
 ## 0.0.10
 
 * Added example.dart
+
+## 0.0.11
+
+* Added custom future builder

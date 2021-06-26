@@ -6,6 +6,7 @@ export 'layouts/layouts.dart';
 export 'labelWidget/labelWidget.dart';
 export 'input/input.dart';
 export 'futureComponent/futureComponent.dart';
+export 'futureProvider/futureProvider.dart';
 export 'assets/assets.dart';
 export 'dropDown/customDropDown.dart';
 export 'customExpansion/customExpansion.dart';
