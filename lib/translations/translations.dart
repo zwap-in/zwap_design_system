@@ -173,7 +173,7 @@ class LocalizationClass {
       'continueButton': 'Continue',
       'exploreButtonMenu': '',
       'suggestedButtonMenu': 's',
-      'viewProfileButton': 'Vedi profiledrhrrrrreo',
+      'viewProfileButton': 'Vedi profisdrsledrhrrrrreo',
       'memberOfTitle': 'Memdbro di',
       'cityPlaceholder': "Città",
       "rolePlaceholder": "Ruolddo",

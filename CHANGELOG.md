@@ -34,3 +34,7 @@
 ## 0.0.9
 
 * Adjusted some general components
+
+## 0.0.10
+
+* Added example.dart
