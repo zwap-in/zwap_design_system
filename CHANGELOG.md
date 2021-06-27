@@ -46,3 +46,7 @@
 ## 0.0.12
 
 * Fixed custom future builder
+
+## 0.0.13
+
+* Added callback function to view profile in the suggested users row / column

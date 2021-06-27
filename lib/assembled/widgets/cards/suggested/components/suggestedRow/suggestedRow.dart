@@ -11,7 +11,7 @@ class SuggestedRow extends StatelessWidget{
   final List<User> users;
 
   /// custom callBack function to view the profile
-  final Function() viewProfile;
+  final Function(User profile) viewProfile;
 
   SuggestedRow({Key? key,
     required this.users,
@@ -26,7 +26,10 @@ class SuggestedRow extends StatelessWidget{
           Flexible(
             child: Padding(
               padding: EdgeInsets.all(20),
-              child: SuggestedCard(profileData: element, viewProfile: (){},),
+              child: SuggestedCard(
+                profileData: element,
+                viewProfile: () => this.viewProfile(element),
+              ),
             ),
             flex: 0,
           )

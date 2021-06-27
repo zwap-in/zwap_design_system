@@ -15,7 +15,7 @@ class SuggestedColumn extends StatelessWidget{
   final double cardWidth;
 
   /// custom callBack function to view the profile
-  final Function() viewProfile;
+  final Function(User profile) viewProfile;
 
   SuggestedColumn({Key? key,
     required this.cardWidth,
@@ -33,7 +33,7 @@ class SuggestedColumn extends StatelessWidget{
             child: SuggestedCard(
               profileData: element,
               isCard: false,
-              viewProfile: () => this.viewProfile(),
+              viewProfile: () => this.viewProfile(element),
             ),
           )
       );
