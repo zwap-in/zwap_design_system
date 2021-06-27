@@ -12,7 +12,7 @@ class CustomFutureProvider<T> extends StatelessWidget{
   final dynamic initialData;
 
   /// The child widget to display inside
-  final Widget child;
+  final Widget Function(T value) child;
 
   /// The optional waiting widget
   final Widget? waitChildWidget;
@@ -33,7 +33,7 @@ class CustomFutureProvider<T> extends StatelessWidget{
       },
       initialData: this.initialData,
       child: Consumer<T>(
-        builder: (_, value, __) => value != null ?  this.child : this.waitChildWidget ?? Container(),
+        builder: (_, value, __) => value != null ?  this.child(value) : this.waitChildWidget ?? Container(),
       ),
     );
   }

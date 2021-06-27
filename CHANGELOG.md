@@ -42,3 +42,7 @@
 ## 0.0.11
 
 * Added custom future builder
+
+## 0.0.12
+
+* Fixed custom future builder
