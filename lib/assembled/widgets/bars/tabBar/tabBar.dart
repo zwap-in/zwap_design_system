@@ -13,6 +13,7 @@ class CustomTabBar extends StatelessWidget{
   /// The app bar inside this custom tab bar
   final Widget appBar;
 
+  /// The custom bottom menu
   final Widget? customBottomMenu;
 
   CustomTabBar({Key? key,

@@ -82,7 +82,7 @@ class LocalizationClass {
       "commonPeople": "We find common people",
       "profileEfficiency": "Profile efficiency",
       "infoAbout": "Info about ",
-      "writePrivateNote": "Write a private note about ",
+      "writePrivateNote": "Write a private notsrre about ",
       "alreadyCommonPeople": "persone in comune",
       "schedule": "Schedule",
       "viewAllMeetings": "View all meetings",

@@ -6,3 +6,6 @@ export 'iconText/iconText.dart';
 export 'imageCard/imageCard.dart';
 export 'tag/tag.dart';
 export 'targetItem/targetItem.dart';
+export 'notSupportedScreen/notSupportedScreen.dart';
+export 'splashComponent/splashComponent.dart';
+export 'notFound/notFound.dart';

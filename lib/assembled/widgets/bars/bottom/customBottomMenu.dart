@@ -3,15 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
+/// Custom bottom menu state for this widget
 class CustomBottomMenuState extends ChangeNotifier{
 
+  /// The current index
   int _currentIndex = 0;
 
+  /// Change the index inside the bottom menu
   void changeIndex(int newIndex){
     this._currentIndex = newIndex;
     notifyListeners();
   }
 
+  /// It retrieves the current index
   int get index => this._currentIndex;
 
 }
@@ -22,6 +26,7 @@ class CustomBottomMenu extends StatelessWidget{
   /// The bottom navigation bar items
   final List<BottomNavigationBarItem> bottomNavigationBarItems;
 
+  /// The provider to handle the state of the data
   final CustomBottomMenuState provider;
 
   CustomBottomMenu({Key? key,
