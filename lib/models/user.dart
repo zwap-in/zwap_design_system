@@ -4,6 +4,9 @@ import 'targets.dart';
 /// The profile data
 class User{
 
+  /// The pk number
+  final int pk;
+
   /// The first name
   final String firstName;
 
@@ -23,6 +26,7 @@ class User{
   final List<TargetData> targetsData;
 
   User({
+    required this.pk,
     required this.firstName,
     required this.lastName,
     required this.profileBio,
@@ -45,6 +49,7 @@ class User{
     });
 
     return User(
+      pk: json['pk'],
       firstName: json['first_name'],
       lastName: json['last_name'],
       profileBio: json['profile_bio'],

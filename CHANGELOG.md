@@ -50,3 +50,7 @@
 ## 0.0.13
 
 * Added callback function to view profile in the suggested users row / column
+
+## 0.0.14
+
+* Added the pk number to the User model
