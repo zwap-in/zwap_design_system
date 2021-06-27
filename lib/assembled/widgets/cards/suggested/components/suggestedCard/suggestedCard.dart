@@ -66,7 +66,7 @@ class SuggestedCard extends StatelessWidget{
                   child: BaseButton(
                     buttonText: "Vedi Profilo",
                     buttonTypeStyle: ButtonTypeStyle.pinkyButton,
-                    onPressedCallback: (){},
+                    onPressedCallback: () => this.viewProfile(),
                   ),
                 )
               ],

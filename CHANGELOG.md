@@ -62,3 +62,7 @@
 ## 0.0.16
 
 * Fixed some basic screens
+
+## 0.0.17
+
+* Fixed suggestedCard element
