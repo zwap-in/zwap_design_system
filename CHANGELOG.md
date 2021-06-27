@@ -58,3 +58,7 @@
 ## 0.0.15
 
 * Added some basic screens
+
+## 0.0.16
+
+* Fixed some basic screens

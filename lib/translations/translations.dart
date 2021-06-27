@@ -119,7 +119,8 @@ class LocalizationClass {
       "thursdayAbbr": "Thu",
       "fridayAbbr": "Fri",
       "saturdayAbbr": "Sat",
-      "sundayAbbr": "Sun"
+      "sundayAbbr": "Sun",
+      "notFoundTitle": "We are sorry but we didn't find any content about what you are looking for"
     },
     'it': {
       'signupTitle': '',
@@ -224,7 +225,8 @@ class LocalizationClass {
       "thursdayAbbr": "Gio",
       "fridayAbbr": "Ven",
       "saturdayAbbr": "Sab",
-      "sundayAbbr": "Dom"
+      "sundayAbbr": "Dom",
+      "notFoundTitle": "Ci dispiace ma non abbiamo trovato niente riguardo a quello che stai cercando"
     },
   };
 
