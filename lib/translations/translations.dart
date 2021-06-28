@@ -120,7 +120,9 @@ class LocalizationClass {
       "fridayAbbr": "Fri",
       "saturdayAbbr": "Sat",
       "sundayAbbr": "Sun",
-      "notFoundTitle": "We are sorry but we didn't find any content about what you are looking for"
+      "notFoundTitle": "We are sorry but we didn't find any content about what you are looking for",
+      "connectToGoogle": "Connect with Google",
+      "connectToLinkedin": "Connect with linkedin"
     },
     'it': {
       'signupTitle': '',
@@ -226,7 +228,9 @@ class LocalizationClass {
       "fridayAbbr": "Ven",
       "saturdayAbbr": "Sab",
       "sundayAbbr": "Dom",
-      "notFoundTitle": "Ci dispiace ma non abbiamo trovato niente riguardo a quello che stai cercando"
+      "notFoundTitle": "Ci dispiace ma non abbiamo trovato niente riguardo a quello che stai cercando",
+      "connectToGoogle": "Connect with Google",
+      "connectToLinkedin": "Connect with linkedin"
     },
   };
 

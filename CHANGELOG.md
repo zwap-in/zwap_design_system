@@ -99,3 +99,7 @@
 ## 0.0.25
 
 * Added email regex to constants value and an extensions to DateTime object in the Utils file
+
+## 0.0.26
+
+* Added some translations
