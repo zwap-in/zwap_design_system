@@ -91,3 +91,7 @@
 ## 0.0.23
 
 * Fixed the settings components and just added the Utils classes and functions
+
+## 0.0.24
+
+* Fixed the settings components

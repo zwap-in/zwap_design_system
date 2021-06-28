@@ -15,7 +15,7 @@ class SettingElement{
   final String settingsTitle;
 
   /// The settings subtitle
-  final String settingsSubTitle;
+  final String? settingsSubTitle;
 
   /// The settings subTitle
   final SettingsType settingsType;
@@ -31,7 +31,7 @@ class SettingElement{
 
   SettingElement({
     required this.settingsTitle,
-    required this.settingsSubTitle,
+    this.settingsSubTitle,
     required this.settingsType,
     required this.settingsTitleValue,
     required this.regexValidate,
@@ -39,11 +39,15 @@ class SettingElement{
   }){
     if(this.settingsType == SettingsType.SettingsDropDown){
       assert(this.settingsOptions != null && this.settingsOptions!.length != 0, "Setting options must be not null or it must has the length not equal to 0 if settingsType is a dropdown");
-      assert(this.regexValidate == null, "regex validate must be null on settings type equal to dropdown");
     }
     else{
       assert(this.settingsOptions == null || this.settingsOptions!.length == 0, "Setting options must be null or it must has the length equal to 0 if settingsType is not a dropdown");
-      assert(this.regexValidate != null, "regex validate must be not null on settings type equal to dropdown");
+    }
+    if(this.settingsType == SettingsType.SettingsInputText || this.settingsType == SettingsType.SettingsInputNumber || this.settingsType == SettingsType.SettingsInputPassword){
+      assert(this.regexValidate != null, "regex validate must be not null on settings type equal to some input");
+    }
+    else{
+      assert(this.regexValidate == null, "regex validate must be null on settings type not equal to some input");
     }
   }
 

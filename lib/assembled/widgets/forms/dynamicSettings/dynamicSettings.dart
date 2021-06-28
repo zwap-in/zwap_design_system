@@ -12,7 +12,7 @@ class LineSettings extends StatelessWidget{
   final String title;
 
   /// The subtitle of the line
-  final String subTitle;
+  final String? subTitle;
 
   /// The widget element inside this line settings
   final Widget rightElement;
@@ -42,14 +42,15 @@ class LineSettings extends StatelessWidget{
                       baseTextsType: [BaseTextType.normalBold],
                     ),
                   ),
+                  this.subTitle != null ?
                   Padding(
                     padding: EdgeInsets.only(bottom: 4, top: 4),
                     child: BaseText(
-                      texts: [this.subTitle],
+                      texts: [this.subTitle!],
                       baseTextsType: [BaseTextType.subTitle],
                       textsColor: [DesignColors.greyPrimary],
                     ),
-                  ),
+                  ) : Container(),
                 ],
               ),
             ),
