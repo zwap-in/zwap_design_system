@@ -2,8 +2,7 @@
 enum SettingsType{
   SettingsInputText,
   SettingsInputNumber,
-  SettingsSocialGoogle,
-  SettingsSocialLinkedin,
+  SettingsSocial,
   SettingsSwitch,
   SettingsDropDown,
 }

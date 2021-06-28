@@ -34,19 +34,28 @@ class SettingsCard extends StatelessWidget{
               return true;
             }
         );
-      case SettingsType.SettingsSocialGoogle:
-        return BaseButton(
-            buttonText: LocalizationClass.of(context).dynamicValue("connectToGoogle"),
-            imagePath: "assets/images/socials/google.png",
-            buttonTypeStyle: ButtonTypeStyle.socialButtonGoogle,
-            onPressedCallback: () => this.socialConnect!("google")
-        );
-      case SettingsType.SettingsSocialLinkedin:
-        return BaseButton(
-            buttonText: LocalizationClass.of(context).dynamicValue("connectToLinkedin"),
-            imagePath: "assets/images/socials/linkedin.png",
-            buttonTypeStyle: ButtonTypeStyle.socialButtonLinkedin,
-            onPressedCallback: () => this.socialConnect!("linkedin")
+      case SettingsType.SettingsSocial:
+        return Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 5),
+              child: BaseButton(
+                  buttonText: LocalizationClass.of(context).dynamicValue("connectToGoogle"),
+                  imagePath: "assets/images/socials/google.png",
+                  buttonTypeStyle: ButtonTypeStyle.socialButtonGoogle,
+                  onPressedCallback: () => this.socialConnect!("google")
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 5),
+              child: BaseButton(
+                  buttonText: LocalizationClass.of(context).dynamicValue("connectToLinkedin"),
+                  imagePath: "assets/images/socials/linkedin.png",
+                  buttonTypeStyle: ButtonTypeStyle.socialButtonLinkedin,
+                  onPressedCallback: () => this.socialConnect!("linkedin")
+              ),
+            )
+          ],
         );
       case SettingsType.SettingsSwitch:
         return ChangeNotifierProvider<CustomSwitchState>(

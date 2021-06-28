@@ -83,3 +83,7 @@
 ## 0.0.21
 
 * Fixed the sneak user component
+
+## 0.0.22
+
+* Fixed the settings components
