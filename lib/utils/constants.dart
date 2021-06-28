@@ -1,8 +1,13 @@
+/// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
+
+/// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/translations/translations.dart';
 
+/// The constants class to retrieve some constants values
 class Constants{
 
+  /// The name of the month
   static Map<int, String> monthlyName(BuildContext context){
     return {
       1:  LocalizationClass.of(context).dynamicValue("january"),
@@ -20,6 +25,7 @@ class Constants{
     };
   }
 
+  /// The abbreviation of the months name
   static Map<int, String> monthlyAbbrName(BuildContext context){
     return {
       1:  LocalizationClass.of(context).dynamicValue("januaryAbbr"),
@@ -36,6 +42,8 @@ class Constants{
       12: LocalizationClass.of(context).dynamicValue("decemberAbbr"),
     };
   }
+
+  /// The abbreviations name for the week days
   static Map<int, String> weekDayAbbrName(BuildContext context){
     return {
       1:  LocalizationClass.of(context).dynamicValue("mondayAbbr"),

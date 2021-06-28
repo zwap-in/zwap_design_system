@@ -22,7 +22,7 @@ class DynamicQuestion extends StatelessWidget{
   /// Validate input
   bool validateInput(dynamic value, QuestionElement questionElement){
       if(questionElement.questionType != QuestionType.InputDropdown && questionElement.regexValidate != null){
-        return RegExp(questionElement.regexValidate!).hasMatch(value.toString());
+        return Utils.validateRegex(questionElement.regexValidate!, value);
       }
       return true;
   }

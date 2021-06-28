@@ -7,18 +7,46 @@ import 'package:taastrap/taastrap.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// The switch state extended to customize the change state and send the data to the custom callBack function
+class ExtendSwitchState extends CustomSwitchState{
+
+  /// The bool value for the switch component
+  bool value;
+
+  /// The setting element
+  final String customTitleValue;
+
+  /// The handle change callBack function
+  Function(String key, dynamic value) handleChange;
+
+  ExtendSwitchState({
+    required this.value,
+    required this.customTitleValue,
+    required this.handleChange
+  }) : super(value: value);
+
+  /// Change the state inside this switch
+  void changeState(bool value){
+    this.handleChange(this.customTitleValue, value);
+    super.changeState(value);
+  }
+
+}
+
+
 /// Custom widget to display the settings inside a card
 class SettingsCard extends StatelessWidget{
 
   /// The settings list to display inside this card dynamically
   final List<SettingElement> settingsList;
 
-  /// The callBack function to handle any social connections
-  final Function(String name)? socialConnect;
+  /// The callBack function to handle the change inside the settings form
+  final Function(String key, dynamic value) callBackChange;
+
 
   SettingsCard({Key? key,
     required this.settingsList,
-    this.socialConnect,
+    required this.callBackChange,
   }): super(key: key);
 
 
@@ -28,10 +56,10 @@ class SettingsCard extends StatelessWidget{
       case SettingsType.SettingsInputText:
         return BaseInput(
             placeholderText: "",
-            changeValue: (dynamic value) {},
+            changeValue: (dynamic value) => this.callBackChange(element.settingsTitleValue, value),
             inputType: InputType.inputText,
             validateValue: (dynamic value) {
-              return true;
+              return Utils.validateRegex(element.regexValidate!, value);
             }
         );
       case SettingsType.SettingsSocial:
@@ -43,7 +71,7 @@ class SettingsCard extends StatelessWidget{
                   buttonText: LocalizationClass.of(context).dynamicValue("connectToGoogle"),
                   imagePath: "assets/images/socials/google.png",
                   buttonTypeStyle: ButtonTypeStyle.socialButtonGoogle,
-                  onPressedCallback: () => this.socialConnect!("google")
+                  onPressedCallback: () => this.callBackChange("social_google", true)
               ),
             ),
             Padding(
@@ -52,15 +80,19 @@ class SettingsCard extends StatelessWidget{
                   buttonText: LocalizationClass.of(context).dynamicValue("connectToLinkedin"),
                   imagePath: "assets/images/socials/linkedin.png",
                   buttonTypeStyle: ButtonTypeStyle.socialButtonLinkedin,
-                  onPressedCallback: () => this.socialConnect!("linkedin")
+                  onPressedCallback: () => this.callBackChange("social_linkedin", true)
               ),
             )
           ],
         );
       case SettingsType.SettingsSwitch:
-        return ChangeNotifierProvider<CustomSwitchState>(
-          create: (context) => CustomSwitchState(value: false),
-          child: Consumer<CustomSwitchState>(
+        return ChangeNotifierProvider<ExtendSwitchState>(
+          create: (context) => ExtendSwitchState(
+              value: false,
+              customTitleValue: element.settingsTitleValue,
+              handleChange: this.callBackChange
+          ),
+          child: Consumer<ExtendSwitchState>(
             builder: (context, provider, child){
               return CustomSwitch(provider: provider);
             }
@@ -69,16 +101,25 @@ class SettingsCard extends StatelessWidget{
       case SettingsType.SettingsInputNumber:
         return BaseInput(
             placeholderText: "",
-            changeValue: (dynamic value) {},
+            changeValue: (dynamic value) => this.callBackChange(element.settingsTitleValue, value),
             inputType: InputType.inputNumber,
             validateValue: (dynamic value) {
-              return true;
+              return Utils.validateRegex(element.regexValidate!, value);
             }
         );
       case SettingsType.SettingsDropDown:
         return CustomDropDown(
-          handleChange: (String value) {  },
+          handleChange: (String value) => this.callBackChange(element.settingsTitleValue, value),
           values: element.settingsOptions!,
+        );
+      case SettingsType.SettingsInputPassword:
+        return BaseInput(
+            placeholderText: "",
+            changeValue: (dynamic value) => this.callBackChange(element.settingsTitleValue, value),
+            inputType: InputType.inputPassword,
+            validateValue: (dynamic value) {
+              return Utils.validateRegex(element.regexValidate!, value);
+            }
         );
     }
   }
@@ -106,20 +147,11 @@ class SettingsCard extends StatelessWidget{
 
     int _deviceType = DeviceInherit.of(context).deviceType;
 
-    List<Widget> _children = this._settingsListForm(context);
-    _children.add(
-        BottomButtons(
-            continueButtonText: LocalizationClass.of(context).dynamicValue("saveButton"),
-            rightButtonIcon: Icons.group_add_sharp,
-            continueButtonCallBackFunction: () => {}
-        )
-    );
-
     return CustomCard(
         childComponent: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.0 * _deviceType, vertical: 40),
           child: Column(
-            children: _children,
+            children: this._settingsListForm(context),
           ),
         )
     );
