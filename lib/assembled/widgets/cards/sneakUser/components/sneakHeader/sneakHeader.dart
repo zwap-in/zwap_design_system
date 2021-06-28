@@ -47,6 +47,7 @@ class SneakUserHeader extends StatelessWidget{
                     padding: EdgeInsets.only(top: 10),
                     child: CustomIcon(
                         icon: FontAwesomeIcons.heart,
+                        iconColor: DesignColors.pinkyPrimary,
                         callBackPressedFunction: () => this.savingUser()
                     ),
                   ),

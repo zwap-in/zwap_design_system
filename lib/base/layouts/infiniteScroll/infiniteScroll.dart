@@ -139,7 +139,7 @@ class InfiniteScroll<T> extends StatelessWidget {
     Map<Widget, Map<String, int>> finals = {};
     this.provider.elements.asMap().forEach((int index, T element) {
       Widget tmp = this._itemBuilder(index);
-      finals[tmp] = {'xl': 4, 'lg': 4, 'md': 4, 'sm': 6, 'xs': 12};
+      finals[tmp] = {'xl': 4, 'lg': 4, 'md': 6, 'sm': 6, 'xs': 12};
     });
     if(!this.provider._stop){
       Widget tmp = this._itemBuilder(finals.length);

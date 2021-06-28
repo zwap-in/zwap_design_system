@@ -79,3 +79,7 @@
 ## 0.0.20
 
 * Fixed the infinite scroll component
+
+## 0.0.21
+
+* Fixed the sneak user component
