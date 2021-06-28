@@ -84,3 +84,15 @@ class TupleType<T, F>{
   TupleType({required this.a, required this.b});
 
 }
+
+
+/// Add some custom methods to the DateTime object
+extension DateTimeExtension on DateTime {
+  DateTime next(int day) {
+    return this.add(
+      Duration(
+        days: (day - this.weekday) % DateTime.daysPerWeek,
+      ),
+    );
+  }
+}

@@ -95,3 +95,7 @@
 ## 0.0.24
 
 * Fixed the settings components
+
+## 0.0.25
+
+* Added email regex to constants value and an extensions to DateTime object in the Utils file
