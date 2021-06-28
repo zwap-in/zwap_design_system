@@ -64,6 +64,7 @@ class LateralMenu extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: this._items(),
     );
   }

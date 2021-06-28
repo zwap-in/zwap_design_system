@@ -66,3 +66,8 @@
 ## 0.0.17
 
 * Fixed suggestedCard element
+
+
+## 0.0.18
+
+* Fixed the explore components

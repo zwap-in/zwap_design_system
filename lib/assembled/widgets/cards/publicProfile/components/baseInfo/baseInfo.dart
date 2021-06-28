@@ -21,11 +21,14 @@ class BaseInfo extends StatelessWidget{
   /// The callBack function to show the inviter
   final Function()? showInviter;
 
+  final User? inviter;
+
   BaseInfo({Key? key,
     required this.customData,
     this.isCurrentProfile = true,
     this.editCustomData,
-    this.showInviter
+    this.showInviter,
+    this.inviter
   }): super(key: key){
     if(this.isCurrentProfile){
       assert(this.editCustomData != null, "Edit custom data callBack function could not be null on currentProfile flag");
@@ -139,14 +142,14 @@ class BaseInfo extends StatelessWidget{
           padding: EdgeInsets.only(top: 5, bottom: 5),
           child: this._getCityCompanyResponsive(context),
         ),
-        this.customData.containsKey("invited_by") ?
+        this.inviter != null ?
         Padding(
           padding: EdgeInsets.only(top: 5, bottom: 5),
           child: Row(
             children: [
               Flexible(
                 child: IconText(text: BaseText(
-                  texts: ["${LocalizationClass.of(context).dynamicValue("invitedByPlaceholder")}", " ${this.customData['invited_by']}"],
+                  texts: ["${LocalizationClass.of(context).dynamicValue("invitedByPlaceholder")}", " ${this.inviter!.firstName} ${this.inviter!.lastName}"],
                   baseTextsType: [BaseTextType.normal, BaseTextType.normalBold],
                   textsColor: [DesignColors.blackPrimary, DesignColors.bluePrimary],
                   hasClick: [false, true],
