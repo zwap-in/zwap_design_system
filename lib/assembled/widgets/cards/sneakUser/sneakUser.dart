@@ -39,7 +39,7 @@ class SneakUser extends StatelessWidget{
     String _company = this._getCustomDataValue("company");
 
     return Padding(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
       child: CustomCard(
         cardWidth: _deviceType == 1 ? 500 : (_deviceType == 2 ? 300 : (_deviceType == 3 ? 290 : 350)),
         childComponent: Column(

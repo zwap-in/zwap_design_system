@@ -71,3 +71,7 @@
 ## 0.0.18
 
 * Fixed the explore components
+
+## 0.0.19
+
+* Fixed the explore components
