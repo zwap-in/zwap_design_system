@@ -75,3 +75,7 @@
 ## 0.0.19
 
 * Fixed the explore components
+
+## 0.0.20
+
+* Fixed the infinite scroll component

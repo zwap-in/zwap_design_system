@@ -24,6 +24,8 @@ class InfiniteScrollState<T> extends ChangeNotifier{
 
   bool _stop = false;
 
+  ScrollController controller = ScrollController();
+
   /// Number of elements per page
   final int defaultPhotosPerPageCount;
 
@@ -101,16 +103,20 @@ class InfiniteScroll<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController controller = ScrollController();
-    controller.addListener(() {
-      if (controller.position.atEdge) {
-        if (controller.position.pixels != 0) {
+    try{
+      this.provider.controller.position.maxScrollExtent;
+    }
+    catch(e){
+      this.provider.reloadData();
+    }
+    this.provider.controller.addListener(() {
+      if (this.provider.controller.position.atEdge) {
+        if (this.provider.controller.position.pixels != 0) {
           this.provider.reloadData();
         }
       }
     });
-
-    return getBody(controller);
+    return getBody(this.provider.controller);
   }
 
   /// It retrieves the correct item
