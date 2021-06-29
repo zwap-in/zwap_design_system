@@ -72,6 +72,11 @@ class Utils{
     return RegExp(regexString).hasMatch(value.toString());
   }
 
+  /// It retrieves the date string format from a DateTime object
+  static String getDateString(DateTime datetime, BuildContext context){
+    return "${datetime.day} - ${Constants.monthlyName(context)[datetime.month]} - ${datetime.year}";
+  }
+
 }
 
 /// The tuple type to use inside this platform
@@ -89,9 +94,10 @@ class TupleType<T, F>{
 /// Add some custom methods to the DateTime object
 extension DateTimeExtension on DateTime {
   DateTime next(int day) {
+    int days = (day - this.weekday) % DateTime.daysPerWeek;
     return this.add(
       Duration(
-        days: (day - this.weekday) % DateTime.daysPerWeek,
+        days: days != 0 ? days : 7,
       ),
     );
   }

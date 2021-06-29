@@ -103,3 +103,7 @@
 ## 0.0.26
 
 * Added some translations
+
+## 0.0.27 
+
+* Fixed some utilities functions
