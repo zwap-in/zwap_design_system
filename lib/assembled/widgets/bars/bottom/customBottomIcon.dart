@@ -29,7 +29,7 @@ class CustomButtonIcon extends BottomNavigationBarItem{
       child:  Icon(
         IconData(codePoint, fontFamily: fontFamily),
         size: 30,
-        color: isSelected ? Colors.black : Colors.white,
+        color: isSelected ? Colors.white : Colors.black,
       ),
     ),
     label: ""

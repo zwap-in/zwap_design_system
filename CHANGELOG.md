@@ -119,3 +119,8 @@
 ## 0.0.30
 
 * Fixed style for the bottom icon component
+
+
+## 0.0.31
+
+* Fixed style for the bottom icon component
