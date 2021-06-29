@@ -128,3 +128,8 @@
 ## 0.0.32
 
 * Fixed the state for the button icon menu
+
+
+## 0.0.33
+
+* Fixed some utilities functions

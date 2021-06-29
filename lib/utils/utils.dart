@@ -17,13 +17,14 @@ class Utils{
     log("Changing screen to $name");
     String queryArgs = "";
     if(args != null){
+      queryArgs += "?";
       args.forEach((key, value) {
         queryArgs += "$key=$value&";
       });
       queryArgs = queryArgs.substring(0, queryArgs.length - 1);
     }
-    html.window.history.pushState(null, "", "/$name?$queryArgs");
-    Navigator.pushReplacementNamed(context, "/$name?$queryArgs");
+    html.window.history.pushState(null, "", "/$name$queryArgs");
+    Navigator.pushReplacementNamed(context, "/$name$queryArgs");
   }
 
   /// Custom function to open external url
