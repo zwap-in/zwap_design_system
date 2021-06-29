@@ -111,3 +111,7 @@
 ## 0.0.28
 
 * Adjusted the theme colors for bottom navigation bar
+
+## 0.0.29
+
+* Added the bottom icon component for the bottom navigation bar
