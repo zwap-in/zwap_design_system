@@ -107,3 +107,7 @@
 ## 0.0.27 
 
 * Fixed some utilities functions
+
+## 0.0.28
+
+* Adjusted the theme colors for bottom navigation bar

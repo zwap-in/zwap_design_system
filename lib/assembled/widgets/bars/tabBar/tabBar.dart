@@ -27,7 +27,13 @@ class CustomTabBar extends StatelessWidget{
     return DefaultTabController(
       length: this.tabElements.length,
       child: Scaffold(
-          bottomNavigationBar: this.customBottomMenu,
+          bottomNavigationBar: new Theme(
+            data: Theme.of(context).copyWith(
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent
+            ),
+            child: this.customBottomMenu!,
+          ),
           appBar: AppBar(
             backgroundColor: DesignColors.scaffoldColor,
             bottom: TabBar(
