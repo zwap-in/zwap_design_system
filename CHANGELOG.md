@@ -124,3 +124,7 @@
 ## 0.0.31
 
 * Fixed style for the bottom icon component
+
+## 0.0.32
+
+* Fixed the state for the button icon menu

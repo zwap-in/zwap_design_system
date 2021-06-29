@@ -7,16 +7,15 @@ import 'package:flutter/material.dart';
 class CustomBottomMenuState extends ChangeNotifier{
 
   /// The current index
-  int _currentIndex = 0;
+  int currentIndex;
+
+  CustomBottomMenuState({required this.currentIndex});
 
   /// Change the index inside the bottom menu
   void changeIndex(int newIndex){
-    this._currentIndex = newIndex;
+    this.currentIndex = newIndex;
     notifyListeners();
   }
-
-  /// It retrieves the current index
-  int get index => this._currentIndex;
 
 }
 
@@ -56,7 +55,7 @@ class CustomBottomMenu extends StatelessWidget{
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
-            currentIndex: this.provider.index,
+            currentIndex: this.provider.currentIndex,
             onTap: (int index) => this.provider.changeIndex(index),
             items: this.bottomNavigationBarItems,
           ),
