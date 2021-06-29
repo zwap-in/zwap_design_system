@@ -115,3 +115,7 @@
 ## 0.0.29
 
 * Added the bottom icon component for the bottom navigation bar
+
+## 0.0.30
+
+* Fixed style for the bottom icon component

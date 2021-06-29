@@ -19,7 +19,7 @@ class CustomButtonIcon extends BottomNavigationBarItem{
 
   CustomButtonIcon({required this.isSelected, required this.codePoint, required this.fontFamily}) : super(
     tooltip: "",
-    backgroundColor: isSelected ? DesignColors.pinkyPrimary : Colors.white,
+    backgroundColor: Colors.white,
     icon: Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
