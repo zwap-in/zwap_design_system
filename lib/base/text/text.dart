@@ -127,7 +127,7 @@ class BaseText extends StatelessWidget{
   TextSpan _text(int i){
     return TextSpan(
       text: this.texts[i],
-      recognizer: TapGestureRecognizer()..onTap = () =>  (this.hasClick != null && this.hasClick![i]! ? this.callBacksClick![i]!() : {}),
+      recognizer: (this.hasClick == null ||  this.hasClick![i]! == false) ? null : (TapGestureRecognizer()..onTap = () =>  this.callBacksClick![i]!()),
       style: this.baseTextsType[i] == BaseTextType.title ? this._titleStyle(i) :
       (this.baseTextsType[i] == BaseTextType.subTitle ? this._subTitleStyle(i) : (this.baseTextsType[i] == BaseTextType.normalBold ? this._normalBoldText(i) : this._normalTitleText(i))),
     );
