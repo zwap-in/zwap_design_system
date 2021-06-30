@@ -3,7 +3,19 @@ import 'package:flutter/material.dart';
 
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// The meeting confirmed component
 class MeetingConfirmed extends StatelessWidget{
+
+  /// Find other people callBack function
+  final Function() findOtherPeople;
+
+  /// View your meeting callBack function
+  final Function() viewYourMeeting;
+
+  MeetingConfirmed({Key? key,
+    required this.findOtherPeople,
+    required this.viewYourMeeting
+  }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +31,14 @@ class MeetingConfirmed extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: ["Il tuo meeting è confermato"],
+              texts: [LocalizationClass.of(context).dynamicValue("meetingConfirmedTitle")],
               baseTextsType: [BaseTextType.title],
             ),
           ),
           Padding(
               padding: EdgeInsets.only(top: 10),
             child: BaseText(
-              texts: ["Ecco quali sono i prossimi passi"],
+              texts: [LocalizationClass.of(context).dynamicValue("meetingConfirmedSubTitle")],
               baseTextsType: [BaseTextType.normal],
               textsColor: [DesignColors.greyPrimary],
             ),
@@ -34,7 +46,7 @@ class MeetingConfirmed extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(top: 30),
             child: BaseText(
-              texts: ["uno"],
+              texts: [LocalizationClass.of(context).dynamicValue("nextStepsMeetingConfirmed")],
               baseTextsType: [BaseTextType.normal],
             ),
           ),
@@ -42,17 +54,17 @@ class MeetingConfirmed extends StatelessWidget{
             padding: EdgeInsets.only(top: 20),
             child: BaseButton(
               iconButton: Icons.group_add,
-                buttonText: "Scopri chi è su Zwap",
+                buttonText: LocalizationClass.of(context).dynamicValue("findPeopleOnZwap"),
                 buttonTypeStyle: ButtonTypeStyle.continueButton,
-                onPressedCallback: (){}
+                onPressedCallback: () => this.findOtherPeople()
             ),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 20),
             child: BaseButton(
-                buttonText: "Vedi i tuoi meeting",
+                buttonText: LocalizationClass.of(context).dynamicValue("viewYourMeeting"),
                 buttonTypeStyle: ButtonTypeStyle.backButton,
-                onPressedCallback: (){}
+                onPressedCallback: () => this.viewYourMeeting()
             ),
           ),
         ],

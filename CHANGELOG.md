@@ -137,3 +137,11 @@
 ## 0.0.34
 
 * Removed the bottom menu state
+
+## 0.0.35
+
+* Fixed the base text
+
+## 0.0.36
+
+* Added meeting details model and some meetings component

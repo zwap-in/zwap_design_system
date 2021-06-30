@@ -8,21 +8,6 @@ import 'package:zwap_design_system/zwap_design_system.dart';
 
 import 'upcoming.dart';
 
-/// The meeting details abstract class to pass to the UpComing card
-class MeetingDetails{
-
-  /// The title of the UpComing card
-  final String title;
-
-  /// The meeting datetime
-  final DateTime dateTime;
-
-  MeetingDetails({
-    required this.title,
-    required this.dateTime
-  });
-}
-
 /// The upComing card to display the upcoming meetings
 class UpComingCard extends StatelessWidget{
 
@@ -50,7 +35,7 @@ class UpComingCard extends StatelessWidget{
       _children.add(
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
-          child: UpComingMeeting(title: element.title, datetime: element.dateTime),
+          child: UpComingMeeting(title: element.title, datetime: element.dateTimeStart),
         )
       );
     });
