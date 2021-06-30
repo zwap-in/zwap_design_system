@@ -2,35 +2,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
-/// Custom bottom menu state for this widget
-class CustomBottomMenuState extends ChangeNotifier{
-
-  /// The current index
-  int currentIndex;
-
-  CustomBottomMenuState({required this.currentIndex});
-
-  /// Change the index inside the bottom menu
-  void changeIndex(int newIndex){
-    this.currentIndex = newIndex;
-    notifyListeners();
-  }
-
-}
-
 /// The custom bottom bar for logged screen
 class CustomBottomMenu extends StatelessWidget{
 
   /// The bottom navigation bar items
   final List<BottomNavigationBarItem> bottomNavigationBarItems;
 
-  /// The provider to handle the state of the data
-  final CustomBottomMenuState provider;
+  /// The callBack to change index of the bottom menu
+  final Function(int newIndex) changeIndex;
+
+  /// The current index inside the bottom menu
+  final int currentIndex;
 
   CustomBottomMenu({Key? key,
     required this.bottomNavigationBarItems,
-    required this.provider,
+    required this.changeIndex,
+    required this.currentIndex
   }) : super(key: key);
 
   @override
@@ -55,8 +42,8 @@ class CustomBottomMenu extends StatelessWidget{
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
-            currentIndex: this.provider.currentIndex,
-            onTap: (int index) => this.provider.changeIndex(index),
+            currentIndex: this.currentIndex,
+            onTap: (int index) => this.changeIndex(index),
             items: this.bottomNavigationBarItems,
           ),
       )

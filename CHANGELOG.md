@@ -133,3 +133,7 @@
 ## 0.0.33
 
 * Fixed some utilities functions
+
+## 0.0.34
+
+* Removed the bottom menu state
