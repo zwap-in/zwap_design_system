@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
+import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -24,19 +25,21 @@ class BaseComplete extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-
+    int _deviceType = DeviceInherit.of(context).deviceType;
     List<Widget> _children = this.childrenWidget;
-    _children.add(
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: BottomButtons(
-            backButtonText: LocalizationClass.of(context).dynamicValue("backButton"),
-            continueButtonText: LocalizationClass.of(context).dynamicValue("continueButton"),
-            backButtonCallBackFunction: () => this.backButtonCallBack(),
-            continueButtonCallBackFunction: () => this.continueButtonCallBack(),
-          ),
-        )
-    );
+    if(_deviceType > 2){
+      _children.add(
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: BottomButtons(
+              backButtonText: LocalizationClass.of(context).dynamicValue("backButton"),
+              continueButtonText: LocalizationClass.of(context).dynamicValue("continueButton"),
+              backButtonCallBackFunction: () => this.backButtonCallBack(),
+              continueButtonCallBackFunction: () => this.continueButtonCallBack(),
+            ),
+          )
+      );
+    }
 
     return CustomCard(
       childComponent: Padding(

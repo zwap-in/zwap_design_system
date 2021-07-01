@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:taastrap/colStrap/colStrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -32,14 +33,10 @@ class CompleteBio extends StatelessWidget{
   /// The bio regex to validate the input in bio
   final String bioRegex;
 
-  /// The provider to manage the state
-  final CompleteBioState provider;
-
   CompleteBio({Key? key,
     required this.backButtonCallBack,
     required this.continueButtonCallBack,
     required this.bioRegex,
-    required this.provider
   }): super(key: key);
 
   /// Validate any bio input
@@ -120,12 +117,19 @@ class CompleteBio extends StatelessWidget{
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Column(
               children: [
-                BaseInput(
-                  inputType: InputType.inputArea,
-                  maxLines: 5,
-                  placeholderText: '',
-                  validateValue: (value) => this.validateBio(value),
-                  changeValue: (value) => this.provider.changeBio(value),
+                ChangeNotifierProvider<CompleteBioState>(
+                  create: (context) => CompleteBioState(),
+                  child: Consumer<CompleteBioState>(
+                    builder: (builder, provider, child){
+                      return BaseInput(
+                        inputType: InputType.inputArea,
+                        maxLines: 5,
+                        placeholderText: '',
+                        validateValue: (value) => true,
+                        changeValue: (value) => provider.changeBio(value),
+                      );
+                    }
+                  )
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,

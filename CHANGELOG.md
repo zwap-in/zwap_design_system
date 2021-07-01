@@ -157,3 +157,7 @@
 ## 0.0.39
 
 * Optimized the targets state
+
+## 0.0.40
+
+* Optimized the complete bio state
