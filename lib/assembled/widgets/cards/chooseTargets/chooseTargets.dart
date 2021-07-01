@@ -1,6 +1,7 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taastrap/colStrap/colStrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -39,18 +40,19 @@ class ChooseTargets extends StatelessWidget{
   /// The continue button callBack function
   final Function() continueButtonCallBack;
 
-  final TargetsState provider;
+  /// The targets list to display inside this custom widget
+  final List<TargetData> targets;
 
   ChooseTargets({Key? key,
     required this.backButtonCallBack,
     required this.continueButtonCallBack,
-    required this.provider
+    required this.targets
   }): super(key: key);
 
   /// It retrieves the responsive way to choose the targets inside this custom card
-  Map<Widget, Map<String, int>> targetsRow(){
+  Map<Widget, Map<String, int>> targetsRow(TargetsState provider){
     Map<Widget, Map<String, int>> children = {};
-    this.provider.targetsMapping.forEach((TargetData element, bool value) {
+    provider.targetsMapping.forEach((TargetData element, bool value) {
       Widget tmp = Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -60,7 +62,7 @@ class ChooseTargets extends StatelessWidget{
         child: InkResponse(
           hoverColor: Colors.transparent,
           splashColor: Colors.transparent,
-          onTap: () => this.provider.selectTarget(element),
+          onTap: () => provider.selectTarget(element),
           child: ImageCard(
             imagePath: element.targetImage,
             textCard: element.targetName,
@@ -94,8 +96,15 @@ class ChooseTargets extends StatelessWidget{
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
-            child: ResponsiveRow(
-              children: this.targetsRow(),
+            child: ChangeNotifierProvider<TargetsState>(
+              create: (context) => TargetsState(targets: targets),
+              child: Consumer<TargetsState>(
+                builder: (context, provider, child){
+                  return ResponsiveRow(
+                    children: this.targetsRow(provider),
+                  );
+                }
+              ),
             ),
           ),
         ],

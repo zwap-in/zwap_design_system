@@ -153,3 +153,7 @@
 ## 0.0.38
 
 * Added major components
+
+## 0.0.39
+
+* Optimized the targets state
