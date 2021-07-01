@@ -8,3 +8,6 @@ export 'suggested/suggested.dart';
 export 'networkCard/networkCard.dart';
 export 'meetings/meetings.dart';
 export 'editTargets/editTargets.dart';
+export 'chooseTargets/chooseTargets.dart';
+export 'completeBio/completeBio.dart';
+export 'baseComplete/baseComplete.dart';

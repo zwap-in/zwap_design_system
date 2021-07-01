@@ -1,6 +1,9 @@
 /// The data about single target
 class TargetData{
 
+  /// The pk number of the target
+  final int pk;
+
   /// The name of the target
   final String targetName;
 
@@ -8,12 +11,14 @@ class TargetData{
   final String targetImage;
 
   TargetData({
+    required this.pk,
     required this.targetName,
     required this.targetImage
   });
 
   factory TargetData.fromJson(Map<String, dynamic> json){
     return TargetData(
+        pk: json['pk'],
         targetName: json['target_name'],
         targetImage: json['target_image']
     );

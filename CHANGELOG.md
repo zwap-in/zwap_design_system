@@ -145,3 +145,7 @@
 ## 0.0.36
 
 * Added meeting details model and some meetings component
+
+## 0.0.37
+
+* Added major components

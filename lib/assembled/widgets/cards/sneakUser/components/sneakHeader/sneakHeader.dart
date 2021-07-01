@@ -13,7 +13,7 @@ class SneakUserHeader extends StatelessWidget{
   final String imageAsset;
 
   /// Callback function to save any user in the bookmarks
-  final Function() savingUser;
+  final Function()? savingUser;
 
   SneakUserHeader({Key? key,
     required this.imageAsset,
@@ -34,6 +34,7 @@ class SneakUserHeader extends StatelessWidget{
             ),
           ),
         ),
+        this.savingUser != null ?
         Padding(
           padding: EdgeInsets.only(right: 20),
           child: Align(
@@ -48,14 +49,14 @@ class SneakUserHeader extends StatelessWidget{
                     child: CustomIcon(
                         icon: FontAwesomeIcons.heart,
                         iconColor: DesignColors.pinkyPrimary,
-                        callBackPressedFunction: () => this.savingUser()
+                        callBackPressedFunction: () => this.savingUser!()
                     ),
                   ),
                 ],
               ),
             ),
           ),
-        )
+        ) : Container()
       ],
     );
   }

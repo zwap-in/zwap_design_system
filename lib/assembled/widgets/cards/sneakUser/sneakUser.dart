@@ -15,10 +15,10 @@ class SneakUser extends StatelessWidget{
   final User userInfo;
 
   /// Callback function to save in the bookmarks the user
-  final Function() saveUser;
+  final Function()? saveUser;
 
   /// Callback function to view the profile
-  final Function() viewProfile;
+  final Function()? viewProfile;
 
   SneakUser({Key? key,
     required this.userInfo,
@@ -46,13 +46,13 @@ class SneakUser extends StatelessWidget{
     return Padding(
       padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
       child: InkWell(
-        onTap: () => this.viewProfile(),
+        onTap: () => this.viewProfile != null ? this.viewProfile!() : null,
         child: CustomCard(
           cardWidth: _deviceType == 1 ? 500 : (_deviceType == 2 ? 300 : (_deviceType == 3 ? 290 : 350)),
           childComponent: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SneakUserHeader(imageAsset: this._getCustomDataValue("profilePic"), savingUser: () => this.saveUser(),),
+              SneakUserHeader(imageAsset: this._getCustomDataValue("profilePic"), savingUser: () => this.saveUser != null ? this.saveUser!() : {},),
               Padding(
                 padding: EdgeInsets.only(left: 30, right: 30, top: 5),
                 child: BaseText(
@@ -74,14 +74,15 @@ class SneakUser extends StatelessWidget{
                   baseTextsType: [BaseTextType.normal],
                 ),
               ),
+              this.viewProfile != null ?
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                   child: BaseButton(
                     buttonText: LocalizationClass.of(context).dynamicValue("viewProfileButton"),
                     buttonTypeStyle: ButtonTypeStyle.pinkyButton,
-                    onPressedCallback: () => this.viewProfile(),
+                    onPressedCallback: () => this.viewProfile!(),
                   )
-              )
+              ) : Container()
             ],
           ),
         ),
