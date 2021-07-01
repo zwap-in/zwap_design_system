@@ -144,6 +144,9 @@ class LocalizationClass {
       "today": "",
       "meetingScheduleTitle": "",
       "meetingScheduleSubTitle": "",
+      "editInterestsTitle": "",
+      "editInterestsSubTitle": "",
+      "wantTalkTitle": "",
     },
     'it': {
       'signupTitle': '',
@@ -273,7 +276,9 @@ class LocalizationClass {
       "today": "",
       "meetingScheduleTitle": "",
       "meetingScheduleSubTitle": "",
-
+      "editInterestsTitle": "",
+      "editInterestsSubTitle": "",
+      "wantTalkTitle": "",
     },
   };
 

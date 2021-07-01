@@ -5,6 +5,21 @@ import 'package:taastrap/colStrap/colStrap.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// The state of the bio
+class CompleteBioState extends ChangeNotifier{
+
+  /// The bio in input
+  String bio = "";
+
+  /// Changing the bio with the state handler
+  void changeBio(String value){
+    this.bio = value;
+    notifyListeners();
+  }
+
+}
+
+
 /// The complete bio component
 class CompleteBio extends StatelessWidget{
 
@@ -17,14 +32,14 @@ class CompleteBio extends StatelessWidget{
   /// The bio regex to validate the input in bio
   final String bioRegex;
 
-  /// Save bio callBack function
-  final Function(String value) saveBio;
+  /// The provider to manage the state
+  final CompleteBioState provider;
 
   CompleteBio({Key? key,
     required this.backButtonCallBack,
     required this.continueButtonCallBack,
     required this.bioRegex,
-    required this.saveBio
+    required this.provider
   }): super(key: key);
 
   /// Validate any bio input
@@ -110,7 +125,7 @@ class CompleteBio extends StatelessWidget{
                   maxLines: 5,
                   placeholderText: '',
                   validateValue: (value) => this.validateBio(value),
-                  changeValue: (value) => this.saveBio(value),
+                  changeValue: (value) => this.provider.changeBio(value),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,

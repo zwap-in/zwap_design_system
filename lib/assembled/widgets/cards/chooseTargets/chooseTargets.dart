@@ -6,14 +6,32 @@ import 'package:taastrap/colStrap/colStrap.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// The class to handle the targets state
+class TargetsState extends ChangeNotifier{
+
+  /// The targets mapping selected state
+  Map<TargetData, bool> targetsMapping = {};
+
+  /// The targets list
+  final List<TargetData> targets;
+
+  TargetsState({required this.targets}){
+    this.targets.forEach((TargetData element) {
+      this.targetsMapping[element] = false;
+    });
+  }
+
+  /// Selecting any target
+  void selectTarget(TargetData element){
+    this.targetsMapping[element] = this.targetsMapping[element]!;
+    notifyListeners();
+  }
+
+}
+
+
 /// The choose targets card element
 class ChooseTargets extends StatelessWidget{
-
-  /// The targets to display
-  final Map<TargetData, bool> targets;
-
-  /// callBack function on click on some targets
-  final Function(int pk) onTargetsClick;
 
   /// The back button callBack function
   final Function() backButtonCallBack;
@@ -21,17 +39,18 @@ class ChooseTargets extends StatelessWidget{
   /// The continue button callBack function
   final Function() continueButtonCallBack;
 
+  final TargetsState provider;
+
   ChooseTargets({Key? key,
-    required this.targets,
-    required this.onTargetsClick,
     required this.backButtonCallBack,
-    required this.continueButtonCallBack
+    required this.continueButtonCallBack,
+    required this.provider
   }): super(key: key);
 
   /// It retrieves the responsive way to choose the targets inside this custom card
   Map<Widget, Map<String, int>> targetsRow(){
     Map<Widget, Map<String, int>> children = {};
-    this.targets.forEach((TargetData element, bool value) {
+    this.provider.targetsMapping.forEach((TargetData element, bool value) {
       Widget tmp = Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -41,7 +60,7 @@ class ChooseTargets extends StatelessWidget{
         child: InkResponse(
           hoverColor: Colors.transparent,
           splashColor: Colors.transparent,
-          onTap: () => this.onTargetsClick(element.pk),
+          onTap: () => this.provider.selectTarget(element),
           child: ImageCard(
             imagePath: element.targetImage,
             textCard: element.targetName,

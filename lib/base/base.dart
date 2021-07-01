@@ -14,3 +14,5 @@ export 'checkbox/customCheckBox.dart';
 export 'card/customCard.dart';
 export 'buttons/baseButton.dart';
 export 'switch/switch.dart';
+export 'dropdownTag/dropDownTag.dart';
+export 'inputTag/inputTag.dart';

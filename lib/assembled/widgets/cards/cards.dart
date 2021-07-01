@@ -11,3 +11,4 @@ export 'editTargets/editTargets.dart';
 export 'chooseTargets/chooseTargets.dart';
 export 'completeBio/completeBio.dart';
 export 'baseComplete/baseComplete.dart';
+export 'editInterests/editInterests.dart';

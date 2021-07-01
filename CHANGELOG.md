@@ -149,3 +149,7 @@
 ## 0.0.37
 
 * Added major components
+
+## 0.0.38
+
+* Added major components
