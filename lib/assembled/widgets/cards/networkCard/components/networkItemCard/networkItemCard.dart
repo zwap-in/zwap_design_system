@@ -30,14 +30,14 @@ class NetworkItemCard extends StatelessWidget{
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: BaseText(
-            texts: ["${LocalizationClass.of(context).dynamicValue("infoAbout")} ${this.userData.firstName}"],
+            texts: ["${Utils.getIt<LocalizationClass>().dynamicValue("infoAbout")} ${this.userData.firstName}"],
             baseTextsType: [BaseTextType.title],
           ),
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: BaseInput(
-            placeholderText: "${LocalizationClass.of(context).dynamicValue("writePrivateNote")} ${this.userData.firstName}",
+            placeholderText: "${Utils.getIt<LocalizationClass>().dynamicValue("writePrivateNote")} ${this.userData.firstName}",
             changeValue: (dynamic value) => {},
             inputType: InputType.inputArea,
             validateValue: (dynamic value) => true,
@@ -80,7 +80,7 @@ class NetworkItemCard extends StatelessWidget{
                   child: IconText(
                     iconImage: "assets/images/assets/contact.png",
                     text: BaseText(
-                      texts: ["${this.userData.customData["commonPeople"] ?? "0"} ${LocalizationClass.of(context).dynamicValue("alreadyCommonPeople")}"],
+                      texts: ["${this.userData.customData["commonPeople"] ?? "0"} ${Utils.getIt<LocalizationClass>().dynamicValue("alreadyCommonPeople")}"],
                       baseTextsType: [BaseTextType.normal],
                     ),
                   ),

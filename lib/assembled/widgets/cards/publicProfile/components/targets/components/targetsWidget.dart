@@ -23,7 +23,7 @@ class TargetsWidget extends StatelessWidget{
       return Column(
         children: [
           BaseText(
-            texts: [LocalizationClass.of(context).dynamicValue('targetsTitle')],
+            texts: [Utils.getIt<LocalizationClass>().dynamicValue('targetsTitle')],
             baseTextsType: [BaseTextType.title],
             textsColor: [DesignColors.pinkyPrimary],
           ),

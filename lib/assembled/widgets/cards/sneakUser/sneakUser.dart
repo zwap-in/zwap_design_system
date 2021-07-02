@@ -35,7 +35,7 @@ class SneakUser extends StatelessWidget{
   Widget build(BuildContext context) {
 
     /// The device type in base of the current responsive sizes
-    int _deviceType = DeviceInherit.of(context).deviceType;
+    int _deviceType = Utils.getIt<Generic>().deviceType();
 
     /// The optional role of the user
     String _role = this._getCustomDataValue("role");
@@ -78,7 +78,7 @@ class SneakUser extends StatelessWidget{
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                   child: BaseButton(
-                    buttonText: LocalizationClass.of(context).dynamicValue("viewProfileButton"),
+                    buttonText: Utils.getIt<LocalizationClass>().dynamicValue("viewProfileButton"),
                     buttonTypeStyle: ButtonTypeStyle.pinkyButton,
                     onPressedCallback: () => this.viewProfile!(),
                   )

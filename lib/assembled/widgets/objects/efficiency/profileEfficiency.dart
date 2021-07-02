@@ -30,7 +30,7 @@ class ProfileEfficiency extends StatelessWidget{
               Padding(
                 padding: EdgeInsets.only(bottom: 10),
                 child: BaseText(
-                  texts: [LocalizationClass.of(context).dynamicValue("profileEfficiency")],
+                  texts: [Utils.getIt<LocalizationClass>().dynamicValue("profileEfficiency")],
                   baseTextsType: [BaseTextType.title],
                   textAlignment: Alignment.center,
                 ),
@@ -66,7 +66,7 @@ class ProfileEfficiency extends StatelessWidget{
         Padding(
           padding: EdgeInsets.only(bottom: 3),
           child: BaseText(
-            texts: ["${LocalizationClass.of(context).dynamicValue("profileEfficiency")}: ${this.percent * 100}%"],
+            texts: ["${Utils.getIt<LocalizationClass>().dynamicValue("profileEfficiency")}: ${this.percent * 100}%"],
             baseTextsType: [BaseTextType.title],
             textsColor: [DesignColors.pinkyPrimary],
           ),
@@ -82,7 +82,7 @@ class ProfileEfficiency extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    int _deviceType = DeviceInherit.of(context).deviceType;
+    int _deviceType = Utils.getIt<Generic>().deviceType();
     return _deviceType < 3 ? this._mobileLayout(context) : this._desktopLayout(context);
   }
 

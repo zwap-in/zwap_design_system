@@ -1,7 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -31,14 +30,7 @@ class EditProfile extends StatelessWidget{
                   childrenStack: [
                     FractionalTranslation(
                       translation: const Offset(0.0, 0.5),
-                      child: ChangeNotifierProvider<ImagePickerState>(
-                          create: (context) => ImagePickerState(),
-                          child: Consumer<ImagePickerState>(
-                              builder: (context, provider, child){
-                                return PickImage(provider: provider);
-                              }
-                          )
-                      ),
+                      child: PickImage(),
                     )
                   ],
                   headerHeight: 80,
@@ -56,8 +48,8 @@ class EditProfile extends StatelessWidget{
                 child: BottomButtons(
                   rightButtonIcon: Icons.group_add_sharp,
                   continueButtonCallBackFunction: () {  },
-                  continueButtonText: LocalizationClass.of(context).dynamicValue('saveButton'),
-                  backButtonText: LocalizationClass.of(context).dynamicValue('cancelButton'),
+                  continueButtonText: Utils.getIt<LocalizationClass>().dynamicValue('saveButton'),
+                  backButtonText: Utils.getIt<LocalizationClass>().dynamicValue('cancelButton'),
                   backButtonCallBackFunction: () {  },
                 ),
               )

@@ -151,7 +151,7 @@ class ProfileCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    int _deviceType = DeviceInherit.of(context).deviceType;
+    int _deviceType = Utils.getIt<Generic>().deviceType();
 
     return CustomCard(
       childComponent: Column(
@@ -168,7 +168,7 @@ class ProfileCard extends StatelessWidget{
             child: Column(
               children: [
                 this._headerInfo(),
-                DeviceInherit.of(context).deviceType < 3 ? Padding(
+                Utils.getIt<Generic>().deviceType() < 3 ? Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                   child: ProfileEfficiency(percent: this._profileEfficiencyValue),
                 ) : Container(),

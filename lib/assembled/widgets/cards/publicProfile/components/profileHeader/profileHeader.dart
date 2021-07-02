@@ -43,7 +43,7 @@ class ProfileHeader extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    int _deviceType = DeviceInherit.of(context).deviceType;
+    int _deviceType = Utils.getIt<Generic>().deviceType();
 
     double horizontalPadding = 0.1 * _deviceType;
 
@@ -90,7 +90,7 @@ class ProfileHeader extends StatelessWidget{
                         width: 150,
                         child: BaseButton(
                           iconButton: Icons.group_add_sharp,
-                          buttonText: LocalizationClass.of(context).dynamicValue('askIntro'),
+                          buttonText: Utils.getIt<LocalizationClass>().dynamicValue('askIntro'),
                           onPressedCallback: () => this.askIntro!(),
                           buttonTypeStyle: ButtonTypeStyle.pinkyButton,
                         ),

@@ -31,19 +31,15 @@ class LateralMenu extends StatelessWidget{
   /// The initial selected item for the lateral menu
   final String? initialItem;
 
-  /// The provider to handle the state
-  final LateralMenuState provider;
-
   LateralMenu({Key? key,
     required this.listMenu,
-    required this.provider,
     this.initialItem
   }): super(key: key);
 
   /// It displays inside the column of the lateral menu
-  List<Widget> _items(){
+  List<Widget> _items(LateralMenuState provider){
     List<Widget> finals = [];
-    String _tmp = this.provider.current != "" ? this.provider.current : this.listMenu.first;
+    String _tmp = provider.current != "" ? provider.current : this.listMenu.first;
     this.listMenu.forEach((String value) {
       finals.add(
           Padding(
@@ -53,7 +49,7 @@ class LateralMenu extends StatelessWidget{
               textsColor: [value == _tmp ? DesignColors.bluePrimary : DesignColors.greyPrimary],
               baseTextsType: [BaseTextType.title],
               hasClick: [true],
-              callBacksClick: [() => this.provider.changeCurrentSelected(value)],
+              callBacksClick: [() => provider.changeCurrentSelected(value)],
             ),
           )
       );
@@ -63,9 +59,14 @@ class LateralMenu extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: this._items(),
+    Utils.getIt.registerFactory(() => LateralMenuState());
+    return ProviderCustomer<LateralMenuState>(
+      childWidget: (LateralMenuState provider) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: this._items(provider),
+        );
+      }
     );
   }
 

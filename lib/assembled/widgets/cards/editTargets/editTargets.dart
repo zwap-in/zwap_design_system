@@ -5,9 +5,15 @@ import 'package:zwap_design_system/zwap_design_system.dart';
 
 class EditTargetState extends ChangeNotifier{
 
-  Map<TargetData, bool> targetsValue;
+  Map<TargetData, bool> targetsValue = {};
 
-  EditTargetState(this.targetsValue);
+  final List<TargetData> targets;
+
+  EditTargetState({required this.targets}){
+    this.targets.forEach((element) {
+      this.targetsValue[element] = false;
+    });
+  }
 
   void changeTargetsMapping(TargetData element, bool newValue){
     this.targetsValue[element] = newValue;
@@ -18,21 +24,21 @@ class EditTargetState extends ChangeNotifier{
 
 class EditTargets extends StatelessWidget{
 
-  final EditTargetState provider;
+  final List<TargetData> targets;
 
   EditTargets({Key? key,
-    required this.provider,
+    required this.targets
   }): super(key: key);
 
-  List<Widget> _itemElements(){
+  List<Widget> _itemElements(EditTargetState provider){
     List<Widget> tmp = [];
-    this.provider.targetsValue.forEach((TargetData element, bool flagValue) {
+    provider.targetsValue.forEach((TargetData element, bool flagValue) {
       tmp.add(
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
           child: TargetItem(
             buttonTriggered: () => {
-              this.provider.changeTargetsMapping(element, !flagValue)
+              provider.changeTargetsMapping(element, !flagValue)
             },
             titleItem: element.targetName,
             imagePath: element.targetImage,
@@ -46,12 +52,17 @@ class EditTargets extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Utils.getIt.registerFactory(() => EditTargetState(targets: this.targets));
     return CustomCard(
       cardWidth: 900,
       childComponent: Padding(
         padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          children: this._itemElements(),
+        child: ProviderCustomer<EditTargetState>(
+          childWidget: (EditTargetState provider){
+            return Column(
+              children: this._itemElements(provider),
+            );
+          }
         ),
       ),
     );

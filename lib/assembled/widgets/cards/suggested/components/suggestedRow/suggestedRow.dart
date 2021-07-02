@@ -46,7 +46,7 @@ class SuggestedRow extends StatelessWidget{
         Padding(
           padding: EdgeInsets.all(10),
           child: BaseText(
-            texts: [LocalizationClass.of(context).dynamicValue("suggestedUsersTitle")],
+            texts: [Utils.getIt<LocalizationClass>().dynamicValue("suggestedUsersTitle")],
             baseTextsType: [BaseTextType.title],
           ),
         ),

@@ -41,14 +41,14 @@ class FindCommon extends StatelessWidget{
               Padding(
                 padding: EdgeInsets.only(bottom: 10),
                 child: BaseText(
-                  texts: ["${LocalizationClass.of(context).dynamicValue("findPeopleKnows")} ${this.userName}"],
+                  texts: ["${Utils.getIt<LocalizationClass>().dynamicValue("findPeopleKnows")} ${this.userName}"],
                   baseTextsType: [BaseTextType.title],
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 10),
                 child: BaseText(
-                  texts: [LocalizationClass.of(context).dynamicValue("commonPeople")],
+                  texts: [Utils.getIt<LocalizationClass>().dynamicValue("commonPeople")],
                   baseTextsType: [BaseTextType.subTitle],
                   textsColor: [DesignColors.greyPrimary],
                 ),
@@ -56,7 +56,7 @@ class FindCommon extends StatelessWidget{
               Padding(
                 padding: EdgeInsets.only(top: 5),
                 child: BaseInput(
-                  buttonText: LocalizationClass.of(context).dynamicValue('continueButton'),
+                  buttonText: Utils.getIt<LocalizationClass>().dynamicValue('continueButton'),
                   changeValue: (value) {  },
                   validateValue: (value) => this.func(),
                   inputType: InputType.inputButton,

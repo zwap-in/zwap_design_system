@@ -31,14 +31,14 @@ class MeetingConfirmed extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("meetingConfirmedTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("meetingConfirmedTitle")],
               baseTextsType: [BaseTextType.title],
             ),
           ),
           Padding(
               padding: EdgeInsets.only(top: 10),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("meetingConfirmedSubTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("meetingConfirmedSubTitle")],
               baseTextsType: [BaseTextType.normal],
               textsColor: [DesignColors.greyPrimary],
             ),
@@ -46,7 +46,7 @@ class MeetingConfirmed extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(top: 30),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("nextStepsMeetingConfirmed")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("nextStepsMeetingConfirmed")],
               baseTextsType: [BaseTextType.normal],
             ),
           ),
@@ -54,7 +54,7 @@ class MeetingConfirmed extends StatelessWidget{
             padding: EdgeInsets.only(top: 20),
             child: BaseButton(
               iconButton: Icons.group_add,
-                buttonText: LocalizationClass.of(context).dynamicValue("findPeopleOnZwap"),
+                buttonText: Utils.getIt<LocalizationClass>().dynamicValue("findPeopleOnZwap"),
                 buttonTypeStyle: ButtonTypeStyle.continueButton,
                 onPressedCallback: () => this.findOtherPeople()
             ),
@@ -62,7 +62,7 @@ class MeetingConfirmed extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(bottom: 20),
             child: BaseButton(
-                buttonText: LocalizationClass.of(context).dynamicValue("viewYourMeeting"),
+                buttonText: Utils.getIt<LocalizationClass>().dynamicValue("viewYourMeeting"),
                 buttonTypeStyle: ButtonTypeStyle.backButton,
                 onPressedCallback: () => this.viewYourMeeting()
             ),

@@ -1,6 +1,5 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -46,12 +45,13 @@ class EditInterests extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Utils.getIt.registerFactory(() => EditInterestsState());
     return BaseComplete(
         childrenWidget: [
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("editInterestsTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("editInterestsTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
             ),
@@ -59,7 +59,7 @@ class EditInterests extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("editInterestsSubTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("editInterestsSubTitle")],
               baseTextsType: [BaseTextType.subTitle],
               textsColor: [DesignColors.greyPrimary],
             ),
@@ -71,55 +71,49 @@ class EditInterests extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("wantTalkTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("wantTalkTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
             ),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 20),
-            child: ChangeNotifierProvider<EditInterestsState>(
-                create: (context) => EditInterestsState(),
-                child: Consumer<EditInterestsState>(
-                    builder: (context, provider, child){
-                      return BaseInput(
-                        inputType: InputType.inputArea,
-                        maxLines: 5,
-                        placeholderText: LocalizationClass.of(context).dynamicValue("wantTalkExamplePlaceholder"),
-                        changeValue: (value) => provider.changeWantTalk(value),
-                        validateValue: (value) {
-                          return true;
-                        },
-                      );
-                    }
-                )
+            child: ProviderCustomer<EditInterestsState>(
+              childWidget: (EditInterestsState provider){
+                return BaseInput(
+                  inputType: InputType.inputArea,
+                  maxLines: 5,
+                  placeholderText: Utils.getIt<LocalizationClass>().dynamicValue("wantTalkExamplePlaceholder"),
+                  changeValue: (value) => provider.changeWantTalk(value),
+                  validateValue: (value) {
+                    return true;
+                  },
+                );
+              },
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("lookingForTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("lookingForTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
             ),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 20),
-            child: ChangeNotifierProvider<EditInterestsState>(
-              create: (context) => EditInterestsState(),
-              child: Consumer<EditInterestsState>(
-                builder: (context, provider, child){
-                  return BaseInput(
-                    inputType: InputType.inputArea,
-                    maxLines: 5,
-                    placeholderText: LocalizationClass.of(context).dynamicValue("lookingForExamplePlaceholder"),
-                    changeValue: (value) => provider.changeLookingFor(value),
-                    validateValue: (value) {
-                      return true;
-                    },
-                  );
-                }
-              )
+            child: ProviderCustomer<EditInterestsState>(
+              childWidget: (EditInterestsState provider){
+                return BaseInput(
+                  inputType: InputType.inputArea,
+                  maxLines: 5,
+                  placeholderText: Utils.getIt<LocalizationClass>().dynamicValue("lookingForExamplePlaceholder"),
+                  changeValue: (value) => provider.changeLookingFor(value),
+                  validateValue: (value) {
+                    return true;
+                  },
+                );
+              },
             ),
           ),
         ],

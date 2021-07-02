@@ -1,12 +1,13 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'dart:developer';
 import 'dart:html' as html;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_it/get_it.dart';
 
+/// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
 /// Utilities class functions
@@ -74,9 +75,11 @@ class Utils{
   }
 
   /// It retrieves the date string format from a DateTime object
-  static String getDateString(DateTime datetime, BuildContext context){
-    return "${datetime.day} - ${Constants.monthlyName(context)[datetime.month]} - ${datetime.year}";
+  static String getDateString(DateTime datetime){
+    return "${datetime.day} - ${Constants.monthlyName()[datetime.month]} - ${datetime.year}";
   }
+
+  static GetIt get getIt => GetIt.instance;
 
 }
 

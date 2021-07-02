@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -19,7 +20,6 @@ class ImagePickerState extends ChangeNotifier{
 
   /// This functions pick the image from local storage
   Future getImage() async {
-    print("SI");
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       _image = File(pickedFile.path);
@@ -34,19 +34,17 @@ class ImagePickerState extends ChangeNotifier{
 /// Custom widget to display an image picker
 class PickImage extends StatelessWidget{
 
-  /// The provider to handle any changes
-  final ImagePickerState provider;
-
-  PickImage({Key? key,
-    required this.provider,
-  }): super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    Utils.getIt.registerFactory(() => ImagePickerState());
     return Column(
       children: [
-        AvatarCircle(
-          imagePath: this.provider.currentImage == null ? '' : this.provider.currentImage!.path,
+        ProviderCustomer<ImagePickerState>(
+            childWidget: (ImagePickerState provider){
+              return AvatarCircle(
+                imagePath: provider.currentImage == null ? '' : provider.currentImage!.path,
+              );
+            }
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -62,10 +60,10 @@ class PickImage extends StatelessWidget{
               padding: EdgeInsets.only(right: 10, left: 2),
               child: BaseText(
                 textAlignment: Alignment.centerLeft,
-                texts: [LocalizationClass.of(context).dynamicValue("changePic")],
+                texts: [Utils.getIt<LocalizationClass>().dynamicValue("changePic")],
                 baseTextsType: [BaseTextType.normal],
                 hasClick: [true],
-                callBacksClick: [() => this.provider.getImage()],
+                callBacksClick: [() => Provider.of<ImagePickerState>(context, listen: false).getImage()],
               ),
             )
           ],

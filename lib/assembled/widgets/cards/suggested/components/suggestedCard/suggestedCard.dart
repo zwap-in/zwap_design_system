@@ -14,6 +14,7 @@ class SuggestedCard extends StatelessWidget{
   /// Custom callBack to go to view the profile suggested
   final Function() viewProfile;
 
+  /// Flag to show this custom component inside a card
   final bool isCard;
 
   SuggestedCard({Key? key,
@@ -28,6 +29,7 @@ class SuggestedCard extends StatelessWidget{
   /// The user's company
   String get _company => this.profileData.customData['company'] != null ? "@${this.profileData.customData['company']}" : "";
 
+  /// The user's profile pic
   String get _profilePic => this.profileData.customData['profilePic'] != null ? this.profileData.customData['profilePic'] : "";
 
   Widget _container(Widget child){
@@ -64,7 +66,7 @@ class SuggestedCard extends StatelessWidget{
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: BaseButton(
-                    buttonText: "Vedi Profilo",
+                    buttonText: Utils.getIt<LocalizationClass>().dynamicValue("viewProfileButton"),
                     buttonTypeStyle: ButtonTypeStyle.pinkyButton,
                     onPressedCallback: () => this.viewProfile(),
                   ),

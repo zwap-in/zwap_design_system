@@ -1,6 +1,5 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
-import 'package:zwap_design_system/base/layouts/verticalScroll/verticalScroll.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -48,7 +47,7 @@ class SuggestedColumn extends StatelessWidget{
       Padding(
         padding: EdgeInsets.all(20),
         child: BaseText(
-          texts: [LocalizationClass.of(context).dynamicValue("suggestedUsersTitle")],
+          texts: [Utils.getIt<LocalizationClass>().dynamicValue("suggestedUsersTitle")],
           baseTextsType: [BaseTextType.title],
         ),
       )

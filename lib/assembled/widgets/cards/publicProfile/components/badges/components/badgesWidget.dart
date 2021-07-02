@@ -24,7 +24,7 @@ class BadgesWidget extends StatelessWidget{
         Padding(
           padding: EdgeInsets.all(20),
           child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("memberOfTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("memberOfTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
           ),

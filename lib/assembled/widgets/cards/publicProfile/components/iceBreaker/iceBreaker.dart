@@ -21,7 +21,7 @@ class IceBreaker extends StatelessWidget{
         Padding(
           padding: EdgeInsets.only(bottom: 5),
           child: BaseText(
-            texts: [LocalizationClass.of(context).dynamicValue("wantTalkAboutTitle")],
+            texts: [Utils.getIt<LocalizationClass>().dynamicValue("wantTalkAboutTitle")],
             textsColor: [DesignColors.pinkyPrimary],
             baseTextsType: [BaseTextType.title],
           ),

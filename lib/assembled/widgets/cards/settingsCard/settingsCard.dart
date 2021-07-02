@@ -1,38 +1,23 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
-/// The switch state extended to customize the change state and send the data to the custom callBack function
-class ExtendSwitchState extends CustomSwitchState{
+/// The settings state
+class SettingsState extends ChangeNotifier{
 
-  /// The bool value for the switch component
-  bool value;
+  /// The custom values inside this settings card
+  final Map<String, dynamic> customValues = {};
 
-  /// The setting element
-  final String customTitleValue;
-
-  /// The handle change callBack function
-  Function(String key, dynamic value) handleChange;
-
-  ExtendSwitchState({
-    required this.value,
-    required this.customTitleValue,
-    required this.handleChange
-  }) : super(value: value);
-
-  /// Change the state inside this switch
-  void changeState(bool value){
-    this.handleChange(this.customTitleValue, value);
-    super.changeState(value);
+  /// Changing custom values inside this state
+  void changeValues(String key, dynamic value){
+    this.customValues[key] = value;
+    notifyListeners();
   }
-
 }
-
 
 /// Custom widget to display the settings inside a card
 class SettingsCard extends StatelessWidget{
@@ -40,23 +25,22 @@ class SettingsCard extends StatelessWidget{
   /// The settings list to display inside this card dynamically
   final List<SettingElement> settingsList;
 
-  /// The callBack function to handle the change inside the settings form
-  final Function(String key, dynamic value) callBackChange;
+  final Function(String socialType) onSocialClick;
 
 
   SettingsCard({Key? key,
     required this.settingsList,
-    required this.callBackChange,
+    required this.onSocialClick
   }): super(key: key);
 
 
   /// It retrieves the right element to insert into this settings card
-  Widget _retrieveRightElement(SettingElement element, BuildContext context){
+  Widget _retrieveRightElement(SettingElement element, SettingsState provider){
     switch(element.settingsType){
       case SettingsType.SettingsInputText:
         return BaseInput(
             placeholderText: "",
-            changeValue: (dynamic value) => this.callBackChange(element.settingsTitleValue, value),
+            changeValue: (dynamic value) => provider.changeValues(element.settingsTitleValue, value),
             inputType: InputType.inputText,
             validateValue: (dynamic value) {
               return Utils.validateRegex(element.regexValidate!, value);
@@ -68,40 +52,31 @@ class SettingsCard extends StatelessWidget{
             Padding(
               padding: EdgeInsets.only(bottom: 5),
               child: BaseButton(
-                  buttonText: LocalizationClass.of(context).dynamicValue("connectToGoogle"),
+                  buttonText: Utils.getIt<LocalizationClass>().dynamicValue("connectToGoogle"),
                   imagePath: "assets/images/socials/google.png",
                   buttonTypeStyle: ButtonTypeStyle.socialButtonGoogle,
-                  onPressedCallback: () => this.callBackChange("social_google", true)
+                  onPressedCallback: () => this.onSocialClick("google")
               ),
             ),
             Padding(
               padding: EdgeInsets.only(top: 5),
               child: BaseButton(
-                  buttonText: LocalizationClass.of(context).dynamicValue("connectToLinkedin"),
+                  buttonText: Utils.getIt<LocalizationClass>().dynamicValue("connectToLinkedin"),
                   imagePath: "assets/images/socials/linkedin.png",
                   buttonTypeStyle: ButtonTypeStyle.socialButtonLinkedin,
-                  onPressedCallback: () => this.callBackChange("social_linkedin", true)
+                  onPressedCallback: () => this.onSocialClick("linkedin")
               ),
             )
           ],
         );
       case SettingsType.SettingsSwitch:
-        return ChangeNotifierProvider<ExtendSwitchState>(
-          create: (context) => ExtendSwitchState(
-              value: false,
-              customTitleValue: element.settingsTitleValue,
-              handleChange: this.callBackChange
-          ),
-          child: Consumer<ExtendSwitchState>(
-            builder: (context, provider, child){
-              return CustomSwitch(provider: provider);
-            }
-          )
+        return CustomSwitch(
+          onChange: (bool value) => provider.changeValues(element.settingsTitleValue, value),
         );
       case SettingsType.SettingsInputNumber:
         return BaseInput(
             placeholderText: "",
-            changeValue: (dynamic value) => this.callBackChange(element.settingsTitleValue, value),
+            changeValue: (dynamic value) => provider.changeValues(element.settingsTitleValue, value),
             inputType: InputType.inputNumber,
             validateValue: (dynamic value) {
               return Utils.validateRegex(element.regexValidate!, value);
@@ -109,13 +84,13 @@ class SettingsCard extends StatelessWidget{
         );
       case SettingsType.SettingsDropDown:
         return CustomDropDown(
-          handleChange: (String value) => this.callBackChange(element.settingsTitleValue, value),
+          handleChange: (String value) => provider.changeValues(element.settingsTitleValue, value),
           values: element.settingsOptions!,
         );
       case SettingsType.SettingsInputPassword:
         return BaseInput(
             placeholderText: "",
-            changeValue: (dynamic value) => this.callBackChange(element.settingsTitleValue, value),
+            changeValue: (dynamic value) => provider.changeValues(element.settingsTitleValue, value),
             inputType: InputType.inputPassword,
             validateValue: (dynamic value) {
               return Utils.validateRegex(element.regexValidate!, value);
@@ -125,19 +100,19 @@ class SettingsCard extends StatelessWidget{
   }
 
   /// It retrieve the line setting
-  Widget _retrieveSetting(SettingElement settingElement, BuildContext context){
+  Widget _retrieveSetting(SettingElement settingElement, SettingsState provider){
     return LineSettings(
         title: settingElement.settingsTitle,
         subTitle: settingElement.settingsSubTitle,
-        rightElement: this._retrieveRightElement(settingElement, context)
+        rightElement: this._retrieveRightElement(settingElement, provider)
     );
   }
 
   /// Iterate each settings to display all the settings inside this card
-  List<Widget> _settingsListForm(BuildContext context){
+  List<Widget> _settingsListForm(SettingsState provider){
     List<Widget> finals = [];
     this.settingsList.forEach((SettingElement value) {
-      finals.add(this._retrieveSetting(value, context));
+      finals.add(this._retrieveSetting(value, provider));
     });
     return finals;
   }
@@ -145,13 +120,17 @@ class SettingsCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    int _deviceType = DeviceInherit.of(context).deviceType;
+    int _deviceType = Utils.getIt<Generic>().deviceType();
 
     return CustomCard(
         childComponent: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.0 * _deviceType, vertical: 40),
-          child: Column(
-            children: this._settingsListForm(context),
+          child: ProviderCustomer<SettingsState>(
+            childWidget: (SettingsState provider){
+              return Column(
+                children: this._settingsListForm(provider),
+              );
+            }
           ),
         )
     );

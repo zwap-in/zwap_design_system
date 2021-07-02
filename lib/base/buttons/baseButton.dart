@@ -164,7 +164,7 @@ class BaseButton extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    int _deviceSize = DeviceInherit.of(context).deviceType;
+    int _deviceSize = Utils.getIt<Generic>().deviceType();
 
     return TextButton(
       child: Padding(

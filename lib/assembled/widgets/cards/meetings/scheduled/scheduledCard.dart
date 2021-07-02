@@ -21,7 +21,7 @@ class ScheduledCard extends StatelessWidget{
   }): super(key: key);
 
   /// It retrieves the info about all widgets
-  List<Widget> _meetingsList(List<MeetingDetails> meetings, BuildContext context){
+  List<Widget> _meetingsList(List<MeetingDetails> meetings){
     List<Widget> finals = [];
     meetings.forEach((element) {
       String dateTime = "${element.dateTimeStart.hour}:${element.dateTimeStart.minute} - ${element.dateTimeEnd.hour}:${element.dateTimeEnd.minute}";
@@ -51,7 +51,7 @@ class ScheduledCard extends StatelessWidget{
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: BaseButton(
                           iconButton: FontAwesomeIcons.trash,
-                          buttonText: LocalizationClass.of(context).dynamicValue('rescheduleButton'),
+                          buttonText: Utils.getIt<LocalizationClass>().dynamicValue('rescheduleButton'),
                           buttonTypeStyle: ButtonTypeStyle.greyButton,
                           onPressedCallback: () => this.rescheduleMeetingCallback(element.pk),
                           iconColor: DesignColors.blackPrimary,
@@ -64,7 +64,7 @@ class ScheduledCard extends StatelessWidget{
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: BaseButton(
                           iconButton: FontAwesomeIcons.trash,
-                          buttonText: LocalizationClass.of(context).dynamicValue("cancelButton"),
+                          buttonText: Utils.getIt<LocalizationClass>().dynamicValue("cancelButton"),
                           buttonTypeStyle: ButtonTypeStyle.greyButton,
                           onPressedCallback: () => this.cancelMeetingCallBack(element.pk),
                           iconColor: DesignColors.blackPrimary,
@@ -84,20 +84,20 @@ class ScheduledCard extends StatelessWidget{
   }
 
   /// It retrieves the info about all day meetings
-  List<Widget> _dayMeetings(BuildContext context){
+  List<Widget> _dayMeetings(){
     List<Widget> finals = [];
     this.scheduled.forEach((DateTime key, List<MeetingDetails> value) {
-      String dateTimeInfo = "${Constants.weekDayAbbrName(context)[key.weekday]}, ${key.day} ${Constants.monthlyName(context)[key.month]} ${key.year}";
+      String dateTimeInfo = "${Constants.weekDayAbbrName()[key.weekday]}, ${key.day} ${Constants.monthlyName()[key.month]} ${key.year}";
       List<Widget> meetingChildren = [
         Padding(
           padding: EdgeInsets.only(bottom: 10),
           child: BaseText(
-              texts: ['$dateTimeInfo ', LocalizationClass.of(context).dynamicValue('today')],
+              texts: ['$dateTimeInfo ', Utils.getIt<LocalizationClass>().dynamicValue('today')],
               baseTextsType: [BaseTextType.normal, BaseTextType.normalBold]
           ),
         )
       ];
-      meetingChildren.addAll(this._meetingsList(value, context));
+      meetingChildren.addAll(this._meetingsList(value));
       finals.add(
           Padding(
             padding: EdgeInsets.symmetric(vertical: 30),
@@ -117,7 +117,7 @@ class ScheduledCard extends StatelessWidget{
       Padding(
         padding: EdgeInsets.only(bottom: 5),
         child: BaseText(
-          texts: [LocalizationClass.of(context).dynamicValue("meetingsScheduledTitle")],
+          texts: [Utils.getIt<LocalizationClass>().dynamicValue("meetingsScheduledTitle")],
           baseTextsType: [BaseTextType.title],
           textsColor: [DesignColors.pinkyPrimary],
         ),
@@ -125,13 +125,13 @@ class ScheduledCard extends StatelessWidget{
       Padding(
         padding: EdgeInsets.only(top: 5),
         child: BaseText(
-          texts: [LocalizationClass.of(context).dynamicValue("meetingsScheduledSubTitle")],
+          texts: [Utils.getIt<LocalizationClass>().dynamicValue("meetingsScheduledSubTitle")],
           baseTextsType: [BaseTextType.subTitle],
           textsColor: [DesignColors.greyPrimary],
         ),
       ),
     ];
-    _children.addAll(this._dayMeetings(context));
+    _children.addAll(this._dayMeetings());
     return CustomCard(
         childComponent: Padding(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),

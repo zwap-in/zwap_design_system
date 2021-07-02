@@ -67,11 +67,11 @@ class TargetItem extends StatelessWidget{
               child: this.isToAdd ? BaseButton(
                 buttonTypeStyle: ButtonTypeStyle.lightBlueButton,
                 onPressedCallback: () => this.buttonTriggered(),
-                buttonText: LocalizationClass.of(context).dynamicValue("addButton"),
+                buttonText: Utils.getIt<LocalizationClass>().dynamicValue("addButton"),
               ) : BaseButton(
                 buttonTypeStyle: ButtonTypeStyle.pinkyButton,
                 onPressedCallback: () => this.buttonTriggered(),
-                buttonText: LocalizationClass.of(context).dynamicValue("removeButton"),
+                buttonText: Utils.getIt<LocalizationClass>().dynamicValue("removeButton"),
               ),
               flex: 1,
             ),

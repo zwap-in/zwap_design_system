@@ -25,15 +25,15 @@ class BaseComplete extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    int _deviceType = DeviceInherit.of(context).deviceType;
+    int _deviceType = Utils.getIt<Generic>().deviceType();
     List<Widget> _children = this.childrenWidget;
     if(_deviceType > 2){
       _children.add(
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BottomButtons(
-              backButtonText: LocalizationClass.of(context).dynamicValue("backButton"),
-              continueButtonText: LocalizationClass.of(context).dynamicValue("continueButton"),
+              backButtonText: Utils.getIt<LocalizationClass>().dynamicValue("backButton"),
+              continueButtonText: Utils.getIt<LocalizationClass>().dynamicValue("continueButton"),
               backButtonCallBackFunction: () => this.backButtonCallBack(),
               continueButtonCallBackFunction: () => this.continueButtonCallBack(),
             ),

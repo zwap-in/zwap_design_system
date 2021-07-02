@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show SynchronousFuture;
+/// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
 
 
@@ -286,24 +286,4 @@ class LocalizationClass {
   String dynamicValue(String key) {
     return _localizedValues[locale.languageCode]![key]!;
   }
-}
-
-/// Translation delegation class
-class LocalizationClassDelegate extends LocalizationsDelegate<LocalizationClass> {
-
-  const LocalizationClassDelegate();
-
-  /// Check if the current languageCode is supported
-  @override
-  bool isSupported(Locale locale) => ['en', 'it'].contains(locale.languageCode);
-
-  @override
-  Future<LocalizationClass> load(Locale locale) {
-    // Returning a SynchronousFuture here because an async "load" operation
-    // isn't needed to produce an instance of DemoLocalizations.
-    return SynchronousFuture<LocalizationClass>(LocalizationClass(locale));
-  }
-
-  @override
-  bool shouldReload(LocalizationClassDelegate old) => false;
 }

@@ -1,6 +1,9 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:zwap_design_system/assembled/assembled.dart';
 
 /// Define custom switch
 class CustomSwitchState extends ChangeNotifier{
@@ -21,23 +24,32 @@ class CustomSwitchState extends ChangeNotifier{
 /// Custom widget to display a switch component
 class CustomSwitch extends StatelessWidget{
 
-  /// The provider to handle change and the current state
-  final CustomSwitchState provider;
+  final Function(bool value) onChange;
 
   CustomSwitch({Key? key,
-    required this.provider
+    required this.onChange
   }): super(key: key);
+
+  void handleChange(BuildContext context){
+    bool value = !Provider.of<CustomSwitchState>(context, listen: false).value;
+    Provider.of<CustomSwitchState>(context, listen: false).changeState(value);
+    this.onChange(value);
+  }
 
   @override
   Widget build(BuildContext context) {
     return MergeSemantics(
       child: ListTile(
         title: Container(),
-        trailing: CupertinoSwitch(
-          value: this.provider.value,
-          onChanged: (bool value) => this.provider.changeState(value),
+        trailing: ProviderCustomer<CustomSwitchState>(
+          childWidget: (CustomSwitchState provider){
+            return CupertinoSwitch(
+              value: provider.value,
+              onChanged: (bool value) => provider.changeState(value),
+            );
+          },
         ),
-        onTap: () => this.provider.changeState(!this.provider.value),
+        onTap: () => this.handleChange(context),
       ),
     );
   }

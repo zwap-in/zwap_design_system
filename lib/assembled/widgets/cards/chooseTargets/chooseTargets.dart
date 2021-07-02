@@ -1,7 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:taastrap/colStrap/colStrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -76,12 +75,13 @@ class ChooseTargets extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Utils.getIt.registerFactory(() => TargetsState(targets: this.targets));
     return BaseComplete(
         childrenWidget: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("choiceTargetsTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("choiceTargetsTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
             ),
@@ -89,22 +89,19 @@ class ChooseTargets extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("choiceTargetsSubTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("choiceTargetsSubTitle")],
               baseTextsType: [BaseTextType.subTitle],
               textsColor: [DesignColors.greyPrimary],
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
-            child: ChangeNotifierProvider<TargetsState>(
-              create: (context) => TargetsState(targets: targets),
-              child: Consumer<TargetsState>(
-                builder: (context, provider, child){
-                  return ResponsiveRow(
-                    children: this.targetsRow(provider),
-                  );
-                }
-              ),
+            child: ProviderCustomer<TargetsState>(
+              childWidget: (TargetsState provider) {
+                return ResponsiveRow(
+                  children: this.targetsRow(provider),
+                );
+              } ,
             ),
           ),
         ],

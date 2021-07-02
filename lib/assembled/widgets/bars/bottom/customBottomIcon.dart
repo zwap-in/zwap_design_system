@@ -27,7 +27,10 @@ class CustomButtonIcon extends BottomNavigationBarItem{
           borderRadius: BorderRadius.circular(30)
       ),
       child:  Icon(
-        IconData(codePoint, fontFamily: fontFamily),
+        IconData(
+            codePoint,
+            fontFamily: fontFamily
+        ),
         size: 30,
         color: isSelected ? Colors.white : Colors.black,
       ),

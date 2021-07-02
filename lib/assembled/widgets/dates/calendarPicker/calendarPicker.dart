@@ -129,7 +129,7 @@ class _CalendarPickerState extends State<CalendarPicker>{
     daysPlotted.forEach((DateTime key, List<TimeOfDay> value) {
       finals.add(
           Flexible(
-            child: this._getDaysSlot(Constants.weekDayAbbrName(context)[key.weekday]!, Constants.monthlyAbbrName(context)[key.month]!, key.day, value),
+            child: this._getDaysSlot(Constants.weekDayAbbrName()[key.weekday]!, Constants.monthlyAbbrName()[key.month]!, key.day, value),
             flex: 1,
           )
       );
@@ -153,7 +153,7 @@ class _CalendarPickerState extends State<CalendarPicker>{
             ),
             Flexible(
               child: BaseText(
-                texts: ["${Constants.monthlyName(context)[_startDatetime.month]} ${_startDatetime.year}"],
+                texts: ["${Constants.monthlyName()[_startDatetime.month]} ${_startDatetime.year}"],
                 baseTextsType: [BaseTextType.normal],
               ),
             ),

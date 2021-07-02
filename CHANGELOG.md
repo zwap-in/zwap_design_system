@@ -161,3 +161,7 @@
 ## 0.0.40
 
 * Optimized the complete bio state
+
+## 0.0.41
+
+* Optimized the state inside the components

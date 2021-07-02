@@ -1,6 +1,5 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 import 'package:taastrap/colStrap/colStrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -50,7 +49,7 @@ class CompleteBio extends StatelessWidget{
     User tmpOne = User(
       lastName: "Rossi",
       firstName: "Marco",
-      profileBio: LocalizationClass.of(context).dynamicValue("bioExampleOne"),
+      profileBio: Utils.getIt<LocalizationClass>().dynamicValue("bioExampleOne"),
       targetsData: [],
       interests: [],
       customData: {
@@ -62,7 +61,7 @@ class CompleteBio extends StatelessWidget{
     User tmpTwo = User(
         lastName: "Rossi",
         firstName: "Marco",
-        profileBio: LocalizationClass.of(context).dynamicValue("bioExampleOne"),
+        profileBio: Utils.getIt<LocalizationClass>().dynamicValue("bioExampleOne"),
         targetsData: [],
         interests: [],
         customData: {
@@ -74,7 +73,7 @@ class CompleteBio extends StatelessWidget{
     User tmpThree = User(
         lastName: "Rossi",
         firstName: "Marco",
-        profileBio: LocalizationClass.of(context).dynamicValue("bioExampleOne"),
+        profileBio: Utils.getIt<LocalizationClass>().dynamicValue("bioExampleOne"),
         targetsData: [],
         interests: [],
         customData: {
@@ -95,12 +94,13 @@ class CompleteBio extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Utils.getIt.registerFactory(() => CompleteBioState());
     return BaseComplete(
         childrenWidget: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("bioCompleteTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("bioCompleteTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
             ),
@@ -108,7 +108,7 @@ class CompleteBio extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("bioCompleteSubTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("bioCompleteSubTitle")],
               baseTextsType: [BaseTextType.subTitle],
               textsColor: [DesignColors.greyPrimary],
             ),
@@ -117,25 +117,22 @@ class CompleteBio extends StatelessWidget{
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Column(
               children: [
-                ChangeNotifierProvider<CompleteBioState>(
-                  create: (context) => CompleteBioState(),
-                  child: Consumer<CompleteBioState>(
-                    builder: (builder, provider, child){
-                      return BaseInput(
-                        inputType: InputType.inputArea,
-                        maxLines: 5,
-                        placeholderText: '',
-                        validateValue: (value) => true,
-                        changeValue: (value) => provider.changeBio(value),
-                      );
-                    }
-                  )
+                ProviderCustomer<CompleteBioState>(
+                  childWidget: (CompleteBioState provider){
+                    return BaseInput(
+                      inputType: InputType.inputArea,
+                      maxLines: 5,
+                      placeholderText: '',
+                      validateValue: (value) => true,
+                      changeValue: (value) => provider.changeBio(value),
+                    );
+                  },
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     BaseText(
-                      texts: [LocalizationClass.of(context).dynamicValue("minBioInput")],
+                      texts: [Utils.getIt<LocalizationClass>().dynamicValue("minBioInput")],
                       baseTextsType: [BaseTextType.normalBold],
                       textsColor: [DesignColors.pinkyPrimary],
                     )
@@ -147,7 +144,7 @@ class CompleteBio extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [LocalizationClass.of(context).dynamicValue("bioExampleTitle")],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue("bioExampleTitle")],
               baseTextsType: [BaseTextType.title],
             ),
           ),

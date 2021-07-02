@@ -23,7 +23,7 @@ class InterestsWidget extends StatelessWidget{
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
           child: BaseText(
-            texts: [LocalizationClass.of(context).dynamicValue("interestedInTitle")],
+            texts: [Utils.getIt<LocalizationClass>().dynamicValue("interestedInTitle")],
             textsColor: [DesignColors.pinkyPrimary],
             baseTextsType: [BaseTextType.title],
           ),
