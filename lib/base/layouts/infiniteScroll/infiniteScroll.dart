@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -86,9 +88,6 @@ class InfiniteScrollState<T> extends ChangeNotifier{
 /// Custom component to display a list of widget of type T inside an infinite scroll
 class InfiniteScroll<T> extends StatelessWidget {
 
-  /// The provider to handle the change state
-  final InfiniteScrollState<T> provider;
-
   /// The dynamic widget to retrieve the custom widget element with dynamic data from the custom API
   final Widget Function(T element) dynamicWidget;
 
@@ -96,86 +95,86 @@ class InfiniteScroll<T> extends StatelessWidget {
   final bool scrollDirection;
 
   InfiniteScroll({Key? key,
-    required this.provider,
     required this.dynamicWidget,
     this.scrollDirection = false,
   }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    InfiniteScrollState<T> provider = Provider.of<InfiniteScrollState<T>>(context, listen: false);
     try{
-      this.provider.controller.position.maxScrollExtent;
+      provider.controller.position.maxScrollExtent;
     }
     catch(e){
-      this.provider.reloadData();
+      provider.reloadData();
     }
-    this.provider.controller.addListener(() {
-      if (this.provider.controller.position.atEdge) {
-        if (this.provider.controller.position.pixels != 0) {
-          this.provider.reloadData();
+    provider.controller.addListener(() {
+      if (provider.controller.position.atEdge) {
+        if (provider.controller.position.pixels != 0) {
+          provider.reloadData();
         }
       }
     });
-    return getBody(this.provider.controller);
+    return getBody(provider);
   }
 
   /// It retrieves the correct item
-  Widget _itemBuilder(int index){
-    if(index == this.provider.elements.length){
-      if(!this.provider.error){
+  Widget _itemBuilder(int index, InfiniteScrollState<T> provider){
+    if(index == provider.elements.length){
+      if(!provider.error){
         return this._loadingBody();
       }
       else{
         return this._errorBody();
       }
     }
-    final T element = this.provider.elements[index];
+    final T element = provider.elements[index];
     return this.dynamicWidget(element);
 
   }
 
   /// It retrieve the responsive elements for the responsive row
-  Map<Widget, Map<String, int>> _verticalResponsiveElements(){
+  Map<Widget, Map<String, int>> _verticalResponsiveElements(InfiniteScrollState<T> provider){
     Map<Widget, Map<String, int>> finals = {};
-    this.provider.elements.asMap().forEach((int index, T element) {
-      Widget tmp = this._itemBuilder(index);
+    provider.elements.asMap().forEach((int index, T element) {
+      Widget tmp = this._itemBuilder(index, provider);
       finals[tmp] = {'xl': 4, 'lg': 4, 'md': 6, 'sm': 6, 'xs': 12};
     });
-    if(!this.provider._stop){
-      Widget tmp = this._itemBuilder(finals.length);
+    if(!provider._stop){
+      Widget tmp = this._itemBuilder(finals.length, provider);
       finals[tmp] = {'xl': 12, 'lg': 12, 'md': 12, 'sm': 12, 'xs': 12};
     }
     return finals;
   }
 
   /// It retrieve the responsive elements for the responsive row
-  List<Widget> _horizontalResponsiveElement(){
+  List<Widget> _horizontalResponsiveElement(InfiniteScrollState<T> provider){
     List<Widget> finals = [];
-    this.provider.elements.asMap().forEach((int index, T element) {
-      Widget tmp = this._itemBuilder(index);
+    provider.elements.asMap().forEach((int index, T element) {
+      Widget tmp = this._itemBuilder(index, provider);
       finals.add(tmp);
     });
-    if(!this.provider._stop){
-      Widget tmp = this._itemBuilder(finals.length);
+    if(!provider._stop){
+      Widget tmp = this._itemBuilder(finals.length, provider);
       finals.add(tmp);
     }
     return finals;
   }
 
   /// It retrieves the vertical scroll container
-  Widget _verticalScroll(ScrollController controller){
+  Widget _verticalScroll(InfiniteScrollState<T> provider){
     return ResponsiveRow(
-      children: this._verticalResponsiveElements(),
-      controller: controller,
+      children: this._verticalResponsiveElements(provider),
+      controller: provider.controller,
     );
   }
 
   /// It retrieves the horizontal scroll container
-  Widget _horizontalScroll(ScrollController controller){
+  Widget _horizontalScroll(InfiniteScrollState<T> provider){
     return ListView(
       scrollDirection: Axis.horizontal,
-      controller: controller,
-      children: this._horizontalResponsiveElement(),
+      controller: provider.controller,
+      children: this._horizontalResponsiveElement(provider),
     );
   }
 
@@ -206,15 +205,19 @@ class InfiniteScroll<T> extends StatelessWidget {
   }
 
   /// It returns the body of this custom widget
-  Widget getBody(ScrollController controller) {
-    if (this.provider.elements.isEmpty) {
-      if (this.provider.loading) {
-        this.provider.reloadData();
+  Widget getBody(InfiniteScrollState<T> provider) {
+    if (provider.elements.isEmpty) {
+      if (provider.loading) {
+        provider.reloadData();
         return this._loadingBody();
-      } else if (this.provider.error) {
+      } else if (provider.error) {
         return this._errorBody();
       }
     }
-    return this.scrollDirection ? this._horizontalScroll(controller) : this._verticalScroll(controller);
+    return ProviderCustomer<InfiniteScrollState<T>>(
+      childWidget: (InfiniteScrollState<T> provider) => (
+          this.scrollDirection ? this._horizontalScroll(provider) : this._verticalScroll(provider)
+      )
+    );
   }
 }

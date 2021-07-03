@@ -177,3 +177,7 @@
 ## 0.0.44
 
 * Fixed any registered instance type
+
+## 0.0.45
+
+* Fixed the state for the infinite scroll
