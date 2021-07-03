@@ -173,3 +173,7 @@
 ## 0.0.43
 
 * Added static function to register any T object with GetIt in a proper way
+
+## 0.0.44
+
+* Fixed any registered instance type

@@ -59,7 +59,8 @@ class LateralMenu extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    Utils.getIt.registerFactory(() => LateralMenuState());
+    LateralMenuState instance = LateralMenuState();
+    Utils.registerType<LateralMenuState>(instance);
     return ProviderCustomer<LateralMenuState>(
       childWidget: (LateralMenuState provider) {
         return Column(

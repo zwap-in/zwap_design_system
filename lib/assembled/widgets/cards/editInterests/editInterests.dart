@@ -45,7 +45,8 @@ class EditInterests extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    Utils.getIt.registerFactory(() => EditInterestsState());
+    EditInterestsState instance = EditInterestsState();
+    Utils.registerType<EditInterestsState>(instance);
     return BaseComplete(
         childrenWidget: [
           Padding(

@@ -75,7 +75,8 @@ class ChooseTargets extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    Utils.getIt.registerFactory(() => TargetsState(targets: this.targets));
+    TargetsState instance = TargetsState(targets: this.targets);
+    Utils.registerType<TargetsState>(instance);
     return BaseComplete(
         childrenWidget: [
           Padding(
