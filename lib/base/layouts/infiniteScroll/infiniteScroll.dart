@@ -94,28 +94,22 @@ class InfiniteScroll<T> extends StatelessWidget {
   /// The type of the infinite scroll
   final bool scrollDirection;
 
+  final InfiniteScrollState<T> instance;
+
   InfiniteScroll({Key? key,
     required this.dynamicWidget,
     this.scrollDirection = false,
+    required this.instance
   }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    InfiniteScrollState<T> provider = Provider.of<InfiniteScrollState<T>>(context, listen: false);
-    try{
-      provider.controller.position.maxScrollExtent;
-    }
-    catch(e){
-      provider.reloadData();
-    }
-    provider.controller.addListener(() {
-      if (provider.controller.position.atEdge) {
-        if (provider.controller.position.pixels != 0) {
-          provider.reloadData();
-        }
-      }
-    });
-    return getBody(provider);
+    return ProviderCustomer<InfiniteScrollState<T>>(
+        elementChild: (Consumer<InfiniteScrollState<T>> consumer) => this.handleScroll(context, consumer),
+        childWidget: (InfiniteScrollState<T> provider) => (
+            this.scrollDirection ? this._horizontalScroll(provider) : this._verticalScroll(provider)
+        )
+    );
   }
 
   /// It retrieves the correct item
@@ -204,8 +198,22 @@ class InfiniteScroll<T> extends StatelessWidget {
     );
   }
 
-  /// It returns the body of this custom widget
-  Widget getBody(InfiniteScrollState<T> provider) {
+  Widget handleScroll(BuildContext context, Consumer<InfiniteScrollState<T>> consumer){
+    Utils.registerType<InfiniteScrollState<T>>(this.instance);
+    InfiniteScrollState<T> provider = Provider.of<InfiniteScrollState<T>>(context, listen: false);
+    try{
+      provider.controller.position.maxScrollExtent;
+    }
+    catch(e){
+      provider.reloadData();
+    }
+    provider.controller.addListener(() {
+      if (provider.controller.position.atEdge) {
+        if (provider.controller.position.pixels != 0) {
+          provider.reloadData();
+        }
+      }
+    });
     if (provider.elements.isEmpty) {
       if (provider.loading) {
         provider.reloadData();
@@ -214,10 +222,6 @@ class InfiniteScroll<T> extends StatelessWidget {
         return this._errorBody();
       }
     }
-    return ProviderCustomer<InfiniteScrollState<T>>(
-      childWidget: (InfiniteScrollState<T> provider) => (
-          this.scrollDirection ? this._horizontalScroll(provider) : this._verticalScroll(provider)
-      )
-    );
+    return consumer;
   }
 }

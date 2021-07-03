@@ -1,6 +1,7 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taastrap/colStrap/colStrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -98,6 +99,9 @@ class ChooseTargets extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: ProviderCustomer<TargetsState>(
+              elementChild: (Consumer<TargetsState> consumer){
+                return consumer;
+              },
               childWidget: (TargetsState provider) {
                 return ResponsiveRow(
                   children: this.targetsRow(provider),

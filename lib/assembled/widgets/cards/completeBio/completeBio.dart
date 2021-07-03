@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:taastrap/colStrap/colStrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -127,6 +128,9 @@ class CompleteBio extends StatelessWidget{
                       validateValue: (value) => true,
                       changeValue: (value) => provider.changeBio(value),
                     );
+                  },
+                  elementChild: (Consumer<CompleteBioState> consumer){
+                    return consumer;
                   },
                 ),
                 Row(

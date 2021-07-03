@@ -36,20 +36,24 @@ class CustomSwitch extends StatelessWidget{
     this.onChange(value);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return MergeSemantics(
-      child: ListTile(
-        title: Container(),
-        trailing: ProviderCustomer<CustomSwitchState>(
-          childWidget: (CustomSwitchState provider){
-            return CupertinoSwitch(
+      child: ProviderCustomer<CustomSwitchState>(
+        elementChild: (Consumer<CustomSwitchState> consumer) {
+          return ListTile(
+            title: Container(),
+            onTap: () => this.handleChange(context),
+            trailing: consumer,
+          );
+        },
+        childWidget: (CustomSwitchState provider){
+          return CupertinoSwitch(
               value: provider.value,
               onChanged: (bool value) => provider.changeState(value),
             );
           },
-        ),
-        onTap: () => this.handleChange(context),
       ),
     );
   }

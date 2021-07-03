@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -80,6 +81,9 @@ class EditInterests extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(bottom: 20),
             child: ProviderCustomer<EditInterestsState>(
+              elementChild: (Consumer<EditInterestsState> consumer){
+                return consumer;
+              },
               childWidget: (EditInterestsState provider){
                 return BaseInput(
                   inputType: InputType.inputArea,
@@ -104,6 +108,9 @@ class EditInterests extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(bottom: 20),
             child: ProviderCustomer<EditInterestsState>(
+              elementChild: (Consumer<EditInterestsState> consumer){
+                return consumer;
+              },
               childWidget: (EditInterestsState provider){
                 return BaseInput(
                   inputType: InputType.inputArea,

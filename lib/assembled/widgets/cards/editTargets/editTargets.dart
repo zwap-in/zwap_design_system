@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:zwap_design_system/zwap_design_system.dart';
 
@@ -59,6 +60,9 @@ class EditTargets extends StatelessWidget{
       childComponent: Padding(
         padding: EdgeInsets.symmetric(vertical: 20),
         child: ProviderCustomer<EditTargetState>(
+          elementChild: (Consumer<EditTargetState> consumer){
+            return consumer;
+          },
           childWidget: (EditTargetState provider){
             return Column(
               children: this._itemElements(provider),

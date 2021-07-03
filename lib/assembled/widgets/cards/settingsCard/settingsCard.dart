@@ -1,6 +1,7 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -126,6 +127,9 @@ class SettingsCard extends StatelessWidget{
         childComponent: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.0 * _deviceType, vertical: 40),
           child: ProviderCustomer<SettingsState>(
+            elementChild: (Consumer<SettingsState> consumer){
+              return consumer;
+            },
             childWidget: (SettingsState provider){
               return Column(
                 children: this._settingsListForm(provider),

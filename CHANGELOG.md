@@ -181,3 +181,7 @@
 ## 0.0.45
 
 * Fixed the state for the infinite scroll
+
+## 0.0.46
+
+* Adjusted the state inside the provider customer

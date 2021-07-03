@@ -1,6 +1,7 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -62,6 +63,9 @@ class LateralMenu extends StatelessWidget{
     LateralMenuState instance = LateralMenuState();
     Utils.registerType<LateralMenuState>(instance);
     return ProviderCustomer<LateralMenuState>(
+      elementChild: (Consumer<LateralMenuState> consumer){
+        return consumer;
+      },
       childWidget: (LateralMenuState provider) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
