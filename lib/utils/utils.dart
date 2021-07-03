@@ -1,6 +1,5 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'dart:developer';
-import 'dart:html' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +23,6 @@ class Utils{
       });
       queryArgs = queryArgs.substring(0, queryArgs.length - 1);
     }
-    html.window.history.pushState(null, "", "/$name$queryArgs");
     Navigator.pushReplacementNamed(context, "/$name$queryArgs");
   }
 

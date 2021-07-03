@@ -165,3 +165,7 @@
 ## 0.0.41
 
 * Optimized the state inside the components
+
+## 0.0.42
+
+* Remove temporally the html push navigator state
