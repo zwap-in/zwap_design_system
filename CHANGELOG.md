@@ -169,3 +169,7 @@
 ## 0.0.42
 
 * Remove temporally the html push navigator state
+
+## 0.0.43
+
+* Added static function to register any T object with GetIt in a proper way

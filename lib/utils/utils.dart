@@ -77,7 +77,16 @@ class Utils{
     return "${datetime.day} - ${Constants.monthlyName()[datetime.month]} - ${datetime.year}";
   }
 
+  /// Retrieve the GetIt object
   static GetIt get getIt => GetIt.instance;
+
+  /// Register any T instance with GetIt
+  static void registerType<T extends Object>(T instance){
+    if(Utils.getIt.isRegistered<T>()){
+      Utils.getIt.unregister<T>();
+    }
+    Utils.getIt.registerFactory<T>(() => instance);
+  }
 
 }
 
