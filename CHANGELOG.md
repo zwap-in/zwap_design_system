@@ -197,3 +197,7 @@
 ## 0.0.49
 
 * Removed the instance param from the infinite scroll
+
+## 0.0.50
+
+* Removed the Consumer from the infinite scroll component

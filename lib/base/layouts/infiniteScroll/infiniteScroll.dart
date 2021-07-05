@@ -101,11 +101,29 @@ class InfiniteScroll<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return this.handleScroll(context, Consumer<InfiniteScrollState<T>>(
-      builder: (builder, provider, child){
-        return this.scrollDirection ? this._horizontalScroll(provider) : this._verticalScroll(provider);
+    InfiniteScrollState<T> provider = Provider.of<InfiniteScrollState<T>>(context, listen: false);
+    try{
+      provider.controller.position.maxScrollExtent;
+    }
+    catch(e){
+      provider.reloadData();
+    }
+    provider.controller.addListener(() async {
+      if (provider.controller.position.atEdge) {
+        if (provider.controller.position.pixels != 0) {
+          provider.reloadData();
+        }
       }
-    ));
+    });
+    if (provider.elements.isEmpty) {
+      if (provider.loading) {
+        provider.reloadData();
+        return this._loadingBody();
+      } else if (provider.error) {
+        return this._errorBody();
+      }
+    }
+    return this.scrollDirection ? this._horizontalScroll(provider) : this._verticalScroll(provider);
   }
 
   /// It retrieves the correct item
@@ -192,31 +210,5 @@ class InfiniteScroll<T> extends StatelessWidget {
         child: CircularProgressIndicator(),
       ),
     );
-  }
-
-  Widget handleScroll(BuildContext context, Consumer<InfiniteScrollState<T>> consumer){
-    InfiniteScrollState<T> provider = Provider.of<InfiniteScrollState<T>>(context, listen: false);
-    try{
-      provider.controller.position.maxScrollExtent;
-    }
-    catch(e){
-      provider.reloadData();
-    }
-    provider.controller.addListener(() {
-      if (provider.controller.position.atEdge) {
-        if (provider.controller.position.pixels != 0) {
-          provider.reloadData();
-        }
-      }
-    });
-    if (provider.elements.isEmpty) {
-      if (provider.loading) {
-        provider.reloadData();
-        return this._loadingBody();
-      } else if (provider.error) {
-        return this._errorBody();
-      }
-    }
-    return consumer;
   }
 }
