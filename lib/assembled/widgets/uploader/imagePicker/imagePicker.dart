@@ -36,8 +36,6 @@ class PickImage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    ImagePickerState instance = ImagePickerState();
-    Utils.registerType<ImagePickerState>(instance);
     return Column(
       children: [
         Consumer<ImagePickerState>(

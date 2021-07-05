@@ -198,7 +198,6 @@ class InfiniteScroll<T> extends StatelessWidget {
   }
 
   Widget handleScroll(BuildContext context, Consumer<InfiniteScrollState<T>> consumer){
-    Utils.registerType<InfiniteScrollState<T>>(this.instance);
     InfiniteScrollState<T> provider = Provider.of<InfiniteScrollState<T>>(context, listen: false);
     try{
       provider.controller.position.maxScrollExtent;

@@ -189,3 +189,7 @@
 ## 0.0.47
 
 * Adjusted the state inside the provider customer
+
+## 0.0.48
+
+* Removed any registration of the instance

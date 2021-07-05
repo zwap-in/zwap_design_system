@@ -53,8 +53,6 @@ class EditTargets extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    EditTargetState instance = EditTargetState(targets: this.targets);
-    Utils.registerType<EditTargetState>(instance);
     return CustomCard(
       cardWidth: 900,
       childComponent: Padding(

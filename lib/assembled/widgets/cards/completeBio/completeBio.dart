@@ -95,8 +95,6 @@ class CompleteBio extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    CompleteBioState instance = CompleteBioState();
-    Utils.registerType<CompleteBioState>(instance);
     return BaseComplete(
         childrenWidget: [
           Padding(
