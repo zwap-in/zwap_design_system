@@ -201,3 +201,7 @@
 ## 0.0.50
 
 * Removed the Consumer from the infinite scroll component
+
+## 0.0.51
+
+* Added the callBack function on click on item on card steps component

@@ -15,7 +15,7 @@ class CardSteps extends StatelessWidget {
   final String titleCard;
 
   /// The mapping info about the checkList elements
-  final Map<String, bool> mappingListElements;
+  final Map<String, Map<String, dynamic>> mappingListElements;
 
   CardSteps({Key? key,
     required this.titleCard,
@@ -30,7 +30,8 @@ class CardSteps extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10),
         child: CheckListItem(
             checkListItemText: i,
-            isDoneItem: this.mappingListElements[i]!),
+            callBackClick: () => this.mappingListElements[i]!['callBackFunction'](),
+            isDoneItem: this.mappingListElements[i]!['isComplete']),
       ));
     return finals;
   }

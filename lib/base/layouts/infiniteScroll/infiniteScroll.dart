@@ -29,7 +29,7 @@ class InfiniteScrollState<T> extends ChangeNotifier{
   ScrollController controller = ScrollController();
 
   /// Number of elements per page
-  final int defaultPhotosPerPageCount;
+  final int itemsPerPageCount;
 
   /// The threshold to get more data during the scroll
   final int _nextPageThreshold = 5;
@@ -39,7 +39,7 @@ class InfiniteScrollState<T> extends ChangeNotifier{
 
   InfiniteScrollState({
     required this.fetchMoreData,
-    required this.defaultPhotosPerPageCount
+    required this.itemsPerPageCount
   });
 
   /// Function to reload data
