@@ -193,3 +193,7 @@
 ## 0.0.48
 
 * Removed any registration of the instance
+
+## 0.0.49
+
+* Removed the instance param from the infinite scroll

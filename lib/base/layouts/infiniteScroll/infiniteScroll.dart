@@ -94,12 +94,9 @@ class InfiniteScroll<T> extends StatelessWidget {
   /// The type of the infinite scroll
   final bool scrollDirection;
 
-  final InfiniteScrollState<T> instance;
-
   InfiniteScroll({Key? key,
     required this.dynamicWidget,
     this.scrollDirection = false,
-    required this.instance
   }): super(key: key);
 
   @override
