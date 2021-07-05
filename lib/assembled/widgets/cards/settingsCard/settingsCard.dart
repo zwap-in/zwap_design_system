@@ -126,11 +126,8 @@ class SettingsCard extends StatelessWidget{
     return CustomCard(
         childComponent: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.0 * _deviceType, vertical: 40),
-          child: ProviderCustomer<SettingsState>(
-            elementChild: (Consumer<SettingsState> consumer){
-              return consumer;
-            },
-            childWidget: (SettingsState provider){
+          child: Consumer<SettingsState>(
+            builder: (builder, provider, child){
               return Column(
                 children: this._settingsListForm(provider),
               );

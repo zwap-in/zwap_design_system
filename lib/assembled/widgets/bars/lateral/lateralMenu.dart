@@ -60,18 +60,13 @@ class LateralMenu extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    LateralMenuState instance = LateralMenuState();
-    Utils.registerType<LateralMenuState>(instance);
-    return ProviderCustomer<LateralMenuState>(
-      elementChild: (Consumer<LateralMenuState> consumer){
-        return consumer;
-      },
-      childWidget: (LateralMenuState provider) {
+    return Consumer<LateralMenuState>(
+      builder: (builder, provider, child){
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: this._items(provider),
         );
-      }
+      },
     );
   }
 

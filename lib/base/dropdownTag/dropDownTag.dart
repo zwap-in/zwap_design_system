@@ -52,27 +52,26 @@ class DropDownTag extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return ProviderCustomer<DropDownTagState>(
-      elementChild: (Consumer<DropDownTagState> consumer){
-        return Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: CustomDropDown(
-                  values: this.values,
-                  handleChange: (String value) => Provider.of<DropDownTagState>(context, listen: false).changeValues(value, true)
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: consumer,
-            )
-          ],
-        );
-      },
-      childWidget: (DropDownTagState value) => ResponsiveRow(
-        children: this._getResponsiveChildren(value),
-      ),
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: CustomDropDown(
+              values: this.values,
+              handleChange: (String value) => Provider.of<DropDownTagState>(context, listen: false).changeValues(value, true)
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Consumer<DropDownTagState>(
+            builder: (builder, provider, child){
+              return ResponsiveRow(
+                children: this._getResponsiveChildren(provider),
+              );
+            }
+          ),
+        )
+      ],
     );
   }
 

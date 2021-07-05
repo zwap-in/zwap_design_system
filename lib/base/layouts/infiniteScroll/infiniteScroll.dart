@@ -104,12 +104,11 @@ class InfiniteScroll<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderCustomer<InfiniteScrollState<T>>(
-        elementChild: (Consumer<InfiniteScrollState<T>> consumer) => this.handleScroll(context, consumer),
-        childWidget: (InfiniteScrollState<T> provider) => (
-            this.scrollDirection ? this._horizontalScroll(provider) : this._verticalScroll(provider)
-        )
-    );
+    return this.handleScroll(context, Consumer<InfiniteScrollState<T>>(
+      builder: (builder, provider, child){
+        return this.scrollDirection ? this._horizontalScroll(provider) : this._verticalScroll(provider);
+      }
+    ));
   }
 
   /// It retrieves the correct item

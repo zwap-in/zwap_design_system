@@ -59,11 +59,8 @@ class EditTargets extends StatelessWidget{
       cardWidth: 900,
       childComponent: Padding(
         padding: EdgeInsets.symmetric(vertical: 20),
-        child: ProviderCustomer<EditTargetState>(
-          elementChild: (Consumer<EditTargetState> consumer){
-            return consumer;
-          },
-          childWidget: (EditTargetState provider){
+        child: Consumer<EditTargetState>(
+          builder: (builder, provider, child){
             return Column(
               children: this._itemElements(provider),
             );

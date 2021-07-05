@@ -98,11 +98,8 @@ class ChooseTargets extends StatelessWidget{
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
-            child: ProviderCustomer<TargetsState>(
-              elementChild: (Consumer<TargetsState> consumer){
-                return consumer;
-              },
-              childWidget: (TargetsState provider) {
+            child: Consumer<TargetsState>(
+              builder: (builder, TargetsState provider, child) {
                 return ResponsiveRow(
                   children: this.targetsRow(provider),
                 );

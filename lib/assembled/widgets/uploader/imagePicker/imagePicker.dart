@@ -38,39 +38,36 @@ class PickImage extends StatelessWidget{
   Widget build(BuildContext context) {
     ImagePickerState instance = ImagePickerState();
     Utils.registerType<ImagePickerState>(instance);
-    return ProviderCustomer<ImagePickerState>(
-      elementChild: (Consumer<ImagePickerState> consumer){
-        return Column(
+    return Column(
+      children: [
+        Consumer<ImagePickerState>(
+          builder: (builder, provider, child){
+            return AvatarCircle(imagePath: provider.currentImage == null ? "" : provider.currentImage!.path);
+          }
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            consumer,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 2, left: 10),
-                  child: CustomIcon(
-                    callBackPressedFunction: () {  },
-                    icon: Icons.camera_alt,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 10, left: 2),
-                  child: BaseText(
-                    textAlignment: Alignment.centerLeft,
-                    texts: [Utils.getIt<LocalizationClass>().dynamicValue("changePic")],
-                    baseTextsType: [BaseTextType.normal],
-                    hasClick: [true],
-                    callBacksClick: [() => Provider.of<ImagePickerState>(context, listen: false).getImage()],
-                  ),
-                )
-              ],
+            Padding(
+              padding: EdgeInsets.only(right: 2, left: 10),
+              child: CustomIcon(
+                callBackPressedFunction: () {  },
+                icon: Icons.camera_alt,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 10, left: 2),
+              child: BaseText(
+                textAlignment: Alignment.centerLeft,
+                texts: [Utils.getIt<LocalizationClass>().dynamicValue("changePic")],
+                baseTextsType: [BaseTextType.normal],
+                hasClick: [true],
+                callBacksClick: [() => Provider.of<ImagePickerState>(context, listen: false).getImage()],
+              ),
             )
           ],
-        );
-      },
-      childWidget: (ImagePickerState provider){
-        return AvatarCircle(imagePath: provider.currentImage == null ? "" : provider.currentImage!.path);
-      },
+        )
+      ],
     );
   }
 

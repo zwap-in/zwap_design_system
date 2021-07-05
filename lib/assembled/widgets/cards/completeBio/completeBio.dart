@@ -119,8 +119,8 @@ class CompleteBio extends StatelessWidget{
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Column(
               children: [
-                ProviderCustomer<CompleteBioState>(
-                  childWidget: (CompleteBioState provider){
+                Consumer<CompleteBioState>(
+                  builder: (builder, provider, child){
                     return BaseInput(
                       inputType: InputType.inputArea,
                       maxLines: 5,
@@ -128,10 +128,7 @@ class CompleteBio extends StatelessWidget{
                       validateValue: (value) => true,
                       changeValue: (value) => provider.changeBio(value),
                     );
-                  },
-                  elementChild: (Consumer<CompleteBioState> consumer){
-                    return consumer;
-                  },
+                  }
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,

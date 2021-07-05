@@ -185,3 +185,7 @@
 ## 0.0.46
 
 * Adjusted the state inside the provider customer
+
+## 0.0.47
+
+* Adjusted the state inside the provider customer

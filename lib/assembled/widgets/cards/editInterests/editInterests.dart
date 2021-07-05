@@ -80,11 +80,8 @@ class EditInterests extends StatelessWidget{
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 20),
-            child: ProviderCustomer<EditInterestsState>(
-              elementChild: (Consumer<EditInterestsState> consumer){
-                return consumer;
-              },
-              childWidget: (EditInterestsState provider){
+            child: Consumer<EditInterestsState>(
+              builder: (builder, provider, child){
                 return BaseInput(
                   inputType: InputType.inputArea,
                   maxLines: 5,
@@ -94,7 +91,7 @@ class EditInterests extends StatelessWidget{
                     return true;
                   },
                 );
-              },
+              }
             ),
           ),
           Padding(
@@ -107,11 +104,8 @@ class EditInterests extends StatelessWidget{
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 20),
-            child: ProviderCustomer<EditInterestsState>(
-              elementChild: (Consumer<EditInterestsState> consumer){
-                return consumer;
-              },
-              childWidget: (EditInterestsState provider){
+            child: Consumer<EditInterestsState>(
+              builder: (builder, provider, child){
                 return BaseInput(
                   inputType: InputType.inputArea,
                   maxLines: 5,
@@ -121,7 +115,7 @@ class EditInterests extends StatelessWidget{
                     return true;
                   },
                 );
-              },
+              }
             ),
           ),
         ],
