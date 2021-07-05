@@ -213,3 +213,7 @@
 ## 0.0.53
 
 * Reverted the lateral menu initial params
+
+## 0.0.54
+
+* Added the internal param for the custom asset inside the splash screen

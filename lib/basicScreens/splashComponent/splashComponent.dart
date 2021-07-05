@@ -24,7 +24,8 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomAsset(
-                assetPathUrl: this.imagePath
+              assetPathUrl: this.imagePath,
+              isInternal: true,
             ),
             Padding(
               padding: EdgeInsets.only(top: 30, bottom: 30),
