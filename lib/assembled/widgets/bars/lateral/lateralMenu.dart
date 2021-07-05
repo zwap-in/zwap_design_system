@@ -27,7 +27,7 @@ class LateralMenuState extends ChangeNotifier{
 class LateralMenu extends StatelessWidget{
 
   /// The list menu
-  final Map<String, String> listMenu;
+  final List<String> listMenu;
 
   /// The initial selected item for the lateral menu
   final String? initialItem;
@@ -40,17 +40,17 @@ class LateralMenu extends StatelessWidget{
   /// It displays inside the column of the lateral menu
   List<Widget> _items(LateralMenuState provider){
     List<Widget> finals = [];
-    String _tmp = provider.current != "" ? provider.current : this.listMenu.keys.first;
-    this.listMenu.forEach((String key, String value) {
+    String _tmp = provider.current != "" ? provider.current : this.listMenu.first;
+    this.listMenu.forEach((String element) {
       finals.add(
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue(key)],
-              textsColor: [value == _tmp ? DesignColors.bluePrimary : DesignColors.greyPrimary],
+              texts: [Utils.getIt<LocalizationClass>().dynamicValue(element)],
+              textsColor: [element == _tmp ? DesignColors.bluePrimary : DesignColors.greyPrimary],
               baseTextsType: [BaseTextType.title],
               hasClick: [true],
-              callBacksClick: [() => provider.changeCurrentSelected(value)],
+              callBacksClick: [() => provider.changeCurrentSelected(element)],
             ),
           )
       );
