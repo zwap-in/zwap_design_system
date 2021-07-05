@@ -205,3 +205,7 @@
 ## 0.0.51
 
 * Added the callBack function on click on item on card steps component
+
+## 0.0.52
+
+* Changed the lateral menu items from a list to a map
