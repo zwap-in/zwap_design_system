@@ -217,3 +217,7 @@
 ## 0.0.54
 
 * Added the internal param for the custom asset inside the splash screen
+
+## 0.0.55
+
+* Adjusted the network card screen and added some data models in order to support the network card

@@ -8,10 +8,12 @@ class NetworkItemCard extends StatelessWidget{
 
   final User userData;
 
-  NetworkItemCard({Key? key,
-    required this.userData
-  }): super(key: key);
+  final DateTime lastMeeting;
 
+  NetworkItemCard({Key? key,
+    required this.userData,
+    required this.lastMeeting
+  }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class NetworkItemCard extends StatelessWidget{
           company: this.userData.customData['company'] ?? "",
           bioProfile: this.userData.profileBio,
           starsReview: this.userData.customData["starsReview"] ?? "-1",
-          lastMeeting: DateTime(2021, 3, 20)
+          lastMeeting: this.lastMeeting
       ),
       children: [
         Padding(

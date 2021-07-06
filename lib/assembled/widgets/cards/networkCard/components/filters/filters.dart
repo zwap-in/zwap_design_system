@@ -5,7 +5,27 @@ import 'package:flutter/material.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// The filters widget to display inside the network card
 class Filters extends StatelessWidget{
+
+  /// CallBack function to search any contacts inside the network card
+  final Function(String searchText) searchCallBack;
+
+  /// Importing contacts callBack
+  final Function() importContactsCallBack;
+
+  /// Show filters callBack
+  final Function() showFiltersCallBack;
+
+  /// Exporting contacts callBack
+  final Function() exportContactsCallBack;
+
+  Filters({Key? key,
+    required this.searchCallBack,
+    required this.importContactsCallBack,
+    required this.showFiltersCallBack,
+    required this.exportContactsCallBack
+  }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +35,8 @@ class Filters extends StatelessWidget{
           child: BaseInput(
               validateValue: (value) { return true; },
               inputType: InputType.inputSearch,
-              placeholderText: 'Cerca per nome, città, settore, ruolo',
-              changeValue: (value) {  },
+              placeholderText: Utils.translatedText("searchFiltersPlaceholder"),
+              changeValue: (value) => this.searchCallBack(value),
             ),
           flex: 1,
         ),
@@ -33,9 +53,9 @@ class Filters extends StatelessWidget{
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: BaseButton(
                       iconButton: Icons.group_add,
-                      buttonText: "Importa contatti",
+                      buttonText: Utils.translatedText("importContactsButton"),
                       buttonTypeStyle: ButtonTypeStyle.pinkyButton,
-                      onPressedCallback: (){},
+                      onPressedCallback: () => this.importContactsCallBack(),
                     ),
                   ),
                   flex: 1,
@@ -45,21 +65,9 @@ class Filters extends StatelessWidget{
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: BaseButton(
                       iconButton: Icons.group_add,
-                      buttonText: "Mostra filtri",
+                      buttonText: Utils.translatedText("exportContactsButton"),
                       buttonTypeStyle: ButtonTypeStyle.pinkyButton,
-                      onPressedCallback: (){},
-                    ),
-                  ),
-                  flex: 1,
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: BaseButton(
-                      iconButton: Icons.group_add,
-                      buttonText: "Esporta",
-                      buttonTypeStyle: ButtonTypeStyle.pinkyButton,
-                      onPressedCallback: (){},
+                      onPressedCallback: () => this.exportContactsCallBack(),
                     ),
                   ),
                   flex: 1,

@@ -13,12 +13,12 @@ class BaseStateType{
 
   final String baseStatNumber;
 
-  final String baseStatGraphImage;
+  final IconData iconData;
 
   BaseStateType({
     required this.baseStatTitle,
     required this.baseStatNumber,
-    required this.baseStatGraphImage
+    required this.iconData
   });
 
 }
@@ -40,7 +40,7 @@ class HeaderNetwork extends StatelessWidget{
   Map<Widget, Map<String, int>> _getStatColumns(){
     Map<Widget, Map<String, int>> finals = {};
     this.baseStateType.forEach((element) {
-      Widget tmp = BaseStat(title: element.baseStatTitle, numberStat: element.baseStatNumber, graphImage: element.baseStatGraphImage);
+      Widget tmp = BaseStat(title: element.baseStatTitle, numberStat: element.baseStatNumber, iconData: element.iconData);
       finals[tmp] = {'xl': 3, 'lg': 3, 'md': 4, 'sm': 6, 'xs': 6};
     });
     return finals;

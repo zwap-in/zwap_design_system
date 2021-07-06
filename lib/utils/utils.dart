@@ -88,6 +88,16 @@ class Utils{
     Utils.getIt.registerFactory<T>(() => instance);
   }
 
+  /// It retrieves the dynamic translated text in base of any key
+  static String translatedText(String key){
+    return Utils.getIt<LocalizationClass>().dynamicValue(key);
+  }
+
+  /// It retrieves the dynamic translated text in base of any key
+  static int iconData(String key){
+    int? codePoint = Utils.getIt<IconDataDict>().iconDict[key];
+    return codePoint != null ? codePoint : -1;
+  }
 }
 
 /// The tuple type to use inside this platform

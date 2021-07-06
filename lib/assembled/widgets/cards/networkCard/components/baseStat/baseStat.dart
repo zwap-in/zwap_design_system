@@ -9,12 +9,12 @@ class BaseStat extends StatelessWidget{
 
   final String numberStat;
 
-  final String graphImage;
+  final IconData iconData;
 
   BaseStat({Key? key,
     required this.title,
     required this.numberStat,
-    required this.graphImage
+    required this.iconData
   }): super(key: key);
 
   @override
@@ -26,13 +26,13 @@ class BaseStat extends StatelessWidget{
             Flexible(
               child: CustomIcon(
                 callBackPressedFunction: () {  },
-                icon: Icons.photo_camera_front,
+                icon: this.iconData,
               ),
               flex: 0,
             ),
             Flexible(
                 child: BaseText(
-                  texts: [this.title],
+                  texts: [this.numberStat],
                   baseTextsType: [BaseTextType.normal],
                 )
             )
@@ -44,21 +44,12 @@ class BaseStat extends StatelessWidget{
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 9),
                   child: BaseText(
-                    texts: [this.numberStat],
+                    texts: [this.title],
                     baseTextsType: [BaseTextType.normal],
                   ),
                 ),
               flex: 0,
             ),
-            Flexible(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: CustomAsset(
-                    assetPathUrl: this.graphImage,
-                    isInternal: true,
-                  ),
-                ),
-            )
           ],
         ),
       ],
