@@ -221,3 +221,7 @@
 ## 0.0.55
 
 * Adjusted the network card screen and added some data models in order to support the network card
+
+## 0.0.56
+
+* Added the infinite scroll for the network card item

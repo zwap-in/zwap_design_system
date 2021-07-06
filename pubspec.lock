@@ -242,7 +242,7 @@ packages:
       name: taastrap
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.6"
+    version: "0.1.7"
   term_glyph:
     dependency: transitive
     description:

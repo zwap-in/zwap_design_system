@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
@@ -22,21 +23,8 @@ class NetworkCard extends StatelessWidget{
   }): super(key: key);
 
 
-  /// The list of the users to show inside the network screen
-  List<Widget> finals(){
-    List<Widget> finals = [];
-    this.networkStats.networkUser.forEach((key, value) {
-      finals.add(
-        NetworkItemCard(userData: key, lastMeeting: value.dateTimeStart,)
-      );
-    });
-    return finals;
-  }
-
-
   @override
   Widget build(BuildContext context) {
-    List<Widget> finals = this.finals();
     return CustomCard(
       childComponent: VerticalScroll(
         childComponent: Column(
@@ -91,7 +79,16 @@ class NetworkCard extends StatelessWidget{
                       searchCallBack: (String searchKey) => {},
                     ),
                   ),
-                  for(int i = 0; i < finals.length; i++) finals[i]
+                  Consumer<InfiniteScrollState<TupleType<DateTime, User>>>(
+                    builder: (builder, provider, child){
+                      return InfiniteScroll<TupleType<DateTime, User>>(
+                          dynamicWidget: (TupleType<DateTime, User> element) => NetworkItemCard(
+                            userData: element.b,
+                            lastMeeting: element.a,
+                          )
+                      );
+                    }
+                  )
                 ],
 
               ),
