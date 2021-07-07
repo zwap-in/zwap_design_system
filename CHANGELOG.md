@@ -225,3 +225,7 @@
 ## 0.0.56
 
 * Added the infinite scroll for the network card item
+
+## 0.0.57
+
+* Fixed every translation text on the zwap application

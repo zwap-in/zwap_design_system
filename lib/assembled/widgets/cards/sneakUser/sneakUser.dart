@@ -78,7 +78,7 @@ class SneakUser extends StatelessWidget{
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                   child: BaseButton(
-                    buttonText: Utils.getIt<LocalizationClass>().dynamicValue("viewProfileButton"),
+                    buttonText: Utils.translatedText("viewProfileButton"),
                     buttonTypeStyle: ButtonTypeStyle.pinkyButton,
                     onPressedCallback: () => this.viewProfile!(),
                   )

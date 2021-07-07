@@ -7,49 +7,49 @@ class Constants{
   /// The name of the month
   static Map<int, String> monthlyName(){
     return {
-      1:  Utils.getIt<LocalizationClass>().dynamicValue("january"),
-      2:  Utils.getIt<LocalizationClass>().dynamicValue("february"),
-      3:  Utils.getIt<LocalizationClass>().dynamicValue("march"),
-      4:  Utils.getIt<LocalizationClass>().dynamicValue("april"),
-      5:  Utils.getIt<LocalizationClass>().dynamicValue("may"),
-      6:  Utils.getIt<LocalizationClass>().dynamicValue("june"),
-      7:  Utils.getIt<LocalizationClass>().dynamicValue("july"),
-      8:  Utils.getIt<LocalizationClass>().dynamicValue("august"),
-      9:  Utils.getIt<LocalizationClass>().dynamicValue("september"),
-      10: Utils.getIt<LocalizationClass>().dynamicValue("october"),
-      11: Utils.getIt<LocalizationClass>().dynamicValue("november"),
-      12: Utils.getIt<LocalizationClass>().dynamicValue("december"),
+      1:  Utils.translatedText("january"),
+      2:  Utils.translatedText("february"),
+      3:  Utils.translatedText("march"),
+      4:  Utils.translatedText("april"),
+      5:  Utils.translatedText("may"),
+      6:  Utils.translatedText("june"),
+      7:  Utils.translatedText("july"),
+      8:  Utils.translatedText("august"),
+      9:  Utils.translatedText("september"),
+      10: Utils.translatedText("october"),
+      11: Utils.translatedText("november"),
+      12: Utils.translatedText("december"),
     };
   }
 
   /// The abbreviation of the months name
   static Map<int, String> monthlyAbbrName(){
     return {
-      1:  Utils.getIt<LocalizationClass>().dynamicValue("januaryAbbr"),
-      2:  Utils.getIt<LocalizationClass>().dynamicValue("februaryAbbr"),
-      3:  Utils.getIt<LocalizationClass>().dynamicValue("marchAbbr"),
-      4:  Utils.getIt<LocalizationClass>().dynamicValue("aprilAbbr"),
-      5:  Utils.getIt<LocalizationClass>().dynamicValue("mayAbbr"),
-      6:  Utils.getIt<LocalizationClass>().dynamicValue("juneAbbr"),
-      7:  Utils.getIt<LocalizationClass>().dynamicValue("julyAbbr"),
-      8:  Utils.getIt<LocalizationClass>().dynamicValue("augustAbbr"),
-      9:  Utils.getIt<LocalizationClass>().dynamicValue("septemberAbbr"),
-      10: Utils.getIt<LocalizationClass>().dynamicValue("octoberAbbr"),
-      11: Utils.getIt<LocalizationClass>().dynamicValue("novemberAbbr"),
-      12: Utils.getIt<LocalizationClass>().dynamicValue("decemberAbbr"),
+      1:  Utils.translatedText("januaryAbbr"),
+      2:  Utils.translatedText("februaryAbbr"),
+      3:  Utils.translatedText("marchAbbr"),
+      4:  Utils.translatedText("aprilAbbr"),
+      5:  Utils.translatedText("mayAbbr"),
+      6:  Utils.translatedText("juneAbbr"),
+      7:  Utils.translatedText("julyAbbr"),
+      8:  Utils.translatedText("augustAbbr"),
+      9:  Utils.translatedText("septemberAbbr"),
+      10: Utils.translatedText("octoberAbbr"),
+      11: Utils.translatedText("novemberAbbr"),
+      12: Utils.translatedText("decemberAbbr"),
     };
   }
 
   /// The abbreviations name for the week days
   static Map<int, String> weekDayAbbrName(){
     return {
-      1:  Utils.getIt<LocalizationClass>().dynamicValue("mondayAbbr"),
-      2:  Utils.getIt<LocalizationClass>().dynamicValue("tuesdayAbbr"),
-      3:  Utils.getIt<LocalizationClass>().dynamicValue("wednesdayAbbr"),
-      4:  Utils.getIt<LocalizationClass>().dynamicValue("thursdayAbbr"),
-      5:  Utils.getIt<LocalizationClass>().dynamicValue("fridayAbbr"),
-      6:  Utils.getIt<LocalizationClass>().dynamicValue("saturdayAbbr"),
-      7:  Utils.getIt<LocalizationClass>().dynamicValue("sundayAbbr"),
+      1:  Utils.translatedText("mondayAbbr"),
+      2:  Utils.translatedText("tuesdayAbbr"),
+      3:  Utils.translatedText("wednesdayAbbr"),
+      4:  Utils.translatedText("thursdayAbbr"),
+      5:  Utils.translatedText("fridayAbbr"),
+      6:  Utils.translatedText("saturdayAbbr"),
+      7:  Utils.translatedText("sundayAbbr"),
     };
   }
 

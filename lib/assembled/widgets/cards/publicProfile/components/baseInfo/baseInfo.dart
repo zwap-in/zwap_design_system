@@ -51,14 +51,14 @@ class BaseInfo extends StatelessWidget{
 
   /// It checks if its possible to click on that text
   bool _canClickItem(String dynamicKey, dynamic dynamicData, BuildContext context){
-    return this.isCurrentProfile && dynamicData == Utils.getIt<LocalizationClass>().dynamicValue(dynamicKey);
+    return this.isCurrentProfile && dynamicData == Utils.translatedText(dynamicKey);
   }
 
 
   Widget _getCityCompanyResponsive(BuildContext context){
-    String cityData = this._getCustomData("city", Utils.getIt<LocalizationClass>().dynamicValue("cityPlaceholder"));
-    String roleData = this._getCustomData("role", Utils.getIt<LocalizationClass>().dynamicValue("rolePlaceholder"));
-    String companyData = this._getCustomData("company", Utils.getIt<LocalizationClass>().dynamicValue("companyPlaceholder"));
+    String cityData = this._getCustomData("city", Utils.translatedText("cityPlaceholder"));
+    String roleData = this._getCustomData("role", Utils.translatedText("rolePlaceholder"));
+    String companyData = this._getCustomData("company", Utils.translatedText("companyPlaceholder"));
     return Row(
       children: [
         Flexible(
@@ -149,7 +149,7 @@ class BaseInfo extends StatelessWidget{
             children: [
               Flexible(
                 child: IconText(text: BaseText(
-                  texts: ["${Utils.getIt<LocalizationClass>().dynamicValue("invitedByPlaceholder")}", " ${this.inviter!.firstName} ${this.inviter!.lastName}"],
+                  texts: ["${Utils.translatedText("invitedByPlaceholder")}", " ${this.inviter!.firstName} ${this.inviter!.lastName}"],
                   baseTextsType: [BaseTextType.normal, BaseTextType.normalBold],
                   textsColor: [DesignColors.blackPrimary, DesignColors.bluePrimary],
                   hasClick: [false, true],

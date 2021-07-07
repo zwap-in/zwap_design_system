@@ -33,7 +33,7 @@ class NotSupportedScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 30, bottom: 30),
                   child: BaseText(
-                    texts: [Utils.getIt<LocalizationClass>().dynamicValue("notSupportedScreenTitle")],
+                    texts: [Utils.translatedText("notSupportedScreenTitle")],
                     baseTextsType: [BaseTextType.title],
                   ),
                 )

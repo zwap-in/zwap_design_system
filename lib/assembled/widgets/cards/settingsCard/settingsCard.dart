@@ -53,7 +53,7 @@ class SettingsCard extends StatelessWidget{
             Padding(
               padding: EdgeInsets.only(bottom: 5),
               child: BaseButton(
-                  buttonText: Utils.getIt<LocalizationClass>().dynamicValue("connectToGoogle"),
+                  buttonText: Utils.translatedText("connectToGoogle"),
                   imagePath: "assets/images/socials/google.png",
                   buttonTypeStyle: ButtonTypeStyle.socialButtonGoogle,
                   onPressedCallback: () => this.onSocialClick("google")
@@ -62,7 +62,7 @@ class SettingsCard extends StatelessWidget{
             Padding(
               padding: EdgeInsets.only(top: 5),
               child: BaseButton(
-                  buttonText: Utils.getIt<LocalizationClass>().dynamicValue("connectToLinkedin"),
+                  buttonText: Utils.translatedText("connectToLinkedin"),
                   imagePath: "assets/images/socials/linkedin.png",
                   buttonTypeStyle: ButtonTypeStyle.socialButtonLinkedin,
                   onPressedCallback: () => this.onSocialClick("linkedin")

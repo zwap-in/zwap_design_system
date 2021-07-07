@@ -31,30 +31,42 @@ class MeetingConfirmed extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("meetingConfirmedTitle")],
+              texts: [Utils.translatedText("meetingConfirmedTitle")],
               baseTextsType: [BaseTextType.title],
             ),
           ),
           Padding(
               padding: EdgeInsets.only(top: 10),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("meetingConfirmedSubTitle")],
+              texts: [Utils.translatedText("meetingConfirmedSubTitle")],
               baseTextsType: [BaseTextType.normal],
               textsColor: [DesignColors.greyPrimary],
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 30),
-            child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("nextStepsMeetingConfirmed")],
-              baseTextsType: [BaseTextType.normal],
+            child: Column(
+              children: [
+                BaseText(
+                  texts: [Utils.translatedText("fistStepMeetingConfirmed")],
+                  baseTextsType: [BaseTextType.normal],
+                ),
+                BaseText(
+                  texts: [Utils.translatedText("secondStepMeetingConfirmed")],
+                  baseTextsType: [BaseTextType.normal],
+                ),
+                BaseText(
+                  texts: [Utils.translatedText("thirdStepMeetingConfirmed")],
+                  baseTextsType: [BaseTextType.normal],
+                )
+              ],
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: BaseButton(
               iconButton: Icons.group_add,
-                buttonText: Utils.getIt<LocalizationClass>().dynamicValue("findPeopleOnZwap"),
+                buttonText: Utils.translatedText("findPeopleOnZwap"),
                 buttonTypeStyle: ButtonTypeStyle.continueButton,
                 onPressedCallback: () => this.findOtherPeople()
             ),
@@ -62,7 +74,7 @@ class MeetingConfirmed extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(bottom: 20),
             child: BaseButton(
-                buttonText: Utils.getIt<LocalizationClass>().dynamicValue("viewYourMeeting"),
+                buttonText: Utils.translatedText("viewYourMeeting"),
                 buttonTypeStyle: ButtonTypeStyle.backButton,
                 onPressedCallback: () => this.viewYourMeeting()
             ),

@@ -46,7 +46,7 @@ class LateralMenu extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue(element)],
+              texts: [Utils.translatedText(element)],
               textsColor: [element == _tmp ? DesignColors.bluePrimary : DesignColors.greyPrimary],
               baseTextsType: [BaseTextType.title],
               hasClick: [true],

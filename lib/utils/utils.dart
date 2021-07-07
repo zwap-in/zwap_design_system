@@ -98,6 +98,11 @@ class Utils{
     int? codePoint = Utils.getIt<IconDataDict>().iconDict[key];
     return codePoint != null ? codePoint : -1;
   }
+
+  /// Plotting the minute to show as a String
+  static String plotMinute(int minute){
+    return minute == 0 ? "${minute.toString()}0" : minute.toString();
+  }
 }
 
 /// The tuple type to use inside this platform

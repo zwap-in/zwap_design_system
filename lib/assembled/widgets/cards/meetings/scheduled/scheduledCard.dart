@@ -51,7 +51,7 @@ class ScheduledCard extends StatelessWidget{
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: BaseButton(
                           iconButton: FontAwesomeIcons.trash,
-                          buttonText: Utils.getIt<LocalizationClass>().dynamicValue('rescheduleButton'),
+                          buttonText: Utils.translatedText('rescheduleButton'),
                           buttonTypeStyle: ButtonTypeStyle.greyButton,
                           onPressedCallback: () => this.rescheduleMeetingCallback(element.pk),
                           iconColor: DesignColors.blackPrimary,
@@ -64,7 +64,7 @@ class ScheduledCard extends StatelessWidget{
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: BaseButton(
                           iconButton: FontAwesomeIcons.trash,
-                          buttonText: Utils.getIt<LocalizationClass>().dynamicValue("cancelButton"),
+                          buttonText: Utils.translatedText("cancelButton"),
                           buttonTypeStyle: ButtonTypeStyle.greyButton,
                           onPressedCallback: () => this.cancelMeetingCallBack(element.pk),
                           iconColor: DesignColors.blackPrimary,
@@ -92,7 +92,7 @@ class ScheduledCard extends StatelessWidget{
         Padding(
           padding: EdgeInsets.only(bottom: 10),
           child: BaseText(
-              texts: ['$dateTimeInfo ', Utils.getIt<LocalizationClass>().dynamicValue('today')],
+              texts: ['$dateTimeInfo ', Utils.translatedText('today')],
               baseTextsType: [BaseTextType.normal, BaseTextType.normalBold]
           ),
         )
@@ -117,7 +117,7 @@ class ScheduledCard extends StatelessWidget{
       Padding(
         padding: EdgeInsets.only(bottom: 5),
         child: BaseText(
-          texts: [Utils.getIt<LocalizationClass>().dynamicValue("meetingsScheduledTitle")],
+          texts: [Utils.translatedText("meetingsScheduledTitle")],
           baseTextsType: [BaseTextType.title],
           textsColor: [DesignColors.pinkyPrimary],
         ),
@@ -125,7 +125,7 @@ class ScheduledCard extends StatelessWidget{
       Padding(
         padding: EdgeInsets.only(top: 5),
         child: BaseText(
-          texts: [Utils.getIt<LocalizationClass>().dynamicValue("meetingsScheduledSubTitle")],
+          texts: [Utils.translatedText("meetingsScheduledSubTitle")],
           baseTextsType: [BaseTextType.subTitle],
           textsColor: [DesignColors.greyPrimary],
         ),

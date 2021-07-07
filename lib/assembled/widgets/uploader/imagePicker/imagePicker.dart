@@ -57,7 +57,7 @@ class PickImage extends StatelessWidget{
               padding: EdgeInsets.only(right: 10, left: 2),
               child: BaseText(
                 textAlignment: Alignment.centerLeft,
-                texts: [Utils.getIt<LocalizationClass>().dynamicValue("changePic")],
+                texts: [Utils.translatedText("changePic")],
                 baseTextsType: [BaseTextType.normal],
                 hasClick: [true],
                 callBacksClick: [() => Provider.of<ImagePickerState>(context, listen: false).getImage()],

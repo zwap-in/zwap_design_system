@@ -25,7 +25,7 @@ class NotFound extends StatelessWidget{
             Padding(
               padding: EdgeInsets.only(top: 30, bottom: 30),
               child: BaseText(
-                texts: [Utils.getIt<LocalizationClass>().dynamicValue("notFoundTitle")],
+                texts: [Utils.translatedText("notFoundTitle")],
                 baseTextsType: [BaseTextType.normalBold],
                 textAlignment: Alignment.center,
               ),

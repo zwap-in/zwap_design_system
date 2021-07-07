@@ -1,5 +1,4 @@
 export 'editProfile/editProfile.dart';
-export 'findCommon/findCommon.dart';
 export 'missingSteps/missingSteps.dart';
 export 'publicProfile/profileCard.dart';
 export 'settingsCard/settingsCard.dart';
@@ -12,3 +11,5 @@ export 'chooseTargets/chooseTargets.dart';
 export 'completeBio/completeBio.dart';
 export 'baseComplete/baseComplete.dart';
 export 'editInterests/editInterests.dart';
+export 'referralCard/referralCard.dart';
+export 'shareOnSocial/shareOnSocial.dart';

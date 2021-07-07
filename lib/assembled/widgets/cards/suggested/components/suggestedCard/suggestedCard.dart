@@ -66,7 +66,7 @@ class SuggestedCard extends StatelessWidget{
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: BaseButton(
-                    buttonText: Utils.getIt<LocalizationClass>().dynamicValue("viewProfileButton"),
+                    buttonText: Utils.translatedText("viewProfileButton"),
                     buttonTypeStyle: ButtonTypeStyle.pinkyButton,
                     onPressedCallback: () => this.viewProfile(),
                   ),

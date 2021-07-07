@@ -51,7 +51,7 @@ class EditInterests extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("editInterestsTitle")],
+              texts: [Utils.translatedText("interestedInTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
             ),
@@ -59,7 +59,7 @@ class EditInterests extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("editInterestsSubTitle")],
+              texts: [Utils.translatedText("interestedInSubtitle")],
               baseTextsType: [BaseTextType.subTitle],
               textsColor: [DesignColors.greyPrimary],
             ),
@@ -71,7 +71,7 @@ class EditInterests extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("wantTalkTitle")],
+              texts: [Utils.translatedText("wantTalkAboutTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
             ),
@@ -83,7 +83,7 @@ class EditInterests extends StatelessWidget{
                 return BaseInput(
                   inputType: InputType.inputArea,
                   maxLines: 5,
-                  placeholderText: Utils.getIt<LocalizationClass>().dynamicValue("wantTalkExamplePlaceholder"),
+                  placeholderText: Utils.translatedText("wantTalkAboutPlaceholderInput"),
                   changeValue: (value) => provider.changeWantTalk(value),
                   validateValue: (value) {
                     return true;
@@ -95,7 +95,7 @@ class EditInterests extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("lookingForTitle")],
+              texts: [Utils.translatedText("lookingForTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
             ),
@@ -107,7 +107,7 @@ class EditInterests extends StatelessWidget{
                 return BaseInput(
                   inputType: InputType.inputArea,
                   maxLines: 5,
-                  placeholderText: Utils.getIt<LocalizationClass>().dynamicValue("lookingForExamplePlaceholder"),
+                  placeholderText: Utils.translatedText("lookingForPlaceholder"),
                   changeValue: (value) => provider.changeLookingFor(value),
                   validateValue: (value) {
                     return true;

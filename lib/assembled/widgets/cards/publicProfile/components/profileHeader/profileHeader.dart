@@ -90,7 +90,7 @@ class ProfileHeader extends StatelessWidget{
                         width: 150,
                         child: BaseButton(
                           iconButton: Icons.group_add_sharp,
-                          buttonText: Utils.getIt<LocalizationClass>().dynamicValue('askIntro'),
+                          buttonText: Utils.translatedText('askIntro'),
                           onPressedCallback: () => this.askIntro!(),
                           buttonTypeStyle: ButtonTypeStyle.pinkyButton,
                         ),

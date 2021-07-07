@@ -32,8 +32,8 @@ class BaseComplete extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BottomButtons(
-              backButtonText: Utils.getIt<LocalizationClass>().dynamicValue("backButton"),
-              continueButtonText: Utils.getIt<LocalizationClass>().dynamicValue("continueButton"),
+              backButtonText: Utils.translatedText("backButton"),
+              continueButtonText: Utils.translatedText("continueButton"),
               backButtonCallBackFunction: () => this.backButtonCallBack(),
               continueButtonCallBackFunction: () => this.continueButtonCallBack(),
             ),

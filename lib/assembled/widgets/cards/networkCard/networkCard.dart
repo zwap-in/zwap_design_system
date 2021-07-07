@@ -58,7 +58,7 @@ class NetworkCard extends StatelessWidget{
                   ),
                   Padding(
                     padding: EdgeInsets.all(10),
-                    child: GeneralCardStat(title: Utils.translatedText("zwapPointsTitle"),
+                    child: GeneralCardStat(title: Utils.translatedText("zwapPoints"),
                         stat: "${this.networkStats.stats.zwapPoints.toString()} ${Utils.translatedText("zwapPoints")}",
                         cardType: GeneralStatType.TagText),
                   ),

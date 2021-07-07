@@ -1,69 +1,77 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// The state of the calendar picker
+class CalendarPickerState extends ChangeNotifier{
 
-/// Custom widget to display the calendar picker with custom design
-class CalendarPicker extends StatefulWidget{
+  /// The current date from which start
+  DateTime currentDate = DateTime.now();
 
-  /// The days range per week to show inside the calendar picker
+  /// The number of days to show inside the calendar picker
   final List<int> daysRange;
 
-  /// The optional number of days to go on when it selects go on on the calendar picker
-  final int? daysGoOn;
+  /// The date start from which start the calendar picker dates
+  final DateTime dateStart;
 
-  /// The optional number of days to go back when it selects go back on the calendar picker
-  final int? daysGoBack;
+  /// The date end where ends the calendar picker dates
+  final DateTime dateEnd;
 
-  /// The slots per each day to show inside this calendar picker
-  final Map<DateTime, List<TimeOfDay>>? slotsPerDay;
+  /// The slots per day to show inside the days
+  final Map<int, List<TimeOfDay>> slotsPerDay;
 
-  /// From which year the calendar has to starts
-  final int? startYear;
-
-  /// To which year the calendar has to ends
-  final int? endYear;
-
-  /// From which month the calendar has to starts
-  final int? startMonth;
-
-  /// To which month the calendar has to ends
-  final int? endMonth;
-
-  /// Boolean flag to start from current date or from the current week starter
-  final bool startFromCurrent;
-
-  CalendarPicker({Key? key,
+  CalendarPickerState({
     required this.daysRange,
-    this.daysGoOn,
-    this.daysGoBack,
-    this.slotsPerDay,
-    this.startYear,
-    this.endYear,
-    this.startMonth,
-    this.endMonth,
-    this.startFromCurrent = true
-  }): super(key: key);
+    required this.dateStart,
+    required this.dateEnd,
+    required this.slotsPerDay
+  });
 
-  _CalendarPickerState createState() => _CalendarPickerState();
+  /// Changing the start of the calendar picker
+  void changeStart(bool isAdding){
+    if(isAdding){
+      DateTime tmp = currentDate.add(Duration(days: this.daysRange.length));
+      if(tmp.isBefore(this.dateEnd)){
+        this.currentDate = tmp;
+      }
+    }
+    else{
+      DateTime tmp = currentDate.subtract(Duration(days: this.daysRange.length));
+      if(tmp.isAfter(this.dateStart)){
+        this.currentDate = tmp;
+      }
+    }
+    notifyListeners();
+  }
+
+  Map<DateTime, List<TimeOfDay>> _plotDaysSlot(){
+    Map<DateTime, List<TimeOfDay>> finals = {};
+    DateTime tmp = this.currentDate;
+    int i = 0;
+    while(i < this.daysRange.length){
+      if(this.daysRange.contains(tmp.weekday) && this.slotsPerDay.containsKey(tmp.weekday)){
+        finals[tmp] = this.slotsPerDay[tmp.weekday]!;
+        i++;
+      }
+      if(tmp.add(Duration(days: 1)).isBefore(this.dateEnd)){
+        tmp = tmp.add(Duration(days: 1));
+      }
+    }
+    return finals;
+
+  }
+
 
 }
 
-class _CalendarPickerState extends State<CalendarPicker>{
+/// THe calendar picker to show the date where books
+class CalendarPicker extends StatelessWidget{
 
-  DateTime _startDatetime = DateTime.now();
-
-  void changeStart(bool isAdding){
-    int daysGoOn = widget.daysGoOn ?? widget.daysRange.length;
-    int daysGoBack = widget.daysGoBack ?? widget.daysRange.length;
-    setState(() {
-      _startDatetime = isAdding ? _startDatetime.add(Duration(days: daysGoOn)) : _startDatetime.subtract(Duration(days: daysGoBack));
-    });
-  }
-
+  /// It retrieves the slots per each day
   List<Widget> _getSlots(List<TimeOfDay> slots){
     List<Widget> finals = [];
     slots.forEach((TimeOfDay element) {
@@ -71,7 +79,7 @@ class _CalendarPickerState extends State<CalendarPicker>{
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
           child: BaseText(
-            texts: ["${element.hour}:${element.minute != 0 ? element.minute : ("${element.minute.toString()}0")}"],
+            texts: ["${element.hour}:${Utils.plotMinute(element.minute)}"],
             baseTextsType: [BaseTextType.normal],
           ),
         )
@@ -80,6 +88,7 @@ class _CalendarPickerState extends State<CalendarPicker>{
     return finals;
   }
 
+  /// It retrieves all slots
   Widget _getDaysSlot(String weekDay, String monthName, int dayOfMonth, List<TimeOfDay> slots){
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20),
@@ -113,19 +122,10 @@ class _CalendarPickerState extends State<CalendarPicker>{
     );
   }
 
-  Map<DateTime, List<TimeOfDay>> _plotDaysSlot(){
-    Map<DateTime, List<TimeOfDay>> tmp = {
-      DateTime(2021, 6, 8) : [TimeOfDay(hour: 13, minute: 0), TimeOfDay(hour: 17, minute: 0), TimeOfDay(hour: 19, minute: 0)],
-      DateTime(2021, 6, 9) : [TimeOfDay(hour: 13, minute: 0), TimeOfDay(hour: 17, minute: 0), TimeOfDay(hour: 19, minute: 0)],
-      DateTime(2021, 6, 10) : [TimeOfDay(hour: 13, minute: 0), TimeOfDay(hour: 17, minute: 0), TimeOfDay(hour: 19, minute: 0)],
-      DateTime(2021, 6, 11) : [TimeOfDay(hour: 13, minute: 0), TimeOfDay(hour: 17, minute: 0), TimeOfDay(hour: 19, minute: 0)]
-    };
-    return tmp;
-  }
-
-  List<Widget> _plotChildren(){
+  /// It plots all slots to show
+  List<Widget> _plotChildren(CalendarPickerState provider){
     List<Widget> finals = [];
-    Map<DateTime, List<TimeOfDay>> daysPlotted = this._plotDaysSlot();
+    Map<DateTime, List<TimeOfDay>> daysPlotted = provider._plotDaysSlot();
     daysPlotted.forEach((DateTime key, List<TimeOfDay> value) {
       finals.add(
           Flexible(
@@ -139,6 +139,7 @@ class _CalendarPickerState extends State<CalendarPicker>{
 
   @override
   Widget build(BuildContext context) {
+    CalendarPickerState provider = context.read<CalendarPickerState>();
     return Column(
       children: [
         Row(
@@ -148,12 +149,12 @@ class _CalendarPickerState extends State<CalendarPicker>{
                   iconButton: Icons.arrow_back_ios,
                   buttonText: "",
                   buttonTypeStyle: ButtonTypeStyle.continueButton,
-                  onPressedCallback: () => this.changeStart(false),
+                  onPressedCallback: () => provider.changeStart(false),
                 )
             ),
             Flexible(
               child: BaseText(
-                texts: ["${Constants.monthlyName()[_startDatetime.month]} ${_startDatetime.year}"],
+                texts: ["${Constants.monthlyName()[provider.currentDate.month]} ${provider.currentDate.year}"],
                 baseTextsType: [BaseTextType.normal],
               ),
             ),
@@ -162,14 +163,18 @@ class _CalendarPickerState extends State<CalendarPicker>{
                   iconButton: Icons.arrow_forward_ios,
                   buttonText: "",
                   buttonTypeStyle: ButtonTypeStyle.continueButton,
-                  onPressedCallback: () => this.changeStart(true),
+                  onPressedCallback: () => provider.changeStart(true),
                 )
             ),
           ],
         ),
-        Row(
-          children: this._plotChildren(),
-        ),
+        Consumer<CalendarPickerState>(
+          builder: (builder, provider, child){
+            return Row(
+              children: this._plotChildren(provider),
+            );
+          }
+        )
       ],
     );
   }

@@ -81,7 +81,7 @@ class ChooseTargets extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("choiceTargetsTitle")],
+              texts: [Utils.translatedText("targetsTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
             ),
@@ -89,7 +89,7 @@ class ChooseTargets extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("choiceTargetsSubTitle")],
+              texts: [Utils.translatedText("targetsSubtitle")],
               baseTextsType: [BaseTextType.subTitle],
               textsColor: [DesignColors.greyPrimary],
             ),

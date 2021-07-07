@@ -50,7 +50,7 @@ class CompleteBio extends StatelessWidget{
     User tmpOne = User(
       lastName: "Rossi",
       firstName: "Marco",
-      profileBio: Utils.getIt<LocalizationClass>().dynamicValue("bioExampleOne"),
+      profileBio: Utils.translatedText("bioStepSignupExampleBio"),
       targetsData: [],
       interests: [],
       customData: {
@@ -62,7 +62,7 @@ class CompleteBio extends StatelessWidget{
     User tmpTwo = User(
         lastName: "Rossi",
         firstName: "Marco",
-        profileBio: Utils.getIt<LocalizationClass>().dynamicValue("bioExampleOne"),
+        profileBio: Utils.translatedText("bioStepSignupExampleBio"),
         targetsData: [],
         interests: [],
         customData: {
@@ -74,7 +74,7 @@ class CompleteBio extends StatelessWidget{
     User tmpThree = User(
         lastName: "Rossi",
         firstName: "Marco",
-        profileBio: Utils.getIt<LocalizationClass>().dynamicValue("bioExampleOne"),
+        profileBio: Utils.translatedText("bioStepSignupExampleBio"),
         targetsData: [],
         interests: [],
         customData: {
@@ -100,7 +100,7 @@ class CompleteBio extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("bioCompleteTitle")],
+              texts: [Utils.translatedText("bioStepSignupTitle")],
               baseTextsType: [BaseTextType.title],
               textsColor: [DesignColors.pinkyPrimary],
             ),
@@ -108,7 +108,7 @@ class CompleteBio extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("bioCompleteSubTitle")],
+              texts: [Utils.translatedText("bioStepSignupSubTitle")],
               baseTextsType: [BaseTextType.subTitle],
               textsColor: [DesignColors.greyPrimary],
             ),
@@ -132,7 +132,7 @@ class CompleteBio extends StatelessWidget{
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     BaseText(
-                      texts: [Utils.getIt<LocalizationClass>().dynamicValue("minBioInput")],
+                      texts: [Utils.translatedText("bioStepSignupMinChars").replaceAll("", "")],
                       baseTextsType: [BaseTextType.normalBold],
                       textsColor: [DesignColors.pinkyPrimary],
                     )
@@ -144,7 +144,7 @@ class CompleteBio extends StatelessWidget{
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: BaseText(
-              texts: [Utils.getIt<LocalizationClass>().dynamicValue("bioExampleTitle")],
+              texts: [Utils.translatedText("bioStepSignupExamplesTitle")],
               baseTextsType: [BaseTextType.title],
             ),
           ),

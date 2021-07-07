@@ -30,7 +30,7 @@ class ProfileEfficiency extends StatelessWidget{
               Padding(
                 padding: EdgeInsets.only(bottom: 10),
                 child: BaseText(
-                  texts: [Utils.getIt<LocalizationClass>().dynamicValue("profileEfficiency")],
+                  texts: [Utils.translatedText("efficiencyTitle")],
                   baseTextsType: [BaseTextType.title],
                   textAlignment: Alignment.center,
                 ),
@@ -66,7 +66,7 @@ class ProfileEfficiency extends StatelessWidget{
         Padding(
           padding: EdgeInsets.only(bottom: 3),
           child: BaseText(
-            texts: ["${Utils.getIt<LocalizationClass>().dynamicValue("profileEfficiency")}: ${this.percent * 100}%"],
+            texts: ["${Utils.translatedText("efficiencyTitle")}: ${this.percent * 100}%"],
             baseTextsType: [BaseTextType.title],
             textsColor: [DesignColors.pinkyPrimary],
           ),

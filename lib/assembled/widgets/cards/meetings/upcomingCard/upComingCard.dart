@@ -25,7 +25,7 @@ class UpComingCard extends StatelessWidget{
       Padding(
         padding: EdgeInsets.symmetric(vertical: 2),
         child: BaseText(
-          texts: [Utils.getIt<LocalizationClass>().dynamicValue("nextMeetings")],
+          texts: [Utils.translatedText("nextMeetings")],
           baseTextsType: [BaseTextType.title],
         ),
       )
@@ -44,7 +44,7 @@ class UpComingCard extends StatelessWidget{
       Padding(
         padding: EdgeInsets.symmetric(vertical: 10),
         child: BaseButton(
-          buttonText: Utils.getIt<LocalizationClass>().dynamicValue("schedule"),
+          buttonText: Utils.translatedText("schedule"),
           buttonTypeStyle: ButtonTypeStyle.continueButton,
           onPressedCallback: (){},
           iconButton: FontAwesomeIcons.globe,
@@ -56,7 +56,7 @@ class UpComingCard extends StatelessWidget{
       Padding(
         padding: EdgeInsets.symmetric(vertical: 10),
         child: BaseText(
-          texts: [Utils.getIt<LocalizationClass>().dynamicValue("viewAllMeetings")],
+          texts: [Utils.translatedText("viewAllMeetings")],
           baseTextsType: [BaseTextType.normalBold],
           textsColor: [DesignColors.bluePrimary],
           textAlignment: Alignment.center,

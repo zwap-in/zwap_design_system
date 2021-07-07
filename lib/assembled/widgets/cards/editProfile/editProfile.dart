@@ -48,8 +48,8 @@ class EditProfile extends StatelessWidget{
                 child: BottomButtons(
                   rightButtonIcon: Icons.group_add_sharp,
                   continueButtonCallBackFunction: () {  },
-                  continueButtonText: Utils.getIt<LocalizationClass>().dynamicValue('saveButton'),
-                  backButtonText: Utils.getIt<LocalizationClass>().dynamicValue('cancelButton'),
+                  continueButtonText: Utils.translatedText('saveButton'),
+                  backButtonText: Utils.translatedText('cancelButton'),
                   backButtonCallBackFunction: () {  },
                 ),
               )
