@@ -229,3 +229,7 @@
 ## 0.0.57
 
 * Fixed every translation text on the zwap application
+
+## 0.0.58
+
+* Fixed the infinite scroll state and the the network contacts list with its infinite scroll state

@@ -8,6 +8,27 @@ import 'package:zwap_design_system/zwap_design_system.dart';
 import 'components/components.dart';
 
 
+/// The state of the network card with the changeNotifier class
+class NetworkCardState extends ChangeNotifier{
+
+  /// Elements inside this network card
+  final List<TupleType<DateTime, User>> elements;
+
+  /// The pageNumber to fetch more data
+  final int pageNumber;
+
+  /// Callback function to fetch more data
+  final Function(int pageNumber) fetchMoreData;
+
+  NetworkCardState({
+    required this.elements,
+    required this.pageNumber,
+    required this.fetchMoreData
+  });
+
+}
+
+
 /// Custom widget to display the network card
 class NetworkCard extends StatelessWidget{
 
@@ -79,15 +100,18 @@ class NetworkCard extends StatelessWidget{
                       searchCallBack: (String searchKey) => {},
                     ),
                   ),
-                  Consumer<InfiniteScrollState<TupleType<DateTime, User>>>(
-                    builder: (builder, provider, child){
-                      return InfiniteScroll<TupleType<DateTime, User>>(
-                          dynamicWidget: (TupleType<DateTime, User> element) => NetworkItemCard(
-                            userData: element.b,
-                            lastMeeting: element.a,
-                          )
-                      );
-                    }
+                  Consumer<NetworkCardState>(
+                      builder: (builder, provider, child){
+                        return InfiniteScroll<TupleType<DateTime, User>>(
+                            elements: provider.elements,
+                            pageNumber: provider.pageNumber + 1,
+                            fetchMoreData: (int pageNumber) => provider.fetchMoreData(pageNumber),
+                            dynamicWidget: (TupleType<DateTime, User> element) => NetworkItemCard(
+                              userData: element.b,
+                              lastMeeting: element.a,
+                            )
+                        );
+                      }
                   )
                 ],
 
