@@ -237,3 +237,7 @@
 ## 0.0.59
 
 * Adjusted the flex inside the checkListItem widget
+
+## 0.0.60
+
+* Added a change menu item callBack function
