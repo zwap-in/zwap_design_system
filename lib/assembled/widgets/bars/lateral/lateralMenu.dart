@@ -12,14 +12,14 @@ class LateralMenuState extends ChangeNotifier{
   /// The current selected value
   String _currentSelected = "";
 
-  final Function() changeCallBack;
+  final Function(String selectedFilter) changeCallBack;
 
   LateralMenuState({required this.changeCallBack});
 
   /// The callBack to set the selected item
   void changeCurrentSelected(String item){
     _currentSelected = item;
-    this.changeCallBack();
+    this.changeCallBack(item);
     notifyListeners();
   }
 

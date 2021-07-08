@@ -241,3 +241,7 @@
 ## 0.0.60
 
 * Added a change menu item callBack function
+
+## 0.0.61
+
+* Added a param on callBack change lateral menu item
