@@ -233,3 +233,7 @@
 ## 0.0.58
 
 * Fixed the infinite scroll state and the the network contacts list with its infinite scroll state
+
+## 0.0.59
+
+* Adjusted the flex inside the checkListItem widget

@@ -34,7 +34,7 @@ class CheckListItem extends StatelessWidget {
           ),
           flex: 0,
         ),
-        new Flexible(
+        new Expanded(
           child: Padding(
             padding: EdgeInsets.only(left: 10),
             child: BaseText(
@@ -45,7 +45,6 @@ class CheckListItem extends StatelessWidget {
               textsColor: [this.isDoneItem ? DesignColors.greenPrimary : DesignColors.greyPrimary],
             ),
           ),
-          flex: 0,
         ),
       ],
     );
