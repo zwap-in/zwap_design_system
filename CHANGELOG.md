@@ -253,3 +253,8 @@
 ## 0.0.63
 
 * Added all controller to handle changing data on tab bar and scroll controller
+
+
+## 0.0.64
+
+* Added callBack on TabBarController

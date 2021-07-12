@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/base/base.dart';
 
-/// Custom tab bar to display tab slides
-class CustomTabBar extends StatelessWidget{
+class CustomTabBar extends StatefulWidget {
 
   /// The tab elements
   final Map<Tab, Widget> tabElements;
@@ -17,38 +16,53 @@ class CustomTabBar extends StatelessWidget{
   /// The custom bottom menu
   final Widget? customBottomMenu;
 
-  final TabController tabController;
-
+  final Function() onChangeTabController;
 
   CustomTabBar({Key? key,
     required this.tabElements,
     required this.appBar,
-    required this.tabController,
+    required this.onChangeTabController,
     this.customBottomMenu,
   }): super(key: key);
+
+
+  @override
+  _TabControllerState createState() => _TabControllerState();
+
+}
+/// Custom tab bar to display tab slides
+class _TabControllerState extends State<CustomTabBar> with SingleTickerProviderStateMixin{
+
+  late TabController tabController;
+
+  void initState() {
+    this.tabController = TabController(length: widget.tabElements.length, vsync: this, initialIndex: 0);
+    this.tabController.addListener(()  => widget.onChangeTabController());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: this.tabElements.length,
+      length: widget.tabElements.length,
       child: Scaffold(
           bottomNavigationBar: new Theme(
             data: Theme.of(context).copyWith(
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent
             ),
-            child: this.customBottomMenu!,
+            child: widget.customBottomMenu!,
           ),
           appBar: AppBar(
             backgroundColor: DesignColors.scaffoldColor,
             bottom: TabBar(
-              tabs: this.tabElements.keys.toList(),
+              tabs: widget.tabElements.keys.toList(),
             ),
-            title: this.appBar,
+            title: widget.appBar,
           ),
         body: TabBarView(
           controller: this.tabController,
-          children: this.tabElements.values.toList(),
+          children: widget.tabElements.values.toList(),
         ),
       ),
     );
