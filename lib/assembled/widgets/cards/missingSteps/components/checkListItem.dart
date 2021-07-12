@@ -12,7 +12,8 @@ class CheckListItem extends StatelessWidget {
   /// Is the item done?
   final bool isDoneItem;
 
-  final Function() callBackClick;
+  /// The callBack on clicking the item
+  final Function()? callBackClick;
 
   CheckListItem({Key? key,
     required this.checkListItemText,
@@ -40,8 +41,8 @@ class CheckListItem extends StatelessWidget {
             child: BaseText(
               texts: [this.checkListItemText],
               baseTextsType: [BaseTextType.normalBold],
-              hasClick: [true],
-              callBacksClick: [() => this.callBackClick()],
+              hasClick: [this.callBackClick != null],
+              callBacksClick: [this.callBackClick != null ? () => this.callBackClick!() : null],
               textsColor: [this.isDoneItem ? DesignColors.greenPrimary : DesignColors.greyPrimary],
             ),
           ),

@@ -266,3 +266,7 @@
 ## 0.0.66
 
 * Fixed the TabController to handle changing new index
+
+## 0.0.67
+
+* Added check on item if is it clickable on missing steps card
