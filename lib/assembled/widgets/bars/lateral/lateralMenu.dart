@@ -10,21 +10,18 @@ import 'package:zwap_design_system/zwap_design_system.dart';
 class LateralMenuState extends ChangeNotifier{
 
   /// The current selected value
-  String _currentSelected = "";
+  String current;
 
   final Function(String selectedFilter) changeCallBack;
 
-  LateralMenuState({required this.changeCallBack});
+  LateralMenuState({required this.changeCallBack, required this.current});
 
   /// The callBack to set the selected item
   void changeCurrentSelected(String item){
-    _currentSelected = item;
+    current = item;
     this.changeCallBack(item);
     notifyListeners();
   }
-
-  /// It retrieves the current selected element
-  String get current => _currentSelected;
 }
 
 

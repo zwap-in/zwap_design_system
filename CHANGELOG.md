@@ -245,3 +245,7 @@
 ## 0.0.61
 
 * Added a param on callBack change lateral menu item
+
+## 0.0.62
+
+* Added a param to init lateral menu started selected
