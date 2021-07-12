@@ -26,17 +26,15 @@ class InfiniteScrollState<T> extends ChangeNotifier{
   /// Stopping to loading
   bool _stop = false;
 
-  /// The controller
-  final ScrollController controller;
-
   /// Function to retrieve more data with the custom API
   final Future<List<T>> Function() fetchMoreData;
+
+  final ScrollController controller = ScrollController();
 
   InfiniteScrollState({
     required this.elements,
     required this.pageNumber,
     required this.fetchMoreData,
-    required this.controller
   }){
     this.setElements();
   }
@@ -63,6 +61,11 @@ class InfiniteScrollState<T> extends ChangeNotifier{
         await this.reloadData();
       }
     }
+  }
+
+  /// Return to the start of the the controller with a linear animation
+  Future<void> reInitController() async{
+    await this.controller.animateTo(0, duration: Duration(milliseconds: 20), curve: Curves.linear);
   }
 
   /// Function to load more elements
@@ -106,8 +109,6 @@ class InfiniteScroll<T> extends StatelessWidget {
   /// Function to retrieve more data with the custom API
   final Future<List<T>> Function() fetchMoreData;
 
-  final ScrollController scrollController;
-
   InfiniteScroll({Key? key,
     required this.dynamicWidget,
     this.scrollDirection = false,
@@ -115,7 +116,6 @@ class InfiniteScroll<T> extends StatelessWidget {
     required this.elements,
     required this.pageNumber,
     required this.fetchMoreData,
-    required this.scrollController
   }): super(key: key);
 
   /// It retrieves the provider
@@ -131,7 +131,6 @@ class InfiniteScroll<T> extends StatelessWidget {
           elements: this.elements,
           pageNumber: this.pageNumber,
           fetchMoreData: this.fetchMoreData,
-          controller: this.scrollController
       ),
       builder: (context, child){
         return Consumer<InfiniteScrollState<T>>(

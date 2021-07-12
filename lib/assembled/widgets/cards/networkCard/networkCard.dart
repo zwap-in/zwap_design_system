@@ -103,7 +103,6 @@ class NetworkCard extends StatelessWidget{
                   Consumer<NetworkCardState>(
                       builder: (builder, provider, child){
                         return InfiniteScroll<TupleType<DateTime, User>>(
-                            scrollController: ScrollController(),
                             elements: provider.elements,
                             pageNumber: provider.pageNumber + 1,
                             fetchMoreData: () => provider.fetchMoreData(),

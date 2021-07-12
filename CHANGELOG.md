@@ -258,3 +258,7 @@
 ## 0.0.64
 
 * Added callBack on TabBarController
+
+## 0.0.65
+
+* re init the controller to position to the start the controller
