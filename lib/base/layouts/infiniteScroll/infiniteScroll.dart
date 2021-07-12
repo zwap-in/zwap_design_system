@@ -27,15 +27,16 @@ class InfiniteScrollState<T> extends ChangeNotifier{
   bool _stop = false;
 
   /// The controller
-  ScrollController controller = ScrollController();
+  final ScrollController controller;
 
   /// Function to retrieve more data with the custom API
-  final Future<List<T>> Function(int pageNumber) fetchMoreData;
+  final Future<List<T>> Function() fetchMoreData;
 
   InfiniteScrollState({
     required this.elements,
     required this.pageNumber,
-    required this.fetchMoreData
+    required this.fetchMoreData,
+    required this.controller
   }){
     this.setElements();
   }
@@ -68,7 +69,7 @@ class InfiniteScrollState<T> extends ChangeNotifier{
   Future<void> loadMoreElements() async {
     if(!this._stop){
       try {
-        List<T> fetchedElements = await this.fetchMoreData(this.pageNumber);
+        List<T> fetchedElements = await this.fetchMoreData();
         if(fetchedElements.length == 0){
           this._stop = true;
         }else{
@@ -103,7 +104,9 @@ class InfiniteScroll<T> extends StatelessWidget {
   final int pageNumber;
 
   /// Function to retrieve more data with the custom API
-  final Future<List<T>> Function(int pageNumber) fetchMoreData;
+  final Future<List<T>> Function() fetchMoreData;
+
+  final ScrollController scrollController;
 
   InfiniteScroll({Key? key,
     required this.dynamicWidget,
@@ -111,7 +114,8 @@ class InfiniteScroll<T> extends StatelessWidget {
     this.itemsPerPageCount = 10,
     required this.elements,
     required this.pageNumber,
-    required this.fetchMoreData
+    required this.fetchMoreData,
+    required this.scrollController
   }): super(key: key);
 
   /// It retrieves the provider
@@ -126,7 +130,8 @@ class InfiniteScroll<T> extends StatelessWidget {
       create: (_) => InfiniteScrollState<T>(
           elements: this.elements,
           pageNumber: this.pageNumber,
-          fetchMoreData: this.fetchMoreData
+          fetchMoreData: this.fetchMoreData,
+          controller: this.scrollController
       ),
       builder: (context, child){
         return Consumer<InfiniteScrollState<T>>(

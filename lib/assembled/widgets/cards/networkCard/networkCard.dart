@@ -18,7 +18,7 @@ class NetworkCardState extends ChangeNotifier{
   final int pageNumber;
 
   /// Callback function to fetch more data
-  final Function(int pageNumber) fetchMoreData;
+  final Function() fetchMoreData;
 
   NetworkCardState({
     required this.elements,
@@ -103,9 +103,10 @@ class NetworkCard extends StatelessWidget{
                   Consumer<NetworkCardState>(
                       builder: (builder, provider, child){
                         return InfiniteScroll<TupleType<DateTime, User>>(
+                            scrollController: ScrollController(),
                             elements: provider.elements,
                             pageNumber: provider.pageNumber + 1,
-                            fetchMoreData: (int pageNumber) => provider.fetchMoreData(pageNumber),
+                            fetchMoreData: () => provider.fetchMoreData(),
                             dynamicWidget: (TupleType<DateTime, User> element) => NetworkItemCard(
                               userData: element.b,
                               lastMeeting: element.a,

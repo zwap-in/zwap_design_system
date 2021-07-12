@@ -249,3 +249,7 @@
 ## 0.0.62
 
 * Added a param to init lateral menu started selected
+
+## 0.0.63
+
+* Added all controller to handle changing data on tab bar and scroll controller

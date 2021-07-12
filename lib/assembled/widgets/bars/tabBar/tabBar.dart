@@ -17,9 +17,13 @@ class CustomTabBar extends StatelessWidget{
   /// The custom bottom menu
   final Widget? customBottomMenu;
 
+  final TabController tabController;
+
+
   CustomTabBar({Key? key,
     required this.tabElements,
     required this.appBar,
+    required this.tabController,
     this.customBottomMenu,
   }): super(key: key);
 
@@ -43,6 +47,7 @@ class CustomTabBar extends StatelessWidget{
             title: this.appBar,
           ),
         body: TabBarView(
+          controller: this.tabController,
           children: this.tabElements.values.toList(),
         ),
       ),
