@@ -16,7 +16,7 @@ class CustomTabBar extends StatefulWidget {
   /// The custom bottom menu
   final Widget? customBottomMenu;
 
-  final Function() onChangeTabController;
+  final Function(int index) onChangeTabController;
 
   CustomTabBar({Key? key,
     required this.tabElements,
@@ -37,7 +37,7 @@ class _TabControllerState extends State<CustomTabBar> with SingleTickerProviderS
 
   void initState() {
     this.tabController = TabController(length: widget.tabElements.length, vsync: this, initialIndex: 0);
-    this.tabController.addListener(()  => widget.onChangeTabController());
+    this.tabController.addListener(()  => this.tabController.indexIsChanging ? widget.onChangeTabController(this.tabController.index) : {});
     super.initState();
   }
 
@@ -56,6 +56,7 @@ class _TabControllerState extends State<CustomTabBar> with SingleTickerProviderS
           appBar: AppBar(
             backgroundColor: DesignColors.scaffoldColor,
             bottom: TabBar(
+              controller: this.tabController,
               tabs: widget.tabElements.keys.toList(),
             ),
             title: widget.appBar,

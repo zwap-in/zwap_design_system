@@ -262,3 +262,7 @@
 ## 0.0.65
 
 * re init the controller to position to the start the controller
+
+## 0.0.66
+
+* Fixed the TabController to handle changing new index
