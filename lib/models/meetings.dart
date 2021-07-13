@@ -114,14 +114,11 @@ class NetworkFilterElement{
 
 class ScheduleDataMeetings{
 
-  final List<int> daysRange;
-
-  final Map<int, TimeOfDay> slotsMapping;
+  final Map<int, List<TimeOfDay>> slotsMapping;
 
   final Map<String, NetworkFilterElement> filters;
 
   ScheduleDataMeetings({
-    required this.daysRange,
     required this.slotsMapping,
     required this.filters,
   });
@@ -134,7 +131,6 @@ class ScheduleDataMeetings{
     }
     );
     return ScheduleDataMeetings(
-        daysRange: json['days_range'],
         slotsMapping: json['slots_mapping'],
         filters: filters
     );

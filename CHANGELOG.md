@@ -274,3 +274,11 @@
 ## 0.0.68
 
 * Adjusted the planning card
+
+## 0.0.69
+
+* Fixed import libraries
+
+## 0.0.70
+
+* Adjusted the data model for the meetings data

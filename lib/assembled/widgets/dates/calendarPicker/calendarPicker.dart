@@ -12,9 +12,6 @@ class CalendarPickerState extends ChangeNotifier{
   /// The current date from which start
   DateTime currentDate = DateTime.now();
 
-  /// The number of days to show inside the calendar picker
-  final List<int> daysRange;
-
   /// The date start from which start the calendar picker dates
   final DateTime dateStart;
 
@@ -25,7 +22,6 @@ class CalendarPickerState extends ChangeNotifier{
   final Map<int, List<TimeOfDay>> slotsPerDay;
 
   CalendarPickerState({
-    required this.daysRange,
     required this.dateStart,
     required this.dateEnd,
     required this.slotsPerDay
@@ -34,13 +30,13 @@ class CalendarPickerState extends ChangeNotifier{
   /// Changing the start of the calendar picker
   void changeStart(bool isAdding){
     if(isAdding){
-      DateTime tmp = currentDate.add(Duration(days: this.daysRange.length));
+      DateTime tmp = currentDate.add(Duration(days: this.slotsPerDay.keys.toList().length));
       if(tmp.isBefore(this.dateEnd)){
         this.currentDate = tmp;
       }
     }
     else{
-      DateTime tmp = currentDate.subtract(Duration(days: this.daysRange.length));
+      DateTime tmp = currentDate.subtract(Duration(days: this.slotsPerDay.keys.toList().length));
       if(tmp.isAfter(this.dateStart)){
         this.currentDate = tmp;
       }
@@ -53,8 +49,8 @@ class CalendarPickerState extends ChangeNotifier{
     DateTime tmp = this.currentDate;
     int i = 0;
     bool checkNext = false;
-    while(i < this.daysRange.length){
-      if(this.daysRange.contains(tmp.weekday) && this.slotsPerDay.containsKey(tmp.weekday)){
+    while(i < this.slotsPerDay.keys.toList().length){
+      if(this.slotsPerDay.keys.toList().contains(tmp.weekday) && this.slotsPerDay.containsKey(tmp.weekday)){
         finals[tmp] = this.slotsPerDay[tmp.weekday]!;
         checkNext = true;
         i++;
