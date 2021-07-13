@@ -286,3 +286,7 @@
 ## 0.0.71
 
 * Removed unused params inside PlanMeeting card component
+
+## 0.0.72
+
+* Adjusted the data models

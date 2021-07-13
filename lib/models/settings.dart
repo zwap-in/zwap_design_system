@@ -61,4 +61,13 @@ class SettingElement{
       settingsOptions: json.containsKey("settings_options") ? json['settings_options'] : null
     );
   }
+
+  /// Convert a list of json in a list of SettingsElement
+  static List<SettingElement> parseSettings(List<Map<String, dynamic>> jsonBody){
+    List<SettingElement> settings = [];
+    jsonBody.forEach((element) {
+      settings.add(SettingElement.fromJson(element));
+    });
+    return settings;
+  }
 }

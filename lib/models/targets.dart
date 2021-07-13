@@ -23,4 +23,13 @@ class TargetData{
         targetImage: json['target_image']
     );
   }
+
+  /// Parsing list of maps in a iterable targets
+  static List<TargetData> parseTargets(List<Map<String, dynamic>> targetsBody){
+    List<TargetData> targets = [];
+    targetsBody.forEach((element) {
+      targets.add(TargetData.fromJson(element));
+    });
+    return targets;
+  }
 }

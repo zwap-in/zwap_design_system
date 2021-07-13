@@ -22,6 +22,37 @@ class MeetingDetails{
     required this.dateTimeStart,
     required this.dateTimeEnd,
     required this.title});
+
+  factory MeetingDetails.fromJson(Map<String, dynamic> json){
+    return MeetingDetails(
+        pk: json['pk'],
+        dateTimeStart: json['dateTimeStart'],
+        dateTimeEnd: json['dateTimeEnd'],
+        title: json['title']
+    );
+  }
+
+  /// Parsing list of json inside a map with datetime as key and a list of MeetingDetails as value
+  static Map<DateTime, List<MeetingDetails>> mapParsing(List<Map<String, dynamic>> jsonBody) {
+    Map<DateTime, List<MeetingDetails>> mapping = {};
+    jsonBody.forEach((element){
+      MeetingDetails meetingElement = MeetingDetails.fromJson(element);
+      if(!mapping.containsKey(meetingElement.dateTimeStart)){
+        mapping[meetingElement.dateTimeStart] = [];
+      }
+      mapping[meetingElement.dateTimeStart]!.add(meetingElement);
+    });
+    return mapping;
+  }
+
+  /// Parsing a list of json to a list of meeting details
+  static List<MeetingDetails> parseMeetings(List<Map<String, dynamic>> jsonBody){
+    List<MeetingDetails> meetings = [];
+    jsonBody.forEach((element) {
+      meetings.add(MeetingDetails.fromJson(element));
+    });
+    return meetings;
+  }
 }
 
 /// The network stats class model
@@ -54,6 +85,18 @@ class NetworkStats{
     required this.generatedMeetings, required this.zwapPoints,
     required this.totalContacts
   });
+  
+  factory NetworkStats.fromJson(Map<String, dynamic> json){
+    return NetworkStats(
+        meetings: json['meetings'], 
+        streak: json['streak'], 
+        invitedFriends: json['invited_friends'],
+        zwapScore: json['zwap_score'],
+        generatedMeetings: json['generated_meetings'], 
+        zwapPoints: json['zwap_points'], 
+        totalContacts: json['total_contacts']
+    );
+  }
 
 }
 
@@ -61,12 +104,32 @@ class NetworkStats{
 class NetworkData{
 
   /// Mapping each meeting details with any user
-  final Map<User, MeetingDetails> networkUser;
+  final Map<User, List<MeetingDetails>> networkUser;
 
   /// The stats behind your network
   final NetworkStats stats;
 
-  NetworkData({required this.networkUser, required this.stats});
+  NetworkData({
+    required this.networkUser,
+    required this.stats
+  });
+  
+  factory NetworkData.fromJson(Map<String, dynamic> json){
+    List<User> users = User.parseUsers(json['users']);
+    List<MeetingDetails> meetings = MeetingDetails.parseMeetings(json['meetings']);
+    Map<User, List<MeetingDetails>> mapping = {};
+    meetings.asMap().forEach((int index, MeetingDetails element) {
+      User tmp = users[index];
+      if(!mapping.containsKey(tmp)){
+        mapping[tmp] = [];
+      }
+      mapping[tmp]!.add(element);
+    });
+    return NetworkData(
+        networkUser: mapping,
+        stats: NetworkStats.fromJson(json['stats'])
+    );
+  }
 
 }
 
@@ -78,16 +141,22 @@ enum FilterType{
 
 class NetworkFilterElement{
 
+  /// The network filter's title
   final String networkTitle;
 
+  /// The network filter's subtitle
   final String networkSubTitle;
 
+  /// The network filter's type
   final FilterType filterType;
 
+  /// The network filter's placeholder
   final String placeholder;
 
+  /// The network filter's options
   final List<String> filtersOptions;
 
+  /// The network filter's key name
   final String filterKeyName;
 
   NetworkFilterElement({
@@ -105,17 +174,30 @@ class NetworkFilterElement{
       networkSubTitle: json['network_subtitle'],
       filtersOptions: json['filter_options'],
       filterType: json['filter_type'],
-      filterKeyName: json['filterKeyName'],
+      filterKeyName: json['filter_key_name'],
       placeholder: json['placeholder']
     );
   }
 
+  /// Parsing a list of json into list of networkFilters
+  static List<NetworkFilterElement> parseNetworkFilters(List<Map<String, dynamic>> jsonBody){
+    List<NetworkFilterElement> networkFilters = [];
+    jsonBody.forEach((element) {
+      networkFilters.add(NetworkFilterElement.fromJson(element));
+    });
+    return networkFilters;
+  }
+
+
 }
 
+/// The data to setup the schedule layout
 class ScheduleDataMeetings{
 
+  /// The slots per day mapping
   final Map<int, List<TimeOfDay>> slotsMapping;
 
+  /// Mapping each filter with its key
   final Map<String, NetworkFilterElement> filters;
 
   ScheduleDataMeetings({
@@ -124,14 +206,22 @@ class ScheduleDataMeetings{
   });
 
   factory ScheduleDataMeetings.fromJson(Map<String, dynamic> json){
+    List<NetworkFilterElement> networkFilters = NetworkFilterElement.parseNetworkFilters(json['filters']);
     Map<String, NetworkFilterElement> filters = {};
-    json['filters'].forEach((value) {
-      NetworkFilterElement currentFilter = NetworkFilterElement.fromJson(value);
-      filters[currentFilter.filterKeyName] = currentFilter;
-    }
-    );
+    networkFilters.forEach((element) {
+      filters[element.filterKeyName] = element;
+    });
+    Map<int, List<TimeOfDay>> finalSlotsMapping = {};
+    Map<int, List<Map<String, int>>> slotsMapping = json['slots_mapping'];
+    slotsMapping.forEach((int weekDay, List<Map<String, int>> days) {
+      List<TimeOfDay> slots = [];
+      days.forEach((element) {
+        slots.add(TimeOfDay(hour: element['hour']!, minute: element['minutes']!));
+      });
+      finalSlotsMapping[weekDay] = slots;
+    });
     return ScheduleDataMeetings(
-        slotsMapping: json['slots_mapping'],
+        slotsMapping: finalSlotsMapping,
         filters: filters
     );
   }

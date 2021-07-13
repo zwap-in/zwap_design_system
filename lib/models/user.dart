@@ -59,4 +59,13 @@ class User{
     );
   }
 
+  /// Parsing list of json inside list of users
+  static List<User> parseUsers(List<Map<String, dynamic>> jsonBody){
+    List<User> users = [];
+    jsonBody.forEach((element) {
+      users.add(User.fromJson(element));
+    });
+    return users;
+  }
+
 }

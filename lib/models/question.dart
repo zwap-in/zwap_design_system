@@ -30,6 +30,7 @@ class QuestionElement{
   /// The list of the options to show inside question with questionType == InputDropdown
   final List<String>? questionOptions;
 
+  /// Custom regex to validate the input inside this question
   final String? regexValidate;
 
   QuestionElement({
@@ -63,6 +64,15 @@ class QuestionElement{
         questionOptions: json.containsKey("question_options") ? json['question_options'] : null
     );
   }
+
+  /// Parsing a list of json into a list of QuestionElement
+  static List<QuestionElement> parseQuestions(List<Map<String, dynamic>> jsonBody){
+    List<QuestionElement> questions = [];
+    jsonBody.forEach((element) {
+      questions.add(QuestionElement.fromJson(element));
+    });
+    return questions;
+  }
 }
 
 /// Use this element with any profile data form
@@ -84,5 +94,14 @@ class ProfileQuestions{
         questionOne: QuestionElement.fromJson(json['question_one']),
         questionTwo: json.containsKey("question_two") ? QuestionElement.fromJson(json['question_two']) : null
     );
+  }
+
+  /// Parsing list of json inside a list of ProfileQuestion
+  static List<ProfileQuestions> parseProfileQuestion(List<Map<String, dynamic>> jsonBody){
+    List<ProfileQuestions> profileQuestions = [];
+    jsonBody.forEach((element) {
+      profileQuestions.add(ProfileQuestions.fromJson(element));
+    });
+    return profileQuestions;
   }
 }
