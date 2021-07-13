@@ -11,16 +11,8 @@ class PlanMeetingCard extends StatelessWidget{
   /// The filters to customize the planning
   final List<NetworkFilterElement> filters;
 
-  /// The days range to show inside the calendar picker
-  final List<int> daysRange;
-
-  /// The slots mapping to show custom hour slots for each day
-  final Map<int, List<TimeOfDay>> slotsMapping;
-
   PlanMeetingCard({Key? key,
     required this.filters,
-    required this.daysRange,
-    required this.slotsMapping
   }): super(key: key);
 
   @override

@@ -282,3 +282,7 @@
 ## 0.0.70
 
 * Adjusted the data model for the meetings data
+
+## 0.0.71
+
+* Removed unused params inside PlanMeeting card component
