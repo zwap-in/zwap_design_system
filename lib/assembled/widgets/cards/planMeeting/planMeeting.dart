@@ -1,13 +1,27 @@
+/// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+/// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// Custom card to schedule and plan a custom meeting
 class PlanMeetingCard extends StatelessWidget{
 
-  final List<String> networksList;
+  /// The filters to customize the planning
+  final List<NetworkFilterElement> filters;
+
+  /// The days range to show inside the calendar picker
+  final List<int> daysRange;
+
+  /// The slots mapping to show custom hour slots for each day
+  final Map<int, List<TimeOfDay>> slotsMapping;
 
   PlanMeetingCard({Key? key,
-    required this.networksList
+    required this.filters,
+    required this.daysRange,
+    required this.slotsMapping
   }): super(key: key);
 
   @override
@@ -38,7 +52,7 @@ class PlanMeetingCard extends StatelessWidget{
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: FiltersPlan(
-              networksList: this.networksList,
+              filters: this.filters,
             ),
           ),
           Padding(

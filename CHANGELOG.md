@@ -270,3 +270,7 @@
 ## 0.0.67
 
 * Added check on item if is it clickable on missing steps card
+
+## 0.0.68
+
+* Adjusted the planning card

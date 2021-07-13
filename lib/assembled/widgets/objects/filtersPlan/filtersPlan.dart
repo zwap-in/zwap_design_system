@@ -1,34 +1,32 @@
+/// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+/// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// The provider to handle the state inside this custom filters widget
 class FiltersProvider extends ChangeNotifier{
 
-  String currentNetwork = "";
+  /// The value mapping
+  Map<String, dynamic> mappingValues = {};
 
-  String kindOfMeeting = "";
-
-  void changeNetwork(String network){
-    this.currentNetwork = network;
-    notifyListeners();
-  }
-
-  void changeKindOfMeeting(String newKind){
-    this.kindOfMeeting = newKind;
+  /// Handling changing value
+  void changeMappingValue(String key, dynamic value){
+    this.mappingValues[key] = value;
     notifyListeners();
   }
 
 }
 
-
-
+/// Custom component to create a collapse widget to show inside the custom filters
 class FiltersPlan extends StatelessWidget{
 
-  final List<String> networksList;
+  /// The dynamic filters list
+  final List<NetworkFilterElement> filters;
 
   FiltersPlan({Key? key,
-    required this.networksList,
+    required this.filters,
   }): super(key: key);
   
   @override
@@ -39,39 +37,27 @@ class FiltersPlan extends StatelessWidget{
           baseTextsType: [BaseTextType.title],
         ),
       children: [
-        Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-              child: LineSettings(
-                  title: Utils.translatedText("chooseYourNetwork"),
-                  subTitle: Utils.translatedText("chooseYourNetworkSubTitle"),
-                  rightElement: Consumer<FiltersProvider>(
-                    builder: (builder, provider, child){
-                      return CustomDropDown(
-                        values: this.networksList,
-                        handleChange: (String value) => provider.changeNetwork(value),
-                      );
-                    }
+        VerticalScroll(
+            childComponent: Column(
+              children: [
+                for(int i = 0; i < this.filters.length; i++) Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                    child: LineSettings(
+                      title: Utils.translatedText(this.filters[i].networkTitle),
+                      subTitle: Utils.translatedText(this.filters[i].networkSubTitle),
+                      rightElement: Consumer<FiltersProvider>(
+                        builder: (builder, provider, child){
+                          return NetworkFilter(
+                            currentValue: provider.mappingValues[this.filters[i].filterKeyName],
+                            changeValueCallBack: (String value) => provider.changeMappingValue(this.filters[i].filterKeyName, value),
+                            networkFilter: this.filters[i],
+                          );
+                        }
+                      )
+                    ),
                   )
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-              child: LineSettings(
-                  title: Utils.translatedText("kindOfMeetingTitle"),
-                  subTitle: Utils.translatedText("kindOfMeetingSubTitle"),
-                  rightElement: Consumer<FiltersProvider>(
-                      builder: (builder, provider, child){
-                        return RowButtons(
-                          selected: provider.kindOfMeeting == "1:1" ? 0 : 1,
-                          changeSelectedButton: (int newSelection) => provider.changeKindOfMeeting(newSelection == 0 ? "1:1" : "groups"),
-                        );
-                      }
-                  )
-              ),
-            ),
-          ],
+              ],
+          )
         )
       ],
     );

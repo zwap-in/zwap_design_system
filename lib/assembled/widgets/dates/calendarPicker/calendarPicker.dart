@@ -52,13 +52,21 @@ class CalendarPickerState extends ChangeNotifier{
     Map<DateTime, List<TimeOfDay>> finals = {};
     DateTime tmp = this.currentDate;
     int i = 0;
+    bool checkNext = false;
     while(i < this.daysRange.length){
       if(this.daysRange.contains(tmp.weekday) && this.slotsPerDay.containsKey(tmp.weekday)){
         finals[tmp] = this.slotsPerDay[tmp.weekday]!;
+        checkNext = true;
         i++;
       }
-      if(tmp.add(Duration(days: 1)).isBefore(this.dateEnd)){
-        tmp = tmp.add(Duration(days: 1));
+      if (!checkNext){
+        DateTime nextTmp = tmp.add(Duration(days: 1));
+        if(nextTmp.isAfter(this.dateEnd)){
+          break;
+        }
+        else{
+          tmp = nextTmp;
+        }
       }
     }
     return finals;
