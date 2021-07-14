@@ -298,3 +298,7 @@
 ## 0.0.74
 
 * Fixed some components inside the complete profile steps
+
+## 0.0.75
+
+* Fixed some components inside the complete profile steps

@@ -24,8 +24,7 @@ class TargetsState extends ChangeNotifier{
 
   /// Selecting any target
   void selectTarget(TargetData element){
-    print("SELECTED $element");
-    this.targetsMapping[element] = this.targetsMapping[element]!;
+    this.targetsMapping[element] = !this.targetsMapping[element]!;
     notifyListeners();
   }
 
