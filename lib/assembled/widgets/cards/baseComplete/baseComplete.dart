@@ -41,11 +41,13 @@ class BaseComplete extends StatelessWidget{
       );
     }
 
-    return CustomCard(
-      childComponent: Padding(
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-        child: Column(
-          children: _children,
+    return VerticalScroll(
+      childComponent: CustomCard(
+        childComponent: Padding(
+          padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+          child: Column(
+            children: _children,
+          ),
         ),
       ),
     );

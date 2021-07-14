@@ -46,13 +46,13 @@ class _TabControllerState extends State<CustomTabBar> with SingleTickerProviderS
     return DefaultTabController(
       length: widget.tabElements.length,
       child: Scaffold(
-          bottomNavigationBar: new Theme(
-            data: Theme.of(context).copyWith(
+        bottomNavigationBar: widget.customBottomMenu != null ? new Theme(
+          data: Theme.of(context).copyWith(
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent
-            ),
-            child: widget.customBottomMenu!,
           ),
+          child: widget.customBottomMenu!,
+        ) : null,
           appBar: AppBar(
             backgroundColor: DesignColors.scaffoldColor,
             bottom: TabBar(

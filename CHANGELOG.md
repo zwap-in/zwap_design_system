@@ -294,3 +294,7 @@
 ## 0.0.73
 
 * Removed the NetworkData model
+
+## 0.0.74
+
+* Fixed some components inside the complete profile steps

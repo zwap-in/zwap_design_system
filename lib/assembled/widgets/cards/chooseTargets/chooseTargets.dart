@@ -24,6 +24,7 @@ class TargetsState extends ChangeNotifier{
 
   /// Selecting any target
   void selectTarget(TargetData element){
+    print("SELECTED $element");
     this.targetsMapping[element] = this.targetsMapping[element]!;
     notifyListeners();
   }
@@ -53,19 +54,22 @@ class ChooseTargets extends StatelessWidget{
   Map<Widget, Map<String, int>> targetsRow(TargetsState provider){
     Map<Widget, Map<String, int>> children = {};
     provider.targetsMapping.forEach((TargetData element, bool value) {
-      Widget tmp = Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: value ? DesignColors.pinkyPrimary : Colors.black
-          )
-        ),
-        child: InkResponse(
-          hoverColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          onTap: () => provider.selectTarget(element),
-          child: ImageCard(
-            imagePath: element.targetImage,
-            textCard: element.targetName,
+      Widget tmp = Padding(
+        padding: EdgeInsets.all(3),
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: value ? DesignColors.pinkyPrimary : Colors.white
+              )
+          ),
+          child: InkResponse(
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            onTap: () => provider.selectTarget(element),
+            child: ImageCard(
+              imagePath: element.targetImage,
+              textCard: element.targetName,
+            ),
           ),
         ),
       );

@@ -52,7 +52,7 @@ class SneakUser extends StatelessWidget{
           childComponent: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SneakUserHeader(imageAsset: this._getCustomDataValue("profilePic"), savingUser: () => this.saveUser != null ? this.saveUser!() : {},),
+              SneakUserHeader(imageAsset: this._getCustomDataValue("profilePic"), savingUser: () => this.saveUser != null ? this.saveUser!() : null,),
               Padding(
                 padding: EdgeInsets.only(left: 30, right: 30, top: 5),
                 child: BaseText(
