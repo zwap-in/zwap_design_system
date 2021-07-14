@@ -33,7 +33,7 @@ class NetworkCardState extends ChangeNotifier{
 class NetworkCard extends StatelessWidget{
 
   /// The network stats to show inside this
-  final NetworkData networkStats;
+  final NetworkStats networkStats;
 
   /// The current logged user
   final User currentUser;
@@ -56,37 +56,37 @@ class NetworkCard extends StatelessWidget{
                 children: [
                   HeaderNetwork(firstName: this.currentUser.firstName, lastName: this.currentUser.lastName, baseStateType: [
                     BaseStateType(baseStatTitle: Utils.translatedText("totalMeeting"),
-                        baseStatNumber: this.networkStats.stats.meetings.toString(),
+                        baseStatNumber: this.networkStats.meetings.toString(),
                         iconData: IconData(Utils.iconData("cameraIcon"), fontFamily: "zwapIcon")),
                     BaseStateType(baseStatTitle: Utils.translatedText("totalStreak"),
-                        baseStatNumber: this.networkStats.stats.streak.toString(),
+                        baseStatNumber: this.networkStats.streak.toString(),
                         iconData: IconData(Utils.iconData("cameraIcon"), fontFamily: "zwapIcon")),
                     BaseStateType(baseStatTitle: Utils.translatedText("invitedFriends"),
-                        baseStatNumber: this.networkStats.stats.invitedFriends.toString(),
+                        baseStatNumber: this.networkStats.invitedFriends.toString(),
                         iconData: IconData(Utils.iconData("cameraIcon"), fontFamily: "zwapIcon")),
                   ]),
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: GeneralCardStat(title: Utils.translatedText("zwapScoreTitle"),
-                        stat: this.networkStats.stats.zwapScore.toString(),
+                        stat: this.networkStats.zwapScore.toString(),
                         cardType: GeneralStatType.TagStat),
                   ),
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: GeneralCardStat(title: Utils.translatedText("generatedMeetingsTitle"),
-                        stat: "${this.networkStats.stats.generatedMeetings.toString()} ${Utils.translatedText("meetings")}",
+                        stat: "${this.networkStats.generatedMeetings.toString()} ${Utils.translatedText("meetings")}",
                         cardType: GeneralStatType.TagText),
                   ),
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: GeneralCardStat(title: Utils.translatedText("zwapPoints"),
-                        stat: "${this.networkStats.stats.zwapPoints.toString()} ${Utils.translatedText("zwapPoints")}",
+                        stat: "${this.networkStats.zwapPoints.toString()} ${Utils.translatedText("zwapPoints")}",
                         cardType: GeneralStatType.TagText),
                   ),
                   Padding(
                     padding: EdgeInsets.all(20),
                     child: BaseText(
-                      texts: ["${this.networkStats.stats.totalContacts} ${Utils.translatedText("contactsTitle")}"],
+                      texts: ["${this.networkStats.totalContacts} ${Utils.translatedText("contactsTitle")}"],
                       baseTextsType: [BaseTextType.subTitle],
                       textsColor: [DesignColors.greyPrimary],
                     ),

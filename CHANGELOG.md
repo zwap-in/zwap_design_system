@@ -290,3 +290,7 @@
 ## 0.0.72
 
 * Adjusted the data models
+
+## 0.0.73
+
+* Removed the NetworkData model

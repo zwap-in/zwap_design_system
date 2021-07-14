@@ -100,39 +100,6 @@ class NetworkStats{
 
 }
 
-/// The network data class model
-class NetworkData{
-
-  /// Mapping each meeting details with any user
-  final Map<User, List<MeetingDetails>> networkUser;
-
-  /// The stats behind your network
-  final NetworkStats stats;
-
-  NetworkData({
-    required this.networkUser,
-    required this.stats
-  });
-  
-  factory NetworkData.fromJson(Map<String, dynamic> json){
-    List<User> users = User.parseUsers(json['users']);
-    List<MeetingDetails> meetings = MeetingDetails.parseMeetings(json['meetings']);
-    Map<User, List<MeetingDetails>> mapping = {};
-    meetings.asMap().forEach((int index, MeetingDetails element) {
-      User tmp = users[index];
-      if(!mapping.containsKey(tmp)){
-        mapping[tmp] = [];
-      }
-      mapping[tmp]!.add(element);
-    });
-    return NetworkData(
-        networkUser: mapping,
-        stats: NetworkStats.fromJson(json['stats'])
-    );
-  }
-
-}
-
 enum FilterType{
   inputText,
   inputDropDown,
