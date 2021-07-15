@@ -1,6 +1,7 @@
 /// IMPORTING THIRD PARTY PACKAGES
-import 'dart:developer';
+import 'dart:developer' as developer;
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class Utils{
 
   /// Custom function to change screen
   static void goToScreen(String name, BuildContext context, Map<String, String>? args){
-    log("Changing screen to $name");
+    developer.log("Changing screen to $name");
     String queryArgs = "";
     if(args != null){
       queryArgs += "?";
@@ -30,7 +31,7 @@ class Utils{
 
   /// Custom function to open external url
   static Future<void> launchInBrowser(String url) async {
-    log("Open external url $url in browser");
+    developer.log("Open external url $url in browser");
   }
 
   /// Copy on clipboard dynamic text
@@ -128,6 +129,11 @@ class Utils{
       filePath = 'Can not fetch url';
     }
     return filePath;
+  }
+
+  static double roundDouble(double value, int places){
+    num mod = pow(10.0, places);
+    return ((value * mod).round().toDouble() / mod);
   }
 }
 

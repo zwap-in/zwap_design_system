@@ -310,3 +310,7 @@
 ## 0.0.77
 
 * Fixed the design style for some components inside the complete profile steps
+
+## 0.0.78
+
+* Added function to round to two decimals a double number and some translation texts

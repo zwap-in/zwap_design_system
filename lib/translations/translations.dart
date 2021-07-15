@@ -156,7 +156,12 @@ class LocalizationClass {
       "kindOfMeetingSubTitle": "Choose if you wanna meet your match in 1:1 or in group or both",
       "oneToOneMeeting": "1:1",
       "groupsMeeting": "Group",
-      "notSupportedScreenTitle": "We are sorry but this device it's not supported"
+      "notSupportedScreenTitle": "We are sorry but this device it's not supported",
+      "biography": "Biography",
+      "profile": "Profile",
+      "interests": "Interests",
+      "targets": "Targets",
+      "editSaved": "Edit saved",
     },
     'it': {
       'signupTitle': 'Sblocca il potere del networking',
@@ -298,7 +303,12 @@ class LocalizationClass {
       "kindOfMeetingSubTitle": "Scegli se vuoi incontrare il tuo match in gruppo, 1:1 o entrambi",
       "oneToOneMeeting": "1:1",
       "groupsMeeting": "Gruppo",
-      "notSupportedScreenTitle": "Ci dispiace ma questo dispositivo non sembra supportato"
+      "notSupportedScreenTitle": "Ci dispiace ma questo dispositivo non sembra supportato",
+      "biography": "Biografia",
+      "profile": "Profilo",
+      "interests": "Interessi",
+      "targets": "Targets",
+      "editSaved": "Modifiche salvate",
     },
   };
 
