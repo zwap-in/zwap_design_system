@@ -302,3 +302,7 @@
 ## 0.0.75
 
 * Fixed some components inside the complete profile steps
+
+## 0.0.76
+
+* Changed the targets component design

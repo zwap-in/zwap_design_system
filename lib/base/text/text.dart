@@ -144,7 +144,7 @@ class BaseText extends StatelessWidget{
     return Align(
       alignment: this.textAlignment,
       child: RichText(
-        textAlign: TextAlign.left,
+        textAlign: this.textAlignment == Alignment.center ? TextAlign.center : TextAlign.left,
         text: TextSpan(
             text: "",
             children: _children

@@ -14,12 +14,15 @@ class ImageCard extends StatelessWidget {
   /// The card title
   final String textCard;
 
+  final bool isFlag;
+
   /// Is this icon an internal asset
   final bool? isInternalAsset;
 
   ImageCard({Key? key,
     required this.imagePath,
     required this.textCard,
+    required this.isFlag,
     this.isInternalAsset,
   }): super(key: key);
 
@@ -33,6 +36,7 @@ class ImageCard extends StatelessWidget {
     // than having to individually change instances of widgets.
     return SizedBox(
       child: CustomCard(
+        borderColor: this.isFlag ? DesignColors.pinkyPrimary : Colors.transparent,
         childComponent: Column(
           children: [
             Padding(
@@ -42,10 +46,13 @@ class ImageCard extends StatelessWidget {
                 isInternal: this.isInternalAsset ?? false,
               ),
             ),
-            BaseText(
-              texts: [this.textCard],
-              baseTextsType: [BaseTextType.normal],
-              textAlignment: Alignment.center,
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: BaseText(
+                texts: [this.textCard],
+                baseTextsType: [BaseTextType.normal],
+                textAlignment: Alignment.center,
+              ),
             )
           ],
         ),

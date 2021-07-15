@@ -55,20 +55,14 @@ class ChooseTargets extends StatelessWidget{
     provider.targetsMapping.forEach((TargetData element, bool value) {
       Widget tmp = Padding(
         padding: EdgeInsets.all(3),
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(
-                  color: value ? DesignColors.pinkyPrimary : Colors.white
-              )
-          ),
-          child: InkResponse(
-            hoverColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            onTap: () => provider.selectTarget(element),
-            child: ImageCard(
-              imagePath: element.targetImage,
-              textCard: element.targetName,
-            ),
+        child: InkResponse(
+          hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          onTap: () => provider.selectTarget(element),
+          child: ImageCard(
+            imagePath: element.targetImage,
+            isFlag: value,
+            textCard: element.targetName,
           ),
         ),
       );

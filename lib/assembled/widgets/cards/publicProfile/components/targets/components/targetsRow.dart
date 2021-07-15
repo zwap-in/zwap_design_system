@@ -21,6 +21,7 @@ class TargetsRow extends StatelessWidget{
     this.targetsMappingInfo.forEach((String key, Map<String, dynamic> value) {
       Widget tmp = ImageCard(
           textCard: key,
+          isFlag: false,
           imagePath: value['imagePath']!,
           isInternalAsset: value['internalInfo']!
       );

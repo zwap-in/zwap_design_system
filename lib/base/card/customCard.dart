@@ -26,11 +26,14 @@ class CustomCard extends StatelessWidget {
   /// The card type to define the style of this card
   final CardStyleType cardStyleType;
 
+  final Color borderColor;
+
   CustomCard({Key? key,
     required this.childComponent,
     this.cardWidth,
     this.cardHeight,
-    this.cardStyleType = CardStyleType.defaultCard
+    this.cardStyleType = CardStyleType.defaultCard,
+    this.borderColor = Colors.transparent
   }): super(key: key);
 
   @override
@@ -48,10 +51,10 @@ class CustomCard extends StatelessWidget {
 
     /// The default value for the border decoration of the card
     Border _borderDecoration = Border(
-        top: BorderSide(color: Colors.transparent),
-        bottom: BorderSide(color: Colors.transparent),
-        right: BorderSide(color: Colors.transparent),
-        left: BorderSide(color:Colors.transparent)
+        top: BorderSide(color: this.borderColor),
+        bottom: BorderSide(color: this.borderColor),
+        right: BorderSide(color: this.borderColor),
+        left: BorderSide(color: this.borderColor)
     );
 
     return new Container(
