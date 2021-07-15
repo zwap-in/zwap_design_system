@@ -21,20 +21,21 @@ class EditProfile extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return CustomCard(
+    return VerticalScroll(
+        childComponent: CustomCard(
         childComponent: Padding(
           padding: EdgeInsets.only(bottom: 40),
           child: Column(
             children: [
               BlueHeader(
-                  childrenStack: [
-                    FractionalTranslation(
-                      translation: const Offset(0.0, 0.5),
-                      child: PickImage(),
-                    )
-                  ],
-                  headerHeight: 80,
-                  stackAlignment: AlignmentDirectional.center,
+                childrenStack: [
+                  FractionalTranslation(
+                    translation: const Offset(0.0, 0.5),
+                    child: PickImage(),
+                  )
+                ],
+                headerHeight: 80,
+                stackAlignment: AlignmentDirectional.center,
               ),
               Padding(
                 padding: EdgeInsets.only(top: 80),
@@ -56,6 +57,7 @@ class EditProfile extends StatelessWidget{
             ],
           ),
         )
+    )
     );
   }
 }

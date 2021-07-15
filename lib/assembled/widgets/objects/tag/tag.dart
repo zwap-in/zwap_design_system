@@ -55,7 +55,7 @@ class TagElement extends StatelessWidget{
           children: [
             Flexible(
               child: this.icon != null ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 3),
+                padding: EdgeInsets.symmetric(horizontal: 3, vertical: 3),
                 child: InkWell(
                   hoverColor: Colors.transparent,
                   splashColor: Colors.transparent,

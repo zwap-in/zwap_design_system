@@ -334,3 +334,7 @@
 ## 0.0.83
 
 * Changed the padding inside the tag elements
+
+## 0.0.84
+
+* Added vertical scroll inside the edit profile card

@@ -36,7 +36,7 @@ class InputTag extends StatelessWidget{
     Map<Widget, Map<String, int>> finals = {};
     value.inputValues.asMap().forEach((int index, String element) {
       Widget tmp = Padding(
-        padding: index == 0 ? EdgeInsets.only(right: 10, bottom: 10) : EdgeInsets.only(right: 10, left: 10, bottom: 10),
+        padding: EdgeInsets.all(10),
         child: TagElement(
           tagText: element,
           icon: IconData(0),
@@ -67,7 +67,7 @@ class InputTag extends StatelessWidget{
           child: BaseInput(
             validateValue: (value) { return true; },
             inputType: InputType.inputText,
-            changeValue: (dynamic value) => context.read<InputTagState>().changeValues(value, true),
+            changeValue: (dynamic value) => value != "" ? context.read<InputTagState>().changeValues(value, true) : {},
             placeholderText: '',
           ),
         )
