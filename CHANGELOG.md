@@ -322,3 +322,7 @@
 ## 0.0.80
 
 * Removed the on click action on sneak user for complete profile
+
+## 0.0.81
+
+* Fixed the interests state

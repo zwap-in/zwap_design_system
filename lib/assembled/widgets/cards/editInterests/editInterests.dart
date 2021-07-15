@@ -69,7 +69,7 @@ class EditInterests extends StatelessWidget{
             child: InputTag(),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 20),
+            padding: EdgeInsets.only(top: 20, bottom: 5),
             child: BaseText(
               texts: [Utils.translatedText("wantTalkAboutTitle")],
               baseTextsType: [BaseTextType.title],
@@ -77,7 +77,7 @@ class EditInterests extends StatelessWidget{
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: 20),
+            padding: EdgeInsets.only(bottom: 20, top: 5),
             child: Consumer<EditInterestsState>(
               builder: (builder, provider, child){
                 return BaseInput(
@@ -93,7 +93,7 @@ class EditInterests extends StatelessWidget{
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 20),
+            padding: EdgeInsets.only(top: 20, bottom: 5),
             child: BaseText(
               texts: [Utils.translatedText("lookingForTitle")],
               baseTextsType: [BaseTextType.title],
@@ -101,7 +101,7 @@ class EditInterests extends StatelessWidget{
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: 20),
+            padding: EdgeInsets.only(bottom: 20, top: 5),
             child: Consumer<EditInterestsState>(
               builder: (builder, provider, child){
                 return BaseInput(

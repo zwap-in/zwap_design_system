@@ -51,15 +51,12 @@ class InputTag extends StatelessWidget{
       children: [
         Padding(
           padding: EdgeInsets.only(bottom: 20),
-          child: ChangeNotifierProvider<InputTagState>(
-              create: (context) => InputTagState(),
-              child: Consumer<InputTagState>(
-                  builder: (context, provider, child){
-                    return ResponsiveRow(
-                      children: this.childrenResponsive(provider),
-                    );
-                  }
-              )
+          child: Consumer<InputTagState>(
+              builder: (context, provider, child){
+                return ResponsiveRow(
+                  children: this.childrenResponsive(provider),
+                );
+              }
           ),
         ),
         Padding(
@@ -67,7 +64,7 @@ class InputTag extends StatelessWidget{
           child: BaseInput(
             validateValue: (value) { return true; },
             inputType: InputType.inputText,
-            changeValue: (dynamic value) => Provider.of<InputTagState>(context, listen: false).changeValues(value, true),
+            changeValue: (dynamic value) => context.read<InputTagState>().changeValues(value, true),
             placeholderText: '',
           ),
         )
