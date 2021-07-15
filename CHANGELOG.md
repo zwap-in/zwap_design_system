@@ -318,3 +318,7 @@
 ## 0.0.79
 
 * Added validation on bio input
+
+## 0.0.80
+
+* Removed the on click action on sneak user for complete profile

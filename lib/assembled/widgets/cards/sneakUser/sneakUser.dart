@@ -46,7 +46,7 @@ class SneakUser extends StatelessWidget{
     return Padding(
       padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
       child: InkWell(
-        onTap: () => this.viewProfile != null ? this.viewProfile!() : null,
+        onTap: this.viewProfile != null ? () => this.viewProfile!() : null,
         child: CustomCard(
           cardWidth: _deviceType == 1 ? 500 : (_deviceType == 2 ? 300 : (_deviceType == 3 ? 290 : 350)),
           childComponent: Column(
