@@ -23,10 +23,10 @@ class SneakUserHeader extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return BlueHeader(
-      headerHeight: 150,
+      headerHeight: 120,
       childrenStack: [
         FractionalTranslation(
-          translation: const Offset(0.0, 0.5),
+          translation: const Offset(0.0, 0.2),
           child: Padding(
             padding: const EdgeInsets.only(left: 20),
             child: AvatarCircle(

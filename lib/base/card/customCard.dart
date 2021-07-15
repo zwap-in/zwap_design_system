@@ -50,11 +50,8 @@ class CustomCard extends StatelessWidget {
     ];
 
     /// The default value for the border decoration of the card
-    Border _borderDecoration = Border(
-        top: BorderSide(color: this.borderColor),
-        bottom: BorderSide(color: this.borderColor),
-        right: BorderSide(color: this.borderColor),
-        left: BorderSide(color: this.borderColor)
+    Border _borderDecoration = Border.all(
+      color: Colors.transparent,
     );
 
     return new Container(
@@ -63,6 +60,10 @@ class CustomCard extends StatelessWidget {
             elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(ConstantsValue.cardRadiusValue),
+              side: BorderSide(
+                width: 2,
+                color: this.borderColor
+              )
             ),
             child: Container(
               decoration: this.cardStyleType == CardStyleType.leftBlueBorderCard ? BoxDecoration(

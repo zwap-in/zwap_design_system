@@ -48,16 +48,16 @@ class CompleteBio extends StatelessWidget{
   Map<Widget, Map<String, int>> exampleBio(BuildContext context){
     Map<Widget, Map<String, int>> finals = {};
     User tmpOne = User(
-      lastName: "Rossi",
-      firstName: "Marco",
-      profileBio: Utils.translatedText("bioStepSignupExampleBio"),
-      targetsData: [],
-      interests: [],
-      customData: {
-        'role': 'CEO',
-        'company': 'ZWAP'
-      },
-      pk: 1
+        lastName: "Rossi",
+        firstName: "Marco",
+        profileBio: Utils.translatedText("bioStepSignupExampleBio"),
+        targetsData: [],
+        interests: [],
+        customData: {
+          'role': 'CEO',
+          'company': 'ZWAP'
+        },
+        pk: 1
     );
     User tmpTwo = User(
         lastName: "Rossi",
@@ -118,23 +118,30 @@ class CompleteBio extends StatelessWidget{
             child: Column(
               children: [
                 Consumer<CompleteBioState>(
-                  builder: (builder, provider, child){
-                    return BaseInput(
-                      inputType: InputType.inputArea,
-                      maxLines: 5,
-                      placeholderText: '',
-                      validateValue: (value) => true,
-                      changeValue: (value) => provider.changeBio(value),
-                    );
-                  }
+                    builder: (builder, provider, child){
+                      return BaseInput(
+                        inputType: InputType.inputArea,
+                        maxLines: 5,
+                        placeholderText: '',
+                        validateValue: (value) => true,
+                        changeValue: (value) => provider.changeBio(value),
+                      );
+                    }
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    BaseText(
-                      texts: [Utils.translatedText("bioStepSignupMinChars").replaceAll("", "")],
-                      baseTextsType: [BaseTextType.normalBold],
-                      textsColor: [DesignColors.pinkyPrimary],
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: BaseText(
+                          texts: [Utils.translatedText("bioStepSignupMinChars").replaceAll("", "")],
+                          baseTextsType: [BaseTextType.normalBold],
+                          textsColor: [DesignColors.pinkyPrimary],
+                          textAlignment: Alignment.centerRight,
+                        ),
+                      ),
                     )
                   ],
                 )

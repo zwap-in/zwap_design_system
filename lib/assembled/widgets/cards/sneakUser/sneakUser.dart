@@ -52,7 +52,7 @@ class SneakUser extends StatelessWidget{
           childComponent: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SneakUserHeader(imageAsset: this._getCustomDataValue("profilePic"), savingUser: () => this.saveUser != null ? this.saveUser!() : null,),
+              SneakUserHeader(imageAsset: this._getCustomDataValue("profilePic"), savingUser: this.saveUser != null ? () => this.saveUser!() : null,),
               Padding(
                 padding: EdgeInsets.only(left: 30, right: 30, top: 5),
                 child: BaseText(
@@ -68,7 +68,7 @@ class SneakUser extends StatelessWidget{
                 ),
               ) : Container(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.only(left: 30, right: 30, bottom: 30, top: 10),
                 child: BaseText(
                   texts: ["${this.userInfo.profileBio}"],
                   baseTextsType: [BaseTextType.normal],

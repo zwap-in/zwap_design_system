@@ -44,7 +44,7 @@ class BaseComplete extends StatelessWidget{
     return VerticalScroll(
       childComponent: CustomCard(
         childComponent: Padding(
-          padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+          padding: EdgeInsets.symmetric(vertical: 50, horizontal: 40),
           child: Column(
             children: _children,
           ),
