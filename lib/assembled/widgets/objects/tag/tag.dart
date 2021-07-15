@@ -53,22 +53,27 @@ class TagElement extends StatelessWidget{
         padding: EdgeInsets.all(7),
         child: Row(
           children: [
-            this.icon != null ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: 3),
-              child: InkWell(
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                onTap: () => this.callBackClick!(),
-                child: Icon(
-                    this.icon
+            Flexible(
+              child: this.icon != null ? Padding(
+                padding: EdgeInsets.symmetric(horizontal: 3),
+                child: InkWell(
+                  hoverColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  onTap: () => this.callBackClick!(),
+                  child: Icon(
+                      this.icon
+                  ),
                 ),
+              ) : Container(),
+              flex: 0,
+            ),
+            Expanded(
+              child: BaseText(
+                texts: [this.tagText],
+                baseTextsType: [BaseTextType.normal],
+                textsColor: [this.tagStyleType == TagStyleType.blueTag ? DesignColors.bluePrimary : Colors.white],
+                textAlignment: Alignment.center,
               ),
-            ) : Container(),
-            BaseText(
-              texts: [this.tagText],
-              baseTextsType: [BaseTextType.normal],
-              textsColor: [this.tagStyleType == TagStyleType.blueTag ? DesignColors.bluePrimary : Colors.white],
-              textAlignment: Alignment.center,
             )
           ],
         ),

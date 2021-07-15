@@ -326,3 +326,7 @@
 ## 0.0.81
 
 * Fixed the interests state
+
+## 0.0.82
+
+* Fixed the input tag element with correct flex
