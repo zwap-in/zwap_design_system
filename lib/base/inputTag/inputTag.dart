@@ -34,11 +34,14 @@ class InputTag extends StatelessWidget{
   /// It retrieves the children in a responsive way
   Map<Widget, Map<String, int>> childrenResponsive(InputTagState value){
     Map<Widget, Map<String, int>> finals = {};
-    value.inputValues.forEach((element) {
-      Widget tmp = TagElement(
-        tagText: element,
-        icon: IconData(0),
-        callBackClick: () => value.changeValues(element, false),
+    value.inputValues.asMap().forEach((int index, String element) {
+      Widget tmp = Padding(
+        padding: index == 0 ? EdgeInsets.only(right: 10, bottom: 10) : EdgeInsets.only(right: 10, left: 10, bottom: 10),
+        child: TagElement(
+          tagText: element,
+          icon: IconData(0),
+          callBackClick: () => value.changeValues(element, false),
+        ),
       );
       finals[tmp] = {'xl': 3, 'lg': 3, 'md': 4, 'sm': 6, 'xs': 6};
     });

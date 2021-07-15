@@ -330,3 +330,7 @@
 ## 0.0.82
 
 * Fixed the input tag element with correct flex
+
+## 0.0.83
+
+* Changed the padding inside the tag elements
