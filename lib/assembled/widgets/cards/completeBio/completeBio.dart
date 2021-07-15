@@ -41,7 +41,7 @@ class CompleteBio extends StatelessWidget{
 
   /// Validate any bio input
   bool validateBio(String text){
-    return Utils.validateRegex(this.bioRegex, text);
+    return text.length >= Utils.evalNumber(this.bioRegex);
   }
 
   /// It retrieves some examples for bio
@@ -119,32 +119,37 @@ class CompleteBio extends StatelessWidget{
               children: [
                 Consumer<CompleteBioState>(
                     builder: (builder, provider, child){
-                      return BaseInput(
-                        inputType: InputType.inputArea,
-                        maxLines: 5,
-                        placeholderText: '',
-                        validateValue: (value) => true,
-                        changeValue: (value) => provider.changeBio(value),
+                      return Column(
+                        children: [
+                          BaseInput(
+                            inputType: InputType.inputArea,
+                            maxLines: 5,
+                            placeholderText: '',
+                            validateValue: (value) => this.validateBio(value),
+                            changeValue: (value) => provider.changeBio(value),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 20),
+                                  child: BaseText(
+                                    texts: [Utils.translatedText("bioStepSignupMinChars").replaceAll("{current_number}", provider.bio.length.toString())
+                                        .replaceAll("{min_number}", Utils.evalNumber(this.bioRegex).toString())],
+                                    baseTextsType: [BaseTextType.normalBold],
+                                    textsColor: [DesignColors.pinkyPrimary],
+                                    textAlignment: Alignment.centerRight,
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
                       );
                     }
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: BaseText(
-                          texts: [Utils.translatedText("bioStepSignupMinChars").replaceAll("", "")],
-                          baseTextsType: [BaseTextType.normalBold],
-                          textsColor: [DesignColors.pinkyPrimary],
-                          textAlignment: Alignment.centerRight,
-                        ),
-                      ),
-                    )
-                  ],
-                )
               ],
             ),
           ),

@@ -314,3 +314,7 @@
 ## 0.0.78
 
 * Added function to round to two decimals a double number and some translation texts
+
+## 0.0.79
+
+* Added validation on bio input
