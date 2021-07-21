@@ -14,9 +14,11 @@ class InputTagState extends ChangeNotifier{
 
   /// Function to change the values
   void changeValues(String value, bool check){
-    if(check && value.contains(" ")){
-      this.inputValues.add(value.split(" ")[0]);
-      Utils.getIt<BaseInputState>().controller.clear();
+    if(check){
+      if(value.contains(" ")){
+        this.inputValues.add(value.split(" ")[0]);
+        Utils.getIt<BaseInputState>().controller.clear();
+      }
     }
     else{
       int index = this.inputValues.indexOf(value);
