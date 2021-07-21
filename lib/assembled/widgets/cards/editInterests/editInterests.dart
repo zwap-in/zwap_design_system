@@ -46,79 +46,83 @@ class EditInterests extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return BaseComplete(
-        childrenWidget: [
-          Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: BaseText(
-              texts: [Utils.translatedText("interestedInTitle")],
-              baseTextsType: [BaseTextType.title],
-              textsColor: [DesignColors.pinkyPrimary],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10, bottom: 10),
-            child: BaseText(
-              texts: [Utils.translatedText("interestedInSubtitle")],
-              baseTextsType: [BaseTextType.subTitle],
-              textsColor: [DesignColors.greyPrimary],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10, bottom: 20),
-            child: InputTag(),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 5),
-            child: BaseText(
-              texts: [Utils.translatedText("wantTalkAboutTitle")],
-              baseTextsType: [BaseTextType.title],
-              textsColor: [DesignColors.pinkyPrimary],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 20, top: 5),
-            child: Consumer<EditInterestsState>(
-              builder: (builder, provider, child){
-                return BaseInput(
-                  inputType: InputType.inputArea,
-                  maxLines: 5,
-                  placeholderText: Utils.translatedText("wantTalkAboutPlaceholderInput"),
-                  changeValue: (value) => provider.changeWantTalk(value),
-                  validateValue: (value) {
-                    return true;
-                  },
-                );
-              }
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 5),
-            child: BaseText(
-              texts: [Utils.translatedText("lookingForTitle")],
-              baseTextsType: [BaseTextType.title],
-              textsColor: [DesignColors.pinkyPrimary],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 20, top: 5),
-            child: Consumer<EditInterestsState>(
-              builder: (builder, provider, child){
-                return BaseInput(
-                  inputType: InputType.inputArea,
-                  maxLines: 5,
-                  placeholderText: Utils.translatedText("lookingForPlaceholder"),
-                  changeValue: (value) => provider.changeLookingFor(value),
-                  validateValue: (value) {
-                    return true;
-                  },
-                );
-              }
-            ),
-          ),
-        ],
-        backButtonCallBack: () => this.backButtonCallBack(),
-        continueButtonCallBack: () => this.continueButtonCallBack()
+    return Consumer<EditInterestsState>(
+      builder: (builder, editInterestsStateProvider, child){
+        return BaseComplete(
+            childrenWidget: [
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: BaseText(
+                  texts: [Utils.translatedText("interestedInTitle")],
+                  baseTextsType: [BaseTextType.title],
+                  textsColor: [DesignColors.pinkyPrimary],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                child: BaseText(
+                  texts: [Utils.translatedText("interestedInSubtitle")],
+                  baseTextsType: [BaseTextType.subTitle],
+                  textsColor: [DesignColors.greyPrimary],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 20),
+                child: InputTag(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20, bottom: 5),
+                child: BaseText(
+                  texts: [Utils.translatedText("wantTalkAboutTitle")],
+                  baseTextsType: [BaseTextType.title],
+                  textsColor: [DesignColors.pinkyPrimary],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 20, top: 5),
+                child: Consumer<EditInterestsState>(
+                    builder: (builder, provider, child){
+                      return BaseInput(
+                        inputType: InputType.inputArea,
+                        maxLines: 5,
+                        placeholderText: Utils.translatedText("wantTalkAboutPlaceholderInput"),
+                        changeValue: (value) => editInterestsStateProvider.changeWantTalk(value),
+                        validateValue: (value) {
+                          return true;
+                        },
+                      );
+                    }
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20, bottom: 5),
+                child: BaseText(
+                  texts: [Utils.translatedText("lookingForTitle")],
+                  baseTextsType: [BaseTextType.title],
+                  textsColor: [DesignColors.pinkyPrimary],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 20, top: 5),
+                child: Consumer<BaseInputState>(
+                    builder: (builder, provider, child){
+                      return BaseInput(
+                        inputType: InputType.inputArea,
+                        maxLines: 5,
+                        placeholderText: Utils.translatedText("lookingForPlaceholder"),
+                        changeValue: (value) => editInterestsStateProvider.changeLookingFor(value),
+                        validateValue: (value) {
+                          return true;
+                        },
+                      );
+                    }
+                ),
+              ),
+            ],
+            backButtonCallBack: () => this.backButtonCallBack(),
+            continueButtonCallBack: () => this.continueButtonCallBack()
+        );
+      }
     );
   }
 
