@@ -33,7 +33,8 @@ class CustomAsset extends StatelessWidget{
     ) : Image.network(
       this.assetPathUrl,
       width: this.imageWidth,
-      height: this.imageHeight,);
+      height: this.imageHeight,
+    );
   }
 
   @override

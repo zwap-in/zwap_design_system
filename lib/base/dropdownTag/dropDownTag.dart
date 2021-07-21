@@ -36,6 +36,7 @@ class DropDownTag extends StatelessWidget{
     required this.values,
   }): super(key: key);
 
+  /// It retrieves the row with the custom tags inside in a responsive way
   Map<Widget, Map<String, int>> _getResponsiveChildren(DropDownTagState value){
     Map<Widget, Map<String, int>> finals = {};
     value.values.forEach((element) {
@@ -58,7 +59,7 @@ class DropDownTag extends StatelessWidget{
           padding: EdgeInsets.symmetric(vertical: 10),
           child: CustomDropDown(
               values: this.values,
-              handleChange: (String value) => Provider.of<DropDownTagState>(context, listen: false).changeValues(value, true)
+              handleChange: (String value) => context.read<DropDownTagState>().changeValues(value, true)
           ),
         ),
         Padding(

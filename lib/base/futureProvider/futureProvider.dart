@@ -28,7 +28,6 @@ class CustomFutureProvider<T> extends StatelessWidget{
   Widget build(BuildContext context) {
     return FutureProvider<T>(
       create: (_) {
-        // print('calling future');
         return this.callBackFetch(context);
       },
       initialData: this.initialData,

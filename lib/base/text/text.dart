@@ -133,6 +133,21 @@ class BaseText extends StatelessWidget{
     );
   }
 
+  /// Plotting text alignment in base of the alignment of the container
+  TextAlign _plotTextAlign(){
+    if(this.textAlignment == Alignment.bottomCenter || this.textAlignment == Alignment.center
+        || this.textAlignment == Alignment.topCenter
+      ){
+      return TextAlign.center;
+    }
+    else if(this.textAlignment == Alignment.bottomRight || this.textAlignment == Alignment.topRight || this.textAlignment == Alignment.centerRight){
+      return TextAlign.right;
+    }
+    else{
+      return TextAlign.left;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<TextSpan> _children = [];
@@ -144,7 +159,7 @@ class BaseText extends StatelessWidget{
     return Align(
       alignment: this.textAlignment,
       child: RichText(
-        textAlign: this.textAlignment == Alignment.center ? TextAlign.center : TextAlign.left,
+        textAlign: this._plotTextAlign(),
         text: TextSpan(
             text: "",
             children: _children

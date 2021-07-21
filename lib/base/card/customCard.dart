@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// The card style in base of the type
 enum CardStyleType{
   defaultCard,
   leftBlueBorderCard
@@ -26,6 +27,7 @@ class CustomCard extends StatelessWidget {
   /// The card type to define the style of this card
   final CardStyleType cardStyleType;
 
+  /// The border color of this card
   final Color borderColor;
 
   CustomCard({Key? key,

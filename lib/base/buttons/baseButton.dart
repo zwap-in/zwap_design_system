@@ -6,6 +6,7 @@ import 'package:taastrap/taastrap.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// Custom button type in base of the type
 enum ButtonTypeStyle{
   pinkyButton,
   continueButton,
@@ -38,6 +39,7 @@ class BaseButton extends StatelessWidget{
   /// The order to display the icon and text inside the button. Default = 0
   final int orderKind;
 
+  /// The icon color to display inside the button
   final Color? iconColor;
 
   BaseButton({Key? key,
@@ -163,9 +165,7 @@ class BaseButton extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-
     int _deviceSize = Utils.getIt<Generic>().deviceType();
-
     return TextButton(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),

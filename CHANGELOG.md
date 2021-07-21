@@ -338,3 +338,7 @@
 ## 0.0.84
 
 * Added vertical scroll inside the edit profile card
+
+## 0.0.85
+
+* Fixed input tag state

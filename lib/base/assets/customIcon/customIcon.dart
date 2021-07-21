@@ -1,6 +1,8 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
 
+
+/// Custom widget to render custom icon with pre-defined params
 class CustomIcon extends StatelessWidget {
 
   /// The icon inside this custom icon
@@ -9,6 +11,7 @@ class CustomIcon extends StatelessWidget {
   /// The callBack pressed function
   final Function() callBackPressedFunction;
 
+  /// The icon color inside this custom icon
   final Color? iconColor;
 
   CustomIcon({Key? key,
@@ -17,10 +20,8 @@ class CustomIcon extends StatelessWidget {
     this.iconColor
   }): super(key: key);
 
-
   Widget build(BuildContext context) {
     return IconButton(
-      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
         icon: Icon(this.icon),
         padding: EdgeInsets.zero,
         color: this.iconColor,
