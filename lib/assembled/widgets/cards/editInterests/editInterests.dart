@@ -80,18 +80,23 @@ class EditInterests extends StatelessWidget{
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 20, top: 5),
-                child: Consumer<EditInterestsState>(
-                    builder: (builder, provider, child){
-                      return BaseInput(
-                        inputType: InputType.inputArea,
-                        maxLines: 5,
-                        placeholderText: Utils.translatedText("wantTalkAboutPlaceholderInput"),
-                        changeValue: (value) => editInterestsStateProvider.changeWantTalk(value),
-                        validateValue: (value) {
-                          return true;
-                        },
-                      );
-                    }
+                child: ChangeNotifierProvider<BaseInputState>(
+                  create: (_) => BaseInputState(handleValidation: (dynamic value) => true, controller: TextEditingController()),
+                  builder: (builder, child){
+                    return Consumer<BaseInputState>(
+                        builder: (builder, provider, child){
+                          return BaseInput(
+                            inputType: InputType.inputArea,
+                            maxLines: 5,
+                            placeholderText: Utils.translatedText("wantTalkAboutPlaceholderInput"),
+                            changeValue: (value) => editInterestsStateProvider.changeWantTalk(value),
+                            validateValue: (value) {
+                              return true;
+                            },
+                          );
+                        }
+                    );
+                  }
                 ),
               ),
               Padding(
@@ -104,18 +109,23 @@ class EditInterests extends StatelessWidget{
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 20, top: 5),
-                child: Consumer<BaseInputState>(
-                    builder: (builder, provider, child){
-                      return BaseInput(
-                        inputType: InputType.inputArea,
-                        maxLines: 5,
-                        placeholderText: Utils.translatedText("lookingForPlaceholder"),
-                        changeValue: (value) => editInterestsStateProvider.changeLookingFor(value),
-                        validateValue: (value) {
-                          return true;
-                        },
-                      );
-                    }
+                child: ChangeNotifierProvider<BaseInputState>(
+                  create: (_) => BaseInputState(handleValidation: (dynamic value) => true, controller: TextEditingController()),
+                  builder: (builder, provider){
+                    return Consumer<BaseInputState>(
+                        builder: (builder, provider, child){
+                          return BaseInput(
+                            inputType: InputType.inputArea,
+                            maxLines: 5,
+                            placeholderText: Utils.translatedText("lookingForPlaceholder"),
+                            changeValue: (value) => editInterestsStateProvider.changeLookingFor(value),
+                            validateValue: (value) {
+                              return true;
+                            },
+                          );
+                        }
+                    );
+                  }
                 ),
               ),
             ],

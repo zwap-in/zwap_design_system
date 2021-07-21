@@ -16,6 +16,7 @@ class InputTagState extends ChangeNotifier{
   void changeValues(String value, bool check){
     if(check && value.contains(" ")){
       this.inputValues.add(value.split(" ")[0]);
+      Utils.getIt<BaseInputState>().controller.clear();
     }
     else{
       int index = this.inputValues.indexOf(value);
@@ -50,28 +51,37 @@ class InputTag extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(bottom: 20),
-          child: Consumer<InputTagState>(
-              builder: (context, provider, child){
-                return ResponsiveRow(
-                  children: this.childrenResponsive(provider),
-                );
-              }
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 20),
-          child: BaseInput(
-            validateValue: (value) { return true; },
-            inputType: InputType.inputText,
-            changeValue: (dynamic value) => value != "" ? context.read<InputTagState>().changeValues(value, true) : {},
-            placeholderText: '',
-          ),
-        )
-      ],
+    return ChangeNotifierProvider(
+        create: (_) => BaseInputState(handleValidation: (dynamic value) => true,  controller: TextEditingController()),
+        builder: (builder, child){
+          return Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 20),
+                child: Consumer<InputTagState>(
+                    builder: (context, provider, child){
+                      return ResponsiveRow(
+                        children: this.childrenResponsive(provider),
+                      );
+                    }
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Consumer<BaseInputState>(
+                    builder: (builder, provider, child){
+                      return BaseInput(
+                        validateValue: (value) { return true; },
+                        inputType: InputType.inputText,
+                        changeValue: (dynamic value) => value != "" ? context.read<InputTagState>().changeValues(value, true) : {},
+                        placeholderText: '',
+                      );
+                    }
+                ),
+              )
+            ],
+          );
+      }
     );
   }
 

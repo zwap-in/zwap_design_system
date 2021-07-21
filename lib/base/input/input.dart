@@ -29,10 +29,12 @@ class BaseInputState extends ChangeNotifier{
   /// Bool validator to check if the user wrote everything correctly
   bool isValid = false;
 
+  TextEditingController controller;
+
   /// Handle the validation with a custom callBack
   final Function(dynamic value) handleValidation;
 
-  BaseInputState({required this.handleValidation});
+  BaseInputState({required this.handleValidation, required this.controller});
 
   /// Changing the state inside when user starts to write
   void changeState(bool value){
@@ -192,6 +194,7 @@ class BaseInput extends StatelessWidget {
   /// It retrieves the text field inside this custom input field
   Widget _getTextInputField(BaseInputState provider){
     return TextField(
+        controller: provider.controller,
         keyboardType: this._getInputType(),
         maxLines: this.maxLines ?? 1,
         textCapitalization: TextCapitalization.sentences,
