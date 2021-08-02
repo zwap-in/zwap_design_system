@@ -8,13 +8,6 @@ import 'package:zwap_design_system/zwap_design_system.dart';
 /// The splash screen with custom icon and loader
 class SplashScreen extends StatelessWidget {
 
-  /// The image icon inside this splash icon
-  final String imagePath;
-
-  SplashScreen({Key? key,
-    required this.imagePath
-  }): super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,8 +16,8 @@ class SplashScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomAsset(
-              assetPathUrl: this.imagePath,
+            ZwapAsset(
+              assetPathUrl: "assets/images/brand.png",
               isInternal: true,
             ),
             Padding(

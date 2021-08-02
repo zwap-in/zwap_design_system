@@ -1,15 +1,13 @@
+/// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:zwap_utils/zwap_utils.dart';
 
+/// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/zwap_design_system.dart';
 
+/// Not found content default screen
 class NotFound extends StatelessWidget{
-
-  final String imagePath;
-
-  NotFound({Key? key,
-    required this.imagePath
-  }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +17,15 @@ class NotFound extends StatelessWidget{
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomAsset(
-                assetPathUrl: this.imagePath
+            ZwapAsset(
+              assetPathUrl: "assets/images/brand.png",
+              isInternal: true,
             ),
             Padding(
               padding: EdgeInsets.only(top: 30, bottom: 30),
-              child: BaseText(
+              child: ZwapText(
                 texts: [Utils.translatedText("notFoundTitle")],
-                baseTextsType: [BaseTextType.normalBold],
+                baseTextsType: [ZwapTextType.normalBold],
                 textAlignment: Alignment.center,
               ),
             )

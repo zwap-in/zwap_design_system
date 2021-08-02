@@ -18,8 +18,8 @@ class DesignColors{
 
   /// The colors for buttons
   static const Color blueButton = Color(0xFF005BFF);
-  static const Color pinkyButton = Color.fromRGBO(255, 181, 181, 0.13);
-  static const Color greyButton = Color(0xFFF5F5F5);
+  static const Color pinkyButton = Color.fromRGBO(255, 181, 181, 0.13); /// TODO check this
+  static const Color greyButton = Color(0xFFF5F5F5); /// TODO check this
   static const Color lightBlueButton = Color(0xFFECF0FF);
 
   /// The card colors
