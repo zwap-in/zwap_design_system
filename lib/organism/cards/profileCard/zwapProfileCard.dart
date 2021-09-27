@@ -65,11 +65,11 @@ class ZwapProfileCard extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
                   child: ZwapButton(
-                    onPressedCallBack: () {},
+                    onPressedCallBack: () => this.buttonClickCallBack(),
                     zwapButtonContentType: ZwapButtonContentType.noIcon,
                     zwapButtonStatus: ZwapButtonStatus.defaultStatus,
                     zwapButtonType: ZwapButtonType.primary,
-                    text: "Vedi profilo",
+                    text: Utils.translatedText("view_profile_button"),
                     height: 40,
                     width: 50,
                   ),
