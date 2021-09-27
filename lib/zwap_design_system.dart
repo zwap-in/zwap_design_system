@@ -1,4 +1,6 @@
 library zwap_design_system;
 
-export 'base/base.dart';
-export 'basicScreens/basicScreens.dart';
+export 'modelData/api.dart';
+export 'atoms/atoms.dart';
+export 'molecules/molecules.dart';
+export 'organism/organism.dart';

@@ -8,30 +8,30 @@ This repository is a simple package to get the base design asset system kit for 
 
 ## Structure 
 
- - [Base folder](lib/base)
+ - [Base folder](tmp/base)
  
-    - [media](lib/base/media/media.dart)
-        - [ZwapAsset](lib/base/media/asset/zwapAsset.dart): component to render a custom image from local path or network path with zwap style
-        - [ZwapIcon](lib/base/media/icon/zwapIcon.dart): component to render a custom icon with zwap style
+    - [media](tmp/base/media/media.dart)
+        - [ZwapAsset](tmp/base/media/asset/zwapAsset.dart): component to render a custom image from local path or network path with zwap style
+        - [ZwapIcon](tmp/base/media/icon/zwapIcon.dart): component to render a custom icon with zwap style
         
-    - [avatar](lib/base/avatar)
-        - [ZwapAvatar](lib/base/avatar/zwapAvatar.dart): component to render a custom avatar component with Zwap style
+    - [avatar](tmp/base/avatar)
+        - [ZwapAvatar](tmp/base/avatar/zwapAvatar.dart): component to render a custom avatar component with Zwap style
         
-    - [buttons](lib/base/buttons)
-        - [ZwapButton](lib/base/buttons/classic/zwapButton.dart): component to render a zwap button with different predefined type of styles
+    - [buttons](tmp/base/buttons)
+        - [ZwapButton](tmp/base/buttons/classic/zwapButton.dart): component to render a zwap button with different predefined type of styles
     
-    - [card](lib/base/card)
-        - [ZwapCard](lib/base/card/zwapCard.dart): component to render a card with zwap predefined style
+    - [card](tmp/base/card)
+        - [ZwapCard](tmp/base/card/zwapCard.dart): component to render a card with zwap predefined style
     
-    - [checkBoxes](lib/base/checkBoxes/checkBoxes.dart)
-        - [ZwapTodoCheck](lib/base/checkBoxes/icon/zwapTodoCheck.dart): Custom widget to render a TODO checkbox
-        - [ZwapClassicCheckBox](lib/base/checkBoxes/classic/zwapClassicCheckBox.dart): Custom widget to render a custom checkbox
+    - [checkBoxes](tmp/base/checkBoxes/checkBoxes.dart)
+        - [ZwapTodoCheck](tmp/base/checkBoxes/icon/zwapTodoCheck.dart): Custom widget to render a TODO checkbox
+        - [ZwapClassicCheckBox](tmp/base/checkBoxes/classic/zwapClassicCheckBox.dart): Custom widget to render a custom checkbox
     
-    - [customExpansion](lib/base/customExpansion)
-        - [ZwapCustomExpansionTile](lib/base/customExpansion/zwapExpansion.dart): Custom widget to display an expansion widget with elements inside that and as heading component
+    - [customExpansion](tmp/base/customExpansion)
+        - [ZwapCustomExpansionTile](tmp/base/customExpansion/zwapExpansion.dart): Custom widget to display an expansion widget with elements inside that and as heading component
 
-    - [dropdown](lib/base/dropDowns/dropdowns.dart)
-        - [ZwapCustomDropDown](lib/base/dropDowns/dropdowns.dart): component to render a zwap dropdown component with the zwap style
+    - [dropdown](tmp/base/dropDowns/dropdowns.dart)
+        - [ZwapCustomDropDown](tmp/base/dropDowns/dropdowns.dart): component to render a zwap dropdown component with the zwap style
         
  
     - [text](lib/base/text)
@@ -70,8 +70,8 @@ This repository is a simple package to get the base design asset system kit for 
        - [colors](lib/base/theme/colors.dart): Zwap colors
        - [constants](lib/base/theme/constants.dart): Zwap constants value
     
-  - [basicScreen folder](lib/basicScreens)
+  - [basicScreen folder](tmp/basicScreens)
     
-    - [notFound](lib/basicScreens/notFound/notFound.dart): default not found object screen
-    - [notSupportedScreen](lib/basicScreens/notSupportedScreen/notSupportedScreen.dart): default not supported device screen
-    - [splashComponent](lib/basicScreens/splashComponent): default splashComponent screen
+    - [notFound](tmp/basicScreens/notFound/notFound.dart): default not found object screen
+    - [notSupportedScreen](tmp/basicScreens/notSupportedScreen/notSupportedScreen.dart): default not supported device screen
+    - [splashComponent](tmp/basicScreens/splashComponent): default splashComponent screen
