@@ -80,8 +80,8 @@ class ZwapAvatarInfo extends StatelessWidget{
               decoration: BoxDecoration(
                 color: this.profileColor,
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(ZwapRadius.defaultRadius),
-                    topRight: Radius.circular(ZwapRadius.defaultRadius)),
+                    topLeft: Radius.circular(ZwapRadius.popupRadius),
+                    topRight: Radius.circular(ZwapRadius.popupRadius)),
               ),
               height: getMultipleConditions(83.0, 67.0, 50.0, 90.0, 86.0),
             ),

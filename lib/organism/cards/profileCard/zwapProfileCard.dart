@@ -51,7 +51,7 @@ class ZwapProfileCard extends StatelessWidget {
     return InkWell(
       onTap: () => this.buttonClickCallBack(),
       child: ZwapCard(
-          zwapCardType: ZwapCardType.levelOne,
+          zwapCardType: ZwapCardType.levelZero,
           child: Column(
             children: [
               ZwapAvatarInfo(
