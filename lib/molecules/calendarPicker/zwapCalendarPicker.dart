@@ -212,7 +212,7 @@ class ZwapCalendarPicker extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: ZwapText(
               zwapTextType: ZwapTextType.h3,
-              text: "${this.handleKeyName(Constants.monthlyName()[provider.currentDate!.month]!.capitalize())}",
+              text: "${this.handleKeyName(Constants.monthlyName()[provider.currentDate!.month]!)}",
               textColor: ZwapColors.neutral700,
             ),
           ),
