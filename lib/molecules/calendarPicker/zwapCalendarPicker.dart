@@ -166,7 +166,7 @@ class ZwapCalendarPicker extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 2),
             child: ZwapText(
-              text: weekDayName,
+              text: this.handleKeyName(weekDayName),
               textColor: ZwapColors.neutral800,
               zwapTextType: ZwapTextType.body1SemiBold,
             ),
