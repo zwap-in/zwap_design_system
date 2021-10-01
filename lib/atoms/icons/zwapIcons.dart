@@ -12,21 +12,45 @@ class ZwapIcons {
 
   /// The mapping data for each icons
   static Map<String, IconData> icons = {
-    "microsoft": IconData(
+    "close": IconData(
         0xe800,
         fontFamily: ZwapIcons.iconFamily,
         fontPackage: ZwapIcons.fontPackage
-
     ),
-    "google": IconData(
+    "arrow_down": IconData(
+        0xe804,
+        fontFamily: ZwapIcons.iconFamily,
+        fontPackage: ZwapIcons.fontPackage
+    ),
+    "arrow_up": IconData(
+        0xe806,
+        fontFamily: ZwapIcons.iconFamily,
+        fontPackage: ZwapIcons.fontPackage
+    ),
+    "meetings_nav": IconData(
         0xe801,
         fontFamily: ZwapIcons.iconFamily,
         fontPackage: ZwapIcons.fontPackage
     ),
-    "twitter": IconData(
+    "invite_nav": IconData(
+        0xe805,
+        fontFamily: ZwapIcons.iconFamily,
+        fontPackage: ZwapIcons.fontPackage
+    ),
+    "network_nav": IconData(
         0xe802,
         fontFamily: ZwapIcons.iconFamily,
         fontPackage: ZwapIcons.fontPackage
     ),
+    "explore_nav": IconData(
+        0xe803,
+        fontFamily: ZwapIcons.iconFamily,
+        fontPackage: ZwapIcons.fontPackage
+    ),
+    "zwap_logo": IconData(
+        0xe808,
+        fontFamily: ZwapIcons.iconFamily,
+        fontPackage: ZwapIcons.fontPackage
+    )
   };
 }

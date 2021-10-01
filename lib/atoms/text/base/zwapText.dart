@@ -101,6 +101,12 @@ TextStyle getTextStyle(ZwapTextType typeText) {
         desktopM: 14, desktopS: 14, tablet: 11, mobileM: 10, mobileS: 10),
     ZwapTextType.body2Bold: FontSizeDevice(
         desktopM: 14, desktopS: 14, tablet: 11, mobileM: 10, mobileS: 10),
+    ZwapTextType.body3Regular: FontSizeDevice(
+        desktopM: 11, desktopS: 11, tablet: 11, mobileM: 10, mobileS: 10),
+    ZwapTextType.body3SemiBold: FontSizeDevice(
+        desktopM: 11, desktopS: 11, tablet: 11, mobileM: 10, mobileS: 10),
+    ZwapTextType.body3Bold: FontSizeDevice(
+        desktopM: 11, desktopS: 11, tablet: 11, mobileM: 10, mobileS: 10),
   };
 
   switch (typeText) {
@@ -174,6 +180,18 @@ TextStyle getTextStyle(ZwapTextType typeText) {
       return ZwapTypography.body2Bold().apply(
           fontSizeDelta:
               fontSizeMapping[ZwapTextType.body2Bold]!.getFontSize());
+    case ZwapTextType.body3Regular:
+      return ZwapTypography.body2Regular().apply(
+          fontSizeDelta:
+          fontSizeMapping[ZwapTextType.body3Regular]!.getFontSize());
+    case ZwapTextType.body3SemiBold:
+      return ZwapTypography.body2SemiBold().apply(
+          fontSizeDelta:
+          fontSizeMapping[ZwapTextType.body3SemiBold]!.getFontSize());
+    case ZwapTextType.body3Bold:
+      return ZwapTypography.body2Bold().apply(
+          fontSizeDelta:
+          fontSizeMapping[ZwapTextType.body3Bold]!.getFontSize());
   }
 }
 

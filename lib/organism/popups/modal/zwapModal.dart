@@ -25,6 +25,7 @@ class ZwapModal extends StatelessWidget {
   /// The custom callBack function on primary button click
   final Function() primaryButtonCallBack;
 
+  /// The modal container height
   final int containerHeight;
 
   /// Flag to check if this popup card has a back button
@@ -42,6 +43,9 @@ class ZwapModal extends StatelessWidget {
   /// The custom callBack function on secondary button click
   final Function()? secondaryButtonCallBack;
 
+  /// The modal container width
+  final double? containerWidth;
+
   ZwapModal(
       {Key? key,
       required this.cardTitle,
@@ -50,6 +54,7 @@ class ZwapModal extends StatelessWidget {
       required this.primaryButtonText,
       required this.primaryButtonCallBack,
       required this.containerHeight,
+      this.containerWidth,
       this.hasBackButton = false,
       this.iconBackButton = Icons.arrow_back,
       this.backButtonCallBack,
@@ -79,7 +84,7 @@ class ZwapModal extends StatelessWidget {
       children.add(
         Flexible(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
                 child: InkWell(
@@ -106,7 +111,7 @@ class ZwapModal extends StatelessWidget {
           child: ZwapText(
             text: this.cardTitle,
             textColor: ZwapColors.neutral700,
-            zwapTextType: ZwapTextType.h3,
+            zwapTextType: ZwapTextType.h4,
           ),
         ),
       ),
@@ -118,9 +123,9 @@ class ZwapModal extends StatelessWidget {
               child: InkWell(
                 onTap: () => this.closeButtonCallBack(),
                 child: Icon(
-                  Icons.close,
-                  color: ZwapColors.shades100,
-                  size: 32,
+                  ZwapIcons.icons['close']!,
+                  color: ZwapColors.neutral400,
+                  size: 24,
                 ),
               ),
               flex: 0,
@@ -149,6 +154,7 @@ class ZwapModal extends StatelessWidget {
       zwapButtonContentType: ZwapButtonContentType.noIcon,
       onPressedCallBack: () => this.primaryButtonCallBack(),
       text: this.primaryButtonText,
+      verticalPadding: 15,
     );
     return this.secondaryButtonText != null
         ? Column(
@@ -160,6 +166,7 @@ class ZwapModal extends StatelessWidget {
                 zwapButtonStatus: ZwapButtonStatus.defaultStatus,
                 zwapButtonContentType: ZwapButtonContentType.noIcon,
                 onPressedCallBack: () => this.secondaryButtonCallBack!(),
+                verticalPadding: 15,
                 text: this.secondaryButtonText,
               )
             ],
@@ -185,6 +192,7 @@ class ZwapModal extends StatelessWidget {
                   Flexible(
                     child: SizedBox(
                       height: this.containerHeight.toDouble(),
+                      width: this.containerWidth,
                       child: ZwapVerticalScroll(
                         child: this.childComponent,
                       ),
@@ -192,17 +200,15 @@ class ZwapModal extends StatelessWidget {
                     fit: FlexFit.tight,
                     flex: 0,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 0),
-                    child: this._getBottomButtonsSection(),
-                  )
+                  this._getBottomButtonsSection()
                 ],
               ),
             )
           ],
         ),
       ),
-      zwapCardType: ZwapCardType.levelOne,
+      cardWidth: this.containerWidth,
+      zwapCardType: ZwapCardType.levelZero,
     );
   }
 }

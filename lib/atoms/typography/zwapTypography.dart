@@ -24,7 +24,10 @@ enum ZwapTextType {
   body1Bold,
   body2Regular,
   body2SemiBold,
-  body2Bold
+  body2Bold,
+  body3Regular,
+  body3SemiBold,
+  body3Bold
 }
 
 /// Custom typography style for zwap design system kit
@@ -244,6 +247,43 @@ class ZwapTypography {
   }
 
   static TextStyle body2Bold() {
+    return TextStyle(
+        fontSize: 0,
+        letterSpacing: 0.25,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.normal,
+        fontFamily: "PoppinsBold",
+        height: 1.5,
+        package: "zwap_design_system",
+        color: ZwapColors.shades100);
+  }
+
+
+  static TextStyle body3Regular() {
+    return TextStyle(
+        fontSize: 0,
+        letterSpacing: 0.25,
+        fontWeight: FontWeight.normal,
+        fontStyle: FontStyle.normal,
+        fontFamily: "PoppinsRegular",
+        height: 1.5,
+        package: "zwap_design_system",
+        color: ZwapColors.shades100);
+  }
+
+  static TextStyle body3SemiBold() {
+    return TextStyle(
+        fontSize: 0,
+        letterSpacing: 0.25,
+        fontWeight: FontWeight.w600,
+        fontStyle: FontStyle.normal,
+        fontFamily: "PoppinsSemiBold",
+        height: 1.5,
+        package: "zwap_design_system",
+        color: ZwapColors.shades100);
+  }
+
+  static TextStyle body3Bold() {
     return TextStyle(
         fontSize: 0,
         letterSpacing: 0.25,

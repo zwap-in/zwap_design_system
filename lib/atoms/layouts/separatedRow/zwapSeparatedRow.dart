@@ -10,9 +10,13 @@ class ZwapSeparatedRow extends StatelessWidget{
   /// Widgets at the right side
   final List<Widget> rightWidgets;
 
+  /// The optionally crossAxisAlignment for this row
+  final CrossAxisAlignment? crossAxisAlignment;
+
   ZwapSeparatedRow({Key? key,
     required this.leftWidgets,
-    required this.rightWidgets
+    required this.rightWidgets,
+    this.crossAxisAlignment
   }): super(key: key);
 
   /// It gets the items for each side
@@ -41,7 +45,7 @@ class ZwapSeparatedRow extends StatelessWidget{
     List<Widget> finals = this._getItems(this.leftWidgets);
     finals.add(this._getRightSide());
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: this.crossAxisAlignment ?? CrossAxisAlignment.start,
       children: List<Widget>.generate(finals.length, (index) => finals[index]),
     );
   }

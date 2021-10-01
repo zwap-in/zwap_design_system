@@ -17,11 +17,15 @@ class ZwapOpenToTag extends StatefulWidget implements ResponsiveWidget {
   /// The callBack function on clicking element
   final Function(String openToTagText)? callBackClick;
 
+  /// Boolean flag to check if this element is clickAble or not
+  final bool isClickAble;
+
   ZwapOpenToTag({
     Key? key,
     required this.openToTagText,
     required this.tagIcon,
-    this.callBackClick
+    this.callBackClick,
+    this.isClickAble = true
   }) : super(key: key);
 
   _ZwapOpenToTagState createState() => _ZwapOpenToTagState();
@@ -100,11 +104,11 @@ class _ZwapOpenToTagState extends State<ZwapOpenToTag> {
 
   /// It gets the parent in case of clickable widget
   Widget _getClickableParent(){
-    return InkWell(
+    return widget.isClickAble ? InkWell(
       onHover: (bool isHovered) => this._onHover(isHovered),
       onTap: () => widget.callBackClick!(widget.openToTagText),
       child: this._getChildWidget(),
-    );
+    ) : this._getChildWidget();
   }
 
   @override

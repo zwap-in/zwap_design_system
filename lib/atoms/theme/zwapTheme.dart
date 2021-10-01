@@ -6,4 +6,5 @@ ThemeData zwapThemeData = ThemeData(
   hoverColor: Colors.transparent,
   highlightColor: Colors.transparent,
   focusColor: Colors.transparent,
+  scaffoldBackgroundColor: Colors.white
 );

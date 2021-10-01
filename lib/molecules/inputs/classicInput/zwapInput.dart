@@ -106,7 +106,7 @@ class _ZwapInputState extends State<ZwapInput> {
     OutlineInputBorder inputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.buttonRadius)),
         borderSide: BorderSide(
-            color: Colors.black,
+            color: ZwapColors.neutral300,
             width: 1,
             style: BorderStyle.solid
         )
@@ -118,9 +118,9 @@ class _ZwapInputState extends State<ZwapInput> {
   InputDecoration _getTextFieldDecoration() {
     return new InputDecoration(
       border: this._getInputBorder(this.status),
-      hoverColor: ZwapColors.primary300,
+      hoverColor: ZwapColors.neutral300,
       hintText: widget.placeholder,
-      hintStyle: getTextStyle(ZwapTextType.body1SemiBold).apply(color: ZwapColors.neutral400),
+      hintStyle: getTextStyle(ZwapTextType.body2SemiBold).apply(color: ZwapColors.neutral400),
       prefixIcon: widget.prefixIcon != null ? Icon(
               widget.prefixIcon,
               color: ZwapColors.neutral400,
@@ -146,7 +146,7 @@ class _ZwapInputState extends State<ZwapInput> {
         cursorColor: ZwapColors.shades100,
         obscureText: widget.textInputType == TextInputType.visiblePassword,
         textAlign: TextAlign.start,
-        style: getTextStyle(ZwapTextType.body1Regular).apply(color: ZwapColors.shades100),
+        style: getTextStyle(ZwapTextType.body2Regular).apply(color: ZwapColors.neutral700),
         decoration: this._getTextFieldDecoration()
     );
   }
@@ -157,15 +157,15 @@ class _ZwapInputState extends State<ZwapInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(bottom: 5),
+          padding: EdgeInsets.only(bottom: 2.5),
           child: ZwapText(
             text: widget.inputName!,
-            zwapTextType: ZwapTextType.body1SemiBold,
+            zwapTextType: ZwapTextType.body2SemiBold,
             textColor: ZwapColors.neutral600,
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 5),
+          padding: EdgeInsets.only(top: 2.5),
           child: this._getInputWidget(),
         )
       ],
@@ -177,11 +177,11 @@ class _ZwapInputState extends State<ZwapInput> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.only(bottom: 2.5),
           child: widget.inputName != null ? this._getLabelInput(): this._getInputWidget(),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.only(top: 2.5),
           child: this._errorMessage != "" ? ZwapText(
             textColor: ZwapColors.error300,
             zwapTextType: ZwapTextType.body1Regular,

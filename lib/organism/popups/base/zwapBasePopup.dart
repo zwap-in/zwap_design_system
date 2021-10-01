@@ -41,15 +41,19 @@ class BasePopup {
   /// The function to show the dialog
   void openPopup() {
     showGeneralDialog(
-      barrierDismissible: false,
+      barrierDismissible: true,
+      barrierLabel: "BasePopup",
       barrierColor: Colors.black.withOpacity(0.5),
       context: this.context,
       pageBuilder: (context, anim1, anim2) {
         return Align(
           alignment: Alignment.topCenter,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: getMultipleConditions(500.0, 485.0, 0.0, 0.0, 0.0),
-                vertical: getMultipleConditions(40.0, 40.0, 0.0, 0.0, 0.0)),
+            padding: EdgeInsets.only(
+              left: getMultipleConditions(500.0, 485.0, 0.0, 0.0, 0.0),
+              right: getMultipleConditions(500.0, 485.0, 0.0, 0.0, 0.0),
+              top: getMultipleConditions(90.0, 90.0, 0.0, 0.0, 0.0),
+            ),
             child: this.getWidgetChild(this._closePopup),
           ),
         );

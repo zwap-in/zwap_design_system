@@ -60,6 +60,15 @@ class ZwapButton extends StatefulWidget {
   /// Optionally lateral padding inside this button
   final double? lateralPadding;
 
+  /// Optionally vertical padding inside this button
+  final double? verticalPadding;
+
+  /// Optionally icon color inside this button
+  final Color? iconColor;
+
+  /// The button radius
+  final double? buttonRadius;
+
   ZwapButton({Key? key,
       required this.zwapButtonType,
       required this.zwapButtonStatus,
@@ -72,7 +81,10 @@ class ZwapButton extends StatefulWidget {
       this.buttonColor,
       this.height,
       this.width,
-      this.lateralPadding
+      this.lateralPadding,
+      this.verticalPadding,
+      this.iconColor,
+      this.buttonRadius
       })
       : super(key: key) {
     if (zwapButtonType == ZwapButtonType.editButton) {
@@ -222,7 +234,7 @@ class _ZwapButtonState extends State<ZwapButton> {
                   padding: EdgeInsets.only(right: 3),
                   child: Icon(
                     widget.icon,
-                    color: this._getChildrenColor(),
+                    color: widget.iconColor ?? this._getChildrenColor(),
                     size: this._plotIconSize(),
                   ),
                 ),
@@ -243,7 +255,7 @@ class _ZwapButtonState extends State<ZwapButton> {
       case ZwapButtonContentType.noLabel:
         return Icon(
           widget.icon!,
-          color: this._getChildrenColor(),
+          color: widget.iconColor ?? this._getChildrenColor(),
           size: this._plotIconSize(),
         );
     }
@@ -328,7 +340,7 @@ class _ZwapButtonState extends State<ZwapButton> {
             width: 1,
             style: BorderStyle.solid
         ),
-        borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.buttonRadius)));
+        borderRadius: BorderRadius.all(Radius.circular(widget.buttonRadius ?? ZwapRadius.buttonRadius)));
   }
 
   /// It plots the icon size in base of the current device
@@ -344,7 +356,7 @@ class _ZwapButtonState extends State<ZwapButton> {
       width: widget.width != null ? widget.width! + textSize.width : null,
       decoration: this._getButtonDecoration(),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: widget.lateralPadding ?? 10),
+        padding: EdgeInsets.symmetric(vertical: widget.verticalPadding ?? 5, horizontal: widget.lateralPadding ?? 10),
         child: this._getContainerChild(),
       ),
     );
