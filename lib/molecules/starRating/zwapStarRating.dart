@@ -7,11 +7,11 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 /// The component to rendering a star rating bar
 class ZwapStarRating extends StatelessWidget {
 
-  /// It handles the changes inside the rating bar
-  final Function(double newRating) onRatingChanged;
-
   /// The title for this rating bar component
   final String ratingTitle;
+
+  /// It handles the changes inside the rating bar
+  final Function(double newRating)? onRatingChanged;
 
   /// The stars max number
   final int starCount;
@@ -23,8 +23,8 @@ class ZwapStarRating extends StatelessWidget {
   final Color? color;
 
   ZwapStarRating({
-    required this.onRatingChanged,
     required this.ratingTitle,
+    this.onRatingChanged,
     this.starCount = 5,
     this.rating = .0,
     this.color
@@ -51,7 +51,7 @@ class ZwapStarRating extends StatelessWidget {
       );
     }
     return new InkResponse(
-      onTap: () => onRatingChanged(index + 1.0),
+      onTap: this.onRatingChanged != null ? () => this.onRatingChanged!(index + 1.0) : null,
       child: icon,
     );
   }
