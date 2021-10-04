@@ -13,3 +13,5 @@ export 'switch/zwapSwitch.dart';
 export 'tag/zwapTag.dart';
 export 'progress/progress.dart';
 export 'rangeSlider/zwapRangeSlider.dart';
+export 'starRating/zwapStarRating.dart';
+export 'toolTip/zwapToolTip.dart';

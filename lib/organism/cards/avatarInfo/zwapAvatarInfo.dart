@@ -1,4 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:taastrap/taastrap.dart';
 
@@ -69,6 +71,18 @@ class ZwapAvatarInfo extends StatelessWidget{
             ))
       ],
     ) : tmp;
+  }
+
+  double _getTitleSize(){
+    double titleSize = getTextSize(this.title, ZwapTextType.body2SemiBold).width;
+    return titleSize + (this.isVerified ? (16 + 3 + 3) : 0);
+  }
+
+
+  double getSize(){
+    double titleSize = this._getTitleSize();
+    double subTitleSize = getTextSize(this.subTitle, ZwapTextType.captionRegular).width;
+    return max(40, (max(titleSize, subTitleSize)));
   }
 
   Widget build(BuildContext context){

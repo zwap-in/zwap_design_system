@@ -110,6 +110,11 @@ class ZwapButton extends StatefulWidget {
     }
   }
 
+  double? getWidthSize(){
+    Size textSize = getTextSize(this.text != null ? this.text! : "", ZwapTextType.buttonText);
+    return this.width != null ? this.width! + textSize.width : null;
+  }
+
   _ZwapButtonState createState() => _ZwapButtonState();
 }
 
@@ -350,10 +355,9 @@ class _ZwapButtonState extends State<ZwapButton> {
 
   /// It gets the button widget
   Widget _getButtonWidget() {
-    Size textSize = getTextSize(widget.text != null ? widget.text! : "", ZwapTextType.buttonText);
     return Container(
       height: widget.height,
-      width: widget.width != null ? widget.width! + textSize.width : null,
+      width: widget.getWidthSize(),
       decoration: this._getButtonDecoration(),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: widget.verticalPadding ?? 5, horizontal: widget.lateralPadding ?? 10),
