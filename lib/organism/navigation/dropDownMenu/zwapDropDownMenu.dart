@@ -2,63 +2,59 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_utils/zwap_utils.dart';
 
-/// IMPORTING LOCAL PACKAGES
+/// IMPORTING LOCAL PACKAGES COMPONENTS
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/molecules/molecules.dart';
 
-/// The card for the dropDown menu
-class ZwapDropDownMenu extends StatelessWidget{
+/// The dropdown for the popup menu
+class ZwapPopupMenu extends StatelessWidget{
 
-  /// The items for this menu
-  final Map<String, TupleType<IconData, Function(String menuItem)>> menuItems;
+  /// The menu items to display inside the dropdown menu
+  final Map<String, TupleType<IconData, Function()>> menuItems;
 
-  ZwapDropDownMenu({Key? key,
+  ZwapPopupMenu({Key? key,
     required this.menuItems
   }): super(key: key);
 
   Widget build(BuildContext context){
-    List<String> keys = this.menuItems.keys.toList();
     return ZwapCard(
-      zwapCardType: ZwapCardType.levelOne,
+      cardWidth: 300,
+      zwapCardType: ZwapCardType.levelZero,
       child: Column(
-        children: List<Widget>.generate(keys.length, (index) =>
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: InkWell(
-                onTap: () => this.menuItems[keys[index]]!.b,
-                child: Row(
-                  children: [
-                    Flexible(
-                      flex: 0,
-                      fit: FlexFit.tight,
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 4),
-                        child: Icon(
-                          this.menuItems[keys[index]]!.a,
-                          size: 1,
-                        ),
-                      ),
+        children: List<Widget>.generate(this.menuItems.keys.toList().length, (int index) => Padding(
+          child: InkWell(
+            onTap: () => this.menuItems[this.menuItems.keys.toList()[index]]!.b(),
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 0,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 5),
+                    child: Icon(
+                        this.menuItems[this.menuItems.keys.toList()[index]]!.a
                     ),
-                    Flexible(
-                      flex: 0,
-                      fit: FlexFit.tight,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 4),
-                        child: ZwapText(
-                          text: keys[index],
-                          textColor: ZwapColors.neutral700,
-                          zwapTextType: ZwapTextType.body1Regular,
-                        ),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            )
-        ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 0,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: ZwapText(
+                      zwapTextType: ZwapTextType.body1Regular,
+                      text: this.menuItems.keys.toList()[index],
+                      textColor: ZwapColors.neutral700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        )),
       ),
     );
   }
-
 
 }

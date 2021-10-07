@@ -1,6 +1,7 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:zwap_utils/zwap_utils.dart';
 import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -23,7 +24,7 @@ class ScrollCards<T> extends StatelessWidget{
     List<T> mappingElements = provider.elements[day]!.keys.toList();
     DateTime now = DateTime.now();
     DateTime today = new DateTime(now.year, now.month, now.day);
-    String title = today == day ? "Today" : "${day.weekday}, ${day.day} ${day.month}";
+    String title = today == day ? Utils.translatedText("today") : "${Utils.translatedText(Constants.weekDayAbbrName()[day.weekday]!)}, ${day.day} ${Utils.translatedText(Constants.monthlyAbbrName()[day.month]!)}";
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15),
       child: Column(

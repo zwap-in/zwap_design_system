@@ -14,8 +14,8 @@ class ZwapDetailsCard extends StatelessWidget{
   /// The title text for this card
   final String title;
 
-  /// The subtitle text for this card
-  final String subTitle;
+  /// The subtitle widget for this card
+  final Widget subTitle;
 
   /// The optionally image path
   final String? imagePath;
@@ -46,11 +46,7 @@ class ZwapDetailsCard extends StatelessWidget{
         ),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
-          child: ZwapText(
-            text: this.subTitle,
-            zwapTextType: ZwapTextType.body1Regular,
-            textColor: isSelected ? ZwapColors.shades0 : ZwapColors.neutral600,
-          ),
+          child: this.subTitle,
         ),
       ],
     );

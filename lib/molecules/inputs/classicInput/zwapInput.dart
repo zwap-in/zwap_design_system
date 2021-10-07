@@ -177,9 +177,10 @@ class _ZwapInputState extends State<ZwapInput> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(bottom: 2.5),
+          padding: EdgeInsets.only(bottom: this._errorMessage != "" ? 2.5 : 0),
           child: widget.inputName != null ? this._getLabelInput(): this._getInputWidget(),
         ),
+        this._errorMessage != "" ?
         Padding(
           padding: EdgeInsets.only(top: 2.5),
           child: this._errorMessage != "" ? ZwapText(
@@ -187,7 +188,7 @@ class _ZwapInputState extends State<ZwapInput> {
             zwapTextType: ZwapTextType.body1Regular,
             text: this._errorMessage,
           ) : Container(),
-        )
+        ) : Container()
       ],
     );
   }

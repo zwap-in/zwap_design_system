@@ -8,3 +8,4 @@ export 'lineItem/zwapLineItem.dart';
 export 'groupedAvatars/zwapGroupedAvatars.dart';
 export 'stats/stats.dart';
 export 'listDetails/listDetails.dart';
+export 'starRating/zwapStarRating.dart';

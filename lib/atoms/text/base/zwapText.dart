@@ -89,6 +89,12 @@ TextStyle getTextStyle(ZwapTextType typeText) {
         tablet: 11,
         mobileM: 11,
         mobileS: 11),
+    ZwapTextType.body0Regular: FontSizeDevice(
+        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
+    ZwapTextType.body0SemiBold: FontSizeDevice(
+        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
+    ZwapTextType.body0Bold: FontSizeDevice(
+        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
     ZwapTextType.body1Regular: FontSizeDevice(
         desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
     ZwapTextType.body1SemiBold: FontSizeDevice(
@@ -156,6 +162,18 @@ TextStyle getTextStyle(ZwapTextType typeText) {
       return ZwapTypography.buttonText().apply(
           fontSizeDelta:
               fontSizeMapping[ZwapTextType.buttonText]!.getFontSize());
+    case ZwapTextType.body0Regular:
+      return ZwapTypography.body1Regular().apply(
+          fontSizeDelta:
+          fontSizeMapping[ZwapTextType.body0Regular]!.getFontSize());
+    case ZwapTextType.body0SemiBold:
+      return ZwapTypography.body1SemiBold().apply(
+          fontSizeDelta:
+          fontSizeMapping[ZwapTextType.body0SemiBold]!.getFontSize());
+    case ZwapTextType.body0Bold:
+      return ZwapTypography.body1Bold().apply(
+          fontSizeDelta:
+          fontSizeMapping[ZwapTextType.body0Bold]!.getFontSize());
     case ZwapTextType.body1Regular:
       return ZwapTypography.body1Regular().apply(
           fontSizeDelta:

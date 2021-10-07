@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:zwap_design_system/molecules/molecules.dart';
 
 /// The component to rendering a star rating bar
 class ZwapStarRating extends StatelessWidget {
@@ -30,32 +31,6 @@ class ZwapStarRating extends StatelessWidget {
     this.color
   });
 
-  /// It builds the star rating bar
-  Widget buildStar(BuildContext context, int index) {
-    Icon icon;
-    if (index >= rating) {
-      icon = new Icon(
-        Icons.star_border,
-        color: Theme.of(context).buttonColor,
-      );
-    }
-    else if (index > rating - 1 && index < rating) {
-      icon = new Icon(
-        Icons.star_half,
-        color: color ?? ZwapColors.error400,
-      );
-    } else {
-      icon = new Icon(
-        Icons.star,
-        color: color ?? ZwapColors.error400,
-      );
-    }
-    return new InkResponse(
-      onTap: this.onRatingChanged != null ? () => this.onRatingChanged!(index + 1.0) : null,
-      child: icon,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -70,7 +45,12 @@ class ZwapStarRating extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
-          child: Row(children: new List.generate(starCount, (index) => buildStar(context, index))),
+          child: ZwapStars(
+            ratingTitle: this.ratingTitle,
+            starCount: this.starCount,
+            rating: this.rating,
+            color: this.color,
+          ),
         )
       ],
     );

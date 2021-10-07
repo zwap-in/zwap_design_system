@@ -6,6 +6,7 @@ import 'package:zwap_utils/zwap_utils.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/molecules/molecules.dart';
+import 'package:zwap_design_system/organism/navigation/dropDownMenu/zwapDropDownMenu.dart';
 
 /// It handles the state for this custom navBar
 class ZwapNavBarState extends ChangeNotifier {
@@ -29,9 +30,9 @@ class ZwapNavBarState extends ChangeNotifier {
   bool isOpen = false;
 
   /// It opens or closes the menu
-  void openCloseMenu(bool newValue) {
+  void openCloseMenu() {
     this.openMenuCallBack();
-    this.isOpen = newValue;
+    this.isOpen = !this.isOpen;
     notifyListeners();
   }
 
@@ -70,6 +71,9 @@ class ZwapNavBar extends StatelessWidget {
   /// On logo click
   final Function() onLogoClick;
 
+  /// The menu items inside the navBar menu for the desktop view
+  final Map<String, TupleType<IconData, Function()>> menuItems;
+
   ZwapNavBar({Key? key,
     required this.iconsMenu,
     required this.currentAvatarPath,
@@ -79,6 +83,7 @@ class ZwapNavBar extends StatelessWidget {
     required this.onLogoClick,
     this.isAvatarImageExternal = true,
     this.showInviteButton = false,
+    this.menuItems = const {}
   }) : super(key: key);
 
   /// It retrieves the row to display the icon menu inside the navbar
@@ -130,41 +135,41 @@ class ZwapNavBar extends StatelessWidget {
 
   /// It retrieves the avatar icon with a button to show a dropdown menu
   Widget _getAvatarIcon() {
-    return InkWell(
-      onTap: () => {},
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Flexible(
-            child: Padding(
-              padding: EdgeInsets.only(right: 5),
-              child: ZwapAvatar(
-                imagePath: this.currentAvatarPath,
-                size: 20,
-                isExternal: this.isAvatarImageExternal,
+    return Consumer<ZwapNavBarState>(
+      builder: (context, provider, child){
+        return InkWell(
+          onTap: () => provider.openCloseMenu(),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 5),
+                  child: ZwapAvatar(
+                    imagePath: this.currentAvatarPath,
+                    size: 20,
+                    isExternal: this.isAvatarImageExternal,
+                  ),
+                ),
+                flex: 0,
+                fit: FlexFit.tight,
               ),
-            ),
-            flex: 0,
-            fit: FlexFit.tight,
-          ),
-          Flexible(
-            child: Consumer<ZwapNavBarState>(
-              builder: (context, provider, child){
-                return Padding(
+              Flexible(
+                child: Padding(
                   padding: EdgeInsets.only(left: 5),
                   child: Icon(
                     provider.isOpen
                         ? ZwapIcons.icons['arrow_up']
                         : ZwapIcons.icons['arrow_down'],
                   ),
-                );
-              }
-            ),
-            flex: 0,
-            fit: FlexFit.tight,
-          )
-        ],
-      ),
+                ),
+                flex: 0,
+                fit: FlexFit.tight,
+              )
+            ],
+          ),
+        );
+      }
     );
   }
 
@@ -205,17 +210,32 @@ class ZwapNavBar extends StatelessWidget {
     return Container(
       color: this.backgroundColor,
       padding: EdgeInsets.symmetric(vertical: 15, horizontal: 150),
-      child: ZwapSeparatedRow(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        leftWidgets: leftWidgets,
-        rightWidgets: [
-          Padding(
-            padding: EdgeInsets.only(right: 15),
-            child: this._getIconsRow(),
+      child: Stack(
+        children: [
+          ZwapSeparatedRow(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            leftWidgets: leftWidgets,
+            rightWidgets: [
+              Padding(
+                padding: EdgeInsets.only(right: 15),
+                child: this._getIconsRow(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: this._getAvatarIcon(),
+              )
+            ],
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 15),
-            child: this._getAvatarIcon(),
+          Consumer<ZwapNavBarState>(
+              builder: (context, provider, child){
+                return Positioned(
+                  top: 80,
+                  right: 100,
+                  child: provider.isOpen ? ZwapPopupMenu(
+                    menuItems: this.menuItems,
+                  ) : Container(),
+                );
+              }
           )
         ],
       ),

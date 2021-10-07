@@ -9,7 +9,7 @@ import 'package:zwap_design_system/molecules/molecules.dart';
 import 'package:zwap_design_system/organism/cards/avatarInfo/zwapAvatarInfo.dart';
 import 'package:zwap_utils/zwap_utils.dart';
 
-class ZwapProfileCard extends StatelessWidget implements ResponsiveWidget {
+class ZwapProfileCard extends StatefulWidget {
 
   /// The profile card title
   final String title;
@@ -29,12 +29,16 @@ class ZwapProfileCard extends StatelessWidget implements ResponsiveWidget {
   /// Is this profile verified?
   final bool isVerified;
 
+  /// The image path for the asset inside the card
   final String? imagePath;
 
+  /// Is the asset in the profile card an external asset?
   final bool isExternalAsset;
 
-  ZwapProfileCard({
-    Key? key,
+  /// The card width
+  final double? cardWidth;
+
+  ZwapProfileCard({Key? key,
     required this.title,
     required this.subTitle,
     required this.buttonText,
@@ -42,19 +46,35 @@ class ZwapProfileCard extends StatelessWidget implements ResponsiveWidget {
     required this.profileColor,
     this.isVerified = true,
     this.isExternalAsset = false,
-    this.imagePath
+    this.imagePath,
+    this.cardWidth
   }) : super(key: key);
 
+  _ZwapProfileCardState createState() => _ZwapProfileCardState();
+
+}
+
+
+class _ZwapProfileCardState extends State<ZwapProfileCard>{
+
+  bool _isHovered = false;
+
+  void _hoverCard(bool isHovered){
+    setState(() {
+      this._isHovered = isHovered;
+    });
+  }
+
   ZwapAvatarInfo get _avatarInfo => ZwapAvatarInfo(
-      imagePath: this.imagePath,
-      isExternalAsset: isExternalAsset,
-      title: this.title,
-      subTitle: this.subTitle,
-      profileColor: this.profileColor
+      imagePath: widget.imagePath,
+      isExternalAsset: widget.isExternalAsset,
+      title: widget.title,
+      subTitle: widget.subTitle,
+      profileColor: widget.profileColor
   );
 
   ZwapButton get _profileButton => ZwapButton(
-    onPressedCallBack: () => this.buttonClickCallBack(),
+    onPressedCallBack: () => widget.buttonClickCallBack(),
     zwapButtonContentType: ZwapButtonContentType.noIcon,
     zwapButtonStatus: ZwapButtonStatus.defaultStatus,
     zwapButtonType: ZwapButtonType.primary,
@@ -66,15 +86,18 @@ class ZwapProfileCard extends StatelessWidget implements ResponsiveWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => this.buttonClickCallBack(),
+      onHover: (bool isHover) => this._hoverCard(isHover),
+      onTap: () => widget.buttonClickCallBack(),
       child: ZwapCard(
-          zwapCardType: ZwapCardType.levelZero,
+          cardWidth: widget.cardWidth,
+          elevationLevel: this._isHovered ? 1 : 0,
+          zwapCardType: this._isHovered ? ZwapCardType.levelThree : ZwapCardType.levelZero,
           child: Column(
             children: [
               this._avatarInfo,
               Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: this._profileButton,
                 ),
               )
@@ -83,10 +106,4 @@ class ZwapProfileCard extends StatelessWidget implements ResponsiveWidget {
     );
   }
 
-  @override
-  double getSize() {
-    double size = max((this._profileButton.getWidthSize() ?? 0) + 40 + 10, this._avatarInfo.getSize());
-    return size;
-  }
 }
-

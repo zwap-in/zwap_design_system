@@ -30,16 +30,19 @@ class ZwapCard extends StatelessWidget {
   /// The radius for this custom card
   final double? cardRadius;
 
-  ZwapCard(
-      {Key? key,
-      required this.zwapCardType,
-      required this.child,
-      this.backgroundColor,
-      this.cardHeight,
-      this.borderColor,
-      this.cardRadius,
-      this.cardWidth})
-      : super(key: key);
+  /// The elevation level for this card
+  final double? elevationLevel;
+
+  ZwapCard({Key? key,
+    required this.zwapCardType,
+    required this.child,
+    this.backgroundColor,
+    this.cardHeight,
+    this.borderColor,
+    this.cardRadius,
+    this.cardWidth,
+    this.elevationLevel = 0
+   }) : super(key: key);
 
   /// It retrieves the box shadow for this card in base of the type
   BoxShadow? _getBoxShadow() {
@@ -57,13 +60,13 @@ class ZwapCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BoxShadow? boxShadow = this._getBoxShadow();
+    BoxShadow? boxShadow = this.elevationLevel != 0 ? ZwapShadow.levelThree : this._getBoxShadow();
     return Container(
       height: this.cardHeight,
       width: this.cardWidth,
       padding: EdgeInsets.zero,
       child: new Card(
-        elevation: 0,
+        elevation: this.elevationLevel,
         color: this.backgroundColor ?? ZwapColors.shades0,
         child: Container(
           child: this.child,
@@ -75,7 +78,7 @@ class ZwapCard extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border.all(
               color: this.borderColor ?? Colors.transparent, width: 0.7),
-          boxShadow: boxShadow != null ? [boxShadow] : null
+          boxShadow: (boxShadow != null || this.elevationLevel != 0 )? [boxShadow!] : null
       ),
     );
   }

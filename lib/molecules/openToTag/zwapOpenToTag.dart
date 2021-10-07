@@ -20,12 +20,16 @@ class ZwapOpenToTag extends StatefulWidget implements ResponsiveWidget {
   /// Boolean flag to check if this element is clickAble or not
   final bool isClickAble;
 
+  /// Boolean flag to check if this element has the icon on left or right to text inside the open tag component
+  final bool isLeft;
+
   ZwapOpenToTag({
     Key? key,
     required this.openToTagText,
     required this.tagIcon,
     this.callBackClick,
-    this.isClickAble = true
+    this.isClickAble = true,
+    this.isLeft = true
   }) : super(key: key);
 
   _ZwapOpenToTagState createState() => _ZwapOpenToTagState();
@@ -74,14 +78,14 @@ class _ZwapOpenToTagState extends State<ZwapOpenToTag> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Flexible(
-              child: Padding(
+              child: widget.isLeft ? Padding(
                 padding: EdgeInsets.only(left: 8, right: 5, top: 5, bottom: 5),
                 child: Icon(
                   widget.tagIcon,
                   size: this._getIconSize(),
                   color: !this._isHovered ? ZwapColors.primary700 : ZwapColors.shades0,
                 ),
-              ),
+              ) : Container(),
               flex: 0,
               fit: FlexFit.tight,
             ),
@@ -94,6 +98,18 @@ class _ZwapOpenToTagState extends State<ZwapOpenToTag> {
                   textColor: !this._isHovered ? ZwapColors.primary700 : ZwapColors.shades0,
                 ),
               ),
+              flex: 0,
+              fit: FlexFit.tight,
+            ),
+            Flexible(
+              child: !widget.isLeft ? Padding(
+                padding: EdgeInsets.only(left: 8, right: 5, top: 5, bottom: 5),
+                child: Icon(
+                  widget.tagIcon,
+                  size: this._getIconSize(),
+                  color: !this._isHovered ? ZwapColors.primary700 : ZwapColors.shades0,
+                ),
+              ) : Container(),
               flex: 0,
               fit: FlexFit.tight,
             ),

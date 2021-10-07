@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
+import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
@@ -19,12 +20,6 @@ class ZwapModal extends StatelessWidget {
   /// THe child component inside this popup
   final Widget childComponent;
 
-  /// The primary button text
-  final String primaryButtonText;
-
-  /// The custom callBack function on primary button click
-  final Function() primaryButtonCallBack;
-
   /// The modal container height
   final int containerHeight;
 
@@ -33,6 +28,12 @@ class ZwapModal extends StatelessWidget {
 
   /// The iconData about the back button icon
   final IconData iconBackButton;
+
+  /// The primary button text
+  final String? primaryButtonText;
+
+  /// The custom callBack function on primary button click
+  final Function()? primaryButtonCallBack;
 
   /// Custom CallBack function to handle optionally the back button if it's present
   final Function()? backButtonCallBack;
@@ -46,34 +47,46 @@ class ZwapModal extends StatelessWidget {
   /// The modal container width
   final double? containerWidth;
 
+  /// The optionally modal image to display inside the invite popup modal
+  final Image? modalImage;
+
   ZwapModal(
       {Key? key,
-      required this.cardTitle,
-      required this.closeButtonCallBack,
-      required this.childComponent,
-      required this.primaryButtonText,
-      required this.primaryButtonCallBack,
-      required this.containerHeight,
-      this.containerWidth,
-      this.hasBackButton = false,
-      this.iconBackButton = Icons.arrow_back,
-      this.backButtonCallBack,
-      this.secondaryButtonText, this.secondaryButtonCallBack
+        required this.cardTitle,
+        required this.closeButtonCallBack,
+        required this.childComponent,
+        required this.containerHeight,
+        this.containerWidth,
+        this.hasBackButton = false,
+        this.iconBackButton = Icons.arrow_back,
+        this.backButtonCallBack,
+        this.primaryButtonText,
+        this.primaryButtonCallBack,
+        this.secondaryButtonText, this.secondaryButtonCallBack,
+        this.modalImage
       })
       : super(key: key) {
+    if(this.primaryButtonText == null){
+      assert(this.primaryButtonCallBack == null,
+      "Primary button click callBack must be null on primary button text null");
+    }
+    else {
+      assert(this.primaryButtonCallBack != null,
+      "Primary button click callBack must be not equal to none");
+    }
     if (this.secondaryButtonText == null) {
       assert(this.secondaryButtonCallBack == null,
-          "Secondary button click callBack must be null on secondary button text null");
+      "Secondary button click callBack must be null on secondary button text null");
     } else {
       assert(this.secondaryButtonCallBack != null,
-          "Secondary button click callBack must be not equal to none");
+      "Secondary button click callBack must be not equal to none");
     }
     if (this.hasBackButton) {
       assert(this.backButtonCallBack != null,
-          "If has back button is true backButtonCallBack must be not null");
+      "If has back button is true backButtonCallBack must be not null");
     } else {
       assert(this.backButtonCallBack == null,
-          "If has back button is false backButtonCallBack must be null");
+      "If has back button is false backButtonCallBack must be null");
     }
   }
 
@@ -146,31 +159,70 @@ class ZwapModal extends StatelessWidget {
     );
   }
 
+  /// It gets the mobile bottom buttons inside the custom modal
+  Widget _getMobileBottomButtons(Widget primaryButton){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        primaryButton,
+        ZwapButton(
+          zwapButtonType: ZwapButtonType.flat,
+          zwapButtonStatus: ZwapButtonStatus.defaultStatus,
+          zwapButtonContentType: ZwapButtonContentType.noIcon,
+          onPressedCallBack: () => this.secondaryButtonCallBack!(),
+          verticalPadding: 15,
+          text: this.secondaryButtonText,
+        )
+      ],
+    );
+  }
+
+  /// It gets the desktop bottom buttons inside the custom model
+  Widget _getDesktopBottomButtons(Widget primaryButton){
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(right: 5),
+            child: ZwapButton(
+              zwapButtonType: ZwapButtonType.flat,
+              zwapButtonStatus: ZwapButtonStatus.defaultStatus,
+              zwapButtonContentType: ZwapButtonContentType.noIcon,
+              onPressedCallBack: () => this.secondaryButtonCallBack!(),
+              verticalPadding: 15,
+              text: this.secondaryButtonText,
+              fullAxis: true,
+            ),
+          ),
+          flex: 1,
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(left: 5),
+            child: primaryButton,
+          ),
+          flex: 1,
+        ),
+      ],
+    );
+  }
+
   /// It retrieves the bottom buttons section
   Widget _getBottomButtonsSection() {
-    Widget primaryButton = ZwapButton(
+    Widget primaryButton = this.primaryButtonText != null && this.primaryButtonCallBack != null ? ZwapButton(
+      fullAxis: true,
       zwapButtonType: ZwapButtonType.primary,
       zwapButtonStatus: ZwapButtonStatus.defaultStatus,
       zwapButtonContentType: ZwapButtonContentType.noIcon,
-      onPressedCallBack: () => this.primaryButtonCallBack(),
-      text: this.primaryButtonText,
+      onPressedCallBack: () => this.primaryButtonCallBack!(),
+      text: this.primaryButtonText!,
       verticalPadding: 15,
-    );
+    ) : Container();
     return this.secondaryButtonText != null
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              primaryButton,
-              ZwapButton(
-                zwapButtonType: ZwapButtonType.flat,
-                zwapButtonStatus: ZwapButtonStatus.defaultStatus,
-                zwapButtonContentType: ZwapButtonContentType.noIcon,
-                onPressedCallBack: () => this.secondaryButtonCallBack!(),
-                verticalPadding: 15,
-                text: this.secondaryButtonText,
-              )
-            ],
-          )
+        ? getMultipleConditions(this._getDesktopBottomButtons(primaryButton),
+        this._getDesktopBottomButtons(primaryButton), this._getMobileBottomButtons(primaryButton),
+        this._getMobileBottomButtons(primaryButton),
+        this._getMobileBottomButtons(primaryButton))
         : primaryButton;
   }
 
@@ -181,7 +233,7 @@ class ZwapModal extends StatelessWidget {
         child:Column(
           children: [
             this._getTitleSection(),
-            Divider(
+            this.modalImage ?? Divider(
               color: ZwapColors.neutral200,
               thickness: 1,
             ),

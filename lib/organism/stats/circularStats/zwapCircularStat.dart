@@ -23,12 +23,16 @@ class ZwapCircularStat extends StatelessWidget{
   /// The stat title
   final String statTitle;
 
+  /// The line width for this circular progress indicator
+  final double lineWidth;
+
   ZwapCircularStat({Key? key,
     required this.statValue,
     required this.statColor,
     required this.statTitle,
     required this.backgroundStatColor,
-    required this.progressColor
+    required this.progressColor,
+    this.lineWidth = 10
   }): super(key: key);
 
   Widget build(BuildContext context){
@@ -44,6 +48,7 @@ class ZwapCircularStat extends StatelessWidget{
                 percent: this.statValue,
                 backgroundColor: this.backgroundStatColor,
                 progressColor: this.progressColor,
+                lineWidth: this.lineWidth,
               ),
               Center(
                 child: ZwapText(
