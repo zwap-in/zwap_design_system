@@ -7,15 +7,11 @@ class ZwapBottomIconMenu extends BottomNavigationBarItem{
   /// The optionally codePoint for the IconData
   final int? codePoint;
 
-  /// The optionally font family from which retrieve the codePoint
-  final String? fontFamily;
-
   /// The optionally icon data to display inside the bottom icon
   final IconData? iconData;
 
   ZwapBottomIconMenu({
     this.codePoint,
-    this.fontFamily,
     this.iconData
   }) : super(
         tooltip: "",
@@ -23,7 +19,8 @@ class ZwapBottomIconMenu extends BottomNavigationBarItem{
         icon: Icon(
           iconData != null ? iconData : IconData(
               codePoint!,
-              fontFamily: fontFamily!
+              fontFamily: "ZwapIcons",
+            fontPackage: "zwap_design_system"
           ),
           size: 30,
           color: Colors.black,

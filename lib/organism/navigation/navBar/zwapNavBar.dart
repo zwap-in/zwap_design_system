@@ -17,13 +17,9 @@ class ZwapNavBarState extends ChangeNotifier {
   /// Custom callBack function to handle the change screen on click on any item inside the navBar
   final Function(String newItem) changeScreenCallBack;
 
-  /// Callback function to handle the opening menu
-  final Function() openMenuCallBack;
-
   ZwapNavBarState({
     required this.selectedItem,
     required this.changeScreenCallBack,
-    required this.openMenuCallBack
   });
 
   /// Flag to check if the menu is open
@@ -31,7 +27,6 @@ class ZwapNavBarState extends ChangeNotifier {
 
   /// It opens or closes the menu
   void openCloseMenu() {
-    this.openMenuCallBack();
     this.isOpen = !this.isOpen;
     notifyListeners();
   }
@@ -59,9 +54,6 @@ class ZwapNavBar extends StatelessWidget {
   /// Function to handle the click on invite button inside the navBar
   final Function() onInviteButtonClick;
 
-  /// Function to handle the avatar button click
-  final Function() onAvatarButtonClick;
-
   /// The background color for this navbar
   final Color backgroundColor;
 
@@ -79,7 +71,6 @@ class ZwapNavBar extends StatelessWidget {
     required this.currentAvatarPath,
     required this.backgroundColor,
     required this.onInviteButtonClick,
-    required this.onAvatarButtonClick,
     required this.onLogoClick,
     this.isAvatarImageExternal = true,
     this.showInviteButton = false,
