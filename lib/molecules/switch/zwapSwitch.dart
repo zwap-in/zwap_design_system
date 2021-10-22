@@ -8,7 +8,7 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 /// Define the switch provider state
 class ZwapSwitch extends StatefulWidget {
 
-  /// The callBack funtion to handle new value inside the switch
+  /// The callBack function to handle new value inside the switch
   final Function(bool newValue) handleCallBack;
 
   /// The predefined value
@@ -19,21 +19,28 @@ class ZwapSwitch extends StatefulWidget {
     required this.handleCallBack
   }): super(key: key);
 
-  _ZwapSwitchState createState() => _ZwapSwitchState(value: this.predefinedValue ?? false);
+  ZwapSwitchState createState() => ZwapSwitchState(value: this.predefinedValue ?? false);
 
 }
 
 /// Custom widget to display a switch component
-class _ZwapSwitchState extends State<ZwapSwitch> {
+class ZwapSwitchState extends State<ZwapSwitch> {
 
   /// The current value
   bool value;
 
-  _ZwapSwitchState({required this.value});
+  ZwapSwitchState({required this.value});
 
   /// It handles the change inside the switch state
   void handleChange(bool newValue) {
     widget.handleCallBack(newValue);
+    setState(() {
+      this.value = newValue;
+    });
+  }
+
+  /// It reInit the state for this component
+  void reInitState(bool newValue){
     setState(() {
       this.value = newValue;
     });

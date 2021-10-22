@@ -4,9 +4,6 @@ class ZwapRadius {
   /// The constant default radius value
   static double defaultRadius = 4;
 
-  /// The constant card radius value
-  static double cardRadius = 8;
-
   /// The constant button radius value
   static double buttonRadius = 8;
 

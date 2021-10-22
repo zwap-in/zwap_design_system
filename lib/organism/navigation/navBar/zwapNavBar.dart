@@ -1,6 +1,7 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taastrap/taastrap.dart';
 import 'package:zwap_utils/zwap_utils.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -43,7 +44,7 @@ class ZwapNavBarState extends ChangeNotifier {
 class ZwapNavBar extends StatelessWidget {
 
   /// The icons mapping with their related name inside the navbar menu
-  final Map<String, IconData> iconsMenu;
+  final Map<String, String> iconsMenu;
 
   /// The current avatar image path
   final String currentAvatarPath;
@@ -64,7 +65,7 @@ class ZwapNavBar extends StatelessWidget {
   final Function() onLogoClick;
 
   /// The menu items inside the navBar menu for the desktop view
-  final Map<String, TupleType<IconData, Function()>> menuItems;
+  final Map<String, TupleType<String, Function()>> menuItems;
 
   ZwapNavBar({Key? key,
     required this.iconsMenu,
@@ -80,156 +81,163 @@ class ZwapNavBar extends StatelessWidget {
   /// It retrieves the row to display the icon menu inside the navbar
   Widget _getIconsRow() {
     return Consumer<ZwapNavBarState>(
-      builder: (context, provider, child){
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List<Widget>.generate(this.iconsMenu.keys.toList().length, ((item) => Flexible(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 1.5),
-                    child: InkWell(
-                      onTap: () => provider.changeItem(this.iconsMenu.keys.toList()[item]),
-                      child: Icon(
-                        this.iconsMenu[this.iconsMenu.keys.toList()[item]],
-                        color: provider.selectedItem == this.iconsMenu.keys.toList()[item]
+        builder: (context, provider, child){
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List<Widget>.generate(this.iconsMenu.keys.toList().length, ((item) => Flexible(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 1.5),
+                      child: InkWell(
+                        onTap: () => provider.changeItem(this.iconsMenu.keys.toList()[item]),
+                        child: ZwapIcons.icons(this.iconsMenu[this.iconsMenu.keys.toList()[item]]!, iconColor: provider.selectedItem == this.iconsMenu.keys.toList()[item]
                             ? ZwapColors.primary700
-                            : ZwapColors.neutral500,
+                            : ZwapColors.neutral500),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 1.5),
-                    child: InkWell(
-                      onTap: () => provider.changeItem(this.iconsMenu.keys.toList()[item]),
-                      child: ZwapText(
-                        text: this.iconsMenu.keys.toList()[item].capitalize(),
-                        textColor: provider.selectedItem == this.iconsMenu.keys.toList()[item]
-                            ? ZwapColors.primary700
-                            : ZwapColors.neutral500,
-                        zwapTextType: ZwapTextType.body3Regular,
+                    Padding(
+                      padding: EdgeInsets.only(top: 1.5),
+                      child: InkWell(
+                        onTap: () => provider.changeItem(this.iconsMenu.keys.toList()[item]),
+                        child: ZwapText(
+                          text: this.iconsMenu.keys.toList()[item].capitalize(),
+                          textColor: provider.selectedItem == this.iconsMenu.keys.toList()[item]
+                              ? ZwapColors.primary700
+                              : ZwapColors.neutral500,
+                          zwapTextType: ZwapTextType.body3Regular,
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            flex: 0,
-            fit: FlexFit.tight,
-          ))),
-        );
-      }
+              flex: 0,
+              fit: FlexFit.tight,
+            ))),
+          );
+        }
     );
   }
 
   /// It retrieves the avatar icon with a button to show a dropdown menu
   Widget _getAvatarIcon() {
     return Consumer<ZwapNavBarState>(
-      builder: (context, provider, child){
-        return InkWell(
-          onTap: () => provider.openCloseMenu(),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child: ZwapAvatar(
-                    imagePath: this.currentAvatarPath,
-                    size: 20,
-                    isExternal: this.isAvatarImageExternal,
+        builder: (context, provider, child){
+          return InkWell(
+            onTap: () => provider.openCloseMenu(),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 5),
+                    child: ZwapAvatar(
+                      imagePath: this.currentAvatarPath,
+                      size: 20,
+                      isExternal: this.isAvatarImageExternal,
+                    ),
                   ),
+                  flex: 0,
+                  fit: FlexFit.tight,
                 ),
-                flex: 0,
-                fit: FlexFit.tight,
-              ),
-              Flexible(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 5),
-                  child: Icon(
-                    provider.isOpen
-                        ? ZwapIcons.icons['arrow_up']
-                        : ZwapIcons.icons['arrow_down'],
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: provider.isOpen ? ZwapIcons.icons("arrow_up_2") : ZwapIcons.icons("arrow_down_2"),
                   ),
-                ),
-                flex: 0,
-                fit: FlexFit.tight,
-              )
-            ],
-          ),
-        );
-      }
+                  flex: 0,
+                  fit: FlexFit.tight,
+                )
+              ],
+            ),
+          );
+        }
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget get _logoWidget => InkWell(
+    onTap: () => this.onLogoClick(),
+    child: Image.asset(
+      "assets/images/brand/icon.png",
+      package: "zwap_design_system",
+      width: 36,
+      height: 36,
+    ),
+  );
+
+  Widget get _inviteButton => ZwapButton(
+    iconColor: ZwapColors.error400,
+    onPressedCallBack: () => this.onInviteButtonClick(),
+    zwapButtonContentType: ZwapButtonContentType.withIcon,
+    zwapButtonStatus: ZwapButtonStatus.hoverStatus,
+    textColor: ZwapColors.neutral600,
+    zwapButtonType: ZwapButtonType.flat,
+    text: Utils.translatedText("button_invite_navbar"),
+    icon: "ticket_star",
+    verticalPadding: 10,
+  );
+
+  Widget _getDesktopNavBar(){
     List<Widget> leftWidgets = [
       Padding(
         padding: EdgeInsets.only(right: 25),
-        child: InkWell(
-          onTap: () => this.onLogoClick(),
-          child: Image.asset(
-            "assets/images/brand/icon.png",
-            package: "zwap_design_system",
-            width: 36,
-            height: 36,
-          ),
-        ),
+        child: this._logoWidget,
       )
     ];
     if (this.showInviteButton) {
       leftWidgets.add(
           Padding(
             padding: EdgeInsets.only(left: 25),
-            child: ZwapButton(
-              iconColor: ZwapColors.error400,
-              onPressedCallBack: () => this.onInviteButtonClick(),
-              zwapButtonContentType: ZwapButtonContentType.withIcon,
-              zwapButtonStatus: ZwapButtonStatus.hoverStatus,
-              textColor: ZwapColors.neutral600,
-              zwapButtonType: ZwapButtonType.flat,
-              text: Utils.translatedText("button_invite_navbar"),
-              icon: ZwapIcons.icons['invite_nav'],
-              verticalPadding: 10,
-            ),
+            child: this._inviteButton,
           )
       );
     }
-    return Container(
-      color: this.backgroundColor,
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 150),
-      child: Stack(
-        children: [
-          ZwapSeparatedRow(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            leftWidgets: leftWidgets,
-            rightWidgets: [
-              Padding(
-                padding: EdgeInsets.only(right: 15),
-                child: this._getIconsRow(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 15),
-                child: this._getAvatarIcon(),
-              )
-            ],
-          ),
-          Consumer<ZwapNavBarState>(
-              builder: (context, provider, child){
-                return Positioned(
-                  top: 80,
-                  right: 100,
-                  child: provider.isOpen ? ZwapPopupMenu(
-                    menuItems: this.menuItems,
-                  ) : Container(),
-                );
-              }
-          )
-        ],
-      ),
+    return Column(
+      children: [
+        ZwapSeparatedRow(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          leftWidgets: leftWidgets,
+          rightWidgets: [
+            Padding(
+              padding: EdgeInsets.only(right: 15),
+              child: this._getIconsRow(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: this._getAvatarIcon(),
+            )
+          ],
+        ),
+        Consumer<ZwapNavBarState>(
+            builder: (context, provider, child){
+              return Align(
+                alignment: Alignment.bottomRight,
+                child: provider.isOpen ? ZwapPopupMenu(
+                  menuItems: this.menuItems,
+                ) : Container(),
+              );
+            }
+        )
+      ],
     );
+  }
+
+  Widget _getMobileNavBar(){
+    return ZwapSeparatedRow(
+        leftWidgets: [
+          _logoWidget
+        ],
+        rightWidgets: [
+          _inviteButton
+        ]
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return getMultipleConditions(this._getDesktopNavBar(), this._getDesktopNavBar(), this._getDesktopNavBar(), this._getMobileNavBar(), this._getMobileNavBar());
   }
 }

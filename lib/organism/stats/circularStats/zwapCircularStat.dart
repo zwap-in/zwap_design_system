@@ -52,9 +52,9 @@ class ZwapCircularStat extends StatelessWidget{
               ),
               Center(
                 child: ZwapText(
-                  zwapTextType: ZwapTextType.body1Regular,
+                  zwapTextType: ZwapTextType.h3,
                   text: "${(this.statValue * 100).toInt().toString()}%",
-                  textColor: ZwapColors.neutral500,
+                  textColor: ZwapColors.neutral700,
                 ),
               )
             ],

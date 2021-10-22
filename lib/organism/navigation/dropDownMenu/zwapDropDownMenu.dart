@@ -10,7 +10,7 @@ import 'package:zwap_design_system/molecules/molecules.dart';
 class ZwapPopupMenu extends StatelessWidget{
 
   /// The menu items to display inside the dropdown menu
-  final Map<String, TupleType<IconData, Function()>> menuItems;
+  final Map<String, TupleType<String, Function()>> menuItems;
 
   ZwapPopupMenu({Key? key,
     required this.menuItems
@@ -31,9 +31,7 @@ class ZwapPopupMenu extends StatelessWidget{
                   flex: 0,
                   child: Padding(
                     padding: EdgeInsets.only(right: 5),
-                    child: Icon(
-                        this.menuItems[this.menuItems.keys.toList()[index]]!.a
-                    ),
+                    child: ZwapIcons.icons(this.menuItems[this.menuItems.keys.toList()[index]]!.a)
                   ),
                 ),
                 Flexible(

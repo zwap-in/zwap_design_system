@@ -135,11 +135,7 @@ class ZwapModal extends StatelessWidget {
             Flexible(
               child: InkWell(
                 onTap: () => this.closeButtonCallBack(),
-                child: Icon(
-                  ZwapIcons.icons['close']!,
-                  color: ZwapColors.neutral400,
-                  size: 24,
-                ),
+                child: ZwapIcons.icons("close"),
               ),
               flex: 0,
               fit: FlexFit.tight,

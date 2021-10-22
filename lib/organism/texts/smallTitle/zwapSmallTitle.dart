@@ -17,7 +17,7 @@ class ZwapSmallTitle extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return ZwapText(
-      zwapTextType: ZwapTextType.body1SemiBold,
+      zwapTextType: ZwapTextType.body2SemiBold,
       textColor: ZwapColors.neutral500,
       text: title,
     );

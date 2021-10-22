@@ -24,7 +24,7 @@ class ZwapCommonConnections extends StatelessWidget{
       children: [
         Flexible(
           child: Padding(
-            padding: EdgeInsets.only(right: 4),
+            padding: EdgeInsets.only(right: 2),
             child: ZwapGroupedAvatars(
               avatarImagePaths: imagePaths,
             ),
@@ -33,8 +33,8 @@ class ZwapCommonConnections extends StatelessWidget{
           fit: FlexFit.tight,
         ),
         Flexible(
-          child: Padding(
-            padding: EdgeInsets.only(left: 4),
+          child: Transform.translate(
+            offset: Offset(-20.0, 0),
             child: ZwapText(
               textColor: ZwapColors.neutral700,
               zwapTextType: ZwapTextType.body2Regular,

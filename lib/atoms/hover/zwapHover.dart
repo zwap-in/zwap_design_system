@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 /// IMPORTING LOCAL PACKAGES
-import '../colors/zwapColors.dart';
+import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 
 /// Static class to get an hover colors mapping
 class ZwapHover {

@@ -9,6 +9,7 @@ enum ZwapCardType { levelZero, levelOne, levelTwo, levelThree }
 
 /// Custom component to render the card
 class ZwapCard extends StatelessWidget {
+
   /// The card type
   final ZwapCardType zwapCardType;
 
@@ -33,6 +34,9 @@ class ZwapCard extends StatelessWidget {
   /// The elevation level for this card
   final double? elevationLevel;
 
+  /// Optional border width for the box decoration inside the card
+  final double? borderWidth;
+
   ZwapCard({Key? key,
     required this.zwapCardType,
     required this.child,
@@ -41,8 +45,9 @@ class ZwapCard extends StatelessWidget {
     this.borderColor,
     this.cardRadius,
     this.cardWidth,
-    this.elevationLevel = 0
-   }) : super(key: key);
+    this.elevationLevel = 0,
+    this.borderWidth
+  }) : super(key: key);
 
   /// It retrieves the box shadow for this card in base of the type
   BoxShadow? _getBoxShadow() {
@@ -60,7 +65,7 @@ class ZwapCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BoxShadow? boxShadow = this.elevationLevel != 0 ? ZwapShadow.levelThree : this._getBoxShadow();
+    BoxShadow? boxShadow = this.elevationLevel != 0 ? this._getBoxShadow() : ZwapShadow.levelZero;
     return Container(
       height: this.cardHeight,
       width: this.cardWidth,
@@ -69,16 +74,23 @@ class ZwapCard extends StatelessWidget {
         elevation: this.elevationLevel,
         color: this.backgroundColor ?? ZwapColors.shades0,
         child: Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: this.borderColor ?? Colors.transparent, width: this.borderWidth ?? 0.5,
+              ),
+              borderRadius: BorderRadius.circular(this.cardRadius ?? ZwapRadius.tabBarRadius)
+          ),
           child: this.child,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(this.cardRadius ?? ZwapRadius.popupRadius),
+          side: BorderSide(
+            color: this.borderColor ?? Colors.transparent, width: this.borderWidth ?? 0.5,
+          ),
+          borderRadius: BorderRadius.circular(this.cardRadius ?? ZwapRadius.tabBarRadius),
         ),
       ),
       decoration: BoxDecoration(
-          border: Border.all(
-              color: this.borderColor ?? Colors.transparent, width: 0.7),
-          boxShadow: (boxShadow != null || this.elevationLevel != 0 )? [boxShadow!] : null
+          boxShadow: this.elevationLevel != 0 ? ([boxShadow!]) : null
       ),
     );
   }

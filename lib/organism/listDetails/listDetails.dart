@@ -35,10 +35,11 @@ class ListDetails<T> extends StatelessWidget{
             ),
             height: 600,
           ),
+          flex: 2,
         ),
         Expanded(
-          child: this.getDetailsElement(provider.getCurrentElement!),
-          flex: 2,
+          child: provider.getCurrentElement != null ? this.getDetailsElement(provider.getCurrentElement!) : Container(),
+          flex: 3,
         )
       ],
     );

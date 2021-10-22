@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
+import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
@@ -23,12 +24,18 @@ class ZwapStarRating extends StatelessWidget {
   /// The stars color
   final Color? color;
 
+  final ZwapStarsPosition zwapStarsPosition;
+
+  final double? starSize;
+
   ZwapStarRating({
     required this.ratingTitle,
+    this.zwapStarsPosition = ZwapStarsPosition.start,
     this.onRatingChanged,
     this.starCount = 5,
     this.rating = .0,
-    this.color
+    this.color,
+    this.starSize
   });
 
   @override
@@ -44,10 +51,12 @@ class ZwapStarRating extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(vertical: getMultipleConditions(10.0, 10.0, 10.0, 0.0, 0.0)),
           child: ZwapStars(
+            zwapStarsPosition: this.zwapStarsPosition,
             ratingTitle: this.ratingTitle,
             starCount: this.starCount,
+            starSize: this.starSize ?? 16,
             rating: this.rating,
             color: this.color,
           ),

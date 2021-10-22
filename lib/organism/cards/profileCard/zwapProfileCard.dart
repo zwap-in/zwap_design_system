@@ -1,8 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:taastrap/taastrap.dart';
+import 'package:zwap_design_system/atoms/atoms.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/molecules/molecules.dart';
@@ -14,8 +12,14 @@ class ZwapProfileCard extends StatefulWidget {
   /// The profile card title
   final String title;
 
+  /// The text type for the title
+  final ZwapTextType titleTextType;
+
   /// The profile card subTitle
   final String subTitle;
+
+  /// The text type for the subtitle
+  final ZwapTextType subTitleTextType;
 
   /// The button text
   final String buttonText;
@@ -26,14 +30,17 @@ class ZwapProfileCard extends StatefulWidget {
   /// The profile color
   final Color profileColor;
 
-  /// Is this profile verified?
-  final bool isVerified;
+  /// The icon inside this profile card
+  final Icon profileIconCard;
 
   /// The image path for the asset inside the card
   final String? imagePath;
 
   /// Is the asset in the profile card an external asset?
   final bool isExternalAsset;
+
+  /// The size for the avatar image
+  final double? imageSize;
 
   /// The card width
   final double? cardWidth;
@@ -44,8 +51,11 @@ class ZwapProfileCard extends StatefulWidget {
     required this.buttonText,
     required this.buttonClickCallBack,
     required this.profileColor,
-    this.isVerified = true,
+    required this.profileIconCard,
     this.isExternalAsset = false,
+    this.titleTextType = ZwapTextType.h3,
+    this.subTitleTextType = ZwapTextType.body1Regular,
+    this.imageSize,
     this.imagePath,
     this.cardWidth
   }) : super(key: key);
@@ -67,8 +77,13 @@ class _ZwapProfileCardState extends State<ZwapProfileCard>{
 
   ZwapAvatarInfo get _avatarInfo => ZwapAvatarInfo(
       imagePath: widget.imagePath,
+      titleTextType: widget.titleTextType,
+      subTitleTextType: widget.subTitleTextType,
       isExternalAsset: widget.isExternalAsset,
       title: widget.title,
+      profileIcon: widget.profileIconCard,
+      containerRadius: ZwapRadius.tabBarRadius,
+      imageSize: widget.imageSize,
       subTitle: widget.subTitle,
       profileColor: widget.profileColor
   );
@@ -90,8 +105,9 @@ class _ZwapProfileCardState extends State<ZwapProfileCard>{
       onTap: () => widget.buttonClickCallBack(),
       child: ZwapCard(
           cardWidth: widget.cardWidth,
-          elevationLevel: this._isHovered ? 1 : 0,
-          zwapCardType: this._isHovered ? ZwapCardType.levelThree : ZwapCardType.levelZero,
+          elevationLevel: this._isHovered ? 0.5 : 0,
+          borderColor: !this._isHovered ? ZwapColors.primary100 : null,
+          zwapCardType: this._isHovered ? ZwapCardType.levelTwo : ZwapCardType.levelZero,
           child: Column(
             children: [
               this._avatarInfo,

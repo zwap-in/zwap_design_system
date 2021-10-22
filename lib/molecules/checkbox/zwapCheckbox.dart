@@ -26,18 +26,30 @@ class ZwapCheckBox extends StatefulWidget {
   /// It handles the click on checkbox
   final Function(bool isSelected) onCheckBoxClick;
 
+  /// Initial bool value for this checkbox
+  final bool initialValue;
+
+  /// On text click on checkbox
+  final Function()? onTextClick;
+
   ZwapCheckBox({Key? key,
     required this.text,
-    required this.onCheckBoxClick
+    required this.onCheckBoxClick,
+    this.initialValue = false,
+    this.onTextClick
   }) : super(key: key);
 
-  _ZwapCheckBoxState createState() => _ZwapCheckBoxState();
+  _ZwapCheckBoxState createState() => _ZwapCheckBoxState(this.initialValue);
 }
 
 /// Standard component to render a checkbox with Zwap standard style
 class _ZwapCheckBoxState extends State<ZwapCheckBox> {
   /// The status with a default value equal to unselected
   ZwapCheckBoxStatus _status = ZwapCheckBoxStatus.unselected;
+
+  _ZwapCheckBoxState(bool initialValue){
+    this._status = initialValue ? ZwapCheckBoxStatus.selected : ZwapCheckBoxStatus.unselected;
+  }
 
   /// It handles the hover status on this component
   void _hoverStatus(bool value) {
@@ -203,6 +215,11 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
 
   @override
   Widget build(BuildContext context) {
+    Widget text = ZwapText(
+      text: widget.text,
+      zwapTextType: ZwapTextType.body1Regular,
+      textColor: this._getTextColor(),
+    );
     return Row(
       children: [
         Flexible(
@@ -227,11 +244,10 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
             flex: 0,
             child: Padding(
               padding: EdgeInsets.only(left: 6),
-              child: ZwapText(
-                text: widget.text,
-                zwapTextType: ZwapTextType.body1Regular,
-                textColor: this._getTextColor(),
-              ),
+              child: widget.onTextClick != null ? InkWell(
+                onTap: () => widget.onTextClick!(),
+                child: text,
+              ) : text,
             ))
       ],
     );

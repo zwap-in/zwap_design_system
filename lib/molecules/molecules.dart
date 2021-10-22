@@ -15,3 +15,7 @@ export 'progress/progress.dart';
 export 'rangeSlider/zwapRangeSlider.dart';
 export 'stars/zwapStar.dart';
 export 'toolTip/zwapToolTip.dart';
+export 'selectTag/zwapMultiSelect.dart';
+export 'blurComponent/zwapBlurComponent.dart';
+export 'dropdown/dropdown.dart';
+export 'toast/zwapToast.dart';

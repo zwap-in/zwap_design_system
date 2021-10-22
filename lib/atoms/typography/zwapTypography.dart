@@ -12,6 +12,7 @@ enum ZwapTextType {
   h4,
   h5,
   h6,
+  h7,
   subTitleRegular,
   subTitleSemiBold,
   subTitleBold,
@@ -105,6 +106,18 @@ class ZwapTypography {
         color: ZwapColors.shades100);
   }
 
+  static TextStyle h7() {
+    return TextStyle(
+        fontSize: 0,
+        letterSpacing: 0.15,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.normal,
+        fontFamily: "PoppinsSemiBold",
+        height: 1.5,
+        package: "zwap_design_system",
+        color: ZwapColors.shades100);
+  }
+
   static TextStyle subtitleRegular() {
     return TextStyle(
         fontSize: 0,
@@ -181,7 +194,7 @@ class ZwapTypography {
     return TextStyle(
         fontSize: 0,
         letterSpacing: 0.4,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         fontStyle: FontStyle.normal,
         fontFamily: "PoppinsSemiBold",
         height: 1.5,

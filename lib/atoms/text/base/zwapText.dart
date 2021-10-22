@@ -40,25 +40,52 @@ class FontSizeDevice {
 TextStyle getTextStyle(ZwapTextType typeText) {
   Map<ZwapTextType, FontSizeDevice> fontSizeMapping = {
     ZwapTextType.h1: FontSizeDevice(
-        desktopM: 48, desktopS: 48, tablet: 36, mobileM: 27.01, mobileS: 20.27),
+        desktopM: 48,
+        desktopS: 40,
+        tablet: 32,
+        mobileM: 24.01,
+        mobileS: 16.27
+    ),
     ZwapTextType.h2: FontSizeDevice(
-        desktopM: 32,
+        desktopM: 40,
         desktopS: 32,
         tablet: 24.01,
-        mobileM: 18.01,
-        mobileS: 18.01),
+        mobileM: 17.01,
+        mobileS: 15.01
+    ),
     ZwapTextType.h3: FontSizeDevice(
-        desktopM: 24, desktopS: 24, tablet: 18, mobileM: 14, mobileS: 14),
+        desktopM: 24,
+        desktopS: 24,
+        tablet: 18,
+        mobileM: 17,
+        mobileS: 15
+    ),
     ZwapTextType.h4: FontSizeDevice(
-        desktopM: 20, desktopS: 20, tablet: 15, mobileM: 12, mobileS: 12),
+        desktopM: 18,
+        desktopS: 18,
+        tablet: 17,
+        mobileM: 17,
+        mobileS: 15
+    ),
     ZwapTextType.h5: FontSizeDevice(
-        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 12, mobileS: 12),
+        desktopM: 16,
+        desktopS: 16,
+        tablet: 12,
+        mobileM: 12,
+        mobileS: 12
+    ),
     ZwapTextType.h6: FontSizeDevice(
         desktopM: 14,
         desktopS: 14,
         tablet: 10.50,
         mobileM: 11,
         mobileS: 11),
+    ZwapTextType.h7: FontSizeDevice(
+        desktopM: 36,
+        desktopS: 34,
+        tablet: 17,
+        mobileM: 17,
+        mobileS: 17),
     ZwapTextType.subTitleRegular: FontSizeDevice(
         desktopM: 15,
         desktopS: 15,
@@ -78,31 +105,46 @@ TextStyle getTextStyle(ZwapTextType typeText) {
         mobileM: 10.25,
         mobileS: 8.44),
     ZwapTextType.captionRegular: FontSizeDevice(
-        desktopM: 12, desktopS: 12, tablet: 12, mobileM: 12, mobileS: 12),
+        desktopM: 12,
+        desktopS: 12,
+        tablet: 12,
+        mobileM: 12,
+        mobileS: 12
+    ),
     ZwapTextType.captionSemiBold: FontSizeDevice(
-        desktopM: 12, desktopS: 12, tablet: 12, mobileM: 12, mobileS: 12),
+        desktopM: 12,
+        desktopS: 12,
+        tablet: 12,
+        mobileM: 12,
+        mobileS: 12
+    ),
     ZwapTextType.captionBold: FontSizeDevice(
-        desktopM: 12, desktopS: 12, tablet: 12, mobileM: 12, mobileS: 12),
+        desktopM: 12,
+        desktopS: 12,
+        tablet: 12,
+        mobileM: 12,
+        mobileS: 12
+    ),
     ZwapTextType.buttonText: FontSizeDevice(
         desktopM: 14,
         desktopS: 14,
-        tablet: 11,
-        mobileM: 11,
-        mobileS: 11),
+        tablet: 14,
+        mobileM: 14,
+        mobileS: 14),
     ZwapTextType.body0Regular: FontSizeDevice(
-        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
+        desktopM: 20, desktopS: 20, tablet: 12, mobileM: 11, mobileS: 11),
     ZwapTextType.body0SemiBold: FontSizeDevice(
         desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
     ZwapTextType.body0Bold: FontSizeDevice(
         desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
     ZwapTextType.body1Regular: FontSizeDevice(
-        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
+        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 15, mobileS: 15),
     ZwapTextType.body1SemiBold: FontSizeDevice(
-        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
+        desktopM: 16, desktopS: 16, tablet: 13, mobileM: 13, mobileS: 13),
     ZwapTextType.body1Bold: FontSizeDevice(
         desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
     ZwapTextType.body2Regular: FontSizeDevice(
-        desktopM: 14, desktopS: 14, tablet: 11, mobileM: 10, mobileS: 10),
+        desktopM: 14, desktopS: 14, tablet: 11, mobileM: 13, mobileS: 13),
     ZwapTextType.body2SemiBold: FontSizeDevice(
         desktopM: 14, desktopS: 14, tablet: 11, mobileM: 10, mobileS: 10),
     ZwapTextType.body2Bold: FontSizeDevice(
@@ -134,6 +176,9 @@ TextStyle getTextStyle(ZwapTextType typeText) {
     case ZwapTextType.h6:
       return ZwapTypography.h6().apply(
           fontSizeDelta: fontSizeMapping[ZwapTextType.h6]!.getFontSize());
+    case ZwapTextType.h7:
+      return ZwapTypography.h7().apply(
+          fontSizeDelta: fontSizeMapping[ZwapTextType.h7]!.getFontSize());
     case ZwapTextType.subTitleRegular:
       return ZwapTypography.subtitleRegular().apply(
           fontSizeDelta:

@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 class ZwapBottomMenuState extends ChangeNotifier{
 
   /// The current index inside the bottom menu
-  int currentIndex = 0;
+  int currentIndex;
+
+  ZwapBottomMenuState({required this.currentIndex});
 
   void changeIndex(int newIndex){
     this.currentIndex = newIndex;

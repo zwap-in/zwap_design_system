@@ -1,139 +1,132 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
 
 import '../../../card/zwapCard.dart';
 
-/// The provider state to handle the input date picker
-class ZwapDatePickerProviderState extends ChangeNotifier{
 
-  /// The current start year
-  int currentYear;
+class ZwapDatePicker extends StatefulWidget{
 
-  /// The selected year value
-  late int selectedYear;
+  final int minYear;
 
-  /// The callBack function to handle the year selection
-  final Function(int year) callBack;
+  final int maxYear;
 
-  ZwapDatePickerProviderState({required this.callBack, required this.currentYear}){
-    this.selectedYear = this.currentYear;
-  }
+  final Function(int newYear) onSelectYear;
 
-  /// Moving forward or back inside the date picker
-  void changeView(bool isForward){
-    if(isForward){
-      this.currentYear += 10;
-    }
-    else{
-      this.currentYear -= 10;
-    }
-    notifyListeners();
-  }
+  ZwapDatePicker({Key? key,
+    required this.minYear,
+    required this.onSelectYear,
+    this.maxYear = 2099,
+  }): super(key: key);
 
-  /// The current title inside the date picker value
-  String get currentTitle => "${this.currentYear} - ${this.currentYear + 9}";
-
-  /// It selects the year
-  void selectYear(int year){
-    this.selectedYear = year;
-    this.callBack(year);
-    notifyListeners();
-  }
+  _ZwapDatePickerState createState() => _ZwapDatePickerState();
 
 }
 
 /// Component to rendering date picker input
-class ZwapDatePicker extends StatelessWidget{
+class _ZwapDatePickerState extends State<ZwapDatePicker>{
 
-  /// The max year to show
-  final int maxYear;
+  int _currentYear = 1982;
 
-  /// The min year to show
-  final int minYear;
+  int _selectedYear = 0;
 
-  ZwapDatePicker({Key? key,
-    required this.minYear,
-    this.maxYear = 2099,
-  }): super(key: key);
+  /// Moving forward or back inside the date picker
+  void changeView(bool isForward){
+    setState(() {
+      if(isForward){
+        this._currentYear += 10;
+      }
+      else{
+        this._currentYear -= 10;
+      }
+    });
+  }
+
+  /// The current title inside the date picker value
+  String get _currentTitle => "${this._currentYear} - ${this._currentYear + 9}";
+
+  /// It selects the year
+  void selectYear(int year){
+    setState(() {
+      this._selectedYear = year;
+    });
+    widget.onSelectYear(year);
+  }
 
   /// It gets the calendar title row
   Widget _getCalendarTitle(){
-    return Consumer<ZwapDatePickerProviderState>(
-      builder: (context, provider, child){
-        return Row(
-          children: [
-            Flexible(
-              child: provider.currentYear - 10 >= this.minYear ? InkWell(
-                onTap: () => provider.changeView(false),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  size: 30,
-                  color: ZwapColors.shades100,
-                ),
-              ) : Icon(
-                Icons.arrow_back_ios,
-                size: 30,
-                color: ZwapColors.neutral300,
-              ),
-              flex: 0,
-              fit: FlexFit.tight,
+    return Row(
+      children: [
+        Flexible(
+          child: this._currentYear - 10 >= widget.minYear ? InkWell(
+            onTap: () => this.changeView(false),
+            child: Icon(
+              Icons.arrow_back_ios,
+              size: 30,
+              color: ZwapColors.shades100,
             ),
-            Flexible(
-              child: Center(
-                child: ZwapText(
-                  text: provider.currentTitle,
-                  textColor: ZwapColors.shades100,
-                  zwapTextType: ZwapTextType.body1Regular,
-                ),
-              ),
+          ) : Icon(
+            Icons.arrow_back_ios,
+            size: 30,
+            color: ZwapColors.neutral300,
+          ),
+          flex: 0,
+          fit: FlexFit.tight,
+        ),
+        Flexible(
+          child: Center(
+            child: ZwapText(
+              text: this._currentTitle,
+              textColor: ZwapColors.shades100,
+              zwapTextType: ZwapTextType.body1Regular,
             ),
-            Flexible(
-              child: provider.currentYear + 10 < this.maxYear  ? InkWell(
-                onTap: () => provider.changeView(true),
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 30,
-                  color: ZwapColors.shades100,
-                ),
-              ) : Icon(
-                Icons.arrow_forward_ios,
-                size: 30,
-                color: ZwapColors.neutral300,
-              ),
-              flex: 0,
-              fit: FlexFit.tight,
+          ),
+        ),
+        Flexible(
+          child: this._currentYear + 10 < widget.maxYear  ? InkWell(
+            onTap: () => this.changeView(true),
+            child: Icon(
+              Icons.arrow_forward_ios,
+              size: 30,
+              color: ZwapColors.shades100,
             ),
-          ],
-        );
-      }
+          ) : Icon(
+            Icons.arrow_forward_ios,
+            size: 30,
+            color: ZwapColors.neutral300,
+          ),
+          flex: 0,
+          fit: FlexFit.tight,
+        ),
+      ],
     );
   }
 
   /// It gets the grid view inside the calendar picker
   Widget _getYearsGridView(){
-    return Consumer<ZwapDatePickerProviderState>(
-      builder: (context, provider, child){
-        return Center(
-          child: ZwapGridView<int>(
-              children: List<int>.generate(10, ((index) => (provider.currentYear + index))),
-              maxElementsPerRow: 3,
-              maxHeight: 50,
-              getChildWidget: (int element) => InkWell(
-                onTap: () => provider.selectYear(element),
-                child: ZwapText(
-                  textAlign: TextAlign.center,
-                  zwapTextType: ZwapTextType.body1Regular,
-                  text: element.toString(),
-                  textColor: ZwapColors.shades100,
-                ),
-              )
-          ),
-        );
-      }
+    return Center(
+      child: ZwapGridView<int>(
+          children: List<int>.generate(10, ((index) => (this._currentYear + index))),
+          maxElementsPerRow: 3,
+          maxHeight: 50,
+          getChildWidget: (int element) => Container(
+            decoration: BoxDecoration(
+              color: this._selectedYear == element ? ZwapColors.neutral400 : ZwapColors.shades0,
+              borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+            child: InkWell(
+              onTap: () => this.selectYear(element),
+              child: ZwapText(
+                textAlign: TextAlign.center,
+                zwapTextType: ZwapTextType.body1Regular,
+                text: element.toString(),
+                textColor: ZwapColors.shades100,
+              ),
+            ),
+          )
+      ),
     );
   }
 

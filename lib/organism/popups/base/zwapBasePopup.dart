@@ -14,7 +14,7 @@ abstract class AbstractBasePopup extends Widget{
   }) : super(key: key);
 
   /// The save callBack to retrieve to save the data
-  void onSaveCallBack(Map<String, dynamic> json){
+  void onSaveCallBack(Map<String, dynamic> json) async{
     this.onCloseCallBack();
   }
 

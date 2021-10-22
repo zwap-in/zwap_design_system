@@ -35,11 +35,11 @@ class ScrollCards<T> extends StatelessWidget{
             child: ZwapText(
               textColor: ZwapColors.shades100,
               text: title,
-              zwapTextType: ZwapTextType.h3,
+              zwapTextType: ZwapTextType.h4,
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, right: 20),
+            padding: EdgeInsets.only(top: 10, right: getMultipleConditions(20.0, 20.0, 20.0, 0.0, 0.0)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: List<Widget>.generate(mappingElements.length, ((index) {

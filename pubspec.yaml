@@ -1,6 +1,6 @@
 name: zwap_design_system
 description: This is a package to build a standard design system kit for any zwap projects
-version: 0.1.149
+version: 0.1.281
 homepage: https://github.com/zwap-in/zwap_design_system
 
 environment:
@@ -23,9 +23,13 @@ dependencies:
 
   textfield_tags: ^1.4.2
 
-  taastrap: ^0.1.25
+  taastrap: ^0.1.28
 
-  zwap_utils: ^0.0.10
+  zwap_utils: ^0.0.16
+
+  fluttertoast: ^8.0.8
+
+  flutter_svg: ^0.23.0+1
 
 
 dev_dependencies:
@@ -62,4 +66,5 @@ flutter:
   assets:
     - assets/images/brand/
     - assets/images/placeholders/
+    - assets/images/icons/
 

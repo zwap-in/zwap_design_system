@@ -39,13 +39,17 @@ class ZwapInfiniteScroll<T> extends StatefulWidget {
   /// The axis direction for this infinite scroll
   final Axis? axisDirection;
 
+  /// The optional custom waiting widget
+  final Widget? waitingWidget;
+
   ZwapInfiniteScroll({Key? key,
     required this.fetchMoreData,
     required this.getChildWidget,
     required this.zwapInfiniteScrollType,
     required this.mainSizeDirection,
     this.axisDirection = Axis.vertical,
-    this.crossSizeDirection
+    this.crossSizeDirection,
+    this.waitingWidget
   }): super(key: key){
    if(this.zwapInfiniteScrollType == ZwapInfiniteScrollType.gridView){
      assert(this.axisDirection == Axis.vertical, "On grid view infinite scroll the axis direction must be vertical");
@@ -179,7 +183,7 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
           case ConnectionState.none:
             return Container();
           case ConnectionState.waiting:
-            return ZwapWaiting();
+            return widget.waitingWidget ?? ZwapWaiting();
           default:
             if (snapshot.hasError)
               return this._getErrorWidget(snapshot.error.toString());

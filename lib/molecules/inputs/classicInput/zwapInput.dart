@@ -42,11 +42,20 @@ class ZwapInput extends StatefulWidget {
   /// Handle the validation with a custom callBack
   final TupleType<bool, String> Function(dynamic value)? handleValidation;
 
+  /// It handles the changes inside this input text field
+  final Function(String newValue)? onChanged;
+
+  /// Custom internal padding for this input
+  final EdgeInsets? internalPadding;
+
   /// Optionally prefix icon
   final IconData? prefixIcon;
 
   /// Optionally suffix icon
   final IconData? suffixIcon;
+
+  /// The on key callBack function
+  final Function(String value)? keyCallBackFunction;
 
   ZwapInput({Key? key,
     required this.controller,
@@ -54,11 +63,14 @@ class ZwapInput extends StatefulWidget {
     this.maxLines = 1,
     this.zwapInputStatus = ZwapInputStatus.defaultStatus,
     this.enableInput = true,
+    this.internalPadding,
+    this.onChanged,
     this.inputName,
     this.placeholder,
     this.handleValidation,
     this.prefixIcon,
-    this.suffixIcon
+    this.suffixIcon,
+    this.keyCallBackFunction
   }) : super(key: key);
 
   _ZwapInputState createState() => _ZwapInputState(status: this.zwapInputStatus, controller: this.controller);
@@ -89,9 +101,7 @@ class _ZwapInputState extends State<ZwapInput> {
     }
   }
 
-  _ZwapInputState({required this.status, required this.controller}){
-    this.controller.addListener(this._handleController);
-  }
+  _ZwapInputState({required this.status, required this.controller});
 
   /// It changes the input status
   void _changeInputStatus(ZwapInputStatus newStatus, String? errorMessage) {
@@ -114,23 +124,38 @@ class _ZwapInputState extends State<ZwapInput> {
     return inputBorder;
   }
 
+  /// It retrieves the borderColor in base of the current status
+  InputBorder _getFocusedBorder(ZwapInputStatus status) {
+    OutlineInputBorder inputBorder = OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.buttonRadius)),
+        borderSide: BorderSide(
+            color: ZwapColors.primary300,
+            width: 1,
+            style: BorderStyle.solid
+        )
+    );
+    return inputBorder;
+  }
+
   /// The field decoration for any text field
   InputDecoration _getTextFieldDecoration() {
     return new InputDecoration(
-      border: this._getInputBorder(this.status),
-      hoverColor: ZwapColors.neutral300,
-      hintText: widget.placeholder,
-      hintStyle: getTextStyle(ZwapTextType.body2SemiBold).apply(color: ZwapColors.neutral400),
-      prefixIcon: widget.prefixIcon != null ? Icon(
-              widget.prefixIcon,
-              color: ZwapColors.neutral400,
-              size: 16,
-      ) : null,
-      suffixIcon: widget.suffixIcon != null ? Icon(
-        widget.suffixIcon,
-        color: ZwapColors.neutral700,
-        size: 16,
-      ): null
+        enabledBorder: this._getInputBorder(this.status),
+        focusedBorder: this._getFocusedBorder(status),
+        contentPadding: widget.internalPadding,
+        hoverColor: ZwapColors.neutral300,
+        hintText: widget.placeholder,
+        hintStyle: getTextStyle(ZwapTextType.body1Regular).apply(color: ZwapColors.neutral400),
+        prefixIcon: widget.prefixIcon != null ? Icon(
+          widget.prefixIcon,
+          color: ZwapColors.neutral400,
+          size: 24,
+        ) : null,
+        suffixIcon: widget.suffixIcon != null ? Icon(
+          widget.suffixIcon,
+          color: ZwapColors.neutral700,
+          size: 24,
+        ): null
     );
   }
 
@@ -142,6 +167,8 @@ class _ZwapInputState extends State<ZwapInput> {
         enabled: widget.enableInput,
         keyboardType: widget.textInputType,
         maxLines: widget.maxLines,
+        onChanged: widget.onChanged != null ? (String newValue) => widget.onChanged!(newValue) : null,
+        onSubmitted: widget.keyCallBackFunction,
         textCapitalization: TextCapitalization.sentences,
         cursorColor: ZwapColors.shades100,
         obscureText: widget.textInputType == TextInputType.visiblePassword,

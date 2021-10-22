@@ -18,7 +18,7 @@ class ZwapCorpusText extends StatelessWidget{
   Widget build(BuildContext context) {
     return ZwapText(
       text: this.text,
-      textColor: ZwapColors.neutral500,
+      textColor: ZwapColors.neutral700,
       zwapTextType: ZwapTextType.body1Regular,
     );
   }

@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
 
+enum ZwapStarsPosition{
+  center,
+  start
+}
+
 /// The component to rendering a star rating bar
 class ZwapStars extends StatelessWidget {
 
@@ -13,17 +18,24 @@ class ZwapStars extends StatelessWidget {
   /// The stars max number
   final int starCount;
 
+  /// The star size
+  final double starSize;
+
   /// The current stars rating
   final double rating;
 
   /// The stars color
   final Color? color;
 
+  final ZwapStarsPosition zwapStarsPosition;
+
   ZwapStars({Key? key,
     required this.ratingTitle,
+    required this.zwapStarsPosition,
+    required this.starSize,
     this.starCount = 5,
     this.rating = .0,
-    this.color
+    this.color,
   }): super(key: key);
 
   /// It builds the star rating bar
@@ -33,17 +45,20 @@ class ZwapStars extends StatelessWidget {
       icon = new Icon(
         Icons.star_border,
         color: Theme.of(context).buttonColor,
+        size: this.starSize,
       );
     }
     else if (index > rating - 1 && index < rating) {
       icon = new Icon(
         Icons.star_half,
         color: color ?? ZwapColors.warning300,
+        size: this.starSize,
       );
     } else {
       icon = new Icon(
         Icons.star,
         color: color ?? ZwapColors.warning300,
+        size: this.starSize,
       );
     }
     return icon;
@@ -51,6 +66,8 @@ class ZwapStars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: new List.generate(starCount, (index) => buildStar(context, index)));
+    return Row(
+        mainAxisAlignment: this.zwapStarsPosition == ZwapStarsPosition.start ? MainAxisAlignment.start : MainAxisAlignment.center,
+        children: new List.generate(starCount, (index) => buildStar(context, index)));
   }
 }

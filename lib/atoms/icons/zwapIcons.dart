@@ -1,56 +1,27 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:taastrap/taastrap.dart';
+
+/// IMPORTING LOCAL PACKAGES
+import 'package:zwap_design_system/atoms/atoms.dart';
 
 /// Mapping each icons with each code name and code point
 class ZwapIcons {
 
-  /// The default icon family
-  static String iconFamily = "ZwapIcons";
-
   /// The font package name
   static String fontPackage = "zwap_design_system";
 
+  static Map<String, String> iconsPath = {'paper': 'assets/images/icons/paper.svg', 'image': 'assets/images/icons/image.svg', 'plus': 'assets/images/icons/plus.svg', 'play': 'assets/images/icons/play.svg', 'paper_download': 'assets/images/icons/paper_download.svg', 'call_missed': 'assets/images/icons/call_missed.svg', 'bag': 'assets/images/icons/bag.svg', 'document': 'assets/images/icons/document.svg', 'arrow_left_circle': 'assets/images/icons/arrow_left_circle.svg', 'arrow_left_3': 'assets/images/icons/arrow_left_3.svg', 'game': 'assets/images/icons/game.svg', 'arrow_right_2': 'assets/images/icons/arrow_right_2.svg', 'star': 'assets/images/icons/star.svg', 'send': 'assets/images/icons/send.svg', 'camera': 'assets/images/icons/camera.svg', 'user_2': 'assets/images/icons/user_2.svg', 'login': 'assets/images/icons/login.svg', 'category': 'assets/images/icons/category.svg', 'video': 'assets/images/icons/video.svg', 'arrow_down_3': 'assets/images/icons/arrow_down_3.svg', 'arrow_down_circle': 'assets/images/icons/arrow_down_circle.svg', 'volume_off': 'assets/images/icons/volume_off.svg', 'time_square': 'assets/images/icons/time_square.svg', 'volume_up': 'assets/images/icons/volume_up.svg', 'tick_square': 'assets/images/icons/tick_square.svg', 'image_3': 'assets/images/icons/image_3.svg', 'shield_done': 'assets/images/icons/shield_done.svg', 'discount': 'assets/images/icons/discount.svg', 'unlock': 'assets/images/icons/unlock.svg', 'show': 'assets/images/icons/show.svg', 'profile': 'assets/images/icons/profile.svg', 'danger_circle': 'assets/images/icons/danger_circle.svg', 'paper_negative': 'assets/images/icons/paper_negative.svg', 'voice_3': 'assets/images/icons/voice_3.svg', 'ticket_star': 'assets/images/icons/ticket_star.svg', 'download': 'assets/images/icons/download.svg', 'edit': 'assets/images/icons/edit.svg', 'shield_fail': 'assets/images/icons/shield_fail.svg', 'arrow_up_square': 'assets/images/icons/arrow_up_square.svg', 'ticket': 'assets/images/icons/ticket.svg', 'message': 'assets/images/icons/message.svg', 'search': 'assets/images/icons/search.svg', 'arrow_down': 'assets/images/icons/arrow_down.svg', 'folder': 'assets/images/icons/folder.svg', 'more_square': 'assets/images/icons/more_square.svg', 'paper_upload': 'assets/images/icons/paper_upload.svg', 'call_silent': 'assets/images/icons/call_silent.svg', 'upload': 'assets/images/icons/upload.svg', 'arrow_left_2': 'assets/images/icons/arrow_left_2.svg', 'paper_plus': 'assets/images/icons/paper_plus.svg', 'notification': 'assets/images/icons/notification.svg', 'chart': 'assets/images/icons/chart.svg', 'calendar': 'assets/images/icons/calendar.svg', 'bookmark': 'assets/images/icons/bookmark.svg', 'more_circle': 'assets/images/icons/more_circle.svg', 'arrow_right_square': 'assets/images/icons/arrow_right_square.svg', 'hide': 'assets/images/icons/hide.svg', 'close': 'assets/images/icons/close.svg', 'wallet': 'assets/images/icons/wallet.svg', 'volume_down': 'assets/images/icons/volume_down.svg', 'arrow_up_3': 'assets/images/icons/arrow_up_3.svg', 'location': 'assets/images/icons/location.svg', 'paper_fail': 'assets/images/icons/paper_fail.svg', 'arrow_right_3': 'assets/images/icons/arrow_right_3.svg', 'filter': 'assets/images/icons/filter.svg', 'arrow_up_2': 'assets/images/icons/arrow_up_2.svg', 'buy': 'assets/images/icons/buy.svg', 'arrow_right': 'assets/images/icons/arrow_right.svg', 'danger_triangle': 'assets/images/icons/danger_triangle.svg', 'calling': 'assets/images/icons/calling.svg', 'chat': 'assets/images/icons/chat.svg', 'arrow_up_circle': 'assets/images/icons/arrow_up_circle.svg', 'logout': 'assets/images/icons/logout.svg', 'time_circle': 'assets/images/icons/time_circle.svg', 'arrow_down_square': 'assets/images/icons/arrow_down_square.svg', 'graph': 'assets/images/icons/graph.svg', 'add_user': 'assets/images/icons/add_user.svg', 'discovery': 'assets/images/icons/discovery.svg', 'arrow_down_2': 'assets/images/icons/arrow_down_2.svg', 'lock': 'assets/images/icons/lock.svg', 'arrow_left': 'assets/images/icons/arrow_left.svg', 'arrow_up': 'assets/images/icons/arrow_up.svg', 'voice': 'assets/images/icons/voice.svg', 'delete': 'assets/images/icons/delete.svg', 'home': 'assets/images/icons/home.svg', 'swap': 'assets/images/icons/swap.svg', 'call': 'assets/images/icons/call.svg', 'activity': 'assets/images/icons/activity.svg', 'user_3': 'assets/images/icons/user_3.svg', 'close_square': 'assets/images/icons/close_square.svg', 'arrow_left_square': 'assets/images/icons/arrow_left_square.svg', 'filter_3': 'assets/images/icons/filter_3.svg', 'bag_3': 'assets/images/icons/bag_3.svg', 'info_square': 'assets/images/icons/info_square.svg', 'arrow_right_circle': 'assets/images/icons/arrow_right_circle.svg', 'heart': 'assets/images/icons/heart.svg', 'scan': 'assets/images/icons/scan.svg', 'setting': 'assets/images/icons/setting.svg', 'edit_square': 'assets/images/icons/edit_square.svg', 'work': 'assets/images/icons/work.svg', 'password': 'assets/images/icons/password.svg'};
+
   /// The mapping data for each icons
-  static Map<String, IconData> icons = {
-    "close": IconData(
-        0xe800,
-        fontFamily: ZwapIcons.iconFamily,
-        fontPackage: ZwapIcons.fontPackage
-    ),
-    "arrow_down": IconData(
-        0xe804,
-        fontFamily: ZwapIcons.iconFamily,
-        fontPackage: ZwapIcons.fontPackage
-    ),
-    "arrow_up": IconData(
-        0xe806,
-        fontFamily: ZwapIcons.iconFamily,
-        fontPackage: ZwapIcons.fontPackage
-    ),
-    "meetings_nav": IconData(
-        0xe801,
-        fontFamily: ZwapIcons.iconFamily,
-        fontPackage: ZwapIcons.fontPackage
-    ),
-    "invite_nav": IconData(
-        0xe805,
-        fontFamily: ZwapIcons.iconFamily,
-        fontPackage: ZwapIcons.fontPackage
-    ),
-    "network_nav": IconData(
-        0xe802,
-        fontFamily: ZwapIcons.iconFamily,
-        fontPackage: ZwapIcons.fontPackage
-    ),
-    "explore_nav": IconData(
-        0xe803,
-        fontFamily: ZwapIcons.iconFamily,
-        fontPackage: ZwapIcons.fontPackage
-    ),
-    "zwap_logo": IconData(
-        0xe808,
-        fontFamily: ZwapIcons.iconFamily,
-        fontPackage: ZwapIcons.fontPackage
-    )
-  };
+  static SvgPicture icons(String iconName, {double? iconSize, Color? iconColor}) {
+    return SvgPicture.asset(
+      ZwapIcons.iconsPath[iconName]!,
+      color: iconColor ?? ZwapColors.neutral700,
+      package: ZwapIcons.fontPackage,
+      width: iconSize ?? getMultipleConditions(32, 28, 24, 20, 16),
+      height: iconSize ?? getMultipleConditions(32, 28, 24, 20, 16),
+    );
+  }
 }

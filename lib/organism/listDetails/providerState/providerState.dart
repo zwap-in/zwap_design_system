@@ -13,7 +13,10 @@ class ListDetailsProvideState<T> extends ChangeNotifier{
   /// It handles the callBack click
   final Function(Widget newBody) handleCallBack;
 
-  ListDetailsProvideState({required this.elements, required this.filters, required this.handleCallBack}){
+  /// Is it a mobile list provider scroll cards
+  final bool isMobile;
+
+  ListDetailsProvideState({required this.elements, required this.filters, required this.handleCallBack, required this.isMobile}){
     bool check = false;
     int i = 0;
     List<DateTime> keys = this.elements.keys.toList();
@@ -27,9 +30,9 @@ class ListDetailsProvideState<T> extends ChangeNotifier{
       }
       i++;
     }
-    if(!check){
+    if(this.elements.keys.toList().length > 0 && !check){
       T firstKeys = this.elements[keys.first]!.keys.toList().first;
-      this.elements[keys.first]![firstKeys] = true;
+      this.elements[keys.first]![firstKeys] = !this.isMobile;
     }
   }
 

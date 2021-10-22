@@ -14,14 +14,20 @@ class ZwapAvatarInfo extends StatelessWidget{
   /// The title for this card info user
   final String title;
 
+  /// The text type for the title
+  final ZwapTextType titleTextType;
+
   /// The subtitle for this card info user
   final String subTitle;
+
+  /// The text type for the subtitle
+  final ZwapTextType subTitleTextType;
 
   /// The profile color
   final Color profileColor;
 
-  /// Is this user a verified user
-  final bool isVerified;
+  /// The profile icon aside to this component
+  final Icon profileIcon;
 
   /// Is this asset an external asset
   final bool isExternalAsset;
@@ -29,24 +35,28 @@ class ZwapAvatarInfo extends StatelessWidget{
   /// The image path for the avatar icon
   final String? imagePath;
 
+  /// The optional image size for this avatar info component
+  final double? imageSize;
+
+  /// The optional radius for this container
+  final double? containerRadius;
+
   ZwapAvatarInfo({Key? key,
     required this.title,
+    required this.titleTextType,
     required this.subTitle,
+    required this.subTitleTextType,
     required this.profileColor,
-    this.isVerified = false,
+    required this.profileIcon,
     this.isExternalAsset = false,
     this.imagePath,
+    this.imageSize,
+    this.containerRadius
   }): super(key: key);
 
   /// It gets the widget inside the title section
   Widget _getTitleWidget() {
-    Widget tmp = ZwapText(
-      textColor: ZwapColors.neutral800,
-      zwapTextType: ZwapTextType.body2SemiBold,
-      text: this.title,
-    );
-    return this.isVerified
-        ? Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -55,7 +65,11 @@ class ZwapAvatarInfo extends StatelessWidget{
           fit: FlexFit.tight,
           child: Padding(
             padding: EdgeInsets.only(right: 3),
-            child: tmp,
+            child: ZwapText(
+              textColor: ZwapColors.neutral800,
+              zwapTextType: this.titleTextType,
+              text: this.title,
+            ),
           ),
         ),
         Flexible(
@@ -63,19 +77,15 @@ class ZwapAvatarInfo extends StatelessWidget{
             fit: FlexFit.tight,
             child: Padding(
               padding: EdgeInsets.only(left: 3),
-              child: Icon(
-                Icons.verified_sharp,
-                color: Color(0xFF42A5F5),
-                size: 16,
-              ),
+              child: this.profileIcon,
             ))
       ],
-    ) : tmp;
+    );
   }
 
   double _getTitleSize(){
     double titleSize = getTextSize(this.title, ZwapTextType.body2SemiBold).width;
-    return titleSize + (this.isVerified ? (16 + 3 + 3) : 0);
+    return titleSize + (this.profileIcon.size! + 3 + 3);
   }
 
 
@@ -94,8 +104,8 @@ class ZwapAvatarInfo extends StatelessWidget{
               decoration: BoxDecoration(
                 color: this.profileColor,
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(ZwapRadius.popupRadius),
-                    topRight: Radius.circular(ZwapRadius.popupRadius)),
+                    topLeft: Radius.circular(this.containerRadius ?? ZwapRadius.popupRadius),
+                    topRight: Radius.circular(this.containerRadius ?? ZwapRadius.popupRadius)),
               ),
               height: getMultipleConditions(83.0, 67.0, 50.0, 90.0, 86.0),
             ),
@@ -105,7 +115,7 @@ class ZwapAvatarInfo extends StatelessWidget{
                 child: ZwapAvatar(
                   imagePath: this.imagePath,
                   isExternal: this.isExternalAsset,
-                  size: 40,
+                  size: this.imageSize ?? 60,
                 ),
               ),
             )
@@ -122,7 +132,7 @@ class ZwapAvatarInfo extends StatelessWidget{
                 padding: EdgeInsets.only(bottom: 6),
                 child: ZwapText(
                   text: this.subTitle,
-                  zwapTextType: ZwapTextType.captionRegular,
+                  zwapTextType: this.subTitleTextType,
                   textColor: ZwapColors.neutral500,
                 ),
               ),

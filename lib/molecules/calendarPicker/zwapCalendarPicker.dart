@@ -30,9 +30,9 @@ class ZwapCalendarPickerState extends ChangeNotifier {
   final int maxSelections;
 
   ZwapCalendarPickerState({required this.dateEnd,
-      required this.slotsPerDay,
-      required this.selectedDates,
-      required this.maxSelections
+    required this.slotsPerDay,
+    required this.selectedDates,
+    required this.maxSelections
   }) {
     Map<DateTime, List<TimeOfDay>> daysPlotted = this._plotDaysSlot();
     this.currentDate = daysPlotted.keys.first;
@@ -139,11 +139,11 @@ class ZwapCalendarPicker extends StatelessWidget {
             ),
             child: Padding(
               padding:
-                  EdgeInsets.all(15),
+              EdgeInsets.all(15),
               child: ZwapText(
                 text: "${element.hour}:${Utils.plotMinute(element.minute)}",
                 textColor:
-                    isSelected ? ZwapColors.shades0 : ZwapColors.neutral800,
+                isSelected ? ZwapColors.shades0 : ZwapColors.neutral800,
                 zwapTextType: isSelected ? ZwapTextType.body1SemiBold : ZwapTextType.body1Regular,
               ),
             ),
@@ -160,7 +160,7 @@ class ZwapCalendarPicker extends StatelessWidget {
     int day = key.day;
     List<Widget> children = this._getSlots(slots, key, provider);
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+      padding: EdgeInsets.only(top: 40),
       child: Column(
         children: [
           Padding(
@@ -181,7 +181,7 @@ class ZwapCalendarPicker extends StatelessWidget {
           ),
           ZwapVerticalScroll(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: EdgeInsets.only(top: 20),
               child: Column(
                 children: List<Widget>.generate(children.length, ((index) => children[index])),
               ),
@@ -209,7 +209,7 @@ class ZwapCalendarPicker extends StatelessWidget {
           flex: 0,
           fit: FlexFit.tight,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
+            padding: EdgeInsets.symmetric(horizontal: 40),
             child: ZwapText(
               zwapTextType: ZwapTextType.h3,
               text: "${this.handleKeyName(Constants.monthlyName()[provider.currentDate!.month]!)}",
@@ -240,9 +240,9 @@ class ZwapCalendarPicker extends StatelessWidget {
                   this._getCalendarPickerTitle(provider),
                   ResponsiveRow<Map<Widget, Map<String, int>>>(
                     children: Map<Widget, Map<String, int>>.fromIterable(
-                      daysPlotted.keys.toList(),
-                      key: (item) => this._getDaysSlot(item, daysPlotted[item]!, provider),
-                      value: (item) => {'xl': 3, 'lg': 3, 'md': 4, 'sm': 4, 'xs': 4}
+                        daysPlotted.keys.toList(),
+                        key: (item) => this._getDaysSlot(item, daysPlotted[item]!, provider),
+                        value: (item) => {'xl': 3, 'lg': 3, 'md': 4, 'sm': 4, 'xs': 4}
                     ),
                   )
                 ],
