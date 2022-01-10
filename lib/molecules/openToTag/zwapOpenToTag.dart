@@ -37,39 +37,30 @@ class ZwapOpenToTag extends StatefulWidget implements ResponsiveWidget {
   @override
   double getSize(){
     Size sizes = getTextSize(this.openToTagText, ZwapTextType.captionSemiBold);
-    return sizes.width + 24 + 26;
+    return sizes.width + 20 + 26;
   }
 }
 
 /// Handle the state inside this component
 class _ZwapOpenToTagState extends State<ZwapOpenToTag> {
 
-  /// Flag to check if this container is hovered or not
-  bool _isHovered = false;
+  /// The random color chose for this primary color
+  final Color primaryColor = ZwapColors.getRandomColor(is200: true);
 
   /// BackgroundColor for the default status
-  final Color defaultBackgroundColor = ZwapColors.primary100;
-
-  /// BackgroundColor for the default status
-  final Color hoverBackgroundColor = ZwapColors.primary700;
+  Color get defaultBackgroundColor => primaryColor;
 
   /// It plots the icon size in base of the current device sizes
   double _getIconSize() {
-    return 24;
+    return 20;
   }
 
-  /// Callback function on hovering elements
-  void _onHover(bool isHovered){
-    setState(() {
-      this._isHovered = isHovered;
-    });
-  }
 
   /// It gets the child widget for this open status tag
   Widget _getChildWidget(){
     return Container(
         decoration: BoxDecoration(
-            color: !this._isHovered ? this.defaultBackgroundColor : this.hoverBackgroundColor,
+            color: this.defaultBackgroundColor,
             borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.defaultRadius))
         ),
         child: Row(
@@ -83,7 +74,7 @@ class _ZwapOpenToTagState extends State<ZwapOpenToTag> {
                 child: Icon(
                   widget.tagIcon,
                   size: this._getIconSize(),
-                  color: !this._isHovered ? ZwapColors.primary700 : ZwapColors.shades0,
+                  color: ZwapColors.mappingRandomColor(this.defaultBackgroundColor),
                 ),
               ) : Container(),
               flex: 0,
@@ -95,7 +86,7 @@ class _ZwapOpenToTagState extends State<ZwapOpenToTag> {
                 child: ZwapText(
                   text: widget.openToTagText,
                   zwapTextType: ZwapTextType.captionSemiBold,
-                  textColor: !this._isHovered ? ZwapColors.primary700 : ZwapColors.shades0,
+                  textColor: ZwapColors.mappingRandomColor(this.defaultBackgroundColor),
                 ),
               ),
               flex: 0,
@@ -107,7 +98,7 @@ class _ZwapOpenToTagState extends State<ZwapOpenToTag> {
                 child: Icon(
                   widget.tagIcon,
                   size: this._getIconSize(),
-                  color: !this._isHovered ? ZwapColors.primary700 : ZwapColors.shades0,
+                  color: ZwapColors.mappingRandomColor(this.defaultBackgroundColor),
                 ),
               ) : Container(),
               flex: 0,
@@ -121,7 +112,6 @@ class _ZwapOpenToTagState extends State<ZwapOpenToTag> {
   /// It gets the parent in case of clickable widget
   Widget _getClickableParent(){
     return widget.isClickAble ? InkWell(
-      onHover: (bool isHovered) => this._onHover(isHovered),
       onTap: () => widget.callBackClick!(widget.openToTagText),
       child: this._getChildWidget(),
     ) : this._getChildWidget();

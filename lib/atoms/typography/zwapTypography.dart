@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import '../colors/zwapColors.dart';
@@ -11,339 +12,127 @@ enum ZwapTextType {
   h3,
   h4,
   h5,
-  h6,
-  h7,
-  subTitleRegular,
-  subTitleSemiBold,
-  subTitleBold,
   captionRegular,
   captionSemiBold,
-  captionBold,
   buttonText,
-  body0Regular,
-  body0SemiBold,
-  body0Bold,
-  body1Regular,
-  body1SemiBold,
-  body1Bold,
-  body2Regular,
-  body2SemiBold,
-  body2Bold,
-  body3Regular,
-  body3SemiBold,
-  body3Bold
+  bodyRegular,
+  bodySemiBold,
 }
 
 /// Custom typography style for zwap design system kit
 class ZwapTypography {
+
   static TextStyle h1() {
     return TextStyle(
-        fontSize: 0,
-        letterSpacing: -1.5,
-        fontWeight: FontWeight.bold,
+        fontSize: 24,
+        letterSpacing: 0,
+        fontWeight: FontWeight.w600,
         fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
+        height: 1.6,
+        color: ZwapColors.shades100
+    );
   }
 
   static TextStyle h2() {
     return TextStyle(
-        fontSize: 0,
-        letterSpacing: -0.5,
-        fontWeight: FontWeight.bold,
+        fontSize: 20,
+        letterSpacing: 0,
+        fontWeight: FontWeight.w600,
         fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
+        height: 1.6,
+        color: ZwapColors.shades100
+    );
   }
 
   static TextStyle h3() {
     return TextStyle(
-        fontSize: 0,
-        fontWeight: FontWeight.bold,
+        fontSize: 16,
+        letterSpacing: 0,
+        fontWeight: FontWeight.w600,
         fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
         height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
+        color: ZwapColors.shades100
+    );
   }
 
   static TextStyle h4() {
     return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.25,
-        fontWeight: FontWeight.bold,
+        fontSize: 14,
+        letterSpacing: 0,
+        fontWeight: FontWeight.w600,
         fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
+        height: 1.43,
+        color: ZwapColors.shades100
+    );
   }
 
   static TextStyle h5() {
     return TextStyle(
-        fontSize: 0,
-        fontWeight: FontWeight.bold,
+        fontSize: 11,
+        letterSpacing: 0,
+        fontWeight: FontWeight.w500,
         fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
+        height: 1.8,
+        color: ZwapColors.shades100
+    );
   }
 
-  static TextStyle h6() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.15,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle h7() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.15,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsSemiBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle subtitleRegular() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.15,
-        fontWeight: FontWeight.normal,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsRegular",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle subtitleSemiBold() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.15,
-        fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsSemiBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle subtitleBold() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.15,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
 
   static TextStyle captionRegular() {
     return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.4,
-        fontWeight: FontWeight.normal,
+        fontSize: 11,
+        letterSpacing: 0,
+        fontWeight: FontWeight.w400,
         fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsRegular",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
+        height: 1.45,
+        color: ZwapColors.shades100
+    );
   }
 
   static TextStyle captionSemiBold() {
     return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.4,
+        fontSize: 11,
+        letterSpacing: 0,
         fontWeight: FontWeight.w600,
         fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsSemiBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle captionBold() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.4,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
+        height: 1.45,
+        color: ZwapColors.shades100
+    );
   }
 
   static TextStyle buttonText() {
     return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.4,
+        fontSize: 14,
+        letterSpacing: 0,
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsSemiBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
+        height: 1.43,
+        color: ZwapColors.shades100
+    );
   }
 
-  static TextStyle body0Regular() {
+  static TextStyle bodyRegular() {
     return TextStyle(
-        fontSize: 0,
+        fontSize: 14,
         letterSpacing: 0,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.w400,
         fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsRegular",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
+        height: 1.43,
+        color: ZwapColors.shades100
+    );
   }
 
-  static TextStyle body0SemiBold() {
+  static TextStyle bodySemiBold() {
     return TextStyle(
-        fontSize: 0,
+        fontSize: 14,
         letterSpacing: 0,
         fontWeight: FontWeight.w600,
         fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsSemiBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle body0Bold() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.5,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle body1Regular() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0,
-        fontWeight: FontWeight.normal,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsRegular",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle body1SemiBold() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0,
-        fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsSemiBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle body1Bold() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.5,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle body2Regular() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.25,
-        fontWeight: FontWeight.normal,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsRegular",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle body2SemiBold() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.25,
-        fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsSemiBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle body2Bold() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.25,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
+        height: 1.43,
+        color: ZwapColors.shades100
+    );
   }
 
 
-  static TextStyle body3Regular() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.25,
-        fontWeight: FontWeight.normal,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsRegular",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
 
-  static TextStyle body3SemiBold() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.25,
-        fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsSemiBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
-
-  static TextStyle body3Bold() {
-    return TextStyle(
-        fontSize: 0,
-        letterSpacing: 0.25,
-        fontWeight: FontWeight.bold,
-        fontStyle: FontStyle.normal,
-        fontFamily: "PoppinsBold",
-        height: 1.5,
-        package: "zwap_design_system",
-        color: ZwapColors.shades100);
-  }
 }

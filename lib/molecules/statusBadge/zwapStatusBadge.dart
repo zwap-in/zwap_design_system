@@ -26,19 +26,25 @@ class ZwapStatusBadge extends StatefulWidget implements ResponsiveWidget {
   /// The callBack function on clicking element
   final Function(String status) callBackClick;
 
+  /// Is the current status selected or not
+  final bool isSelected;
+
   ZwapStatusBadge({Key? key,
     required this.statusText,
     required this.statusIcon,
     required this.statusIconColor,
-    required this.callBackClick
+    required this.callBackClick,
+    this.isSelected = false
   }) : super(key: key);
 
   _ZwapStatusBadgeState createState() => _ZwapStatusBadgeState();
 
+  double get statusWidth => 45;
+
   @override
   double getSize() {
     Size size = getTextSize(this.statusText, ZwapTextType.buttonText);
-    return size.width + 6 + 6 + (getMultipleConditions(45, 40, 37, 35, 33) * 0.5) + 30 + 2;
+    return size.width + 6 + 6 + (this.statusWidth * 0.5) + 30 + 2;
   }
 
 }
@@ -60,9 +66,12 @@ class _ZwapStatusBadgeState extends State<ZwapStatusBadge> {
 
   /// It gets the text color in base of the current state
   Color _getTextColor() {
+    if(widget.isSelected){
+      return ZwapColors.shades0;
+    }
     switch (this._currentState) {
       case ZwapStatusBadgeState.defaultState:
-        return ZwapColors.primary700;
+        return ZwapColors.neutral700;
       case ZwapStatusBadgeState.hoverState:
         return widget.statusIconColor;
     }
@@ -70,27 +79,33 @@ class _ZwapStatusBadgeState extends State<ZwapStatusBadge> {
 
   /// It gets the border colors in base of the current state
   Color _getBorderColor() {
+    if(widget.isSelected){
+      return ZwapColors.primary700;
+    }
     switch (this._currentState) {
       case ZwapStatusBadgeState.defaultState:
         return ZwapColors.neutral200;
       case ZwapStatusBadgeState.hoverState:
-        return ZwapColors.neutral50;
+        return ZwapColors.neutral100;
     }
   }
 
   /// It gets the background color in base of the current state
   Color _getBackGroundColor() {
+    if(widget.isSelected){
+      return ZwapColors.primary700;
+    }
     switch (this._currentState) {
       case ZwapStatusBadgeState.defaultState:
         return ZwapColors.shades0;
       case ZwapStatusBadgeState.hoverState:
-        return ZwapColors.neutral50;
+        return ZwapColors.neutral100;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    double height = getMultipleConditions(45.0, 40.0, 37.0, 35.0, 33.0);
+    double height = widget.statusWidth;
     return InkWell(
       onTap: () => widget.callBackClick(widget.statusText),
       onHover: (bool isHover) => this._onHover(isHover),
@@ -129,7 +144,7 @@ class _ZwapStatusBadgeState extends State<ZwapStatusBadge> {
                   padding: EdgeInsets.only(left: 6),
                   child: ZwapText(
                     text: widget.statusText,
-                    zwapTextType: ZwapTextType.buttonText,
+                    zwapTextType: ZwapTextType.bodySemiBold,
                     textColor: this._getTextColor(),
                   ),
                 ),

@@ -135,6 +135,7 @@ class ZwapStatusTagContainer extends StatelessWidget {
     return Consumer<ZwapStatusTagProviderState>(builder: (context, provider, child) {
       List<Widget> childrenWidgets = this._getChildrenComponent(provider);
       return InkWell(
+        hoverColor: Colors.transparent,
         onHover: (bool isHover) => provider.onHover(isHover),
         onTap: () => this.callBackClick(),
         child: Container(

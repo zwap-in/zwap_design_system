@@ -7,8 +7,12 @@ class ZwapHorizontalScroll extends StatelessWidget {
   /// The child component to render inside this horizontal scroll
   final Widget child;
 
+  /// The scroll controller to handle the horizontal scroll externally
+  final ScrollController? scrollController;
+
   ZwapHorizontalScroll({Key? key,
-    required this.child
+    required this.child,
+    this.scrollController
   }): super(key: key);
 
   @override
@@ -16,6 +20,7 @@ class ZwapHorizontalScroll extends StatelessWidget {
     return new SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: this.child,
+      controller: this.scrollController,
     );
   }
 }

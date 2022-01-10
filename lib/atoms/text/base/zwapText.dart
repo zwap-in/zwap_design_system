@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -32,229 +33,33 @@ class FontSizeDevice {
 
   /// It retrieves the correct font size in base of the device type
   double getFontSize() {
-    return getMultipleConditions(this.desktopM, this.desktopS, this.tablet, this.mobileM, this.mobileM);
+    return getMultipleConditions<double>(this.desktopM, this.desktopS, this.tablet, this.mobileM, this.mobileM);
   }
 }
 
 /// It returns the text style in base of the different text type
 TextStyle getTextStyle(ZwapTextType typeText) {
-  Map<ZwapTextType, FontSizeDevice> fontSizeMapping = {
-    ZwapTextType.h1: FontSizeDevice(
-        desktopM: 48,
-        desktopS: 40,
-        tablet: 32,
-        mobileM: 24.01,
-        mobileS: 16.27
-    ),
-    ZwapTextType.h2: FontSizeDevice(
-        desktopM: 40,
-        desktopS: 32,
-        tablet: 24.01,
-        mobileM: 17.01,
-        mobileS: 15.01
-    ),
-    ZwapTextType.h3: FontSizeDevice(
-        desktopM: 24,
-        desktopS: 24,
-        tablet: 18,
-        mobileM: 17,
-        mobileS: 15
-    ),
-    ZwapTextType.h4: FontSizeDevice(
-        desktopM: 18,
-        desktopS: 18,
-        tablet: 17,
-        mobileM: 17,
-        mobileS: 15
-    ),
-    ZwapTextType.h5: FontSizeDevice(
-        desktopM: 16,
-        desktopS: 16,
-        tablet: 12,
-        mobileM: 12,
-        mobileS: 12
-    ),
-    ZwapTextType.h6: FontSizeDevice(
-        desktopM: 14,
-        desktopS: 14,
-        tablet: 10.50,
-        mobileM: 11,
-        mobileS: 11),
-    ZwapTextType.h7: FontSizeDevice(
-        desktopM: 36,
-        desktopS: 34,
-        tablet: 17,
-        mobileM: 17,
-        mobileS: 17),
-    ZwapTextType.subTitleRegular: FontSizeDevice(
-        desktopM: 15,
-        desktopS: 15,
-        tablet: 11.25,
-        mobileM: 10.25,
-        mobileS: 8.44),
-    ZwapTextType.subTitleSemiBold: FontSizeDevice(
-        desktopM: 15,
-        desktopS: 15,
-        tablet: 11.25,
-        mobileM: 10.25,
-        mobileS: 8.44),
-    ZwapTextType.subTitleBold: FontSizeDevice(
-        desktopM: 15,
-        desktopS: 15,
-        tablet: 11.25,
-        mobileM: 10.25,
-        mobileS: 8.44),
-    ZwapTextType.captionRegular: FontSizeDevice(
-        desktopM: 12,
-        desktopS: 12,
-        tablet: 12,
-        mobileM: 12,
-        mobileS: 12
-    ),
-    ZwapTextType.captionSemiBold: FontSizeDevice(
-        desktopM: 12,
-        desktopS: 12,
-        tablet: 12,
-        mobileM: 12,
-        mobileS: 12
-    ),
-    ZwapTextType.captionBold: FontSizeDevice(
-        desktopM: 12,
-        desktopS: 12,
-        tablet: 12,
-        mobileM: 12,
-        mobileS: 12
-    ),
-    ZwapTextType.buttonText: FontSizeDevice(
-        desktopM: 14,
-        desktopS: 14,
-        tablet: 14,
-        mobileM: 14,
-        mobileS: 14),
-    ZwapTextType.body0Regular: FontSizeDevice(
-        desktopM: 20, desktopS: 20, tablet: 12, mobileM: 11, mobileS: 11),
-    ZwapTextType.body0SemiBold: FontSizeDevice(
-        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
-    ZwapTextType.body0Bold: FontSizeDevice(
-        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
-    ZwapTextType.body1Regular: FontSizeDevice(
-        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 15, mobileS: 15),
-    ZwapTextType.body1SemiBold: FontSizeDevice(
-        desktopM: 16, desktopS: 16, tablet: 13, mobileM: 13, mobileS: 13),
-    ZwapTextType.body1Bold: FontSizeDevice(
-        desktopM: 16, desktopS: 16, tablet: 12, mobileM: 11, mobileS: 11),
-    ZwapTextType.body2Regular: FontSizeDevice(
-        desktopM: 14, desktopS: 14, tablet: 11, mobileM: 13, mobileS: 13),
-    ZwapTextType.body2SemiBold: FontSizeDevice(
-        desktopM: 14, desktopS: 14, tablet: 11, mobileM: 10, mobileS: 10),
-    ZwapTextType.body2Bold: FontSizeDevice(
-        desktopM: 14, desktopS: 14, tablet: 11, mobileM: 10, mobileS: 10),
-    ZwapTextType.body3Regular: FontSizeDevice(
-        desktopM: 11, desktopS: 11, tablet: 11, mobileM: 10, mobileS: 10),
-    ZwapTextType.body3SemiBold: FontSizeDevice(
-        desktopM: 11, desktopS: 11, tablet: 11, mobileM: 10, mobileS: 10),
-    ZwapTextType.body3Bold: FontSizeDevice(
-        desktopM: 11, desktopS: 11, tablet: 11, mobileM: 10, mobileS: 10),
-  };
-
   switch (typeText) {
     case ZwapTextType.h1:
-      return ZwapTypography.h1().apply(
-          fontSizeDelta: fontSizeMapping[ZwapTextType.h1]!.getFontSize());
+      return GoogleFonts.lato(textStyle: ZwapTypography.h1());
     case ZwapTextType.h2:
-      return ZwapTypography.h2().apply(
-          fontSizeDelta: fontSizeMapping[ZwapTextType.h2]!.getFontSize());
+      return GoogleFonts.lato(textStyle: ZwapTypography.h2());
     case ZwapTextType.h3:
-      return ZwapTypography.h3().apply(
-          fontSizeDelta: fontSizeMapping[ZwapTextType.h3]!.getFontSize());
+      return GoogleFonts.lato(textStyle: ZwapTypography.h3());
     case ZwapTextType.h4:
-      return ZwapTypography.h4().apply(
-          fontSizeDelta: fontSizeMapping[ZwapTextType.h4]!.getFontSize());
+      return GoogleFonts.lato(textStyle: ZwapTypography.h4());
     case ZwapTextType.h5:
-      return ZwapTypography.h5().apply(
-          fontSizeDelta: fontSizeMapping[ZwapTextType.h5]!.getFontSize());
-    case ZwapTextType.h6:
-      return ZwapTypography.h6().apply(
-          fontSizeDelta: fontSizeMapping[ZwapTextType.h6]!.getFontSize());
-    case ZwapTextType.h7:
-      return ZwapTypography.h7().apply(
-          fontSizeDelta: fontSizeMapping[ZwapTextType.h7]!.getFontSize());
-    case ZwapTextType.subTitleRegular:
-      return ZwapTypography.subtitleRegular().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.subTitleRegular]!.getFontSize());
-    case ZwapTextType.subTitleSemiBold:
-      return ZwapTypography.subtitleSemiBold().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.subTitleSemiBold]!.getFontSize());
-    case ZwapTextType.subTitleBold:
-      return ZwapTypography.subtitleBold().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.subTitleBold]!.getFontSize());
+      return GoogleFonts.lato(textStyle: ZwapTypography.h5());
     case ZwapTextType.captionRegular:
-      return ZwapTypography.captionRegular().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.captionRegular]!.getFontSize());
+      return GoogleFonts.lato(textStyle: ZwapTypography.captionRegular());
     case ZwapTextType.captionSemiBold:
-      return ZwapTypography.captionSemiBold().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.captionSemiBold]!.getFontSize());
-    case ZwapTextType.captionBold:
-      return ZwapTypography.captionBold().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.captionBold]!.getFontSize());
+      return GoogleFonts.lato(textStyle: ZwapTypography.captionSemiBold());
     case ZwapTextType.buttonText:
-      return ZwapTypography.buttonText().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.buttonText]!.getFontSize());
-    case ZwapTextType.body0Regular:
-      return ZwapTypography.body1Regular().apply(
-          fontSizeDelta:
-          fontSizeMapping[ZwapTextType.body0Regular]!.getFontSize());
-    case ZwapTextType.body0SemiBold:
-      return ZwapTypography.body1SemiBold().apply(
-          fontSizeDelta:
-          fontSizeMapping[ZwapTextType.body0SemiBold]!.getFontSize());
-    case ZwapTextType.body0Bold:
-      return ZwapTypography.body1Bold().apply(
-          fontSizeDelta:
-          fontSizeMapping[ZwapTextType.body0Bold]!.getFontSize());
-    case ZwapTextType.body1Regular:
-      return ZwapTypography.body1Regular().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.body1Regular]!.getFontSize());
-    case ZwapTextType.body1SemiBold:
-      return ZwapTypography.body1SemiBold().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.body1SemiBold]!.getFontSize());
-    case ZwapTextType.body1Bold:
-      return ZwapTypography.body1Bold().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.body1Bold]!.getFontSize());
-    case ZwapTextType.body2Regular:
-      return ZwapTypography.body2Regular().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.body2Regular]!.getFontSize());
-    case ZwapTextType.body2SemiBold:
-      return ZwapTypography.body2SemiBold().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.body2SemiBold]!.getFontSize());
-    case ZwapTextType.body2Bold:
-      return ZwapTypography.body2Bold().apply(
-          fontSizeDelta:
-              fontSizeMapping[ZwapTextType.body2Bold]!.getFontSize());
-    case ZwapTextType.body3Regular:
-      return ZwapTypography.body2Regular().apply(
-          fontSizeDelta:
-          fontSizeMapping[ZwapTextType.body3Regular]!.getFontSize());
-    case ZwapTextType.body3SemiBold:
-      return ZwapTypography.body2SemiBold().apply(
-          fontSizeDelta:
-          fontSizeMapping[ZwapTextType.body3SemiBold]!.getFontSize());
-    case ZwapTextType.body3Bold:
-      return ZwapTypography.body2Bold().apply(
-          fontSizeDelta:
-          fontSizeMapping[ZwapTextType.body3Bold]!.getFontSize());
+      return GoogleFonts.lato(textStyle: ZwapTypography.buttonText());
+    case ZwapTextType.bodyRegular:
+      return GoogleFonts.lato(textStyle: ZwapTypography.bodyRegular());
+    case ZwapTextType.bodySemiBold:
+      return GoogleFonts.lato(textStyle: ZwapTypography.bodySemiBold());
   }
 }
 

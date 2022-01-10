@@ -50,7 +50,7 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider>{
                 fit: FlexFit.tight,
                 child: ZwapText(
                   text: widget.title,
-                  zwapTextType: ZwapTextType.body1SemiBold,
+                  zwapTextType: ZwapTextType.bodySemiBold,
                   textColor: ZwapColors.neutral800,
                 ),
               ),
@@ -62,7 +62,7 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider>{
                       child: ZwapText(
                         text: "${this._currentRangeValues.start.toInt()} - ${this._currentRangeValues.end.toInt()}",
                         textColor: ZwapColors.neutral600,
-                        zwapTextType: ZwapTextType.body1Regular,
+                        zwapTextType: ZwapTextType.bodyRegular,
                       ),
                       fit: FlexFit.tight,
                       flex: 0,

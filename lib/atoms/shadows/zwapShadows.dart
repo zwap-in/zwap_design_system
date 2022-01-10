@@ -54,5 +54,6 @@ class ZwapShadow {
       color: Color.fromRGBO(139, 149, 170, 0.20),
       blurRadius: 128,
       spreadRadius: 4,
-      offset: Offset(0, 24));
+      offset: Offset(0, 24)
+  );
 }

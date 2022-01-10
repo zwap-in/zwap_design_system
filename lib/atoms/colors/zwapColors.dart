@@ -88,14 +88,38 @@ class ZwapColors {
   static Color get shades100 => Color(0xFF000000);
 
   /// It retrieves a random color from this predefined list
-  static Color getRandomColor() {
-    List<Color> colors = [
-      ZwapColors.secondary200,
-      ZwapColors.primary200,
-      ZwapColors.success200,
-      ZwapColors.error200,
-      ZwapColors.neutral200
-    ];
+  static Color getRandomColor({bool is200 = false}) {
+    late List<Color> colors;
+    if(is200){
+      colors = [
+        ZwapColors.secondary200,
+        ZwapColors.primary200,
+        ZwapColors.success200,
+        ZwapColors.error200,
+        ZwapColors.neutral200,
+      ];
+    }
+    else{
+      colors = [
+        ZwapColors.secondary800,
+        ZwapColors.primary800,
+        ZwapColors.success800,
+        ZwapColors.error800,
+        ZwapColors.neutral800,
+      ];
+    }
     return colors.sample(1).first;
   }
+
+  static Color mappingRandomColor(Color randomColor){
+    Map<Color, Color> randomMapping = {
+      ZwapColors.secondary200: ZwapColors.secondary800,
+      ZwapColors.primary200: ZwapColors.primary800,
+      ZwapColors.success200: ZwapColors.success800,
+      ZwapColors.error200: ZwapColors.error800,
+      ZwapColors.neutral200: ZwapColors.neutral800
+    };
+    return randomMapping[randomColor]!;
+  }
+
 }

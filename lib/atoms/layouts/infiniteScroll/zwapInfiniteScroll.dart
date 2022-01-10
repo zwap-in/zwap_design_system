@@ -1,16 +1,15 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
 import 'package:taastrap/taastrap.dart';
+import 'package:zwap_utils/zwap_utils.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/modelData/api.dart';
 
-import '../../colors/zwapColors.dart';
-import '../../typography/zwapTypography.dart';
-import '../../text/text.dart';
-
-import '../waiting/zwapWaiting.dart';
-import '../gridView/zwapGridView.dart';
+import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
+import 'package:zwap_design_system/atoms/typography/zwapTypography.dart';
+import 'package:zwap_design_system/atoms/text/text.dart';
+import 'package:zwap_design_system/atoms/layouts/waiting/zwapWaiting.dart';
 
 /// It defines the possible types for the infinite scroll
 enum ZwapInfiniteScrollType{
@@ -39,8 +38,22 @@ class ZwapInfiniteScroll<T> extends StatefulWidget {
   /// The axis direction for this infinite scroll
   final Axis? axisDirection;
 
+  /// The optional init data
+  final PageData<T>? initData;
+
   /// The optional custom waiting widget
   final Widget? waitingWidget;
+
+  /// The widget to display on top inside this component
+  final Widget Function(PageData<T> elements)? topWidget;
+
+  /// The scroll controller for this infinite scroll
+  final ScrollController? scrollController;
+
+  /// Custom internal padding for the responsive row component
+  final EdgeInsets? customInternalPadding;
+
+  final bool hasToReloadOnDidUpdate;
 
   ZwapInfiniteScroll({Key? key,
     required this.fetchMoreData,
@@ -48,16 +61,21 @@ class ZwapInfiniteScroll<T> extends StatefulWidget {
     required this.zwapInfiniteScrollType,
     required this.mainSizeDirection,
     this.axisDirection = Axis.vertical,
+    this.hasToReloadOnDidUpdate = false,
+    this.initData,
     this.crossSizeDirection,
-    this.waitingWidget
+    this.waitingWidget,
+    this.topWidget,
+    this.scrollController,
+    this.customInternalPadding
   }): super(key: key){
-   if(this.zwapInfiniteScrollType == ZwapInfiniteScrollType.gridView){
-     assert(this.axisDirection == Axis.vertical, "On grid view infinite scroll the axis direction must be vertical");
-   }
+    if(this.zwapInfiniteScrollType == ZwapInfiniteScrollType.gridView){
+      assert(this.axisDirection == Axis.vertical, "On grid view infinite scroll the axis direction must be vertical");
+    }
   }
 
   @override
-  _ZwapInfiniteScrollState<T> createState() => _ZwapInfiniteScrollState<T>();
+  _ZwapInfiniteScrollState<T> createState() => _ZwapInfiniteScrollState<T>(controller: this.scrollController);
 }
 
 /// The infinite scroll state
@@ -67,10 +85,14 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
   late Future<PageData<T>> _future;
 
   /// The scroll controller to manage the API calls
-  final ScrollController controller = ScrollController();
+  late ScrollController controller;
+
+  _ZwapInfiniteScrollState({ScrollController? controller}){
+    this.controller = controller ?? ScrollController();
+  }
 
   /// The current page number
-  int _pageNumber = 0;
+  int _pageNumber = 1;
 
   /// Is loading or not?
   bool _loading = false;
@@ -78,7 +100,7 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
   @override
   void initState(){
     super.initState();
-    this._future = widget.fetchMoreData(this._pageNumber);
+    this._future = widget.initData != null ? Future.delayed(Duration.zero, () => widget.initData!) : widget.fetchMoreData(this._pageNumber);
     this._pageNumber++;
     this.controller.addListener(() async {
       if(this.controller.position.atEdge && this.controller.position.pixels != 0 && !this._loading && !this.controller.position.outOfRange){
@@ -86,27 +108,34 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
           this._loading = true;
         });
         PageData<T> tmp = await widget.fetchMoreData(this._pageNumber);
-        setState(() {
-          this._pageNumber++;
-          this._future.then((value) =>
-               value.data.addAll(tmp.data)
-          );
-          this._loading = false;
+        this._future.then((value) {
+          setState(() {
+            this._pageNumber++;
+            List<T> newCombinedList = new List<T>.from(value.data)..addAll(tmp.data);
+            value.data = newCombinedList;
+            this._loading = false;
+          });
         });
       }
     });
   }
 
+  void didUpdateWidget(ZwapInfiniteScroll<T> oldWidget){
+    super.didUpdateWidget(oldWidget);
+    if(widget.hasToReloadOnDidUpdate){
+      this._future = widget.initData != null ? Future.delayed(Duration.zero, () => widget.initData!) : widget.fetchMoreData(this._pageNumber);
+    }
+  }
+
   /// It builds the list with a grid view
-  Widget _getGridView(AsyncSnapshot snapshot) {
-    List<T> results = snapshot.data.data;
-    return ZwapGridView<T>(
+  Widget _getGridView(AsyncSnapshot<PageData<T>> snapshot) {
+    List<T> results = snapshot.data!.data;
+    return ResponsiveRow<List<Widget>>(
+      customInternalPadding: widget.customInternalPadding,
+      children: List<Widget>.generate(results.length, ((int index) =>
+          widget.getChildWidget(results[index])
+      )),
       controller: this.controller,
-      children: results,
-      maxElementsPerRow: getMultipleConditions(4, 4, 3, 2, 1),
-      maxHeight: widget.mainSizeDirection,
-      maxWidth: widget.crossSizeDirection,
-      getChildWidget: (T item) => widget.getChildWidget(item),
     );
   }
 
@@ -122,8 +151,8 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
   }
 
   /// It builds the list with a list view
-  Widget _getListView(AsyncSnapshot snapshot){
-    List<T> results = snapshot.data.data;
+  Widget _getListView(AsyncSnapshot<PageData<T>> snapshot){
+    List<T> results = snapshot.data!.data;
     return this._getParentListView(
         ListView.builder(
             scrollDirection: widget.axisDirection!,
@@ -151,15 +180,15 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
   Widget _getErrorWidget(String errorText){
     return Center(
       child: ZwapText(
-        text: "Error during fetching data due to $errorText",
+        text: Utils.translatedText("error_infinite_loading").replaceAll("error_message", errorText),
         textColor: ZwapColors.shades100,
-        zwapTextType: ZwapTextType.body1Regular,
+        zwapTextType: ZwapTextType.bodyRegular,
       ),
     );
   }
 
   /// It gets the child widget to rendering data
-  Widget _getChildWidget(AsyncSnapshot snapshot){
+  Widget _getChildWidget(AsyncSnapshot<PageData<T>> snapshot){
     return this._getParentWidget(
       [
         Expanded(
@@ -176,9 +205,9 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<PageData<T>>(
       future: this._future,
-      builder: (context, AsyncSnapshot snapshot) {
+      builder: (context, AsyncSnapshot<PageData<T>> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
             return Container();
@@ -188,7 +217,15 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
             if (snapshot.hasError)
               return this._getErrorWidget(snapshot.error.toString());
             else
-              return this._getChildWidget(snapshot);
+              return widget.topWidget != null ?
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  widget.topWidget!(snapshot.data!),
+                  this._getChildWidget(snapshot)
+                ],
+              )
+              : this._getChildWidget(snapshot);
         }
       },
     );

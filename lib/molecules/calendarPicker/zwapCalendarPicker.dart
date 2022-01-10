@@ -6,13 +6,16 @@ import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/organism/organism.dart';
+import 'package:zwap_design_system/molecules/scrollArrows/zwapScrollArrow.dart';
 
 /// The state of the calendar picker
 class ZwapCalendarPickerState extends ChangeNotifier {
 
   /// The current date from which start
   DateTime? currentDate;
+
+  /// The hovered date inside the calendar picker
+  TupleType<DateTime, TimeOfDay>? hoveredDate;
 
   /// The date start of the current view inside the picker
   late DateTime dateStart;
@@ -24,7 +27,7 @@ class ZwapCalendarPickerState extends ChangeNotifier {
   final Map<int, List<TimeOfDay>> slotsPerDay;
 
   /// The selected dates
-  final Set selectedDates;
+  final Set<DateTime> selectedDates;
 
   /// The max number of slot you can select
   final int maxSelections;
@@ -108,6 +111,12 @@ class ZwapCalendarPickerState extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  /// It handles the hovering on some date inside the calendar picker
+  void hoverDate(TupleType<DateTime, TimeOfDay>? date){
+    this.hoveredDate = date;
+    notifyListeners();
+  }
 }
 
 /// THe calendar picker to show the slots date
@@ -129,13 +138,15 @@ class ZwapCalendarPicker extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10),
         child: InkWell(
           onTap: () => provider.handleDate(current),
+          onHover: (bool isHovered) => provider.hoverDate(isHovered ? TupleType(a: date, b: element) : null),
+          hoverColor: Colors.transparent,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: isSelected ? ZwapColors.primary700 : Colors.transparent,
+                color: isSelected ? ZwapColors.primary700 : (provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element ? ZwapColors.primary200 : Colors.transparent),
               ),
-              color: isSelected ? ZwapColors.primary700 : Colors.transparent,
+              color: isSelected ? ZwapColors.primary700 : (provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element ? ZwapColors.primary200 : Colors.transparent),
             ),
             child: Padding(
               padding:
@@ -144,7 +155,7 @@ class ZwapCalendarPicker extends StatelessWidget {
                 text: "${element.hour}:${Utils.plotMinute(element.minute)}",
                 textColor:
                 isSelected ? ZwapColors.shades0 : ZwapColors.neutral800,
-                zwapTextType: isSelected ? ZwapTextType.body1SemiBold : ZwapTextType.body1Regular,
+                zwapTextType: isSelected ? ZwapTextType.bodySemiBold : ZwapTextType.bodyRegular,
               ),
             ),
           ),
@@ -168,7 +179,7 @@ class ZwapCalendarPicker extends StatelessWidget {
             child: ZwapText(
               text: this.handleKeyName(weekDayName),
               textColor: ZwapColors.neutral800,
-              zwapTextType: ZwapTextType.body1SemiBold,
+              zwapTextType: ZwapTextType.bodySemiBold,
             ),
           ),
           Padding(
@@ -176,7 +187,7 @@ class ZwapCalendarPicker extends StatelessWidget {
             child: ZwapText(
               textColor: ZwapColors.neutral800,
               text: "$day",
-              zwapTextType: ZwapTextType.body1SemiBold,
+              zwapTextType: ZwapTextType.bodySemiBold,
             ),
           ),
           ZwapVerticalScroll(

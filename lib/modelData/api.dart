@@ -1,12 +1,3 @@
-/// Base data model with factory method to parse a json response from an API call
-abstract class BaseModel{
-  BaseModel();
-
-  factory BaseModel.fromJson(Map<String,dynamic> json){
-    throw UnimplementedError();
-  }
-}
-
 /// Data model about the page results from any paginated API
 class PageData<T>{
 
@@ -14,27 +5,27 @@ class PageData<T>{
   List<T> data;
 
   /// The status code results for this page
-  int statusCode;
+  int count;
 
   /// Error message in case of error
-  String errorMessage;
+  String next;
 
   /// Has a next page?
-  bool hasNext;
+  String previous;
 
   PageData({
     required this.data,
-    required this.statusCode,
-    required this.errorMessage,
-    required this.hasNext
+    required this.count,
+    required this.next,
+    required this.previous
   });
 
-  factory PageData.fromJson(Map<String, dynamic> json){
+  factory PageData.fromJson(Map<String, dynamic> json, T callBack(Map<String, dynamic> json)){
     return PageData(
-      data: List<T>.generate(json['data'].length, ((element) => BaseModel.fromJson(json['data'][element]) as T)),
-      statusCode: json['status_code'],
-      errorMessage: json['error_message'],
-      hasNext: json['has_next']
+      data: List<T>.generate(json['results'].length, ((element) => callBack(json['results'][element]))),
+      count: json['count'] ?? 0,
+      next: json['next'] ?? "",
+      previous: json['previous'] ?? ""
     );
   }
 
