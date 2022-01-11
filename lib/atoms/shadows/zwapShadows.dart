@@ -3,17 +3,11 @@ import 'package:flutter/material.dart';
 
 /// Custom box shadow with custom properties and custom painting
 class CustomBoxShadow extends BoxShadow {
-
   /// Custom blur style
   final BlurStyle blurStyle;
 
-  const CustomBoxShadow({
-    Color color = const Color(0xFF000000),
-    Offset offset = Offset.zero,
-    double blurRadius = 0.0,
-    this.blurStyle = BlurStyle.inner,
-    double spreadRadius = 4
-  }) : super(color: color, offset: offset, blurRadius: blurRadius, spreadRadius: 4);
+  const CustomBoxShadow({Color color = const Color(0xFF000000), Offset offset = Offset.zero, double blurRadius = 0.0, this.blurStyle = BlurStyle.inner, double spreadRadius = 4})
+      : super(color: color, offset: offset, blurRadius: blurRadius, spreadRadius: 4);
 
   @override
   Paint toPaint() {
@@ -21,8 +15,7 @@ class CustomBoxShadow extends BoxShadow {
       ..color = color
       ..maskFilter = MaskFilter.blur(this.blurStyle, blurSigma);
     assert(() {
-      if (debugDisableShadows)
-        result.maskFilter = null;
+      if (debugDisableShadows) result.maskFilter = null;
       return true;
     }());
     return result;
@@ -36,24 +29,25 @@ class ZwapShadow {
 
   /// The first level of shadow
   static BoxShadow get levelOne => BoxShadow(
-      color: Color.fromRGBO(139, 149, 170, 0.20),
-      blurRadius: 11,
-      spreadRadius: 4,
-      offset: Offset(0, 4));
+        color: Color.fromRGBO(193, 193, 193, 0.25),
+        blurRadius: 11,
+        spreadRadius: 4,
+        offset: Offset(0, 4),
+      );
 
   /// The second level of shadow
   static BoxShadow get levelTwo => CustomBoxShadow(
-      color: Color.fromRGBO(139, 149, 170, 0.20),
-      blurRadius: 20,
-      spreadRadius: 0,
-      offset: Offset(0, 5),
-  );
+        color: Color.fromRGBO(193, 193, 193, 0.25),
+        blurRadius: 16,
+        spreadRadius: 0,
+        offset: Offset(0, 8),
+      );
 
   /// The third level of shadow
   static BoxShadow get levelThree => BoxShadow(
-      color: Color.fromRGBO(139, 149, 170, 0.20),
-      blurRadius: 128,
-      spreadRadius: 4,
-      offset: Offset(0, 24)
-  );
+        color: Color.fromRGBO(1393, 193, 193, 0.25),
+        blurRadius: 128,
+        spreadRadius: 4,
+        offset: Offset(0, 24),
+      );
 }
