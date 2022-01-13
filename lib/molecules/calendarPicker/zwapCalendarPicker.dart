@@ -78,8 +78,8 @@ class ZwapCalendarPickerState extends ChangeNotifier {
   /// It plots the slots mapping in base of the current date showed
   Map<DateTime, List<TimeOfDay>> _plotDaysSlot() {
     Map<DateTime, List<TimeOfDay>> finals = {};
-    DateTime now = DateTime.now();
-    DateTime tmp = this.currentDate ?? DateTime.now();
+    DateTime now = (DateTime.now()).add(Duration(days: 1));
+    DateTime tmp = this.currentDate ?? now;
     int i = 0;
     while (i < this._getMaxSlotsView) {
       DateTime tmpCheck = DateTime(now.year, now.month, now.day);
