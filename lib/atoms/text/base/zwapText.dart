@@ -8,7 +8,6 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 
 /// The device
 class FontSizeDevice {
-
   /// The font size for the desktop M version
   final double desktopM;
 
@@ -24,12 +23,7 @@ class FontSizeDevice {
   /// The font size for the mobile S version
   final double mobileS;
 
-  FontSizeDevice(
-      {required this.desktopM,
-      required this.desktopS,
-      required this.tablet,
-      required this.mobileM,
-      required this.mobileS});
+  FontSizeDevice({required this.desktopM, required this.desktopS, required this.tablet, required this.mobileM, required this.mobileS});
 
   /// It retrieves the correct font size in base of the device type
   double getFontSize() {
@@ -63,13 +57,9 @@ TextStyle getTextStyle(ZwapTextType typeText) {
   }
 }
 
-
 /// It plots the text size in base of the current style and current chars
 Size getTextSize(String text, ZwapTextType textType) {
-  final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: getTextStyle(textType)),
-      maxLines: 1, textDirection: TextDirection.ltr
-  )..layout(minWidth: 0, maxWidth: double.infinity);
+  final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: getTextStyle(textType)), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
   return textPainter.size;
 }
 
@@ -87,18 +77,27 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
   /// The align for this text
   final TextAlign? textAlign;
 
-  ZwapText(
-      {Key? key,
-      required this.text,
-      required this.zwapTextType,
-      required this.textColor,
-      this.textAlign})
-      : super(key: key);
+  final int? maxLines;
+
+  final TextOverflow? textOverflow;
+
+  ZwapText({
+    Key? key,
+    required this.text,
+    required this.zwapTextType,
+    required this.textColor,
+    this.textAlign,
+    this.maxLines,
+    this.textOverflow,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
       this.text,
+      maxLines: maxLines,
+      overflow: textOverflow,
+      textScaleFactor: 1,
       textAlign: this.textAlign,
       style: getTextStyle(this.zwapTextType).apply(color: this.textColor),
     );
