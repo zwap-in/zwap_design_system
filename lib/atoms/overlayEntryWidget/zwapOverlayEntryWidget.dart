@@ -40,7 +40,9 @@ class ZwapOverlayEntryWidget extends StatelessWidget {
 
   final OverlayEntry? entity;
 
-  const ZwapOverlayEntryWidget({Key? key, this.autoClose = true, required this.child, required this.entity}) : super(key: key);
+  final Function()? onAutoClose;
+
+  const ZwapOverlayEntryWidget({Key? key, this.autoClose = true, required this.child, required this.entity, this.onAutoClose}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,10 @@ class ZwapOverlayEntryWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       child: GestureDetector(
-        onTap: () => entity?.remove(),
+        onTap: () {
+          if (onAutoClose != null) onAutoClose!();
+          entity?.remove();
+        },
         child: Container(
           width: double.infinity,
           height: double.infinity,

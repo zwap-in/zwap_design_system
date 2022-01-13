@@ -216,6 +216,7 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
       builder: (context) {
         return ZwapOverlayEntryWidget(
           entity: _dropdownOverlay,
+          onAutoClose: () => setState(() => _dropdownOverlay = null),
           child: ZwapOverlayEntryChild(
             top: (_dropdownKey.globalOffset?.dy ?? 0) + (decorations.height ?? 50) + 5 + decorations.overlayTranslateOffset.dy,
             left: (_dropdownKey.globalOffset?.dx ?? 0) - 10 + decorations.overlayTranslateOffset.dx,

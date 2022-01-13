@@ -39,7 +39,7 @@ class ZwapShadow {
   static BoxShadow get levelTwo => CustomBoxShadow(
         color: Color.fromRGBO(193, 193, 193, 0.25),
         blurRadius: 16,
-        spreadRadius: 0,
+        spreadRadius: 8,
         offset: Offset(0, 8),
       );
 
