@@ -61,6 +61,7 @@ class _ZwapStarsState extends State<ZwapStars> {
 
   /// It handles the click on star rating component
   void _clickStarRating(int index){
+    index += 1;
     setState(() {
       this._rating = index.toDouble();
     });
