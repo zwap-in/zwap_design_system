@@ -32,6 +32,7 @@ class ZwapShadow {
         color: Color.fromRGBO(193, 193, 193, 0.25),
         blurRadius: 11,
         spreadRadius: 4,
+        blurStyle: BlurStyle.normal,
         offset: Offset(0, 4),
       );
 
@@ -39,15 +40,17 @@ class ZwapShadow {
   static BoxShadow get levelTwo => CustomBoxShadow(
         color: Color.fromRGBO(193, 193, 193, 0.25),
         blurRadius: 16,
-        spreadRadius: 8,
+        spreadRadius: 0,
+        blurStyle: BlurStyle.normal,
         offset: Offset(0, 8),
       );
 
   /// The third level of shadow
   static BoxShadow get levelThree => BoxShadow(
-        color: Color.fromRGBO(1393, 193, 193, 0.25),
-        blurRadius: 128,
+        color: Color.fromRGBO(193, 193, 193, 0.3),
+        blurRadius: 30,
         spreadRadius: 4,
+        blurStyle: BlurStyle.normal,
         offset: Offset(0, 24),
       );
 }

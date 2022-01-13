@@ -235,6 +235,7 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
                   decoration: BoxDecoration(
                     color: decorations.overlayBackgroundColor,
                     borderRadius: BorderRadius.circular(decorations.overlayBorderRadius),
+                    boxShadow: [ZwapShadow.levelOne],
                   ),
                   padding: decorations.overlayContentPadding,
                   child: Column(
