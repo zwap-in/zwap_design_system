@@ -214,59 +214,61 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
 
     return OverlayEntry(
       builder: (context) {
-        return AnimatedPositioned(
-          duration: const Duration(milliseconds: 200),
-          top: (_dropdownKey.globalOffset?.dy ?? 0) + (decorations.height ?? 50) + 5 + decorations.overlayTranslateOffset.dy,
-          left: (_dropdownKey.globalOffset?.dx ?? 0) - 10 + decorations.overlayTranslateOffset.dx,
-          child: TweenAnimationBuilder<double>(
-            duration: const Duration(milliseconds: 350),
-            curve: Curves.decelerate,
-            tween: Tween(begin: 0, end: 1),
-            builder: (context, animation, child) => Opacity(
-              opacity: animation,
-              child: Container(
-                width: decorations.overlayWidth != null
-                    ? decorations.overlayWidth
-                    : decorations.width == null
-                        ? null
-                        : decorations.width! + 20,
-                decoration: BoxDecoration(
-                  color: decorations.overlayBackgroundColor,
-                  borderRadius: BorderRadius.circular(decorations.overlayBorderRadius),
-                ),
-                padding: decorations.overlayContentPadding,
-                child: Column(
-                  crossAxisAlignment: decorations.itemsAlignment,
-                  children: widget.items.keys
-                      .toList()
-                      .mapIndexed((i, k) => Container(
-                            color: Colors.transparent,
-                            width: double.infinity,
-                            margin: EdgeInsets.only(bottom: i != (widget.items.keys.toList().length - 1) ? decorations.itemSpacing : 0),
-                            child: Material(
-                              color: k == _selectedItem
-                                  ? decorations.selectedItemColor
-                                  : k == _hoveredItem
-                                      ? decorations.itemHoverColor
-                                      : decorations.overlayBackgroundColor,
-                              borderRadius: BorderRadius.circular(decorations.hoverBorderRadius),
-                              child: InkWell(
-                                onTap: k != _selectedItem ? () => this._selectItem(k) : null,
-                                hoverColor: decorations.itemHoverColor,
-                                onHover: (val) => val ? _hoverItem(k) : _hoverItem(''),
+        return ZwapOverlayEntryWidget(
+          entity: _dropdownOverlay,
+          child: ZwapOverlayEntryChild(
+            top: (_dropdownKey.globalOffset?.dy ?? 0) + (decorations.height ?? 50) + 5 + decorations.overlayTranslateOffset.dy,
+            left: (_dropdownKey.globalOffset?.dx ?? 0) - 10 + decorations.overlayTranslateOffset.dx,
+            child: TweenAnimationBuilder<double>(
+              duration: const Duration(milliseconds: 350),
+              curve: Curves.decelerate,
+              tween: Tween(begin: 0, end: 1),
+              builder: (context, animation, child) => Opacity(
+                opacity: animation,
+                child: Container(
+                  width: decorations.overlayWidth != null
+                      ? decorations.overlayWidth
+                      : decorations.width == null
+                          ? null
+                          : decorations.width! + 20,
+                  decoration: BoxDecoration(
+                    color: decorations.overlayBackgroundColor,
+                    borderRadius: BorderRadius.circular(decorations.overlayBorderRadius),
+                  ),
+                  padding: decorations.overlayContentPadding,
+                  child: Column(
+                    crossAxisAlignment: decorations.itemsAlignment,
+                    children: widget.items.keys
+                        .toList()
+                        .mapIndexed((i, k) => Container(
+                              color: Colors.transparent,
+                              width: double.infinity,
+                              margin: EdgeInsets.only(bottom: i != (widget.items.keys.toList().length - 1) ? decorations.itemSpacing : 0),
+                              child: Material(
+                                color: k == _selectedItem
+                                    ? decorations.selectedItemColor
+                                    : k == _hoveredItem
+                                        ? decorations.itemHoverColor
+                                        : decorations.overlayBackgroundColor,
                                 borderRadius: BorderRadius.circular(decorations.hoverBorderRadius),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(decorations.hoverBorderRadius),
+                                child: InkWell(
+                                  onTap: k != _selectedItem ? () => this._selectItem(k) : null,
+                                  hoverColor: decorations.itemHoverColor,
+                                  onHover: (val) => val ? _hoverItem(k) : _hoverItem(''),
+                                  borderRadius: BorderRadius.circular(decorations.hoverBorderRadius),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(decorations.hoverBorderRadius),
+                                    ),
+                                    padding: decorations.insideItemPadding,
+                                    child: widget.items[k],
                                   ),
-                                  padding: decorations.insideItemPadding,
-                                  child: widget.items[k],
                                 ),
                               ),
-                            ),
-                          ))
-                      .toList(),
+                            ))
+                        .toList(),
+                  ),
                 ),
               ),
             ),
