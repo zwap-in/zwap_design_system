@@ -11,7 +11,6 @@ enum ZwapCardType { levelZero, levelOne, levelTwo, levelThree }
 
 /// Custom component to render the card
 class ZwapCard extends StatelessWidget {
-
   /// The card type
   final ZwapCardType zwapCardType;
 
@@ -39,17 +38,9 @@ class ZwapCard extends StatelessWidget {
   /// Optional border width for the box decoration inside the card
   final double? borderWidth;
 
-  ZwapCard({Key? key,
-    required this.zwapCardType,
-    required this.child,
-    this.backgroundColor,
-    this.cardHeight,
-    this.borderColor,
-    this.cardRadius,
-    this.cardWidth,
-    this.elevationLevel = 0,
-    this.borderWidth
-  }) : super(key: key);
+  ZwapCard(
+      {Key? key, required this.zwapCardType, required this.child, this.backgroundColor, this.cardHeight, this.borderColor, this.cardRadius, this.cardWidth, this.elevationLevel = 0, this.borderWidth})
+      : super(key: key);
 
   /// It retrieves the box shadow for this card in base of the type
   BoxShadow? _getBoxShadow() {
@@ -78,21 +69,22 @@ class ZwapCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               border: Border.all(
-                  color: this.borderColor ?? Colors.transparent, width: this.borderWidth ?? 0.5,
+                color: this.borderColor ?? Colors.transparent,
+                width: this.borderWidth ?? 0.5,
               ),
-              borderRadius: BorderRadius.circular(this.cardRadius ?? ZwapRadius.tabBarRadius)
-          ),
+              borderRadius: BorderRadius.circular(this.cardRadius ?? ZwapRadius.tabBarRadius)),
           child: this.child,
         ),
         shape: RoundedRectangleBorder(
           side: BorderSide(
-            color: this.borderColor ?? Colors.transparent, width: this.borderWidth ?? 0.5,
+            color: this.borderColor ?? Colors.transparent,
+            width: this.borderWidth ?? 0.5,
           ),
           borderRadius: BorderRadius.circular(this.cardRadius ?? ZwapRadius.tabBarRadius),
         ),
       ),
       decoration: BoxDecoration(
-          boxShadow: this.elevationLevel != 0 ? ([boxShadow!]) : null
+        boxShadow: boxShadow != null ? [boxShadow] : null,
       ),
     );
   }
