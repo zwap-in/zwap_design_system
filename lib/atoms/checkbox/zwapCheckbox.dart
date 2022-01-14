@@ -6,33 +6,23 @@ import 'package:taastrap/taastrap.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 
 /// It defines the possible status type
-enum ZwapCheckBoxStatus {
-  unselected,
-  hover,
-  disabled,
-  error,
-  selected,
-  selectedHover,
-  selectedActive,
-  selectedDisabled,
-  indeterminateDisabled
-}
+enum ZwapCheckBoxStatus { unselected, hover, disabled, error, selected, selectedHover, selectedActive, selectedDisabled, indeterminateDisabled }
 
 /// The state for this component with a provider
 class ZwapCheckBox extends StatefulWidget {
-
   /// It handles the click on checkbox
   final Function(bool isSelected) onCheckBoxClick;
 
   /// Initial bool value for this checkbox
   final bool initialValue;
 
-  ZwapCheckBox({Key? key,
+  ZwapCheckBox({
+    Key? key,
     required this.onCheckBoxClick,
     this.initialValue = false,
   }) : super(key: key);
 
-  _ZwapCheckBoxState createState() => _ZwapCheckBoxState(this.initialValue);
+  _ZwapCheckBoxState createState() => _ZwapCheckBoxState();
 }
 
 /// Standard component to render a checkbox with Zwap standard style
@@ -40,16 +30,17 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
   /// The status with a default value equal to unselected
   ZwapCheckBoxStatus _status = ZwapCheckBoxStatus.unselected;
 
-  _ZwapCheckBoxState(bool initialValue){
-    this._status = initialValue ? ZwapCheckBoxStatus.selected : ZwapCheckBoxStatus.unselected;
+  final IconData _checkBoxIcon = Icons.check;
+
+  @override
+  void initState() {
+    this._status = widget.initialValue ? ZwapCheckBoxStatus.selected : ZwapCheckBoxStatus.unselected;
+    super.initState();
   }
 
   /// It handles the tap on this component
   void _onTap() {
-    this._changeStatus(this._status == ZwapCheckBoxStatus.selected ||
-        this._status == ZwapCheckBoxStatus.selectedHover
-        ? ZwapCheckBoxStatus.unselected
-        : ZwapCheckBoxStatus.selected);
+    this._changeStatus(this._status == ZwapCheckBoxStatus.selected || this._status == ZwapCheckBoxStatus.selectedHover ? ZwapCheckBoxStatus.unselected : ZwapCheckBoxStatus.selected);
   }
 
   void _changeStatus(ZwapCheckBoxStatus status) {
@@ -97,13 +88,10 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
         borderColor = ZwapColors.primary200;
         break;
     }
-    return BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(4)),
-        border: Border.all(color: borderColor),
-        color: boxColor);
+    return BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(4)), border: Border.all(color: borderColor), color: boxColor);
   }
 
-  double _getIconSize(){
+  double _getIconSize() {
     return getMultipleConditions<double>(17, 17, 16, 15, 15);
   }
 
@@ -132,31 +120,31 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
         );
       case ZwapCheckBoxStatus.selected:
         return Icon(
-          Icons.verified_user_rounded,
+          _checkBoxIcon,
           size: this._getIconSize(),
           color: ZwapColors.shades0,
         );
       case ZwapCheckBoxStatus.selectedHover:
         return Icon(
-          Icons.verified_user_rounded,
+          _checkBoxIcon,
           size: this._getIconSize(),
           color: ZwapColors.shades0,
         );
       case ZwapCheckBoxStatus.selectedActive:
         return Icon(
-          Icons.verified_user_rounded,
+          _checkBoxIcon,
           size: this._getIconSize(),
           color: ZwapColors.shades0,
         );
       case ZwapCheckBoxStatus.selectedDisabled:
         return Icon(
-          Icons.verified_user_rounded,
+          _checkBoxIcon,
           size: this._getIconSize(),
           color: ZwapColors.shades0,
         );
       case ZwapCheckBoxStatus.indeterminateDisabled:
         return Icon(
-          Icons.verified_user_rounded,
+          _checkBoxIcon,
           size: this._getIconSize(),
           color: ZwapColors.shades0,
         );
