@@ -58,8 +58,9 @@ TextStyle getTextStyle(ZwapTextType typeText) {
 }
 
 /// It plots the text size in base of the current style and current chars
-Size getTextSize(String text, ZwapTextType textType) {
-  final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: getTextStyle(textType)), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+Size getTextSize(String text, ZwapTextType textType, {double? maxWidth}) {
+  final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: getTextStyle(textType)), maxLines: 1, textDirection: TextDirection.ltr)
+    ..layout(minWidth: 0, maxWidth: maxWidth ?? double.infinity);
   return textPainter.size;
 }
 
