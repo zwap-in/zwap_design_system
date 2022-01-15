@@ -9,47 +9,33 @@ import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 import 'package:zwap_design_system/atoms/typography/zwapTypography.dart';
 import 'package:zwap_design_system/atoms/text/text.dart';
 
-/// The possibles input statuses
-enum ZwapInputStatus {
-  defaultStatus,
-  errorStatus,
-  successStatus,
-  disabled,
-  disabledFilled,
-}
-
 /// Custom component for a standard input with a predefined Zwap style
 class ZwapInput extends StatefulWidget {
-
   /// Text controller for handling the value from external of this component
   final TextEditingController controller;
 
   /// The input type for this custom component
   final TextInputType textInputType;
 
+  final int? minLines;
+
   /// The max lines to rendering in the input text multi lines
   final int maxLines;
 
-  /// The input status
-  final ZwapInputStatus zwapInputStatus;
+  /// If [true] input will be disabled
+  final bool disabled;
 
-  /// Enable input or not
-  final bool enableInput;
-
-  /// The input name to display inside the component as a placeholder or a label text
-  final String? inputName;
+  /// The input name as a label text
+  final String? label;
 
   /// The placeholder for this input
   final String? placeholder;
-
-  /// Handle the validation with a custom callBack
-  final TupleType<bool, String> Function(dynamic value)? handleValidation;
 
   /// It handles the changes inside this input text field
   final Function(String newValue)? onChanged;
 
   /// Custom internal padding for this input
-  final EdgeInsets? internalPadding;
+  final EdgeInsets internalPadding;
 
   /// Optionally prefix icon
   final IconData? prefixIcon;
@@ -63,182 +49,258 @@ class ZwapInput extends StatefulWidget {
   /// The optional autofill hints inside the input text
   final String? autofillHints;
 
-  /// The hint text to display bottom the input
-  final String? hintText;
-
   final FocusNode? focusNode;
 
   final String? prefixText;
 
-  final bool isErrorHint;
+  ///The text showed under the input
+  final String? helperText;
 
-  ZwapInput({Key? key,
+  ///If [true] helperText will be showed as error, else as regular text
+  final bool helperTextIsError;
+
+  final bool showSuccess;
+
+  final bool _isCollapsed;
+
+  ZwapInput({
+    Key? key,
     required this.controller,
     this.textInputType = TextInputType.text,
     this.maxLines = 1,
-    this.zwapInputStatus = ZwapInputStatus.defaultStatus,
-    this.enableInput = true,
-    this.internalPadding,
+    this.disabled = false,
+    this.internalPadding = const EdgeInsets.all(15),
     this.onChanged,
-    this.inputName,
+    this.label,
     this.placeholder,
-    this.handleValidation,
     this.prefixIcon,
     this.suffixIcon,
     this.keyCallBackFunction,
-    this.hintText,
+    this.helperText,
+    this.helperTextIsError = true,
     this.autofillHints,
     this.focusNode,
     this.prefixText,
-    this.isErrorHint = true
-  }) : super(key: key);
+    this.showSuccess = false,
+    this.minLines,
+  })  : this._isCollapsed = false,
+        super(key: key);
 
-  _ZwapInputState createState() => _ZwapInputState(status: this.zwapInputStatus, controller: this.controller);
+  ZwapInput.collapsed({
+    Key? key,
+    required this.controller,
+    this.textInputType = TextInputType.text,
+    this.maxLines = 1,
+    this.minLines,
+    this.disabled = false,
+    this.internalPadding = const EdgeInsets.all(15),
+    this.onChanged,
+    this.label,
+    required this.placeholder,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.keyCallBackFunction,
+    this.helperText,
+    this.helperTextIsError = true,
+    this.autofillHints,
+    this.focusNode,
+    this.prefixText,
+  })  : this._isCollapsed = true,
+        this.showSuccess = false,
+        super(key: key);
+
+  _ZwapInputState createState() => _ZwapInputState();
 }
 
 /// It handles the input state
 class _ZwapInputState extends State<ZwapInput> {
-
-  /// The input status type
-  late ZwapInputStatus status;
-
   /// The input value controller
   late TextEditingController controller;
 
-  /// The error message
-  String _errorMessage = "";
+  late FocusNode _focusNode;
 
-  /// It handles the controller callBack value
-  void _handleController(){
-    if(widget.handleValidation != null){
-      TupleType<bool, String> validation = widget.handleValidation!(this.controller.text);
-      if(!validation.a){
-        this._changeInputStatus(ZwapInputStatus.errorStatus, validation.b);
-      }
-      else{
-        this._changeInputStatus(ZwapInputStatus.successStatus, "");
-      }
-    }
+  late bool _hasFocus;
+  bool _isHovered = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = widget.controller;
+    _focusNode = widget.focusNode ?? FocusNode();
+
+    _hasFocus = _focusNode.hasFocus;
+
+    _focusNode.addListener(_focusListener);
   }
 
-  _ZwapInputState({required this.status, required this.controller});
-
-  /// It changes the input status
-  void _changeInputStatus(ZwapInputStatus newStatus, String? errorMessage) {
-    setState(() {
-      this.status = widget.zwapInputStatus;
-      this._errorMessage = errorMessage != null ? errorMessage : "";
-    });
+  void _focusListener() {
+    if (_hasFocus != _focusNode.hasFocus) setState(() => _hasFocus = _focusNode.hasFocus);
   }
 
-  /// It retrieves the borderColor in base of the current status
-  InputBorder _getInputBorder(ZwapInputStatus status) {
-    OutlineInputBorder inputBorder = OutlineInputBorder(
+  @override
+  void dispose() {
+    _focusNode.removeListener(_focusListener);
+    super.dispose();
+  }
+
+  Color _getBorderColor(Color defaultColor, {Color? successColor, Color? errorColor}) {
+    if (widget.helperText != null && widget.helperTextIsError) return errorColor ?? ZwapColors.error300;
+    if (widget.showSuccess) return successColor ?? ZwapColors.success800;
+
+    return defaultColor;
+  }
+
+  InputBorder _getZwapInputBorder(Color borderColor) => OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.buttonRadius)),
-        borderSide: BorderSide(
-            color: ZwapColors.neutral300,
-            width: 1,
-            style: BorderStyle.solid
-        )
-    );
-    return inputBorder;
-  }
-
-  /// It retrieves the borderColor in base of the current status
-  InputBorder _getFocusedBorder(ZwapInputStatus status) {
-    OutlineInputBorder inputBorder = OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.buttonRadius)),
-        borderSide: BorderSide(
-            color: ZwapColors.primary300,
-            width: 1,
-            style: BorderStyle.solid
-        )
-    );
-    return inputBorder;
-  }
+        borderSide: BorderSide(color: borderColor, width: 1, style: BorderStyle.solid),
+      );
 
   /// The field decoration for any text field
   InputDecoration _getTextFieldDecoration() {
     return new InputDecoration(
-        enabledBorder: this._getInputBorder(this.status),
-        focusedBorder: this._getFocusedBorder(status),
-        contentPadding: widget.internalPadding,
-        prefixText: widget.prefixText,
-        hoverColor: ZwapColors.neutral300,
-        hintText: widget.placeholder,
-        hintStyle: getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
-        prefixIcon: widget.prefixIcon != null ? Icon(
-          widget.prefixIcon,
-          color: ZwapColors.neutral400,
-          size: 24,
-        ) : null,
-        suffixIcon: widget.suffixIcon != null ? Icon(
-          widget.suffixIcon,
-          color: ZwapColors.neutral700,
-          size: 24,
-        ): null
+      enabledBorder: _getZwapInputBorder(_getBorderColor(ZwapColors.neutral300)),
+      focusedBorder: _getZwapInputBorder(_getBorderColor(ZwapColors.primary300)),
+      disabledBorder: _getZwapInputBorder(_getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)),
+      contentPadding: widget.internalPadding,
+      prefixText: widget.prefixText,
+      hoverColor: ZwapColors.primary300,
+      hintText: widget.placeholder,
+      hintStyle: getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
+      prefixIcon: widget.prefixIcon != null
+          ? Icon(
+              widget.prefixIcon,
+              color: ZwapColors.neutral400,
+              size: 24,
+            )
+          : null,
+      suffixIcon: widget.showSuccess || widget.suffixIcon != null
+          ? Icon(
+              widget.showSuccess ? Icons.check : widget.suffixIcon,
+              color: widget.showSuccess ? ZwapColors.success800 : ZwapColors.neutral700,
+              size: 24,
+            )
+          : null,
     );
   }
 
   /// It gets the input field
-  Widget _getInputWidget(){
+  TextField _getInputWidget({required InputDecoration decorations}) {
     return TextField(
-        controller: this.controller,
-        scrollPadding: EdgeInsets.zero,
-        enabled: widget.enableInput,
-        keyboardType: widget.textInputType,
-        maxLines: widget.maxLines,
-        autofillHints: widget.autofillHints != null ? [widget.autofillHints!] : null,
-        onChanged: widget.onChanged != null ? (String newValue) => widget.onChanged!(newValue) : null,
-        onSubmitted: widget.keyCallBackFunction,
-        textCapitalization: TextCapitalization.sentences,
-        cursorColor: ZwapColors.shades100,
-        obscureText: widget.textInputType == TextInputType.visiblePassword,
-        textAlign: TextAlign.start,
-        focusNode: widget.focusNode,
-        style: getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral700),
-        decoration: this._getTextFieldDecoration()
+      controller: this.controller,
+      scrollPadding: EdgeInsets.zero,
+      enabled: !widget.disabled,
+      keyboardType: widget.textInputType,
+      maxLines: widget.maxLines,
+      minLines: widget.minLines,
+      autofillHints: widget.autofillHints != null ? [widget.autofillHints!] : null,
+      onChanged: widget.onChanged != null ? (String newValue) => widget.onChanged!(newValue) : null,
+      textCapitalization: TextCapitalization.sentences,
+      cursorColor: ZwapColors.shades100,
+      obscureText: widget.textInputType == TextInputType.visiblePassword,
+      textAlign: TextAlign.start,
+      focusNode: _focusNode,
+      style: getTextStyle(ZwapTextType.bodyRegular).apply(color: widget.disabled ? ZwapColors.neutral300 : ZwapColors.neutral700),
+      decoration: decorations,
+      onSubmitted: widget.keyCallBackFunction,
     );
   }
 
   /// It gets the label for this input
-  Widget _getLabelInput(){
+  Widget _getLabel() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(bottom: 2.5),
+          padding: EdgeInsets.only(bottom: 5),
           child: ZwapText(
-            text: widget.inputName!,
+            text: widget.label!,
             zwapTextType: ZwapTextType.bodySemiBold,
-            textColor: ZwapColors.neutral600,
+            textColor: widget.disabled ? ZwapColors.neutral300 : ZwapColors.neutral600,
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 2.5),
-          child: this._getInputWidget(),
-        )
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(bottom: this._errorMessage != "" ? 2.5 : 0),
-          child: widget.inputName != null ? this._getLabelInput(): this._getInputWidget(),
-        ),
-        widget.hintText != null ? Padding(
-          padding: EdgeInsets.only(top: 2.5),
-          child: ZwapText(
-            textColor: widget.isErrorHint ? ZwapColors.error400 : ZwapColors.success400,
-            zwapTextType: ZwapTextType.bodyRegular,
-            text: widget.hintText!,
+    if (widget._isCollapsed)
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (widget.label != null) this._getLabel(),
+          InkWell(
+            onHover: (hover) => setState(() => _isHovered = hover),
+            onTap: () {},
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.buttonRadius)),
+                border: Border.all(
+                  color: widget.disabled
+                      ? _getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)
+                      : (_focusNode.hasFocus || _isHovered)
+                          ? _getBorderColor(ZwapColors.primary300)
+                          : _getBorderColor(ZwapColors.neutral300),
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+              ),
+              padding: widget.internalPadding,
+              child: _getInputWidget(
+                decorations: InputDecoration.collapsed(
+                  hintText: widget.placeholder!,
+                  hintStyle: getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
+                  enabled: !widget.disabled,
+                  hoverColor: ZwapColors.primary300,
+                ),
+              ),
+            ),
           ),
-        ) : Container()
+          Container(
+            width: double.infinity,
+            child: AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              child: widget.helperText != null
+                  ? Padding(
+                      padding: EdgeInsets.only(top: 7),
+                      child: ZwapText(
+                        textColor: widget.helperTextIsError ? ZwapColors.error400 : ZwapColors.success400,
+                        zwapTextType: ZwapTextType.bodyRegular,
+                        text: widget.helperText!,
+                      ),
+                    )
+                  : Container(),
+            ),
+          ),
+        ],
+      );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.label != null) this._getLabel(),
+        this._getInputWidget(decorations: this._getTextFieldDecoration()),
+        Container(
+          width: double.infinity,
+          child: AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            child: widget.helperText != null
+                ? Padding(
+                    padding: EdgeInsets.only(top: 7),
+                    child: ZwapText(
+                      textColor: widget.helperTextIsError ? ZwapColors.error400 : ZwapColors.success400,
+                      zwapTextType: ZwapTextType.bodyRegular,
+                      text: widget.helperText!,
+                    ),
+                  )
+                : Container(),
+          ),
+        ),
       ],
     );
   }
