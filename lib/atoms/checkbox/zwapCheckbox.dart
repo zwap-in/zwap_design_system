@@ -156,11 +156,11 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
     return InkWell(
       onTap: () => this._onTap(),
       child: Padding(
-        padding: EdgeInsets.only(right: 6),
+        padding: EdgeInsets.only(right: 4),
         child: Container(
           decoration: this._getBoxDecoration(),
           child: Padding(
-            padding: EdgeInsets.all(6),
+            padding: EdgeInsets.all(2),
             child: this._getIconChild(),
           ),
         ),

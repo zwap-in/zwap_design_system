@@ -159,7 +159,7 @@ class _ZwapInputState extends State<ZwapInput> {
   /// The field decoration for any text field
   InputDecoration _getTextFieldDecoration() {
     return new InputDecoration(
-      enabledBorder: _getZwapInputBorder(_getBorderColor(ZwapColors.neutral300)),
+      enabledBorder: _getZwapInputBorder(_getBorderColor(_focusNode.hasFocus ? ZwapColors.primary300 : ZwapColors.neutral300)),
       focusedBorder: _getZwapInputBorder(_getBorderColor(ZwapColors.primary300)),
       disabledBorder: _getZwapInputBorder(_getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)),
       contentPadding: widget.internalPadding,

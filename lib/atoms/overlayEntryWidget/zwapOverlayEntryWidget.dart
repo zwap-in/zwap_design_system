@@ -55,8 +55,8 @@ class ZwapOverlayEntryWidget extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       child: GestureDetector(
         onTap: () {
-          if (onAutoClose != null) onAutoClose!();
           entity?.remove();
+          if (onAutoClose != null) onAutoClose!();
         },
         child: Container(
           width: double.infinity,
