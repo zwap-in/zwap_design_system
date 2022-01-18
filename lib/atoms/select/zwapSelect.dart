@@ -27,7 +27,7 @@ class _ZwapSelectProvider extends ChangeNotifier {
   set searched(String value) => searchedValue != value ? {searchedValue = value, notifyListeners()} : null;
 
   void addNewValues(List<String> newValues) {
-    allValues.addAll(newValues);
+    allValues = {...newValues, ...allValues}.toList();
     notifyListeners();
   }
 
@@ -64,6 +64,8 @@ class ZwapSelect extends StatefulWidget {
 
   final Future<List<String>> Function(String inputValue, int pageNumber)? fetchMoreData;
 
+  final int initialPageNumber;
+
   ZwapSelect({
     Key? key,
     required this.values,
@@ -76,6 +78,7 @@ class ZwapSelect extends StatefulWidget {
     this.maxOverlayHeight,
     this.label,
     this.fetchMoreData,
+    this.initialPageNumber = 1,
   })  : assert(values.isNotEmpty),
         super(key: key);
 
@@ -102,12 +105,14 @@ class _ZwapSelectState extends State<ZwapSelect> {
   late final TextEditingController _inputController;
   late final FocusNode _inputFocus;
 
-  int _pageNumber = 1;
+  late int _pageNumber;
 
   @override
   void initState() {
     super.initState();
     this._selectedValue = widget.selected;
+
+    _pageNumber = widget.initialPageNumber;
 
     _inputController = TextEditingController(text: widget.selected);
     _inputFocus = FocusNode(onKey: (node, event) {
@@ -390,58 +395,69 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onHover: (bool value) => this.hoverButton(value),
-      onTap: () {
-        if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
-      },
-      child: Container(
-        decoration: (_selectOverlay?.mounted ?? false)
-            ? BoxDecoration(
-                color: ZwapColors.neutral300,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(4),
-                  topRight: Radius.circular(4),
-                ),
-              )
-            : BoxDecoration(
-                color: this._isHover ? ZwapColors.primary300 : ZwapColors.neutral300,
-                borderRadius: BorderRadius.circular(4),
-              ),
-        child: Container(
-          key: _selectKey,
-          height: 45,
-          decoration: BoxDecoration(
-            color: ZwapColors.shades0,
-            borderRadius: (_selectOverlay?.mounted ?? false)
-                ? BorderRadius.only(
-                    topLeft: Radius.circular(4),
-                    topRight: Radius.circular(4),
-                  )
-                : BorderRadius.circular(4),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (widget.label != null)
+          ZwapText(
+            text: widget.label!,
+            zwapTextType: ZwapTextType.bodySemiBold,
+            textColor: ZwapColors.neutral600,
           ),
-          margin: _selectOverlay?.mounted ?? false ? const EdgeInsets.only(top: 1, left: 1, right: 1) : const EdgeInsets.all(1),
-          padding: const EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10),
-          child: Row(
-            children: [
-              Flexible(
-                child: TextField(
-                  controller: _inputController,
-                  focusNode: _inputFocus,
-                  decoration: InputDecoration.collapsed(hintText: widget.hintText),
-                  cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
-                ),
+        InkWell(
+          onHover: (bool value) => this.hoverButton(value),
+          onTap: () {
+            if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
+          },
+          child: Container(
+            decoration: (_selectOverlay?.mounted ?? false)
+                ? BoxDecoration(
+                    color: ZwapColors.neutral300,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(4),
+                      topRight: Radius.circular(4),
+                    ),
+                  )
+                : BoxDecoration(
+                    color: this._isHover ? ZwapColors.primary300 : ZwapColors.neutral300,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+            child: Container(
+              key: _selectKey,
+              height: 45,
+              decoration: BoxDecoration(
+                color: ZwapColors.shades0,
+                borderRadius: (_selectOverlay?.mounted ?? false)
+                    ? BorderRadius.only(
+                        topLeft: Radius.circular(4),
+                        topRight: Radius.circular(4),
+                      )
+                    : BorderRadius.circular(4),
               ),
-              SizedBox(width: 5),
-              AnimatedRotation(
-                turns: (_selectOverlay?.mounted ?? false) ? 0.5 : 0,
-                duration: const Duration(milliseconds: 150),
-                child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(_selectOverlay?.mounted)),
+              margin: _selectOverlay?.mounted ?? false ? const EdgeInsets.only(top: 1, left: 1, right: 1) : const EdgeInsets.all(1),
+              padding: const EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      controller: _inputController,
+                      focusNode: _inputFocus,
+                      decoration: InputDecoration.collapsed(hintText: widget.hintText),
+                      cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  AnimatedRotation(
+                    turns: (_selectOverlay?.mounted ?? false) ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 150),
+                    child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(_selectOverlay?.mounted)),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
