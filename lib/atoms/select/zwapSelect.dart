@@ -16,18 +16,28 @@ import 'package:zwap_utils/zwap_utils/type.dart';
 
 ///This should be used only for interactions between ZwapSelect and its overlay
 class _ZwapSelectProvider extends ChangeNotifier {
-  List<String> allValues;
+  Map<String, String> _originalValues;
   bool isLoading;
   String searchedValue;
 
-  _ZwapSelectProvider(this.allValues)
+  Map<String, String> _dynamicValues = {};
+
+  Map<String, String> get allValues => {..._originalValues, ..._dynamicValues};
+
+  _ZwapSelectProvider(this._originalValues)
       : this.isLoading = false,
         this.searchedValue = '';
 
   set searched(String value) => searchedValue != value ? {searchedValue = value, notifyListeners()} : null;
 
-  void addNewValues(List<String> newValues) {
-    allValues = {...newValues, ...allValues}.toList();
+  void addNewValues(Map<String, String> newValues) {
+    newValues.removeWhere((k, v) => _originalValues.keys.contains(k));
+    _dynamicValues = {..._dynamicValues, ...newValues};
+    notifyListeners();
+  }
+
+  void originalValuesChanged(Map<String, String> newValues) {
+    _originalValues = newValues;
     notifyListeners();
   }
 
@@ -42,7 +52,7 @@ class _ZwapSelectProvider extends ChangeNotifier {
 /// custom dropdown widget to select some element from a list
 class ZwapSelect extends StatefulWidget {
   /// The custom values to display inside this widget
-  final List<String> values;
+  final Map<String, String> values;
 
   /// It handles the selected value with a callBack function
   final Function(String key) callBackFunction;
@@ -62,7 +72,7 @@ class ZwapSelect extends StatefulWidget {
 
   final String? label;
 
-  final Future<List<String>> Function(String inputValue, int pageNumber)? fetchMoreData;
+  final Future<Map<String, String>> Function(String inputValue, int pageNumber)? fetchMoreData;
 
   final int initialPageNumber;
 
@@ -98,7 +108,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
   /// Is this select hoovered
   bool _isHover = false;
 
-  String? _hoveredItem;
+  dynamic _hoveredItem;
 
   OverlayEntry? _selectOverlay;
 
@@ -110,7 +120,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
   @override
   void initState() {
     super.initState();
-    this._selectedValue = widget.selected;
+    _selectedValue = widget.selected;
 
     _pageNumber = widget.initialPageNumber;
 
@@ -118,7 +128,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
     _inputFocus = FocusNode(onKey: (node, event) {
       if (event.physicalKey == PhysicalKeyboardKey.end || event.physicalKey == PhysicalKeyboardKey.enter || event.physicalKey == PhysicalKeyboardKey.tab) {
         _inputFocus.unfocus();
-        _inputController.text = _selectedValue ?? '';
+        _inputController.text = widget.values[_selectedValue] ?? '';
 
         return KeyEventResult.handled;
       }
@@ -153,15 +163,15 @@ class _ZwapSelectState extends State<ZwapSelect> {
   }
 
   void _scrollControllerListener() async {
-    if (widget.fetchMoreData == null) return;
-
     if (_overlayScrollController.position.atEdge && _overlayScrollController.position.pixels != 0 && !_provider.isLoading && !_overlayScrollController.position.outOfRange) _requestData();
   }
 
   _requestData({bool forcePageToOne = false}) async {
+    if (widget.fetchMoreData == null) return;
+
     _provider.setLoading(true);
 
-    List<String> tmp = await widget.fetchMoreData!(_inputController.text, forcePageToOne ? 1 : _pageNumber);
+    Map<String, String> tmp = await widget.fetchMoreData!(forcePageToOne ? _inputController.text : '', forcePageToOne ? 1 : _pageNumber);
 
     if (!forcePageToOne) _pageNumber += 1;
 
@@ -170,8 +180,9 @@ class _ZwapSelectState extends State<ZwapSelect> {
   }
 
   @override
-  void didUpdateWidget(ZwapSelect oldWidget) {
-    if (widget.selected != oldWidget.selected) setState(() => onChangeValue(widget.selected));
+  void didUpdateWidget(covariant ZwapSelect oldWidget) {
+    if (!mapEquals(oldWidget.values, widget.values)) WidgetsBinding.instance?.addPostFrameCallback((_) => _provider.originalValuesChanged(widget.values));
+    if (widget.selected != oldWidget.selected) WidgetsBinding.instance?.addPostFrameCallback((_) => onChangeValue(widget.selected, callCallback: false));
 
     super.didUpdateWidget(oldWidget);
   }
@@ -185,14 +196,14 @@ class _ZwapSelectState extends State<ZwapSelect> {
   }
 
   /// Selecting new value from the dropdown widget
-  void onChangeValue(String? value) {
+  void onChangeValue(String? value, {bool callCallback = true}) {
     if (value == null) return;
 
-    widget.callBackFunction(value);
+    if (callCallback) widget.callBackFunction(value);
 
     if (_inputFocus.hasFocus) _inputFocus.unfocus();
 
-    _inputController.text = value;
+    _inputController.text = _provider.allValues[value] ?? '';
 
     setState(() {
       this._selectedValue = value;
@@ -230,15 +241,15 @@ class _ZwapSelectState extends State<ZwapSelect> {
           child: Builder(
             builder: (context) {
               bool _isLoading = context.select<_ZwapSelectProvider, bool>((pro) => pro.isLoading);
-              List<String> _allValues = context.select<_ZwapSelectProvider, List<String>>((pro) => pro.allValues);
+              Map<String, String> _allValues = context.select<_ZwapSelectProvider, Map<String, String>>((pro) => pro.allValues);
               String _searchedValue = context.select<_ZwapSelectProvider, String>((pro) => pro.searchedValue);
 
-              List<String> _toShowValues = _allValues.where((s) => s.toLowerCase().trim().contains(_searchedValue.toLowerCase().trim())).toList();
+              Map<String, String> _toShowValues = Map.from(_allValues)..removeWhere((k, v) => v.isNotEmpty && !v.toLowerCase().trim().contains(_searchedValue.toLowerCase().trim()));
 
               return ZwapOverlayEntryWidget(
                 entity: _selectOverlay,
                 onAutoClose: () {
-                  _inputController.text = _selectedValue ?? '';
+                  _inputController.text = _provider.allValues[_selectedValue] ?? '';
 
                   if (_inputFocus.hasFocus) _inputFocus.unfocus();
                 },
@@ -269,10 +280,10 @@ class _ZwapSelectState extends State<ZwapSelect> {
                             ),
                           ),
                           margin: const EdgeInsets.only(bottom: 1, left: 1, right: 1),
-                          padding: const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 13),
                           constraints: BoxConstraints(maxHeight: widget.maxOverlayHeight ?? MediaQuery.of(context).size.height * 0.3),
                           child: SingleChildScrollView(
                             controller: _overlayScrollController,
+                            padding: const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 13),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: _toShowValues.isEmpty
@@ -323,25 +334,26 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                   : [
                                       Column(
                                         key: UniqueKey(),
-                                        children: _toShowValues
-                                            .mapIndexed((i, value) => Container(
+                                        children: _toShowValues.keys
+                                            .toList()
+                                            .mapIndexed((i, key) => Container(
                                                   color: Colors.transparent,
                                                   width: double.infinity,
-                                                  margin: EdgeInsets.only(bottom: i != (widget.values.length - 1) ? 8 : 0),
+                                                  margin: EdgeInsets.only(bottom: i != (_toShowValues.length - 1) ? 8 : 0),
                                                   child: Material(
-                                                    color: value == _selectedValue
-                                                        ? value == _hoveredItem
+                                                    color: key == _selectedValue
+                                                        ? key == _hoveredItem
                                                             ? ZwapColors.primary50
                                                             : ZwapColors.primary100
-                                                        : value == _hoveredItem
+                                                        : key == _hoveredItem
                                                             ? ZwapColors.neutral100
                                                             : ZwapColors.shades0,
                                                     borderRadius: BorderRadius.circular(8),
                                                     child: InkWell(
-                                                      onTap: () => this.onChangeValue(value),
-                                                      hoverColor: value == _selectedValue ? ZwapColors.primary50 : ZwapColors.neutral100,
-                                                      splashColor: value == _selectedValue ? Colors.transparent : null,
-                                                      onHover: (hovered) => setState(() => _hoveredItem = hovered ? value : null),
+                                                      onTap: () => this.onChangeValue(key),
+                                                      hoverColor: key == _selectedValue ? ZwapColors.primary50 : ZwapColors.neutral100,
+                                                      splashColor: key == _selectedValue ? Colors.transparent : null,
+                                                      onHover: (hovered) => setState(() => _hoveredItem = hovered ? key : null),
                                                       borderRadius: BorderRadius.circular(8),
                                                       child: Container(
                                                         width: double.infinity,
@@ -354,10 +366,10 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                           children: [
                                                             Expanded(
                                                                 child: ZwapText(
-                                                                    text: value,
+                                                                    text: _allValues[key] ?? '<error>',
                                                                     zwapTextType: ZwapTextType.bodyRegular,
-                                                                    textColor: value == _selectedValue ? ZwapColors.primary800 : ZwapColors.shades100)),
-                                                            if (value == _selectedValue) ...[
+                                                                    textColor: key == _selectedValue ? ZwapColors.primary800 : ZwapColors.shades100)),
+                                                            if (key == _selectedValue) ...[
                                                               SizedBox(width: 5),
                                                               Icon(Icons.check, color: ZwapColors.shades100, size: 20),
                                                             ]

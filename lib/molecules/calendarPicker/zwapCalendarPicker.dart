@@ -10,7 +10,6 @@ import 'package:zwap_design_system/molecules/scrollArrows/zwapScrollArrow.dart';
 
 /// The state of the calendar picker
 class ZwapCalendarPickerState extends ChangeNotifier {
-
   /// The current date from which start
   DateTime? currentDate;
 
@@ -32,11 +31,7 @@ class ZwapCalendarPickerState extends ChangeNotifier {
   /// The max number of slot you can select
   final int maxSelections;
 
-  ZwapCalendarPickerState({required this.dateEnd,
-    required this.slotsPerDay,
-    required this.selectedDates,
-    required this.maxSelections
-  }) {
+  ZwapCalendarPickerState({required this.dateEnd, required this.slotsPerDay, required this.selectedDates, required this.maxSelections}) {
     Map<DateTime, List<TimeOfDay>> daysPlotted = this._plotDaysSlot();
     this.currentDate = daysPlotted.keys.first;
     this.dateStart = daysPlotted.keys.first;
@@ -84,9 +79,7 @@ class ZwapCalendarPickerState extends ChangeNotifier {
     while (i < this._getMaxSlotsView) {
       DateTime tmpCheck = DateTime(now.year, now.month, now.day);
       DateTime tmpCheckTwo = DateTime(tmp.year, tmp.month, tmp.day);
-      if (this.slotsPerDay.keys.toList().contains(tmp.weekday) &&
-          this.slotsPerDay.containsKey(tmp.weekday) &&
-          !tmpCheck.isAtSameMomentAs(tmpCheckTwo)) {
+      if (this.slotsPerDay.keys.toList().contains(tmp.weekday) && this.slotsPerDay.containsKey(tmp.weekday) && !tmpCheck.isAtSameMomentAs(tmpCheckTwo)) {
         finals[tmp] = this.slotsPerDay[tmp.weekday]!;
         i++;
       }
@@ -97,6 +90,9 @@ class ZwapCalendarPickerState extends ChangeNotifier {
         tmp = nextTmp;
       }
     }
+
+    finals.forEach((key, value) => finals[key] = value..sort((a, b) => a.hour == b.hour ? a.minute.compareTo(b.minute) : a.hour.compareTo(b.hour)));
+
     return finals;
   }
 
@@ -113,7 +109,7 @@ class ZwapCalendarPickerState extends ChangeNotifier {
   }
 
   /// It handles the hovering on some date inside the calendar picker
-  void hoverDate(TupleType<DateTime, TimeOfDay>? date){
+  void hoverDate(TupleType<DateTime, TimeOfDay>? date) {
     this.hoveredDate = date;
     notifyListeners();
   }
@@ -121,7 +117,6 @@ class ZwapCalendarPickerState extends ChangeNotifier {
 
 /// THe calendar picker to show the slots date
 class ZwapCalendarPicker extends StatelessWidget {
-
   /// CallBack to handle the key name for any text
   final Function(String key) handleKeyName;
 
@@ -131,8 +126,7 @@ class ZwapCalendarPicker extends StatelessWidget {
   List<Widget> _getSlots(List<TimeOfDay> slots, DateTime date, ZwapCalendarPickerState provider) {
     List<Widget> finals = [];
     slots.forEach((TimeOfDay element) {
-      DateTime current = DateTime(
-          date.year, date.month, date.day, element.hour, element.minute);
+      DateTime current = DateTime(date.year, date.month, date.day, element.hour, element.minute);
       bool isSelected = provider.selectedDates.contains(current);
       finals.add(Padding(
         padding: EdgeInsets.symmetric(vertical: 10),
@@ -144,17 +138,19 @@ class ZwapCalendarPicker extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: isSelected ? ZwapColors.primary700 : (provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element ? ZwapColors.primary200 : Colors.transparent),
+                color: isSelected
+                    ? ZwapColors.primary700
+                    : (provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element ? ZwapColors.primary200 : Colors.transparent),
               ),
-              color: isSelected ? ZwapColors.primary700 : (provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element ? ZwapColors.primary200 : Colors.transparent),
+              color: isSelected
+                  ? ZwapColors.primary700
+                  : (provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element ? ZwapColors.primary200 : Colors.transparent),
             ),
             child: Padding(
-              padding:
-              EdgeInsets.all(15),
+              padding: EdgeInsets.all(15),
               child: ZwapText(
                 text: "${element.hour}:${Utils.plotMinute(element.minute)}",
-                textColor:
-                isSelected ? ZwapColors.shades0 : ZwapColors.neutral800,
+                textColor: isSelected ? ZwapColors.shades0 : ZwapColors.neutral800,
                 zwapTextType: isSelected ? ZwapTextType.bodySemiBold : ZwapTextType.bodyRegular,
               ),
             ),
@@ -204,7 +200,7 @@ class ZwapCalendarPicker extends StatelessWidget {
   }
 
   /// It gets the calendar picker title section
-  Widget _getCalendarPickerTitle(ZwapCalendarPickerState provider){
+  Widget _getCalendarPickerTitle(ZwapCalendarPickerState provider) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -242,24 +238,17 @@ class ZwapCalendarPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ZwapVerticalScroll(
-        child: Consumer<ZwapCalendarPickerState>(
-            builder: (builder, provider, child) {
-              Map<DateTime, List<TimeOfDay>> daysPlotted = provider._plotDaysSlot();
-              return Column(
-                children: [
-                  this._getCalendarPickerTitle(provider),
-                  ResponsiveRow<Map<Widget, Map<String, int>>>(
-                    children: Map<Widget, Map<String, int>>.fromIterable(
-                        daysPlotted.keys.toList(),
-                        key: (item) => this._getDaysSlot(item, daysPlotted[item]!, provider),
-                        value: (item) => {'xl': 3, 'lg': 3, 'md': 4, 'sm': 4, 'xs': 4}
-                    ),
-                  )
-                ],
-              );
-            }
-        )
-    );
+    return ZwapVerticalScroll(child: Consumer<ZwapCalendarPickerState>(builder: (builder, provider, child) {
+      Map<DateTime, List<TimeOfDay>> daysPlotted = provider._plotDaysSlot();
+      return Column(
+        children: [
+          this._getCalendarPickerTitle(provider),
+          ResponsiveRow<Map<Widget, Map<String, int>>>(
+            children: Map<Widget, Map<String, int>>.fromIterable(daysPlotted.keys.toList(),
+                key: (item) => this._getDaysSlot(item, daysPlotted[item]!, provider), value: (item) => {'xl': 3, 'lg': 3, 'md': 4, 'sm': 4, 'xs': 4}),
+          )
+        ],
+      );
+    }));
   }
 }
