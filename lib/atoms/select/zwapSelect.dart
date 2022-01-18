@@ -3,6 +3,7 @@ import 'package:collection/src/list_extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
@@ -13,6 +14,31 @@ import 'package:zwap_design_system/atoms/text/text.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 import 'package:zwap_utils/zwap_utils/type.dart';
 
+///This should be used only for interactions between ZwapSelect and its overlay
+class _ZwapSelectProvider extends ChangeNotifier {
+  List<String> allValues;
+  bool isLoading;
+  String searchedValue;
+
+  _ZwapSelectProvider(this.allValues)
+      : this.isLoading = false,
+        this.searchedValue = '';
+
+  set searched(String value) => searchedValue != value ? {searchedValue = value, notifyListeners()} : null;
+
+  void addNewValues(List<String> newValues) {
+    allValues.addAll(newValues);
+    notifyListeners();
+  }
+
+  void setLoading(bool newValue) {
+    if (newValue != isLoading) {
+      isLoading = newValue;
+      notifyListeners();
+    }
+  }
+}
+
 /// custom dropdown widget to select some element from a list
 class ZwapSelect extends StatefulWidget {
   /// The custom values to display inside this widget
@@ -22,6 +48,7 @@ class ZwapSelect extends StatefulWidget {
   final Function(String key) callBackFunction;
 
   final Function(String newItem)? onAddItem;
+
   final bool canAddItem;
 
   /// The default value of this dropdown
@@ -31,15 +58,24 @@ class ZwapSelect extends StatefulWidget {
 
   final bool canSearch;
 
+  final double? maxOverlayHeight;
+
+  final String? label;
+
+  final Future<List<String>> Function(String inputValue, int pageNumber)? fetchMoreData;
+
   ZwapSelect({
     Key? key,
     required this.values,
     required this.callBackFunction,
     this.selected,
     this.hintText = '',
-    this.canAddItem = true,
+    this.canAddItem = false,
     this.onAddItem,
     this.canSearch = false,
+    this.maxOverlayHeight,
+    this.label,
+    this.fetchMoreData,
   })  : assert(values.isNotEmpty),
         super(key: key);
 
@@ -49,6 +85,9 @@ class ZwapSelect extends StatefulWidget {
 /// Description: the state for this current widget
 class _ZwapSelectState extends State<ZwapSelect> {
   final GlobalKey _selectKey = GlobalKey();
+  final ScrollController _overlayScrollController = ScrollController();
+
+  late final _ZwapSelectProvider _provider;
 
   /// The value to display
   String? _selectedValue;
@@ -63,7 +102,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
   late final TextEditingController _inputController;
   late final FocusNode _inputFocus;
 
-  List<String> _filteredValues = [];
+  int _pageNumber = 1;
 
   @override
   void initState() {
@@ -85,8 +124,9 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
     _inputController.addListener(_controllerListener);
     _inputFocus.addListener(_focusListener);
+    _overlayScrollController.addListener(_scrollControllerListener);
 
-    _filteredValues = widget.values;
+    _provider = _ZwapSelectProvider(widget.values);
   }
 
   void _focusListener() {
@@ -94,14 +134,31 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
     if ((_isOpened && !_inputFocus.hasFocus) || (!_isOpened && _inputFocus.hasFocus)) {
       _toggleOverlay();
-      _inputController.text = '';
-      _inputController.selection = TextSelection.collapsed(offset: 0);
+
+      if (!_isOpened) {
+        _inputController.text = '';
+        _inputController.selection = TextSelection.collapsed(offset: 0);
+      }
     }
   }
 
   void _controllerListener() {
-    List<String> _tmp = widget.values.where((v) => v.toLowerCase().trim().contains(_inputController.text.toLowerCase().trim())).toList();
-    if (!listEquals(_filteredValues, _tmp)) setState(() => _filteredValues = _tmp);
+    _provider.searched = _inputController.text;
+  }
+
+  void _scrollControllerListener() async {
+    if (widget.fetchMoreData == null) return;
+
+    if (_overlayScrollController.position.atEdge && _overlayScrollController.position.pixels != 0 && !_provider.isLoading && !_overlayScrollController.position.outOfRange) {
+      _provider.setLoading(true);
+
+      List<String> tmp = await widget.fetchMoreData!(_inputController.text, _pageNumber);
+
+      _pageNumber = _pageNumber + 1;
+
+      _provider.addNewValues(tmp);
+      _provider.setLoading(false);
+    }
   }
 
   @override
@@ -115,6 +172,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
   void dispose() {
     _inputController.removeListener(_controllerListener);
     _inputFocus.removeListener(_focusListener);
+    _overlayScrollController.removeListener(_scrollControllerListener);
     super.dispose();
   }
 
@@ -159,134 +217,171 @@ class _ZwapSelectState extends State<ZwapSelect> {
   OverlayEntry _createOverlay() {
     return OverlayEntry(
       builder: (context) {
-        return ZwapOverlayEntryWidget(
-          entity: _selectOverlay,
-          onAutoClose: () {
-            _inputController.text = _selectedValue ?? '';
+        return ChangeNotifierProvider.value(
+          value: _provider,
+          child: Builder(
+            builder: (context) {
+              bool _isLoading = context.select<_ZwapSelectProvider, bool>((pro) => pro.isLoading);
+              List<String> _allValues = context.select<_ZwapSelectProvider, List<String>>((pro) => pro.allValues);
+              String _searchedValue = context.select<_ZwapSelectProvider, String>((pro) => pro.searchedValue);
 
-            if (_inputFocus.hasFocus) _inputFocus.unfocus();
-          },
-          child: ZwapOverlayEntryChild(
-            top: (_selectKey.globalOffset?.dy ?? 0) + 45,
-            left: _selectKey.globalOffset?.dx ?? 0,
-            child: TweenAnimationBuilder<double>(
-              duration: const Duration(milliseconds: 350),
-              curve: Curves.decelerate,
-              tween: Tween(begin: 0, end: 1),
-              builder: (context, animation, child) => Opacity(
-                opacity: animation,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: ZwapColors.neutral300,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(4),
-                      bottomRight: Radius.circular(4),
-                    ),
-                  ),
-                  child: Container(
-                    width: (_selectKey.globalPaintBounds?.size.width ?? 2) - 2,
-                    decoration: BoxDecoration(
-                      color: ZwapColors.shades0,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(4),
-                        bottomRight: Radius.circular(4),
-                      ),
-                    ),
-                    margin: const EdgeInsets.only(bottom: 1, left: 1, right: 1),
-                    padding: const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 13),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: (widget.canSearch ? _filteredValues : widget.values).isEmpty
-                          ? [
-                              if (widget.canAddItem)
-                                Container(
-                                  color: Colors.transparent,
-                                  width: double.infinity,
-                                  child: Material(
-                                    color: '_random_key_for_this_item_2341234112341252456375' == _hoveredItem ? ZwapColors.neutral100 : ZwapColors.shades0,
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: InkWell(
-                                      onTap: () => widget.onAddItem != null ? widget.onAddItem!(_inputController.text) : null,
-                                      hoverColor: ZwapColors.neutral100,
-                                      onHover: (hovered) => setState(() => _hoveredItem = hovered ? '_random_key_for_this_item_2341234112341252456375' : null),
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
+              List<String> _toShowValues = _allValues.where((s) => s.toLowerCase().trim().contains(_searchedValue.toLowerCase().trim())).toList();
+
+              return ZwapOverlayEntryWidget(
+                entity: _selectOverlay,
+                onAutoClose: () {
+                  _inputController.text = _selectedValue ?? '';
+
+                  if (_inputFocus.hasFocus) _inputFocus.unfocus();
+                },
+                child: ZwapOverlayEntryChild(
+                  top: (_selectKey.globalOffset?.dy ?? 0) + 45,
+                  left: _selectKey.globalOffset?.dx ?? 0,
+                  child: TweenAnimationBuilder<double>(
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.decelerate,
+                    tween: Tween(begin: 0, end: 1),
+                    builder: (context, animation, child) => Opacity(
+                      opacity: animation,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: ZwapColors.neutral300,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(4),
+                            bottomRight: Radius.circular(4),
+                          ),
+                        ),
+                        child: Container(
+                          width: (_selectKey.globalPaintBounds?.size.width ?? 2) - 2,
+                          decoration: BoxDecoration(
+                            color: ZwapColors.shades0,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(4),
+                              bottomRight: Radius.circular(4),
+                            ),
+                          ),
+                          margin: const EdgeInsets.only(bottom: 1, left: 1, right: 1),
+                          padding: const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 13),
+                          constraints: BoxConstraints(maxHeight: widget.maxOverlayHeight ?? MediaQuery.of(context).size.height * 0.3),
+                          child: SingleChildScrollView(
+                            controller: _overlayScrollController,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _toShowValues.isEmpty
+                                  ? ([
+                                      if (widget.canAddItem)
+                                        Container(
                                           color: Colors.transparent,
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
-                                        child: Row(
-                                          children: [
-                                            ZwapTextMultiStyle(
-                                              texts: {
-                                                '${_inputController.text}': TupleType(a: null, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.shades100)),
-                                                ' not here? ': TupleType(a: null, b: TupleType(a: ZwapTextType.bodyRegular, b: ZwapColors.shades100)),
-                                                'Add it here': TupleType(a: null, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.shades100)),
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              else
-                                ZwapText(
-                                  text: "Nessun risulatato",
-                                  zwapTextType: ZwapTextType.bodyRegular,
-                                  textColor: ZwapColors.shades100,
-                                ),
-                            ]
-                          : (widget.canSearch ? _filteredValues : widget.values)
-                              .mapIndexed((i, value) => Container(
-                                    color: Colors.transparent,
-                                    width: double.infinity,
-                                    margin: EdgeInsets.only(bottom: i != (widget.values.length - 1) ? 8 : 0),
-                                    child: Material(
-                                      color: value == _selectedValue
-                                          ? value == _hoveredItem
-                                              ? ZwapColors.primary50
-                                              : ZwapColors.primary100
-                                          : value == _hoveredItem
-                                              ? ZwapColors.neutral100
-                                              : ZwapColors.shades0,
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: InkWell(
-                                        onTap: () => this.onChangeValue(value),
-                                        hoverColor: value == _selectedValue ? ZwapColors.primary50 : ZwapColors.neutral100,
-                                        splashColor: value == _selectedValue ? Colors.transparent : null,
-                                        onHover: (hovered) => setState(() => _hoveredItem = hovered ? value : null),
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: Container(
                                           width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            color: Colors.transparent,
+                                          child: Material(
+                                            color: '_random_key_for_this_item_2341234112341252456375' == _hoveredItem ? ZwapColors.neutral100 : ZwapColors.shades0,
                                             borderRadius: BorderRadius.circular(8),
+                                            child: InkWell(
+                                              onTap: () => widget.onAddItem != null ? widget.onAddItem!(_inputController.text) : null,
+                                              hoverColor: ZwapColors.neutral100,
+                                              onHover: (hovered) => setState(() => _hoveredItem = hovered ? '_random_key_for_this_item_2341234112341252456375' : null),
+                                              borderRadius: BorderRadius.circular(8),
+                                              child: Container(
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.transparent,
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
+                                                child: Row(
+                                                  children: [
+                                                    ZwapTextMultiStyle(
+                                                      texts: {
+                                                        '${_inputController.text}': TupleType(a: null, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.shades100)),
+                                                        ' not here? ': TupleType(a: null, b: TupleType(a: ZwapTextType.bodyRegular, b: ZwapColors.shades100)),
+                                                        'Add it here': TupleType(a: null, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.shades100)),
+                                                      },
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                  child:
-                                                      ZwapText(text: value, zwapTextType: ZwapTextType.bodyRegular, textColor: value == _selectedValue ? ZwapColors.primary800 : ZwapColors.shades100)),
-                                              if (value == _selectedValue) ...[
-                                                SizedBox(width: 5),
-                                                Icon(Icons.check, color: ZwapColors.shades100, size: 20),
-                                              ]
-                                            ],
+                                        )
+                                      else
+                                        Material(
+                                          child: ZwapText(
+                                            text: "Nessun risulatato",
+                                            zwapTextType: ZwapTextType.bodyRegular,
+                                            textColor: ZwapColors.shades100,
                                           ),
                                         ),
+                                    ])
+                                  : [
+                                      Column(
+                                        key: UniqueKey(),
+                                        children: _toShowValues
+                                            .mapIndexed((i, value) => Container(
+                                                  color: Colors.transparent,
+                                                  width: double.infinity,
+                                                  margin: EdgeInsets.only(bottom: i != (widget.values.length - 1) ? 8 : 0),
+                                                  child: Material(
+                                                    color: value == _selectedValue
+                                                        ? value == _hoveredItem
+                                                            ? ZwapColors.primary50
+                                                            : ZwapColors.primary100
+                                                        : value == _hoveredItem
+                                                            ? ZwapColors.neutral100
+                                                            : ZwapColors.shades0,
+                                                    borderRadius: BorderRadius.circular(8),
+                                                    child: InkWell(
+                                                      onTap: () => this.onChangeValue(value),
+                                                      hoverColor: value == _selectedValue ? ZwapColors.primary50 : ZwapColors.neutral100,
+                                                      splashColor: value == _selectedValue ? Colors.transparent : null,
+                                                      onHover: (hovered) => setState(() => _hoveredItem = hovered ? value : null),
+                                                      borderRadius: BorderRadius.circular(8),
+                                                      child: Container(
+                                                        width: double.infinity,
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.transparent,
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+                                                        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
+                                                        child: Row(
+                                                          children: [
+                                                            Expanded(
+                                                                child: ZwapText(
+                                                                    text: value,
+                                                                    zwapTextType: ZwapTextType.bodyRegular,
+                                                                    textColor: value == _selectedValue ? ZwapColors.primary800 : ZwapColors.shades100)),
+                                                            if (value == _selectedValue) ...[
+                                                              SizedBox(width: 5),
+                                                              Icon(Icons.check, color: ZwapColors.shades100, size: 20),
+                                                            ]
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ))
+                                            .toList(),
                                       ),
-                                    ),
-                                  ))
-                              .toList(),
+                                      if (_isLoading)
+                                        Center(
+                                          child: Container(
+                                            height: 25,
+                                            width: 25,
+                                            child: CircularProgressIndicator(
+                                              valueColor: AlwaysStoppedAnimation(ZwapColors.primary800),
+                                              strokeWidth: 0.5,
+                                            ),
+                                          ),
+                                        )
+                                    ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         );
       },
@@ -334,7 +429,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                   controller: _inputController,
                   focusNode: _inputFocus,
                   decoration: InputDecoration.collapsed(hintText: widget.hintText),
-                  cursorColor: ZwapColors.shades100,
+                  cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
                 ),
               ),
               SizedBox(width: 5),
