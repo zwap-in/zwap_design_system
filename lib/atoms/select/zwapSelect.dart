@@ -94,7 +94,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
     if ((_isOpened && !_inputFocus.hasFocus) || (!_isOpened && _inputFocus.hasFocus)) {
       _toggleOverlay();
-      _inputController.selection = TextSelection(baseOffset: 0, extentOffset: _inputController.text.length);
+      _inputController.text = '';
+      _inputController.selection = TextSelection.collapsed(offset: 0);
     }
   }
 
