@@ -149,21 +149,24 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
   void _controllerListener() {
     _provider.searched = _inputController.text;
+    _requestData(forcePageToOne: true);
   }
 
   void _scrollControllerListener() async {
     if (widget.fetchMoreData == null) return;
 
-    if (_overlayScrollController.position.atEdge && _overlayScrollController.position.pixels != 0 && !_provider.isLoading && !_overlayScrollController.position.outOfRange) {
-      _provider.setLoading(true);
+    if (_overlayScrollController.position.atEdge && _overlayScrollController.position.pixels != 0 && !_provider.isLoading && !_overlayScrollController.position.outOfRange) _requestData();
+  }
 
-      List<String> tmp = await widget.fetchMoreData!(_inputController.text, _pageNumber);
+  _requestData({bool forcePageToOne = false}) async {
+    _provider.setLoading(true);
 
-      _pageNumber = _pageNumber + 1;
+    List<String> tmp = await widget.fetchMoreData!(_inputController.text, forcePageToOne ? 1 : _pageNumber);
 
-      _provider.addNewValues(tmp);
-      _provider.setLoading(false);
-    }
+    if (!forcePageToOne) _pageNumber += 1;
+
+    _provider.addNewValues(tmp);
+    _provider.setLoading(false);
   }
 
   @override
@@ -397,13 +400,16 @@ class _ZwapSelectState extends State<ZwapSelect> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.label != null)
+        if (widget.label != null) ...[
           ZwapText(
             text: widget.label!,
             zwapTextType: ZwapTextType.bodySemiBold,
             textColor: ZwapColors.neutral600,
           ),
+          SizedBox(height: 5),
+        ],
         InkWell(
           onHover: (bool value) => this.hoverButton(value),
           onTap: () {
