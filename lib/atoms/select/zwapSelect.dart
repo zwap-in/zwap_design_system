@@ -32,8 +32,8 @@ class _ZwapSelectProvider extends ChangeNotifier {
 
   _ZwapSelectProvider(this._originalValues)
       : this.isLoading = false,
-        this.searchedValue = '',
-        this.selectedValues = [];
+        this.selectedValues = [],
+        this.searchedValue = '';
 
   set searched(String value) => searchedValue != value ? {searchedValue = value, notifyListeners()} : null;
 
@@ -56,6 +56,8 @@ class _ZwapSelectProvider extends ChangeNotifier {
   }
 
   void selectedChanged(List<String> selected) {
+    print(selected);
+
     selectedValues = List.from(selected);
     notifyListeners();
   }
@@ -213,6 +215,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
     _overlayScrollController.addListener(_scrollControllerListener);
 
     _provider = _ZwapSelectProvider(widget.values);
+    _provider.selectedChanged(_selectedValues);
   }
 
   void _focusListener() {
@@ -253,12 +256,12 @@ class _ZwapSelectState extends State<ZwapSelect> {
   @override
   void didUpdateWidget(covariant ZwapSelect oldWidget) {
     if (!mapEquals(oldWidget.values, widget.values)) WidgetsBinding.instance?.addPostFrameCallback((_) => _provider.originalValuesChanged(widget.values));
-    if (widget.selected != oldWidget.selected) WidgetsBinding.instance?.addPostFrameCallback((_) => onChangeValue(widget.selected, callCallback: false));
-    if (!listEquals(widget.selectedValues, oldWidget.selectedValues))
-      WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {
-            _selectedValues = widget.selectedValues;
-            _provider.selectedChanged(widget.selectedValues);
-          }));
+    if (widget.isRegular && widget.selected != oldWidget.selected) WidgetsBinding.instance?.addPostFrameCallback((_) => onChangeValue(widget.selected, callCallback: false));
+    if (widget.isMultiple && !listEquals(widget.selectedValues, oldWidget.selectedValues))
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        setState(() => _selectedValues = widget.selectedValues);
+        _provider.selectedChanged(widget.selectedValues);
+      });
 
     super.didUpdateWidget(oldWidget);
   }
@@ -303,6 +306,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
     } else {
       Overlay.of(context)?.insert(_selectOverlay = _createOverlay());
       if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
+      Future.delayed(const Duration(milliseconds: 200), () => _provider.selectedChanged(_selectedValues));
     }
 
     setState(() {});
@@ -319,6 +323,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
               Map<String, String> _allValues = context.select<_ZwapSelectProvider, Map<String, String>>((pro) => pro.allValues);
               String _searchedValue = context.select<_ZwapSelectProvider, String>((pro) => pro.searchedValue);
               List<String> _selectedValues = context.select<_ZwapSelectProvider, List<String>>((pro) => pro.selectedValues);
+
+              print(_selectedValues);
 
               Map<String, String> _toShowValues = Map.from(_allValues)..removeWhere((k, v) => v.isNotEmpty && !v.toLowerCase().trim().contains(_searchedValue.toLowerCase().trim()));
 
@@ -502,111 +508,114 @@ class _ZwapSelectState extends State<ZwapSelect> {
   Widget build(BuildContext context) {
     final bool _showTags = !_inputFocus.hasFocus && widget.isMultiple && _selectedValues.isNotEmpty;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (widget.label != null) ...[
-          ZwapText(
-            text: widget.label!,
-            zwapTextType: ZwapTextType.bodySemiBold,
-            textColor: ZwapColors.neutral600,
-          ),
-          SizedBox(height: 5),
-        ],
-        InkWell(
-          onHover: (bool value) => setState(() => _isHovered = value),
-          onTap: () {
-            if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
-          },
-          child: Container(
-            decoration: (_selectOverlay?.mounted ?? false)
-                ? BoxDecoration(
-                    color: ZwapColors.neutral300,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(4),
-                      topRight: Radius.circular(4),
-                    ),
-                  )
-                : BoxDecoration(
-                    color: this._isHovered ? ZwapColors.primary300 : ZwapColors.neutral300,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+    return ChangeNotifierProvider.value(
+      value: _provider,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (widget.label != null) ...[
+            ZwapText(
+              text: widget.label!,
+              zwapTextType: ZwapTextType.bodySemiBold,
+              textColor: ZwapColors.neutral600,
+            ),
+            SizedBox(height: 5),
+          ],
+          InkWell(
+            onHover: (bool value) => setState(() => _isHovered = value),
+            onTap: () {
+              if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
+            },
             child: Container(
-              key: _selectKey,
-              height: 45,
-              decoration: BoxDecoration(
-                color: ZwapColors.shades0,
-                borderRadius: (_selectOverlay?.mounted ?? false)
-                    ? BorderRadius.only(
+              decoration: (_selectOverlay?.mounted ?? false)
+                  ? BoxDecoration(
+                      color: ZwapColors.neutral300,
+                      borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(4),
                         topRight: Radius.circular(4),
-                      )
-                    : BorderRadius.circular(4),
-              ),
-              margin: _selectOverlay?.mounted ?? false ? const EdgeInsets.only(top: 1, left: 1, right: 1) : const EdgeInsets.all(1),
-              padding: const EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: AnimatedOpacity(
-                            duration: const Duration(milliseconds: 200),
-                            opacity: _showTags ? 0 : 1,
-                            child: IgnorePointer(
-                              ignoring: _showTags,
-                              child: Center(
-                                child: TextField(
-                                  controller: _inputController,
-                                  focusNode: _inputFocus,
-                                  decoration: InputDecoration.collapsed(hintText: widget.hintText),
-                                  cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned.fill(
-                          child: AnimatedOpacity(
-                            duration: const Duration(milliseconds: 200),
-                            opacity: _showTags ? 1 : 0,
-                            child: IgnorePointer(
-                              ignoring: !_showTags,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: _selectedValues
-                                      .map((k) => Container(
-                                            margin: const EdgeInsets.only(left: 4),
-                                            child: _ZwapTag(
-                                              tagValue: _provider.allValues[k] ?? '',
-                                              tagKey: k,
-                                              onCancel: (k) => onChangeValue(k),
-                                            ),
-                                          ))
-                                      .toList(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
+                    )
+                  : BoxDecoration(
+                      color: this._isHovered ? ZwapColors.primary300 : ZwapColors.neutral300,
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                  ),
-                  SizedBox(width: 5),
-                  AnimatedRotation(
-                    turns: (_selectOverlay?.mounted ?? false) ? 0.5 : 0,
-                    duration: const Duration(milliseconds: 150),
-                    child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(_selectOverlay?.mounted)),
-                  ),
-                ],
+              child: Container(
+                key: _selectKey,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: ZwapColors.shades0,
+                  borderRadius: (_selectOverlay?.mounted ?? false)
+                      ? BorderRadius.only(
+                          topLeft: Radius.circular(4),
+                          topRight: Radius.circular(4),
+                        )
+                      : BorderRadius.circular(4),
+                ),
+                margin: _selectOverlay?.mounted ?? false ? const EdgeInsets.only(top: 1, left: 1, right: 1) : const EdgeInsets.all(1),
+                padding: const EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: AnimatedOpacity(
+                              duration: const Duration(milliseconds: 200),
+                              opacity: _showTags ? 0 : 1,
+                              child: IgnorePointer(
+                                ignoring: _showTags,
+                                child: Center(
+                                  child: TextField(
+                                    controller: _inputController,
+                                    focusNode: _inputFocus,
+                                    decoration: InputDecoration.collapsed(hintText: widget.hintText),
+                                    cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: AnimatedOpacity(
+                              duration: const Duration(milliseconds: 200),
+                              opacity: _showTags ? 1 : 0,
+                              child: IgnorePointer(
+                                ignoring: !_showTags,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: _selectedValues
+                                        .map((k) => Container(
+                                              margin: const EdgeInsets.only(left: 4),
+                                              child: _ZwapTag(
+                                                tagValue: _provider.allValues[k] ?? '',
+                                                tagKey: k,
+                                                onCancel: (k) => onChangeValue(k),
+                                              ),
+                                            ))
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    AnimatedRotation(
+                      turns: (_selectOverlay?.mounted ?? false) ? 0.5 : 0,
+                      duration: const Duration(milliseconds: 150),
+                      child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(_selectOverlay?.mounted)),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
