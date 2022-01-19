@@ -3,7 +3,9 @@ import 'package:collection/src/list_extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:zwap_design_system/atoms/atoms.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
@@ -13,10 +15,14 @@ import 'package:zwap_design_system/atoms/typography/zwapTypography.dart';
 import 'package:zwap_design_system/atoms/text/text.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 import 'package:zwap_utils/zwap_utils/type.dart';
+import 'package:collection/collection.dart';
+
+enum _ZwapSelectTypes { regular, multiple }
 
 ///This should be used only for interactions between ZwapSelect and its overlay
 class _ZwapSelectProvider extends ChangeNotifier {
   Map<String, String> _originalValues;
+  List<String> selectedValues;
   bool isLoading;
   String searchedValue;
 
@@ -26,7 +32,8 @@ class _ZwapSelectProvider extends ChangeNotifier {
 
   _ZwapSelectProvider(this._originalValues)
       : this.isLoading = false,
-        this.searchedValue = '';
+        this.searchedValue = '',
+        this.selectedValues = [];
 
   set searched(String value) => searchedValue != value ? {searchedValue = value, notifyListeners()} : null;
 
@@ -47,35 +54,68 @@ class _ZwapSelectProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void selectedChanged(List<String> selected) {
+    selectedValues = List.from(selected);
+    notifyListeners();
+  }
 }
 
 /// custom dropdown widget to select some element from a list
 class ZwapSelect extends StatefulWidget {
   /// The custom values to display inside this widget
+  ///
+  /// { [key]: [value] }
   final Map<String, String> values;
 
   /// It handles the selected value with a callBack function
-  final Function(String key) callBackFunction;
+  ///
+  /// If is regular select [allSelectedValues] is always null, and [key] is the current selected value
+  ///
+  /// If is multiple select the function will be called both on add and remove items:
+  /// * [allSelectedValues] are new selected values,
+  /// * [key] is the key of the element who was added or removed
+  final Function(String key, List<String>? allSelectedValues) callBackFunction;
 
+  /// Called only if [canAddItem] is true when user click add new item
   final Function(String newItem)? onAddItem;
 
+  /// If [true] user can add new values
   final bool canAddItem;
 
-  /// The default value of this dropdown
+  /// The current value of select input, if is regular select
+  ///
+  /// Ignored if multiple select
   final String? selected;
 
+  /// The current selected item keys, if multiple select
+  ///
+  /// Always empty if is regular select
+  ///
+  /// Cannot be null, can be empty
+  final List<String> selectedValues;
+
+  /// Text to display if there is no selected value
   final String hintText;
 
+  /// If [true] user can type and filter items
   final bool canSearch;
 
+  /// The select overlay mac height
   final double? maxOverlayHeight;
 
+  /// If not null a label will be displayed with this value
   final String? label;
 
+  /// If not null and user scrolls to the end this function will be called and new items will be automatically added
   final Future<Map<String, String>> Function(String inputValue, int pageNumber)? fetchMoreData;
 
+  /// The initial page number used for call fetchMoreData callback
   final int initialPageNumber;
 
+  final _ZwapSelectTypes _type;
+
+  ///Regular ZwapSelect
   ZwapSelect({
     Key? key,
     required this.values,
@@ -89,10 +129,34 @@ class ZwapSelect extends StatefulWidget {
     this.label,
     this.fetchMoreData,
     this.initialPageNumber = 1,
-  })  : assert(values.isNotEmpty),
+  })  : this.selectedValues = [],
+        this._type = _ZwapSelectTypes.regular,
+        assert(values.isNotEmpty),
+        super(key: key);
+
+  ///Multiple ZwapSelect, multiple items will be displayed with ZwapTags
+  ZwapSelect.multiple({
+    Key? key,
+    required this.values,
+    required this.callBackFunction,
+    this.selectedValues = const [],
+    this.hintText = '',
+    this.canAddItem = false,
+    this.onAddItem,
+    this.canSearch = false,
+    this.maxOverlayHeight,
+    this.label,
+    this.fetchMoreData,
+    this.initialPageNumber = 1,
+  })  : this.selected = null,
+        this._type = _ZwapSelectTypes.multiple,
+        assert(values.isNotEmpty),
         super(key: key);
 
   _ZwapSelectState createState() => _ZwapSelectState();
+
+  bool get isRegular => _type == _ZwapSelectTypes.regular;
+  bool get isMultiple => _type == _ZwapSelectTypes.multiple;
 }
 
 /// Description: the state for this current widget
@@ -102,25 +166,32 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
   late final _ZwapSelectProvider _provider;
 
-  /// The value to display
-  String? _selectedValue;
+  /// The keys of the current selected items
+  List<String> _selectedValues = [];
 
-  /// Is this select hoovered
-  bool _isHover = false;
+  /// If [true] the select input is hovered
+  bool _isHovered = false;
 
-  dynamic _hoveredItem;
+  /// The key of the current hovered item
+  String? _hoveredItem;
 
+  /// Object for select overlay control
   OverlayEntry? _selectOverlay;
 
+  /// Text input
   late final TextEditingController _inputController;
   late final FocusNode _inputFocus;
 
+  /// The progressive number for requesting page
   late int _pageNumber;
+
+  //TODO: controlla richiesta vuota e a che ricerca apparteneva => no richieste infinite
 
   @override
   void initState() {
     super.initState();
-    _selectedValue = widget.selected;
+
+    _selectedValues = widget.isMultiple ? widget.selectedValues : [if (widget.selected != null) widget.selected!];
 
     _pageNumber = widget.initialPageNumber;
 
@@ -128,7 +199,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
     _inputFocus = FocusNode(onKey: (node, event) {
       if (event.physicalKey == PhysicalKeyboardKey.end || event.physicalKey == PhysicalKeyboardKey.enter || event.physicalKey == PhysicalKeyboardKey.tab) {
         _inputFocus.unfocus();
-        _inputController.text = widget.values[_selectedValue] ?? '';
+        _inputController.text = widget.values[_selectedValues] ?? '';
 
         return KeyEventResult.handled;
       }
@@ -183,6 +254,11 @@ class _ZwapSelectState extends State<ZwapSelect> {
   void didUpdateWidget(covariant ZwapSelect oldWidget) {
     if (!mapEquals(oldWidget.values, widget.values)) WidgetsBinding.instance?.addPostFrameCallback((_) => _provider.originalValuesChanged(widget.values));
     if (widget.selected != oldWidget.selected) WidgetsBinding.instance?.addPostFrameCallback((_) => onChangeValue(widget.selected, callCallback: false));
+    if (!listEquals(widget.selectedValues, oldWidget.selectedValues))
+      WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {
+            _selectedValues = widget.selectedValues;
+            _provider.selectedChanged(widget.selectedValues);
+          }));
 
     super.didUpdateWidget(oldWidget);
   }
@@ -199,24 +275,23 @@ class _ZwapSelectState extends State<ZwapSelect> {
   void onChangeValue(String? value, {bool callCallback = true}) {
     if (value == null) return;
 
-    if (callCallback) widget.callBackFunction(value);
+    if (widget.isMultiple) {
+      if (_selectedValues.contains(value))
+        _selectedValues.remove(value);
+      else
+        _selectedValues.add(value);
+    } else {
+      _selectedValues = [value];
+      _inputController.text = _provider.allValues[value] ?? '';
+    }
 
-    if (_inputFocus.hasFocus) _inputFocus.unfocus();
+    _provider.selectedChanged(_selectedValues);
 
-    _inputController.text = _provider.allValues[value] ?? '';
+    if (callCallback) widget.callBackFunction(value, _selectedValues);
 
-    setState(() {
-      this._selectedValue = value;
-    });
-  }
+    if (_inputFocus.hasFocus && widget.isRegular) _inputFocus.unfocus();
 
-  /// It opens the dropdown
-
-  /// It hoovers the dropdown button
-  void hoverButton(bool value) {
-    setState(() {
-      this._isHover = value;
-    });
+    setState(() {});
   }
 
   void _toggleOverlay() {
@@ -243,13 +318,14 @@ class _ZwapSelectState extends State<ZwapSelect> {
               bool _isLoading = context.select<_ZwapSelectProvider, bool>((pro) => pro.isLoading);
               Map<String, String> _allValues = context.select<_ZwapSelectProvider, Map<String, String>>((pro) => pro.allValues);
               String _searchedValue = context.select<_ZwapSelectProvider, String>((pro) => pro.searchedValue);
+              List<String> _selectedValues = context.select<_ZwapSelectProvider, List<String>>((pro) => pro.selectedValues);
 
               Map<String, String> _toShowValues = Map.from(_allValues)..removeWhere((k, v) => v.isNotEmpty && !v.toLowerCase().trim().contains(_searchedValue.toLowerCase().trim()));
 
               return ZwapOverlayEntryWidget(
                 entity: _selectOverlay,
                 onAutoClose: () {
-                  _inputController.text = _provider.allValues[_selectedValue] ?? '';
+                  if (widget.isRegular) _inputController.text = _provider.allValues[_selectedValues.firstOrNull ?? ''] ?? '';
 
                   if (_inputFocus.hasFocus) _inputFocus.unfocus();
                 },
@@ -296,7 +372,21 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                             color: '_random_key_for_this_item_2341234112341252456375' == _hoveredItem ? ZwapColors.neutral100 : ZwapColors.shades0,
                                             borderRadius: BorderRadius.circular(8),
                                             child: InkWell(
-                                              onTap: () => widget.onAddItem != null ? widget.onAddItem!(_inputController.text) : null,
+                                              onTap: () {
+                                                if (widget.onAddItem == null) return;
+                                                final String _newItemValue = _inputController.text;
+                                                _inputController.text = '';
+
+                                                widget.onAddItem!(_newItemValue);
+
+                                                if (widget.isRegular) return;
+
+                                                _provider.addNewValues({_newItemValue: _newItemValue});
+                                                setState(() {
+                                                  _selectedValues.add(_newItemValue);
+                                                  _provider.selectedChanged(_selectedValues);
+                                                });
+                                              },
                                               hoverColor: ZwapColors.neutral100,
                                               onHover: (hovered) => setState(() => _hoveredItem = hovered ? '_random_key_for_this_item_2341234112341252456375' : null),
                                               borderRadius: BorderRadius.circular(8),
@@ -341,7 +431,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                   width: double.infinity,
                                                   margin: EdgeInsets.only(bottom: i != (_toShowValues.length - 1) ? 8 : 0),
                                                   child: Material(
-                                                    color: key == _selectedValue
+                                                    color: _selectedValues.contains(key)
                                                         ? key == _hoveredItem
                                                             ? ZwapColors.primary50
                                                             : ZwapColors.primary100
@@ -351,8 +441,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                     borderRadius: BorderRadius.circular(8),
                                                     child: InkWell(
                                                       onTap: () => this.onChangeValue(key),
-                                                      hoverColor: key == _selectedValue ? ZwapColors.primary50 : ZwapColors.neutral100,
-                                                      splashColor: key == _selectedValue ? Colors.transparent : null,
+                                                      hoverColor: _selectedValues.contains(key) ? ZwapColors.primary50 : ZwapColors.neutral100,
+                                                      splashColor: _selectedValues.contains(key) ? Colors.transparent : null,
                                                       onHover: (hovered) => setState(() => _hoveredItem = hovered ? key : null),
                                                       borderRadius: BorderRadius.circular(8),
                                                       child: Container(
@@ -368,8 +458,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                                 child: ZwapText(
                                                                     text: _allValues[key] ?? '<error>',
                                                                     zwapTextType: ZwapTextType.bodyRegular,
-                                                                    textColor: key == _selectedValue ? ZwapColors.primary800 : ZwapColors.shades100)),
-                                                            if (key == _selectedValue) ...[
+                                                                    textColor: _selectedValues.contains(key) ? ZwapColors.primary800 : ZwapColors.shades100)),
+                                                            if (_selectedValues.contains(key)) ...[
                                                               SizedBox(width: 5),
                                                               Icon(Icons.check, color: ZwapColors.shades100, size: 20),
                                                             ]
@@ -410,6 +500,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
   @override
   Widget build(BuildContext context) {
+    final bool _showTags = !_inputFocus.hasFocus && widget.isMultiple && _selectedValues.isNotEmpty;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -423,7 +515,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
           SizedBox(height: 5),
         ],
         InkWell(
-          onHover: (bool value) => this.hoverButton(value),
+          onHover: (bool value) => setState(() => _isHovered = value),
           onTap: () {
             if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
           },
@@ -437,7 +529,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                     ),
                   )
                 : BoxDecoration(
-                    color: this._isHover ? ZwapColors.primary300 : ZwapColors.neutral300,
+                    color: this._isHovered ? ZwapColors.primary300 : ZwapColors.neutral300,
                     borderRadius: BorderRadius.circular(4),
                   ),
             child: Container(
@@ -456,12 +548,51 @@ class _ZwapSelectState extends State<ZwapSelect> {
               padding: const EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10),
               child: Row(
                 children: [
-                  Flexible(
-                    child: TextField(
-                      controller: _inputController,
-                      focusNode: _inputFocus,
-                      decoration: InputDecoration.collapsed(hintText: widget.hintText),
-                      cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: AnimatedOpacity(
+                            duration: const Duration(milliseconds: 200),
+                            opacity: _showTags ? 0 : 1,
+                            child: IgnorePointer(
+                              ignoring: _showTags,
+                              child: Center(
+                                child: TextField(
+                                  controller: _inputController,
+                                  focusNode: _inputFocus,
+                                  decoration: InputDecoration.collapsed(hintText: widget.hintText),
+                                  cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: AnimatedOpacity(
+                            duration: const Duration(milliseconds: 200),
+                            opacity: _showTags ? 1 : 0,
+                            child: IgnorePointer(
+                              ignoring: !_showTags,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: _selectedValues
+                                      .map((k) => Container(
+                                            margin: const EdgeInsets.only(left: 4),
+                                            child: _ZwapTag(
+                                              tagValue: _provider.allValues[k] ?? '',
+                                              tagKey: k,
+                                              onCancel: (k) => onChangeValue(k),
+                                            ),
+                                          ))
+                                      .toList(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(width: 5),
@@ -476,6 +607,41 @@ class _ZwapSelectState extends State<ZwapSelect> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ZwapTag extends StatelessWidget {
+  final String tagKey;
+  final String tagValue;
+  final Function(String tagKey)? onCancel;
+
+  const _ZwapTag({required this.tagKey, required this.tagValue, this.onCancel, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(minWidth: 30, maxWidth: 120),
+      decoration: BoxDecoration(color: ZwapColors.primary700, borderRadius: BorderRadius.circular(4)),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: ZwapText(
+              text: tagValue,
+              zwapTextType: ZwapTextType.bodyRegular,
+              textColor: ZwapColors.shades0,
+              textOverflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(width: 5),
+          GestureDetector(
+            onTap: () => onCancel != null ? onCancel!(tagKey) : null,
+            child: ZwapIcons.icons('close', iconColor: ZwapColors.shades0, iconSize: 20),
+          ),
+        ],
+      ),
     );
   }
 }

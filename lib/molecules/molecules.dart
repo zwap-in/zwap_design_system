@@ -8,7 +8,6 @@ export 'openToTag/zwapOpenToTag.dart';
 export 'progress/progress.dart';
 export 'rangeSlider/zwapRangeSlider.dart';
 export 'scrollArrows/zwapScrollArrow.dart';
-export 'selectTag/zwapMultiSelect.dart';
 export 'starRating/zwapStarRating.dart';
 export 'statusBadge/zwapStatusBadge.dart';
 export 'statusTag/zwapStatusTag.dart';
