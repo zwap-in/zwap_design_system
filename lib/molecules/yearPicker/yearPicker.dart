@@ -1,100 +1,158 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
 import 'picker/zwapDatePicker.dart';
 
 /// The provider state to handle this component
 class ZwapDateInput extends StatefulWidget {
   /// The placeholder text inside this input widget
-  final String placeholderText;
+  final String hintText;
 
   /// The text editing controller
-  final TextEditingController textEditingController;
+  final TextEditingController? inputController;
 
   /// The title text for this input date picker widget
-  final String? titleText;
+  final String? label;
 
-  ZwapDateInput({Key? key, required this.placeholderText, required this.textEditingController, this.titleText}) : super(key: key);
+  final int? selectedYear;
+
+  final int? minYear;
+
+  final int? maxYear;
+
+  ZwapDateInput({
+    Key? key,
+    required this.hintText,
+    this.inputController,
+    this.label,
+    this.maxYear,
+    this.minYear,
+    this.selectedYear,
+  }) : super(key: key);
 
   _ZwapDateInputState createState() => _ZwapDateInputState();
 }
 
 /// Component to handle the input date picker
 class _ZwapDateInputState extends State<ZwapDateInput> {
-  /// The focus node for the input field
-  final FocusNode _focusNode = FocusNode();
+  final GlobalKey _yearInputKey = GlobalKey();
 
-  /// The layer linked to the input field
-  final LayerLink _layerLink = LayerLink();
+  /// The focus node for the input field
+  late final FocusNode _inputFocus;
+
+  late final TextEditingController _inputController;
 
   /// The overlay on the input field
-  late OverlayEntry _overlayEntry;
+  OverlayEntry? _pickerOverlay;
 
-  /// It opens or close the input widget
-  void openClose(int? year) {
-    this._focusNode.unfocus();
-    this._overlayEntry.remove();
-    setState(() {
-      if (year != null) {
-        widget.textEditingController.value = TextEditingValue(text: year.toString());
-      }
-    });
-  }
+  bool get _isOverlayOpened => _pickerOverlay?.mounted ?? false;
+
+  late bool _isHovered;
 
   @override
   void initState() {
-    this._focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-        this._overlayEntry = this._createOverlayEntry(false);
-        Overlay.of(context)?.insert(this._overlayEntry);
-      } else {
-        if (!this._overlayEntry.mounted) {
-          this._overlayEntry.remove();
-        }
-      }
+    _isHovered = false;
+    _inputController = widget.inputController ?? TextEditingController();
+    _inputFocus = FocusNode(onKeyEvent: (node, event) {
+      if (_isOverlayOpened) {}
+
+      return KeyEventResult.ignored;
     });
+
     super.initState();
   }
 
-  /// It creates the overlay menu
-  OverlayEntry _createOverlayEntry(bool isLoading) {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
-    Size size = renderBox.size;
-    return OverlayEntry(
-        builder: (context) => Positioned(
-              width: size.width,
-              child: CompositedTransformFollower(
-                link: this._layerLink,
-                showWhenUnlinked: false,
-                offset: Offset(0.0, size.height + 5.0),
-                child: Material(
-                    elevation: 4.0,
-                    child: SizedBox(
-                      height: 350,
-                      child: ZwapDatePicker(
-                        minYear: 1900,
-                        onSelectYear: (int year) => this.openClose(year),
-                        maxYear: DateTime.now().year,
-                      ),
-                    )),
-              ),
-            ));
+  void _toggleOverlay() {
+    if (_pickerOverlay?.mounted ?? false) {
+      try {
+        _pickerOverlay!.remove();
+      } catch (e) {}
+      _pickerOverlay = null;
+    } else {
+      Overlay.of(context)?.insert(_pickerOverlay = _createOverlay());
+      if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
+    }
+
+    setState(() {});
+  }
+
+  OverlayEntry _createOverlay() {
+    return OverlayEntry(builder: (context) {
+      return ZwapOverlayEntryWidget(
+        entity: _pickerOverlay,
+        onAutoClose: () => _inputFocus.hasFocus ? _inputFocus.unfocus() : null,
+        child: ZwapOverlayEntryChild(
+          top: (_yearInputKey.globalOffset?.dy ?? 0) + 45,
+          left: _yearInputKey.globalOffset?.dx ?? 0,
+          child: TweenAnimationBuilder<double>(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.decelerate,
+            tween: Tween(begin: 0, end: 1),
+            builder: (context, animation, child) => Opacity(
+              opacity: animation,
+              child: Container(height: 200),
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: this._layerLink,
-      child: ZwapInput(
-        controller: widget.textEditingController,
-        label: widget.titleText,
-        placeholder: widget.placeholderText,
-        disabled: false,
-        focusNode: this._focusNode,
-        suffixIcon: Icons.lock_clock,
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.label != null) ...[
+          ZwapText(
+            text: widget.label!,
+            zwapTextType: ZwapTextType.bodySemiBold,
+            textColor: ZwapColors.neutral600,
+          ),
+          SizedBox(height: 5),
+        ],
+        InkWell(
+          onHover: (bool value) => setState(() => _isHovered = value),
+          onTap: () {
+            if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
+
+            _toggleOverlay();
+          },
+          child: Container(
+            key: _yearInputKey,
+            height: 45,
+            decoration: BoxDecoration(
+              border: Border.all(color: this._isHovered ? ZwapColors.primary300 : ZwapColors.neutral300),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            padding: const EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _inputController,
+                    focusNode: _inputFocus,
+                    decoration: InputDecoration.collapsed(hintText: widget.hintText),
+                    cursorColor: ZwapColors.shades100,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  ),
+                ),
+                SizedBox(width: 5),
+                AnimatedRotation(
+                  turns: _isOverlayOpened ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 150),
+                  child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(_isOverlayOpened)),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
