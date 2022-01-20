@@ -112,7 +112,7 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
   @override
   void initState() {
     _isHovered = false;
-    _inputController = widget.inputController ?? TextEditingController();
+    _inputController = widget.inputController ?? TextEditingController(text: '${widget.selectedYear ?? ""}');
     _inputFocus = FocusNode(onKeyEvent: (node, event) {
       if (_isOverlayOpened) _toggleOverlay();
       return KeyEventResult.ignored;
