@@ -1,18 +1,11 @@
 /// IMPORTING THIRD PARTY PACKAGES
-import 'package:collection/src/list_extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 
 /// IMPORTING LOCAL PACKAGES
-import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
-import 'package:zwap_design_system/atoms/input/zwapInput.dart';
-import 'package:zwap_design_system/atoms/overlayEntryWidget/zwapOverlayEntryWidget.dart';
-import 'package:zwap_design_system/atoms/typography/zwapTypography.dart';
-import 'package:zwap_design_system/atoms/text/text.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 import 'package:zwap_utils/zwap_utils/type.dart';
 import 'package:collection/collection.dart';
@@ -115,7 +108,18 @@ class ZwapSelect extends StatefulWidget {
   /// The initial page number used for call fetchMoreData callback
   final int initialPageNumber;
 
+  /// The custom values to display inside this widget, divided by category
+  ///
+  /// ! VALUES MUST HAVE DIFFERENT KEYS EVENT IN DIFFERENT CATEGORIES !
+  ///
+  /// ! If [canAddItem] is true make sure to manually add new items both in [selected]/[selectedValues] and [valuesByCategory]
+  /// otherwise some unwonted thing can happen !
+  ///
+  /// { [category]: { [key]: [value] } }
+  final Map<String, Map<String, String>> valuesByCategory;
+
   final _ZwapSelectTypes _type;
+  final bool _hasCategories;
 
   ///Regular ZwapSelect
   ZwapSelect({
@@ -133,7 +137,32 @@ class ZwapSelect extends StatefulWidget {
     this.initialPageNumber = 1,
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
+        this.valuesByCategory = {},
+        this._hasCategories = false,
         assert(values.isNotEmpty),
+        super(key: key);
+
+  ZwapSelect.withCategories({
+    Key? key,
+    required this.valuesByCategory,
+    required this.callBackFunction,
+    this.selected,
+    this.hintText = '',
+    this.canAddItem = false,
+    this.onAddItem,
+    this.canSearch = false,
+    this.maxOverlayHeight,
+    this.label,
+    this.fetchMoreData,
+    this.initialPageNumber = 1,
+  })  : this.selectedValues = [],
+        this._type = _ZwapSelectTypes.regular,
+        this.values = {
+          for (String k in valuesByCategory.keys)
+            for (String _k in valuesByCategory[k]?.keys ?? []) _k: valuesByCategory[k]![_k]!,
+        },
+        this._hasCategories = true,
+        assert(valuesByCategory.isNotEmpty),
         super(key: key);
 
   ///Multiple ZwapSelect, multiple items will be displayed with ZwapTags
@@ -152,7 +181,32 @@ class ZwapSelect extends StatefulWidget {
     this.initialPageNumber = 1,
   })  : this.selected = null,
         this._type = _ZwapSelectTypes.multiple,
+        this._hasCategories = false,
+        this.valuesByCategory = {},
         assert(values.isNotEmpty),
+        super(key: key);
+
+  ZwapSelect.multipleWithCategories({
+    Key? key,
+    required this.valuesByCategory,
+    required this.callBackFunction,
+    this.selectedValues = const [],
+    this.hintText = '',
+    this.canAddItem = false,
+    this.onAddItem,
+    this.canSearch = false,
+    this.maxOverlayHeight,
+    this.label,
+    this.fetchMoreData,
+    this.initialPageNumber = 1,
+  })  : this.selected = null,
+        this._type = _ZwapSelectTypes.multiple,
+        this.values = {
+          for (String k in valuesByCategory.keys)
+            for (String _k in valuesByCategory[k]?.keys ?? []) _k: valuesByCategory[k]![_k]!,
+        },
+        this._hasCategories = true,
+        assert(valuesByCategory.isNotEmpty),
         super(key: key);
 
   _ZwapSelectState createState() => _ZwapSelectState();
@@ -186,6 +240,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
   /// The progressive number for requesting page
   late int _pageNumber;
+
+  List<String> get categories => widget.valuesByCategory.keys.toList();
 
   //TODO: controlla richiesta vuota e a che ricerca apparteneva => no richieste infinite
 
@@ -324,8 +380,6 @@ class _ZwapSelectState extends State<ZwapSelect> {
               String _searchedValue = context.select<_ZwapSelectProvider, String>((pro) => pro.searchedValue);
               List<String> _selectedValues = context.select<_ZwapSelectProvider, List<String>>((pro) => pro.selectedValues);
 
-              print(_selectedValues);
-
               Map<String, String> _toShowValues = Map.from(_allValues)..removeWhere((k, v) => v.isNotEmpty && !v.toLowerCase().trim().contains(_searchedValue.toLowerCase().trim()));
 
               return ZwapOverlayEntryWidget(
@@ -428,55 +482,21 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                         ),
                                     ])
                                   : [
-                                      Column(
-                                        key: UniqueKey(),
-                                        children: _toShowValues.keys
-                                            .toList()
-                                            .mapIndexed((i, key) => Container(
-                                                  color: Colors.transparent,
-                                                  width: double.infinity,
-                                                  margin: EdgeInsets.only(bottom: i != (_toShowValues.length - 1) ? 8 : 0),
-                                                  child: Material(
-                                                    color: _selectedValues.contains(key)
-                                                        ? key == _hoveredItem
-                                                            ? ZwapColors.primary50
-                                                            : ZwapColors.primary100
-                                                        : key == _hoveredItem
-                                                            ? ZwapColors.neutral100
-                                                            : ZwapColors.shades0,
-                                                    borderRadius: BorderRadius.circular(8),
-                                                    child: InkWell(
-                                                      onTap: () => this.onChangeValue(key),
-                                                      hoverColor: _selectedValues.contains(key) ? ZwapColors.primary50 : ZwapColors.neutral100,
-                                                      splashColor: _selectedValues.contains(key) ? Colors.transparent : null,
-                                                      onHover: (hovered) => setState(() => _hoveredItem = hovered ? key : null),
-                                                      borderRadius: BorderRadius.circular(8),
-                                                      child: Container(
-                                                        width: double.infinity,
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.transparent,
-                                                          borderRadius: BorderRadius.circular(8),
-                                                        ),
-                                                        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
-                                                        child: Row(
-                                                          children: [
-                                                            Expanded(
-                                                                child: ZwapText(
-                                                                    text: _allValues[key] ?? '<error>',
-                                                                    zwapTextType: ZwapTextType.bodyRegular,
-                                                                    textColor: _selectedValues.contains(key) ? ZwapColors.primary800 : ZwapColors.shades100)),
-                                                            if (_selectedValues.contains(key)) ...[
-                                                              SizedBox(width: 5),
-                                                              Icon(Icons.check, color: ZwapColors.shades100, size: 20),
-                                                            ]
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ))
-                                            .toList(),
-                                      ),
+                                      widget._hasCategories
+                                          ? _ZwapOverlayChildrenList.withCategories(
+                                              hoveredItem: _hoveredItem,
+                                              onHoverItem: (key, isHovered) => setState(() => _hoveredItem = isHovered ? key : null),
+                                              onItemTap: (key) => onChangeValue(key),
+                                              selectedValues: _selectedValues,
+                                              valuesByCategory: _getToShowValuesByCategory(_toShowValues),
+                                            )
+                                          : _ZwapOverlayChildrenList(
+                                              hoveredItem: _hoveredItem,
+                                              onHoverItem: (key, isHovered) => setState(() => _hoveredItem = isHovered ? key : null),
+                                              onItemTap: (key) => onChangeValue(key),
+                                              selectedValues: _selectedValues,
+                                              values: _toShowValues,
+                                            ),
                                       if (_isLoading)
                                         Center(
                                           child: Container(
@@ -502,6 +522,27 @@ class _ZwapSelectState extends State<ZwapSelect> {
         );
       },
     );
+  }
+
+  Map<String, Map<String, String>> _getToShowValuesByCategory(Map<String, String> toShowValues) {
+    final Map<String, Map<String, String>> res = {};
+
+    String? getCategoryOf(String key) {
+      for (String cat in widget.valuesByCategory.keys) if (widget.valuesByCategory[cat]!.containsKey(key)) return cat;
+      return null;
+    }
+
+    for (String k in toShowValues.keys) {
+      String? _tmpCat = getCategoryOf(k);
+      if (_tmpCat == null) continue;
+
+      if (res.containsKey(_tmpCat))
+        res[_tmpCat]![k] = toShowValues[k]!;
+      else
+        res[_tmpCat] = {k: toShowValues[k]!};
+    }
+
+    return res;
   }
 
   @override
@@ -651,6 +692,128 @@ class _ZwapTag extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ZwapOverlayChildrenList extends StatelessWidget {
+  final Map<String, String> values;
+  final Map<String, Map<String, String>> valuesByCategory;
+
+  final List<String> selectedValues;
+  final String? hoveredItem;
+
+  final Function(String key) onItemTap;
+  final Function(String key, bool isHovered) onHoverItem;
+
+  final bool _hasCategories;
+
+  const _ZwapOverlayChildrenList({
+    required this.values,
+    required this.selectedValues,
+    required this.hoveredItem,
+    required this.onHoverItem,
+    required this.onItemTap,
+    Key? key,
+  })  : this.valuesByCategory = const {},
+        this._hasCategories = false,
+        super(key: key);
+
+  const _ZwapOverlayChildrenList.withCategories({
+    required this.valuesByCategory,
+    required this.selectedValues,
+    required this.hoveredItem,
+    required this.onHoverItem,
+    required this.onItemTap,
+    Key? key,
+  })  : this.values = const {},
+        this._hasCategories = true,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Map<String, String> _allValues = context.select<_ZwapSelectProvider, Map<String, String>>((pro) => pro.allValues);
+
+    Widget _singleElementWidget(bool isLast, String k, {bool indent = false}) {
+      return Container(
+        color: Colors.transparent,
+        width: double.infinity,
+        margin: EdgeInsets.only(bottom: isLast ? 0 : 8),
+        child: Material(
+          color: selectedValues.contains(k)
+              ? k == hoveredItem
+                  ? ZwapColors.primary50
+                  : ZwapColors.primary100
+              : k == hoveredItem
+                  ? ZwapColors.neutral100
+                  : ZwapColors.shades0,
+          borderRadius: BorderRadius.circular(8),
+          child: InkWell(
+            onTap: () => this.onItemTap(k),
+            hoverColor: selectedValues.contains(k) ? ZwapColors.primary50 : ZwapColors.neutral100,
+            splashColor: selectedValues.contains(k) ? Colors.transparent : null,
+            onHover: (hovered) => onHoverItem(k, hovered),
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: indent ? const EdgeInsets.only(top: 3, bottom: 3, left: 17, right: 7) : const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ZwapText(
+                      text: _allValues[k] ?? '<error>',
+                      zwapTextType: ZwapTextType.bodyRegular,
+                      textColor: selectedValues.contains(k) ? ZwapColors.primary800 : ZwapColors.shades100,
+                    ),
+                  ),
+                  if (selectedValues.contains(k)) ...[
+                    SizedBox(width: 5),
+                    Icon(Icons.check, color: ZwapColors.shades100, size: 20),
+                  ]
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (_hasCategories) {
+      return Column(
+        children: valuesByCategory.keys
+            .toList()
+            .mapIndexed((catI, cat) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
+                      child: Material(
+                        child: ZwapText(
+                          text: cat,
+                          zwapTextType: ZwapTextType.bodySemiBold,
+                          textColor: ZwapColors.shades100,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: valuesByCategory[cat]!
+                          .keys
+                          .toList()
+                          .mapIndexed((i, key) => _singleElementWidget(catI + 1 == valuesByCategory.keys.length && i + 1 == valuesByCategory[cat]!.keys.length, key, indent: true))
+                          .toList(),
+                    ),
+                  ],
+                ))
+            .toList(),
+      );
+    }
+
+    return Column(
+      children: values.keys.toList().mapIndexed((i, key) => _singleElementWidget(i == values.keys.toList().length, key)).toList(),
     );
   }
 }
