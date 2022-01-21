@@ -6,7 +6,6 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 
 /// Custom scroll arrow
 class ZwapScrollArrow extends StatefulWidget {
-
   /// Is a right arrow or left?
   final bool isRight;
 
@@ -16,22 +15,15 @@ class ZwapScrollArrow extends StatefulWidget {
   /// Custom callBack function to handle the click on this icon
   final Function() onClickCallBack;
 
-  ZwapScrollArrow(
-      {Key? key,
-        required this.onClickCallBack,
-        this.isRight = true,
-        this.isDisabled = false})
-      : super(key: key);
+  ZwapScrollArrow({Key? key, required this.onClickCallBack, this.isRight = true, this.isDisabled = false}) : super(key: key);
 
   _ZwapScrollArrowState createState() => _ZwapScrollArrowState();
-
 }
 
-class _ZwapScrollArrowState extends State<ZwapScrollArrow>{
-
+class _ZwapScrollArrowState extends State<ZwapScrollArrow> {
   bool _isHovered = false;
 
-  void _handleHover(bool isHovered){
+  void _handleHover(bool isHovered) {
     setState(() {
       this._isHovered = isHovered;
     });
@@ -41,16 +33,13 @@ class _ZwapScrollArrowState extends State<ZwapScrollArrow>{
   Widget build(BuildContext context) {
     Widget tmp = Container(
       decoration: BoxDecoration(
-          color: this._isHovered && !widget.isDisabled ? ZwapColors.neutral200 : ZwapColors.shades0,
-          shape: BoxShape.circle,
-          border: Border.all(color: widget.isDisabled ? ZwapColors.neutral50 : ZwapColors.neutral200, width: 0.5)
+        color: this._isHovered && !widget.isDisabled ? ZwapColors.neutral100 : ZwapColors.neutral50,
+        shape: BoxShape.circle,
       ),
       child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           child: Icon(
-            widget.isRight
-                ? Icons.arrow_forward_ios_rounded
-                : Icons.arrow_back_ios_new_rounded,
+            widget.isRight ? Icons.arrow_forward_ios_rounded : Icons.arrow_back_ios_new_rounded,
             color: widget.isDisabled ? ZwapColors.neutral200 : ZwapColors.neutral500,
             size: 16,
           )),
@@ -63,5 +52,4 @@ class _ZwapScrollArrowState extends State<ZwapScrollArrow>{
       child: tmp,
     );
   }
-
 }

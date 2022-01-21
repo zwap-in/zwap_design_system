@@ -65,7 +65,12 @@ class ZwapCalendarPickerState extends ChangeNotifier {
 
   /// It returns the max slots per each responsive view
   int get _getMaxSlotsView {
-    int deviceType = Utils.getIt<Generic>().deviceType();
+    late int deviceType;
+    try {
+      deviceType = Utils.getIt<Generic>().deviceType();
+    } catch (e) {
+      deviceType = 3;
+    }
     int maxSlots = deviceType < 3 ? 3 : 4;
     return maxSlots;
   }
@@ -103,6 +108,9 @@ class ZwapCalendarPickerState extends ChangeNotifier {
     } else {
       if (this.selectedDates.length < this.maxSelections) {
         this.selectedDates.add(date);
+      } else if (this.selectedDates.isNotEmpty) {
+        this.selectedDates.remove(this.selectedDates.last);
+        this.selectedDates.add(date);
       }
     }
     notifyListeners();
@@ -126,31 +134,42 @@ class ZwapCalendarPicker extends StatelessWidget {
   List<Widget> _getSlots(List<TimeOfDay> slots, DateTime date, ZwapCalendarPickerState provider) {
     List<Widget> finals = [];
     slots.forEach((TimeOfDay element) {
-      DateTime current = DateTime(date.year, date.month, date.day, element.hour, element.minute);
-      bool isSelected = provider.selectedDates.contains(current);
+      final DateTime current = DateTime(date.year, date.month, date.day, element.hour, element.minute);
+      final bool isSelected = provider.selectedDates.contains(current);
+      final bool isHovered = provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element;
+
       finals.add(Padding(
-        padding: EdgeInsets.symmetric(vertical: 10),
+        padding: EdgeInsets.symmetric(vertical: 3),
         child: InkWell(
           onTap: () => provider.handleDate(current),
           onHover: (bool isHovered) => provider.hoverDate(isHovered ? TupleType(a: date, b: element) : null),
           hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: isSelected
-                    ? ZwapColors.primary700
-                    : (provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element ? ZwapColors.primary200 : Colors.transparent),
+                    ? isHovered
+                        ? ZwapColors.primary200
+                        : ZwapColors.primary100
+                    : isHovered
+                        ? ZwapColors.neutral300
+                        : Colors.transparent,
               ),
               color: isSelected
-                  ? ZwapColors.primary700
-                  : (provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element ? ZwapColors.primary200 : Colors.transparent),
+                  ? isHovered
+                      ? ZwapColors.primary50
+                      : ZwapColors.primary100
+                  : isHovered
+                      ? ZwapColors.neutral100
+                      : Colors.transparent,
             ),
             child: Padding(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               child: ZwapText(
                 text: "${element.hour}:${Utils.plotMinute(element.minute)}",
-                textColor: isSelected ? ZwapColors.shades0 : ZwapColors.neutral800,
+                textColor: isSelected ? ZwapColors.primary800 : ZwapColors.neutral800,
                 zwapTextType: isSelected ? ZwapTextType.bodySemiBold : ZwapTextType.bodyRegular,
               ),
             ),
@@ -201,6 +220,8 @@ class ZwapCalendarPicker extends StatelessWidget {
 
   /// It gets the calendar picker title section
   Widget _getCalendarPickerTitle(ZwapCalendarPickerState provider) {
+    int _currentMonth = (provider.currentDate!.add(Duration(days: provider.slotsPerDay.keys.firstWhere((e) => provider.slotsPerDay.keys.every((_e) => e <= _e)) - 1))).month;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -219,7 +240,7 @@ class ZwapCalendarPicker extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 40),
             child: ZwapText(
               zwapTextType: ZwapTextType.h3,
-              text: "${this.handleKeyName(Constants.monthlyName()[provider.currentDate!.month]!)}",
+              text: "${this.handleKeyName(Constants.monthlyName()[_currentMonth]!)}",
               textColor: ZwapColors.neutral700,
             ),
           ),

@@ -29,7 +29,7 @@ dependencies:
 
   taastrap: ^0.1.29
 
-  zwap_utils: ^0.0.41
+  zwap_utils: ^0.0.47
 
 
 dev_dependencies:
