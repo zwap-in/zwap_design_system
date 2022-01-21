@@ -375,7 +375,7 @@ packages:
       name: zwap_utils
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.47"
+    version: "0.0.41"
 sdks:
   dart: ">=2.14.0 <3.0.0"
   flutter: ">=2.5.0"
