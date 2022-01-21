@@ -37,12 +37,11 @@ class _ZwapScrollArrowState extends State<ZwapScrollArrow> {
         shape: BoxShape.circle,
       ),
       child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          child: Icon(
-            widget.isRight ? Icons.arrow_forward_ios_rounded : Icons.arrow_back_ios_new_rounded,
-            color: widget.isDisabled ? ZwapColors.neutral200 : ZwapColors.neutral500,
-            size: 16,
-          )),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        child: widget.isRight
+            ? ZwapIcons.icons('arrow_right', iconColor: widget.isDisabled ? ZwapColors.neutral200 : ZwapColors.shades100, iconSize: 15)
+            : ZwapIcons.icons('arrow_left', iconColor: widget.isDisabled ? ZwapColors.neutral200 : ZwapColors.shades100, iconSize: 15),
+      ),
     );
     return InkWell(
       onTap: widget.isDisabled ? () => {} : () => widget.onClickCallBack(),

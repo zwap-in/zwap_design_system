@@ -139,7 +139,7 @@ class ZwapCalendarPicker extends StatelessWidget {
       final bool isHovered = provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element;
 
       finals.add(Padding(
-        padding: EdgeInsets.symmetric(vertical: 3),
+        padding: EdgeInsets.symmetric(vertical: 5),
         child: InkWell(
           onTap: () => provider.handleDate(current),
           onHover: (bool isHovered) => provider.hoverDate(isHovered ? TupleType(a: date, b: element) : null),
@@ -166,7 +166,7 @@ class ZwapCalendarPicker extends StatelessWidget {
                       : Colors.transparent,
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7.5),
               child: ZwapText(
                 text: "${element.hour}:${Utils.plotMinute(element.minute)}",
                 textColor: isSelected ? ZwapColors.primary800 : ZwapColors.neutral800,
@@ -186,7 +186,7 @@ class ZwapCalendarPicker extends StatelessWidget {
     int day = key.day;
     List<Widget> children = this._getSlots(slots, key, provider);
     return Padding(
-      padding: EdgeInsets.only(top: 40),
+      padding: EdgeInsets.only(top: 20),
       child: Column(
         children: [
           Padding(
@@ -207,7 +207,7 @@ class ZwapCalendarPicker extends StatelessWidget {
           ),
           ZwapVerticalScroll(
             child: Padding(
-              padding: EdgeInsets.only(top: 20),
+              padding: EdgeInsets.only(top: 10),
               child: Column(
                 children: List<Widget>.generate(children.length, ((index) => children[index])),
               ),
@@ -238,10 +238,13 @@ class ZwapCalendarPicker extends StatelessWidget {
           fit: FlexFit.tight,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 40),
-            child: ZwapText(
-              zwapTextType: ZwapTextType.h3,
-              text: "${this.handleKeyName(Constants.monthlyName()[_currentMonth]!)}",
-              textColor: ZwapColors.neutral700,
+            child: AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              child: ZwapText(
+                zwapTextType: ZwapTextType.h3,
+                text: "${this.handleKeyName(Constants.monthlyName()[_currentMonth]!)}",
+                textColor: ZwapColors.neutral700,
+              ),
             ),
           ),
         ),
