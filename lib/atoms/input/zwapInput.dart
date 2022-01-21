@@ -61,6 +61,11 @@ class ZwapInput extends StatefulWidget {
 
   final bool showSuccess;
 
+  /// If true input will de disabled but without the disabled decorations
+  final bool readOnly;
+
+  final Function()? onTap;
+
   final bool _isCollapsed;
 
   ZwapInput({
@@ -83,6 +88,8 @@ class ZwapInput extends StatefulWidget {
     this.prefixText,
     this.showSuccess = false,
     this.minLines,
+    this.readOnly = false,
+    this.onTap,
   })  : this._isCollapsed = false,
         super(key: key);
 
@@ -90,6 +97,8 @@ class ZwapInput extends StatefulWidget {
     Key? key,
     required this.controller,
     this.textInputType = TextInputType.text,
+    this.readOnly = false,
+    this.onTap,
     this.maxLines = 1,
     this.minLines,
     this.disabled = false,
@@ -199,10 +208,13 @@ class _ZwapInputState extends State<ZwapInput> {
       cursorColor: ZwapColors.shades100,
       obscureText: widget.textInputType == TextInputType.visiblePassword,
       textAlign: TextAlign.start,
-      focusNode: _focusNode,
+      focusNode: widget.readOnly ? FocusNode() : _focusNode,
       style: getTextStyle(ZwapTextType.bodyRegular).apply(color: widget.disabled ? ZwapColors.neutral300 : ZwapColors.neutral700),
       decoration: decorations,
       onSubmitted: widget.keyCallBackFunction,
+      readOnly: widget.readOnly,
+      enableInteractiveSelection: !widget.readOnly,
+      onTap: widget.onTap,
     );
   }
 
