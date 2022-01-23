@@ -1,6 +1,8 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zwap_design_system/atoms/text_controller/initial_text_controller.dart';
+import 'package:zwap_design_system/atoms/text_controller/masked_text_controller.dart';
 import 'package:zwap_utils/zwap_utils.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -12,7 +14,7 @@ import 'package:zwap_design_system/atoms/text/text.dart';
 /// Custom component for a standard input with a predefined Zwap style
 class ZwapInput extends StatefulWidget {
   /// Text controller for handling the value from external of this component
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
   /// The input type for this custom component
   final TextInputType textInputType;
@@ -68,9 +70,14 @@ class ZwapInput extends StatefulWidget {
 
   final bool _isCollapsed;
 
+  final String? fixedInitialText;
+
+  /// Ignored if [fixedInitialText] is null
+  final TextStyle? fixedInitialTextStyle;
+
   ZwapInput({
     Key? key,
-    required this.controller,
+    this.controller,
     this.textInputType = TextInputType.text,
     this.maxLines = 1,
     this.disabled = false,
@@ -90,12 +97,15 @@ class ZwapInput extends StatefulWidget {
     this.minLines,
     this.readOnly = false,
     this.onTap,
-  })  : this._isCollapsed = false,
+    this.fixedInitialText,
+    this.fixedInitialTextStyle,
+  })  : assert(fixedInitialText == null || controller == null),
+        this._isCollapsed = false,
         super(key: key);
 
   ZwapInput.collapsed({
     Key? key,
-    required this.controller,
+    this.controller,
     this.textInputType = TextInputType.text,
     this.readOnly = false,
     this.onTap,
@@ -114,7 +124,10 @@ class ZwapInput extends StatefulWidget {
     this.autofillHints,
     this.focusNode,
     this.prefixText,
-  })  : this._isCollapsed = true,
+    this.fixedInitialText,
+    this.fixedInitialTextStyle,
+  })  : assert(fixedInitialText == null || controller == null),
+        this._isCollapsed = true,
         this.showSuccess = false,
         super(key: key);
 
@@ -124,7 +137,7 @@ class ZwapInput extends StatefulWidget {
 /// It handles the input state
 class _ZwapInputState extends State<ZwapInput> {
   /// The input value controller
-  late TextEditingController controller;
+  late TextEditingController _controller;
 
   late FocusNode _focusNode;
 
@@ -135,7 +148,8 @@ class _ZwapInputState extends State<ZwapInput> {
   void initState() {
     super.initState();
 
-    controller = widget.controller;
+    _controller = widget.controller ??
+        (widget.fixedInitialText != null ? InitialTextController(fixedInitialString: widget.fixedInitialText!, fixedInitialStringStyle: widget.fixedInitialTextStyle) : TextEditingController());
     _focusNode = widget.focusNode ?? FocusNode();
 
     _hasFocus = _focusNode.hasFocus;
@@ -196,7 +210,7 @@ class _ZwapInputState extends State<ZwapInput> {
   /// It gets the input field
   TextField _getInputWidget({required InputDecoration decorations}) {
     return TextField(
-      controller: this.controller,
+      controller: this._controller,
       scrollPadding: EdgeInsets.zero,
       enabled: !widget.disabled,
       keyboardType: widget.textInputType,
