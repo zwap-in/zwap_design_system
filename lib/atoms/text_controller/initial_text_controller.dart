@@ -4,7 +4,7 @@ class InitialTextController extends TextEditingController {
   final String fixedInitialString;
   final TextStyle? fixedInitialStringStyle;
 
-  InitialTextController({required this.fixedInitialString, this.fixedInitialStringStyle}) : super(text: '$fixedInitialString ');
+  InitialTextController({String? text, required this.fixedInitialString, this.fixedInitialStringStyle}) : super(text: '$fixedInitialString ${text ?? ''}');
 
   @override
   set value(TextEditingValue newValue) {

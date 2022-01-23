@@ -75,6 +75,11 @@ class ZwapInput extends StatefulWidget {
   /// Ignored if [fixedInitialText] is null
   final TextStyle? fixedInitialTextStyle;
 
+  /// If you don't wont or can't provide a controller but need to provide some initial values use this field.
+  ///
+  /// If [controller] is not null this field is ignored
+  final String? initialValue;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -99,6 +104,7 @@ class ZwapInput extends StatefulWidget {
     this.onTap,
     this.fixedInitialText,
     this.fixedInitialTextStyle,
+    this.initialValue,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = false,
         super(key: key);
@@ -126,6 +132,7 @@ class ZwapInput extends StatefulWidget {
     this.prefixText,
     this.fixedInitialText,
     this.fixedInitialTextStyle,
+    this.initialValue,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = true,
         this.showSuccess = false,
@@ -149,7 +156,9 @@ class _ZwapInputState extends State<ZwapInput> {
     super.initState();
 
     _controller = widget.controller ??
-        (widget.fixedInitialText != null ? InitialTextController(fixedInitialString: widget.fixedInitialText!, fixedInitialStringStyle: widget.fixedInitialTextStyle) : TextEditingController());
+        (widget.fixedInitialText != null
+            ? InitialTextController(text: widget.initialValue, fixedInitialString: widget.fixedInitialText!, fixedInitialStringStyle: widget.fixedInitialTextStyle)
+            : TextEditingController(text: widget.initialValue));
     _focusNode = widget.focusNode ?? FocusNode();
 
     _hasFocus = _focusNode.hasFocus;
@@ -209,6 +218,11 @@ class _ZwapInputState extends State<ZwapInput> {
 
   /// It gets the input field
   TextField _getInputWidget({required InputDecoration decorations}) {
+    String _getOnChangedValue(String value) {
+      if (widget.fixedInitialText != null) return value.substring(widget.fixedInitialText!.length + 1);
+      return value;
+    }
+
     return TextField(
       controller: this._controller,
       scrollPadding: EdgeInsets.zero,
@@ -217,7 +231,7 @@ class _ZwapInputState extends State<ZwapInput> {
       maxLines: widget.maxLines,
       minLines: widget.minLines,
       autofillHints: widget.autofillHints != null ? [widget.autofillHints!] : null,
-      onChanged: widget.onChanged != null ? (String newValue) => widget.onChanged!(newValue) : null,
+      onChanged: widget.onChanged != null ? (String newValue) => widget.onChanged!(_getOnChangedValue(newValue)) : null,
       textCapitalization: TextCapitalization.sentences,
       cursorColor: ZwapColors.shades100,
       obscureText: widget.textInputType == TextInputType.visiblePassword,
