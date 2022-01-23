@@ -188,7 +188,7 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(
                 min(widget.rowWidgetsCount!, results.length - (i * widget.rowWidgetsCount!)),
-                (index) => widget.getChildWidget(results[i]),
+                (_i) => widget.getChildWidget(results[(i * widget.rowWidgetsCount!) + _i]),
               )),
         ).toList(),
         if (this._loading) Flexible(child: CircularProgressIndicator(), flex: 0, fit: FlexFit.tight),
