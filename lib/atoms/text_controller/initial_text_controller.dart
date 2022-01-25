@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class InitialTextController extends TextEditingController {
@@ -9,7 +11,13 @@ class InitialTextController extends TextEditingController {
   @override
   set value(TextEditingValue newValue) {
     if (newValue.text.length < fixedInitialString.length) return;
-    if (newValue.selection.baseOffset < fixedInitialString.length + 1) return;
+    if (newValue.selection.baseOffset < fixedInitialString.length + 1)
+      newValue = newValue.copyWith(selection: TextSelection(baseOffset: fixedInitialString.length + 1, extentOffset: max(newValue.selection.extentOffset, fixedInitialString.length + 1)));
+
+    if (newValue.selection.baseOffset > newValue.selection.extentOffset && newValue.selection.extentOffset < fixedInitialString.length + 1)
+      newValue = newValue.copyWith(selection: TextSelection(baseOffset: newValue.selection.baseOffset, extentOffset: max(newValue.selection.extentOffset, fixedInitialString.length + 1)));
+
+    print(newValue.selection);
 
     super.value = newValue;
   }
