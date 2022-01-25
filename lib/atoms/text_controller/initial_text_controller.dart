@@ -17,8 +17,6 @@ class InitialTextController extends TextEditingController {
     if (newValue.selection.baseOffset > newValue.selection.extentOffset && newValue.selection.extentOffset < fixedInitialString.length + 1)
       newValue = newValue.copyWith(selection: TextSelection(baseOffset: newValue.selection.baseOffset, extentOffset: max(newValue.selection.extentOffset, fixedInitialString.length + 1)));
 
-    print(newValue.selection);
-
     super.value = newValue;
   }
 

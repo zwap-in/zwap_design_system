@@ -1,4 +1,5 @@
 /// IMPORTING THIRD PARTY PACKAGES
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:taastrap/taastrap.dart';
@@ -14,8 +15,7 @@ import 'buttonTypes/zwapButtonTypes.dart';
 export 'buttonTypes/zwapButtonTypes.dart';
 
 /// Standard zwap button with different type and status
-class ZwapButton extends StatefulWidget implements ResponsiveWidget{
-
+class ZwapButton extends StatefulWidget implements ResponsiveWidget {
   /// The button type
   final ZwapButtonType zwapButtonType;
 
@@ -64,43 +64,39 @@ class ZwapButton extends StatefulWidget implements ResponsiveWidget{
   /// The button radius
   final double? buttonRadius;
 
-  ZwapButton({Key? key,
-    required this.zwapButtonType,
-    required this.zwapButtonStatus,
-    required this.zwapButtonContentType,
-    required this.onPressedCallBack,
-    this.fullAxis = true,
-    this.zwapButtonAlignment = ZwapButtonAlignment.center,
-    this.text,
-    this.icon,
-    this.textColor,
-    this.buttonColor,
-    this.height,
-    this.width,
-    this.lateralPadding,
-    this.verticalPadding,
-    this.iconColor,
-    this.buttonRadius}) : super(key: key) {
+  ZwapButton(
+      {Key? key,
+      required this.zwapButtonType,
+      required this.zwapButtonStatus,
+      required this.zwapButtonContentType,
+      required this.onPressedCallBack,
+      this.fullAxis = true,
+      this.zwapButtonAlignment = ZwapButtonAlignment.center,
+      this.text,
+      this.icon,
+      this.textColor,
+      this.buttonColor,
+      this.height,
+      this.width,
+      this.lateralPadding,
+      this.verticalPadding,
+      this.iconColor,
+      this.buttonRadius})
+      : super(key: key) {
     if (zwapButtonType == ZwapButtonType.editButton) {
-      assert(zwapButtonContentType == ZwapButtonContentType.noIcon,
-      "Edit button cannot have an icon inside the button");
+      assert(zwapButtonContentType == ZwapButtonContentType.noIcon, "Edit button cannot have an icon inside the button");
     }
     if (zwapButtonContentType == ZwapButtonContentType.noIcon) {
-      assert(this.icon == null,
-      "Zwap button with no icon could not be contain an icon");
+      assert(this.icon == null, "Zwap button with no icon could not be contain an icon");
     } else if (zwapButtonContentType == ZwapButtonContentType.noLabel) {
-      assert(this.text == null,
-      "Zwap button with no label could not be contain a label");
+      assert(this.text == null, "Zwap button with no label could not be contain a label");
     } else {
-      assert(this.text != null && this.icon != null,
-      "Zwap button with icon and text must be contain a label and an icon");
+      assert(this.text != null && this.icon != null, "Zwap button with icon and text must be contain a label and an icon");
     }
     if (this.zwapButtonStatus == ZwapButtonStatus.disabledStatus) {
-      assert(this.onPressedCallBack == null,
-      "If the button is disabled it cannot have a callBack function");
+      assert(this.onPressedCallBack == null, "If the button is disabled it cannot have a callBack function");
     } else {
-      assert(this.onPressedCallBack != null,
-      "If the button is not disabled it must have the callBack function");
+      assert(this.onPressedCallBack != null, "If the button is not disabled it must have the callBack function");
     }
   }
 
@@ -113,7 +109,7 @@ class ZwapButton extends StatefulWidget implements ResponsiveWidget{
   }
 
   /// It gets the external horizontal padding
-  double _externalHorizontalPadding(){
+  double _externalHorizontalPadding() {
     return this.lateralPadding ?? 10;
   }
 
@@ -132,9 +128,14 @@ class ZwapButton extends StatefulWidget implements ResponsiveWidget{
 
 /// Handle the state for the standard zwap button
 class _ZwapButtonState extends State<ZwapButton> {
-
   /// Handle the hover on this button
-  bool _isHover = false;
+  late bool _isHover;
+
+  @override
+  void initState() {
+    _isHover = kIsWeb ? false : true;
+    super.initState();
+  }
 
   /// It gets the current button status
   ZwapButtonStatus _getButtonStatus() {
@@ -147,6 +148,8 @@ class _ZwapButtonState extends State<ZwapButton> {
 
   /// Change the hover status on this button
   void _hoverButton(bool isHover) {
+    if (kIsWeb) return;
+
     setState(() {
       this._isHover = isHover;
     });
@@ -218,12 +221,10 @@ class _ZwapButtonState extends State<ZwapButton> {
         } else if (widget.zwapButtonType == ZwapButtonType.secondary) {
           boxColor = ZwapColors.shades0;
           borderColor = ZwapColors.warning700;
-        }
-        else if(widget.zwapButtonType == ZwapButtonType.flat){
+        } else if (widget.zwapButtonType == ZwapButtonType.flat) {
           boxColor = ZwapColors.error50;
           borderColor = ZwapColors.error50;
-        }
-        else {
+        } else {
           boxColor = ZwapColors.shades0;
           borderColor = ZwapColors.shades0;
         }
@@ -231,11 +232,7 @@ class _ZwapButtonState extends State<ZwapButton> {
     }
     return BoxDecoration(
         color: widget.buttonColor ?? boxColor,
-        border: Border.all(
-            color: widget.buttonColor ?? borderColor,
-            width: 1,
-            style: BorderStyle.solid
-        ),
+        border: Border.all(color: widget.buttonColor ?? borderColor, width: 1, style: BorderStyle.solid),
         borderRadius: BorderRadius.all(Radius.circular(widget.buttonRadius ?? ZwapRadius.buttonRadius)));
   }
 
@@ -287,8 +284,7 @@ class _ZwapButtonState extends State<ZwapButton> {
     if (widget.zwapButtonType == ZwapButtonType.primary) {
       iconColor = ZwapColors.shades0;
     } else if (widget.zwapButtonType == ZwapButtonType.secondary) {
-      if (this._getButtonStatus() == ZwapButtonStatus.defaultStatus ||
-          this._getButtonStatus() == ZwapButtonStatus.hoverStatus) {
+      if (this._getButtonStatus() == ZwapButtonStatus.defaultStatus || this._getButtonStatus() == ZwapButtonStatus.hoverStatus) {
         iconColor = ZwapColors.neutral600;
       } else if (this._getButtonStatus() == ZwapButtonStatus.activeStatus) {
         iconColor = ZwapColors.shades0;
@@ -319,10 +315,7 @@ class _ZwapButtonState extends State<ZwapButton> {
           children: [
             Flexible(
               child: Center(
-                child: ZwapText(
-                    text: widget.text!,
-                    zwapTextType: ZwapTextType.buttonText,
-                    textColor: widget.textColor ?? this._getTextColor()),
+                child: ZwapText(text: widget.text!, zwapTextType: ZwapTextType.buttonText, textColor: widget.textColor ?? this._getTextColor()),
               ),
               flex: 0,
               fit: FlexFit.tight,
@@ -335,23 +328,19 @@ class _ZwapButtonState extends State<ZwapButton> {
           children: [
             Flexible(
               child: Padding(
-                padding: EdgeInsets.only(right: 3),
-                child: Icon(
-                  widget.icon,
-                  size: widget._plotIconSize(),
-                  color: this._getChildrenColor(),
-                )
-              ),
+                  padding: EdgeInsets.only(right: 3),
+                  child: Icon(
+                    widget.icon,
+                    size: widget._plotIconSize(),
+                    color: this._getChildrenColor(),
+                  )),
               flex: 0,
               fit: FlexFit.tight,
             ),
             Flexible(
               child: Padding(
                 padding: EdgeInsets.only(left: 3),
-                child: ZwapText(
-                    text: widget.text!,
-                    zwapTextType: ZwapTextType.buttonText,
-                    textColor: widget.textColor ?? this._getTextColor()),
+                child: ZwapText(text: widget.text!, zwapTextType: ZwapTextType.buttonText, textColor: widget.textColor ?? this._getTextColor()),
               ),
               flex: 0,
               fit: FlexFit.tight,
@@ -384,11 +373,12 @@ class _ZwapButtonState extends State<ZwapButton> {
   Widget build(BuildContext context) {
     Widget buttonWidget = this._getButtonWidget();
     ZwapButtonStatus currentButtonStatus = this._getButtonStatus();
-    return currentButtonStatus  == ZwapButtonStatus.disabledStatus ? buttonWidget
+    return currentButtonStatus == ZwapButtonStatus.disabledStatus
+        ? buttonWidget
         : InkWell(
-      onHover: (bool isHover) => this._hoverButton(isHover),
-      onTap: () => widget.onPressedCallBack!(),
-      child: buttonWidget,
-    );
+            onHover: (bool isHover) => this._hoverButton(isHover),
+            onTap: () => widget.onPressedCallBack!(),
+            child: buttonWidget,
+          );
   }
 }
