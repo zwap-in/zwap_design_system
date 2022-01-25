@@ -62,6 +62,9 @@ class ZwapInfiniteScroll<T> extends StatefulWidget {
   /// ! Used only if [expand] is true and [zwapInfiniteScrollType] is gridView
   final int? rowWidgetsCount;
 
+  /// If [filter] is provided is used to remove elements e that not satisfy `filter(e)` only from view
+  final bool Function(T element)? filter;
+
   ZwapInfiniteScroll({
     Key? key,
     required this.fetchMoreData,
@@ -78,6 +81,7 @@ class ZwapInfiniteScroll<T> extends StatefulWidget {
     this.customInternalPadding,
     this.expand = false,
     this.rowWidgetsCount,
+    this.filter,
   })  : assert((!expand || zwapInfiniteScrollType == ZwapInfiniteScrollType.listView) || rowWidgetsCount != null,
             "If expand is true and zwapInfinityScrollType is gridView, rowWidgetsCount must be provided"),
         super(key: key) {
@@ -87,7 +91,7 @@ class ZwapInfiniteScroll<T> extends StatefulWidget {
   }
 
   @override
-  _ZwapInfiniteScrollState<T> createState() => _ZwapInfiniteScrollState<T>(controller: this.scrollController);
+  _ZwapInfiniteScrollState<T> createState() => _ZwapInfiniteScrollState<T>();
 }
 
 /// The infinite scroll state
@@ -98,9 +102,7 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
   /// The scroll controller to manage the API calls
   late ScrollController controller;
 
-  _ZwapInfiniteScrollState({ScrollController? controller}) {
-    this.controller = controller ?? ScrollController();
-  }
+  late bool Function(T e)? _filter;
 
   /// The current page number
   int _pageNumber = 1;
@@ -111,6 +113,10 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
   @override
   void initState() {
     super.initState();
+
+    this.controller = widget.scrollController ?? ScrollController();
+    _filter = widget.filter;
+
     this._future = widget.initData != null ? Future.delayed(Duration.zero, () => widget.initData!) : widget.fetchMoreData(this._pageNumber);
     this._pageNumber++;
     this.controller.addListener(() async {
@@ -131,19 +137,21 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
     });
   }
 
+  @override
   void didUpdateWidget(ZwapInfiniteScroll<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.hasToReloadOnDidUpdate) {
       this._future = widget.initData != null ? Future.delayed(Duration.zero, () => widget.initData!) : widget.fetchMoreData(this._pageNumber);
     }
+    print(widget.filter);
+    if (widget.filter != oldWidget.filter) setState(() => _filter = widget.filter);
   }
 
   /// It builds the list with a grid view
-  Widget _getGridView(AsyncSnapshot<PageData<T>> snapshot) {
-    List<T> results = snapshot.data!.data;
+  Widget _getGridView(List<T> data) {
     return ResponsiveRow<List<Widget>>(
       customInternalPadding: widget.customInternalPadding,
-      children: List<Widget>.generate(results.length, ((int index) => widget.getChildWidget(results[index]))),
+      children: List<Widget>.generate(data.length, ((int index) => widget.getChildWidget(data[index]))),
       controller: this.controller,
     );
   }
@@ -163,21 +171,18 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
           );
   }
 
-  Widget _getExpandedListView(AsyncSnapshot<PageData<T>> snapshot) {
-    List<T> results = snapshot.data!.data;
+  Widget _getExpandedListView(List<T> data) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ...List.generate(results.length, (i) => widget.getChildWidget(results[i])).toList(),
+        ...List.generate(data.length, (i) => widget.getChildWidget(data[i])).toList(),
         if (this._loading) Flexible(child: CircularProgressIndicator(), flex: 0, fit: FlexFit.tight),
       ],
     );
   }
 
-  Widget _getExpandedGridView(AsyncSnapshot<PageData<T>> snapshot) {
-    List<T> results = snapshot.data!.data;
-
-    int _rowsCount = (results.length / widget.rowWidgetsCount!).ceil();
+  Widget _getExpandedGridView(List<T> data) {
+    int _rowsCount = (data.length / widget.rowWidgetsCount!).ceil();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -187,8 +192,8 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
           (i) => Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(
-                min(widget.rowWidgetsCount!, results.length - (i * widget.rowWidgetsCount!)),
-                (_i) => widget.getChildWidget(results[(i * widget.rowWidgetsCount!) + _i]),
+                min(widget.rowWidgetsCount!, data.length - (i * widget.rowWidgetsCount!)),
+                (_i) => widget.getChildWidget(data[(i * widget.rowWidgetsCount!) + _i]),
               )),
         ).toList(),
         if (this._loading) Flexible(child: CircularProgressIndicator(), flex: 0, fit: FlexFit.tight),
@@ -197,16 +202,15 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
   }
 
   /// It builds the list with a list view
-  Widget _getListView(AsyncSnapshot<PageData<T>> snapshot) {
-    List<T> results = snapshot.data!.data;
+  Widget _getListView(List<T> data) {
     return this._getParentListView(ListView.builder(
         scrollDirection: widget.axisDirection!,
         shrinkWrap: widget.expand,
         padding: EdgeInsets.all(1.0),
-        itemCount: results.length,
+        itemCount: data.length,
         controller: this.controller,
         itemBuilder: (BuildContext context, int index) {
-          return widget.getChildWidget(results[index]);
+          return widget.getChildWidget(data[index]);
         }));
   }
 
@@ -233,16 +237,16 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
   }
 
   /// It gets the child widget to rendering data
-  Widget _getChildWidget(AsyncSnapshot<PageData<T>> snapshot) {
+  Widget _getChildWidget(List<T> data) {
     if (widget.expand) {
-      if (widget.zwapInfiniteScrollType == ZwapInfiniteScrollType.listView) return _getExpandedListView(snapshot);
-      return _getExpandedGridView(snapshot);
+      if (widget.zwapInfiniteScrollType == ZwapInfiniteScrollType.listView) return _getExpandedListView(data);
+      return _getExpandedGridView(data);
     }
 
     return this._getParentWidget(
       [
         Expanded(
-          child: widget.zwapInfiniteScrollType == ZwapInfiniteScrollType.gridView ? this._getGridView(snapshot) : this._getListView(snapshot),
+          child: widget.zwapInfiniteScrollType == ZwapInfiniteScrollType.gridView ? this._getGridView(data) : this._getListView(data),
         ),
         this._loading
             ? Flexible(
@@ -266,16 +270,20 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
           case ConnectionState.waiting:
             return widget.waitingWidget ?? ZwapWaiting();
           default:
-            if (snapshot.hasError)
-              return this._getErrorWidget(snapshot.error.toString());
-            else
-              return widget.topWidget != null
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [widget.topWidget!(snapshot.data!), this._getChildWidget(snapshot)],
-                    )
-                  : this._getChildWidget(snapshot);
+            break;
         }
+
+        List<T> data = List.from(snapshot.data!.data)..removeWhere((e) => _filter != null ? !_filter!(e) : false);
+
+        if (snapshot.hasError)
+          return this._getErrorWidget(snapshot.error.toString());
+        else
+          return widget.topWidget != null
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [widget.topWidget!(snapshot.data!), this._getChildWidget(data)],
+                )
+              : this._getChildWidget(data);
       },
     );
   }
