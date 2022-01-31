@@ -117,7 +117,7 @@ class ZwapCalendarPickerState extends ChangeNotifier {
       if (this.selectedDates.contains(date)) {
         this.selectedDates.remove(date);
       } else {
-        if (this.selectedDates.length < this.maxSelections) {
+        if (this.selectedDates.length + elements.length <= this.maxSelections) {
           this.selectedDates.add(date);
         } else if (this.selectedDates.isNotEmpty) {
           this.selectedDates.remove(this.selectedDates.last);
