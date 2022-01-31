@@ -113,8 +113,8 @@ class ZwapCalendarPickerState extends ChangeNotifier {
   /// It handles the click on the date
   void handleDate(DateTime date) {
     Set<DateTime> elements = this.disabledDates ?? Set<DateTime>();
-    if(!elements.contains(date)){
-      if (this.selectedDates.contains(date) && elements.length <= this.maxSelections) {
+    if(!elements.contains(date) && elements.length <= this.maxSelections){
+      if (this.selectedDates.contains(date)) {
         this.selectedDates.remove(date);
       } else {
         if (this.selectedDates.length + elements.length <= this.maxSelections) {
