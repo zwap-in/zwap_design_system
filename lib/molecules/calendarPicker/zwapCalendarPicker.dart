@@ -31,7 +31,16 @@ class ZwapCalendarPickerState extends ChangeNotifier {
   /// The max number of slot you can select
   final int maxSelections;
 
-  ZwapCalendarPickerState({required this.dateEnd, required this.slotsPerDay, required this.selectedDates, required this.maxSelections}) {
+  /// The set of the dates that must be disabled
+  final Set<DateTime>? disabledDates;
+
+  ZwapCalendarPickerState({
+    required this.dateEnd,
+    required this.slotsPerDay,
+    required this.selectedDates,
+    required this.maxSelections,
+    this.disabledDates
+  }) {
     Map<DateTime, List<TimeOfDay>> daysPlotted = this._plotDaysSlot();
     this.currentDate = daysPlotted.keys.first;
     this.dateStart = daysPlotted.keys.first;
@@ -103,14 +112,17 @@ class ZwapCalendarPickerState extends ChangeNotifier {
 
   /// It handles the click on the date
   void handleDate(DateTime date) {
-    if (this.selectedDates.contains(date)) {
-      this.selectedDates.remove(date);
-    } else {
-      if (this.selectedDates.length < this.maxSelections) {
-        this.selectedDates.add(date);
-      } else if (this.selectedDates.isNotEmpty) {
-        this.selectedDates.remove(this.selectedDates.last);
-        this.selectedDates.add(date);
+    Set<DateTime> elements = this.disabledDates ?? Set<DateTime>();
+    if(!elements.contains(date)){
+      if (this.selectedDates.contains(date)) {
+        this.selectedDates.remove(date);
+      } else {
+        if (this.selectedDates.length < this.maxSelections) {
+          this.selectedDates.add(date);
+        } else if (this.selectedDates.isNotEmpty) {
+          this.selectedDates.remove(this.selectedDates.last);
+          this.selectedDates.add(date);
+        }
       }
     }
     notifyListeners();
@@ -133,9 +145,10 @@ class ZwapCalendarPicker extends StatelessWidget {
   /// It retrieves the slots per each day
   List<Widget> _getSlots(List<TimeOfDay> slots, DateTime date, ZwapCalendarPickerState provider) {
     List<Widget> finals = [];
+    Set<DateTime> elements = provider.disabledDates ?? Set<DateTime>();
     slots.forEach((TimeOfDay element) {
       final DateTime current = DateTime(date.year, date.month, date.day, element.hour, element.minute);
-      final bool isSelected = provider.selectedDates.contains(current);
+      final bool isSelected = provider.selectedDates.contains(current) || elements.contains(current);
       final bool isHovered = provider.hoveredDate != null && provider.hoveredDate!.a == date && provider.hoveredDate!.b == element;
 
       finals.add(Padding(
