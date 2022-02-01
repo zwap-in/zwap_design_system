@@ -1,6 +1,7 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:provider/provider.dart';
@@ -298,6 +299,9 @@ class ZwapWeeklyCalendarPickerProvider extends ChangeNotifier {
   /// The hovered date inside the calendar picker
   _ZwapWeeklyCalendarPickerItem? _hoveredItem;
 
+  /// Callback function from widget
+  late Function(List<TupleType<DateTime, TimeOfDay>>)? _onChange;
+
   DateTime get currentWeek => __currentWeek;
 
   List<_ZwapWeeklyCalendarPickerItem> get selected => _selected;
@@ -311,6 +315,7 @@ class ZwapWeeklyCalendarPickerProvider extends ChangeNotifier {
     required List<ZwapWeeklyCalendarPickFilter> filters,
     required ZwapWeeklyCalendarShowFilter? showFilter,
     List<_ZwapWeeklyCalendarPickerItem>? initialSelectedItems,
+    Function(List<TupleType<DateTime, TimeOfDay>>)? onChange,
     DateTime? initialDate,
   }) {
     this.__currentWeek = (initialDate ?? DateTime.now()).firstOfWeek;
@@ -318,6 +323,7 @@ class ZwapWeeklyCalendarPickerProvider extends ChangeNotifier {
     this._calendarTimes = calendarTimes;
     this._filters = filters;
     this._showFilter = showFilter;
+    this._onChange = onChange;
   }
 
   void toggleItem(_ZwapWeeklyCalendarPickerItem item) async {
@@ -341,6 +347,9 @@ class ZwapWeeklyCalendarPickerProvider extends ChangeNotifier {
     for (ZwapWeeklyCalendarPickFilter _f in _filters) if ((await _f._evaluateFilter(_organizedTimes, item)) == ZwapWeeklyCalendarHandleFilter.cancel) return;
 
     _selected.add(item);
+
+    if (_onChange != null) _onChange!(_selected.map((i) => TupleType(a: i.date, b: i.time)).toList());
+
     notifyListeners();
   }
 
@@ -386,6 +395,11 @@ class ZwapWeeklyCalendarPickerProvider extends ChangeNotifier {
     }
 
     return _res.map((k, v) => MapEntry<DateTime, List<TimeOfDay>>(k.pureDate, v..sort((a, b) => a.hour.compareTo(b.hour) == 0 ? a.minute.compareTo(b.minute) : a.hour.compareTo(b.hour))));
+  }
+
+  void widgetSelectedUpdated(List<_ZwapWeeklyCalendarPickerItem> items) {
+    _selected = items;
+    notifyListeners();
   }
 }
 
@@ -435,12 +449,30 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
   ///! Se un giorno si dovesse implementare per più di 7 colonne prestare attenzione alle prestazioni. Piuttosto renderizzare le colonne come un unico blocco
   late final List<ScrollController> _columnsScrollControllers;
 
+  late final ZwapWeeklyCalendarPickerProvider _provider;
+
   @override
   void initState() {
     super.initState();
 
+    _provider = ZwapWeeklyCalendarPickerProvider(
+      calendarTimes: widget.times,
+      filters: widget.pickFilters,
+      initialDate: widget.initialDay,
+      showFilter: widget._showFilter,
+      initialSelectedItems: widget.selected?.map((i) => _ZwapWeeklyCalendarPickerItem(i.a, i.b)).toList(),
+      onChange: widget.onChange,
+    );
+
     _verticalScrollLinker = LinkedScrollControllerGroup();
     _columnsScrollControllers = List.generate(7, (i) => _verticalScrollLinker.addAndGet());
+  }
+
+  @override
+  void didUpdateWidget(covariant ZwapWeeklyCalendarPicker oldWidget) {
+    if (!listEquals(widget.selected, oldWidget.selected)) _provider.widgetSelectedUpdated(widget.selected?.map((i) => _ZwapWeeklyCalendarPickerItem(i.a, i.b)).toList() ?? []);
+
+    super.didUpdateWidget(oldWidget);
   }
 
   bool _isItemDisabled(_ZwapWeeklyCalendarPickerItem item) {
@@ -582,14 +614,8 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ZwapWeeklyCalendarPickerProvider>(
-          create: (_) => ZwapWeeklyCalendarPickerProvider(
-            calendarTimes: widget.times,
-            filters: widget.pickFilters,
-            initialDate: widget.initialDay,
-            showFilter: widget._showFilter,
-            initialSelectedItems: widget.selected?.map((i) => _ZwapWeeklyCalendarPickerItem(i.a, i.b)).toList(),
-          ),
+        ChangeNotifierProvider<ZwapWeeklyCalendarPickerProvider>.value(
+          value: _provider,
         )
       ],
       child: LayoutBuilder(
