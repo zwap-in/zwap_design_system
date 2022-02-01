@@ -6,7 +6,6 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_design_system/molecules/molecules.dart';
 import 'package:zwap_utils/zwap_utils.dart';
-import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
