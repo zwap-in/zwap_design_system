@@ -32,23 +32,27 @@ class _ZwapScrollArrowState extends State<ZwapScrollArrow> {
   @override
   Widget build(BuildContext context) {
     Widget tmp = Container(
+      width: 30,
       decoration: BoxDecoration(
-        color: this._isHovered && !widget.isDisabled ? ZwapColors.neutral100 : ZwapColors.neutral50,
-        shape: BoxShape.circle,
+        borderRadius: BorderRadius.circular(50),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
         child: widget.isRight
             ? ZwapIcons.icons('arrow_right', iconColor: widget.isDisabled ? ZwapColors.neutral200 : ZwapColors.shades100, iconSize: 15)
             : ZwapIcons.icons('arrow_left', iconColor: widget.isDisabled ? ZwapColors.neutral200 : ZwapColors.shades100, iconSize: 15),
       ),
     );
-    return InkWell(
-      onTap: widget.isDisabled ? () => {} : () => widget.onClickCallBack(),
-      hoverColor: ZwapColors.shades0,
-      onHover: (bool isHovered) => this._handleHover(isHovered),
+    return Material(
+      color: this._isHovered && !widget.isDisabled ? ZwapColors.neutral100 : ZwapColors.neutral50,
       borderRadius: BorderRadius.circular(50),
-      child: tmp,
+      child: InkWell(
+        onTap: widget.isDisabled ? () => {} : () => widget.onClickCallBack(),
+        hoverColor: ZwapColors.shades0,
+        onHover: (bool isHovered) => this._handleHover(isHovered),
+        borderRadius: BorderRadius.circular(50),
+        child: tmp,
+      ),
     );
   }
 }

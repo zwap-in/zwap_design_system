@@ -34,13 +34,7 @@ class ZwapCalendarPickerState extends ChangeNotifier {
   /// The set of the dates that must be disabled
   final Set<DateTime>? disabledDates;
 
-  ZwapCalendarPickerState({
-    required this.dateEnd,
-    required this.slotsPerDay,
-    required this.selectedDates,
-    required this.maxSelections,
-    this.disabledDates
-  }) {
+  ZwapCalendarPickerState({required this.dateEnd, required this.slotsPerDay, required this.selectedDates, required this.maxSelections, this.disabledDates}) {
     Map<DateTime, List<TimeOfDay>> daysPlotted = this._plotDaysSlot();
     this.currentDate = daysPlotted.keys.first;
     this.dateStart = daysPlotted.keys.first;
@@ -113,7 +107,7 @@ class ZwapCalendarPickerState extends ChangeNotifier {
   /// It handles the click on the date
   void handleDate(DateTime date) {
     Set<DateTime> elements = this.disabledDates ?? Set<DateTime>();
-    if(!elements.contains(date) && elements.length < this.maxSelections){
+    if (!elements.contains(date) && elements.length < this.maxSelections) {
       if (this.selectedDates.contains(date)) {
         this.selectedDates.remove(date);
       } else {
