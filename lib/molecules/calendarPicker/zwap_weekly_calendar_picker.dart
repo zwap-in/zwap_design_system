@@ -16,6 +16,8 @@ import 'package:collection/collection.dart';
 import 'package:zwap_design_system/extensions/dateTimeExtension.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
+const TimeOfDay _kFakeDay = TimeOfDay(hour: 25, minute: 00);
+
 enum _ZwapWeeklyCalendarTimesTypes { daily, weekly, custom }
 
 enum ZwapWeeklyCalendarHandleFilter {
@@ -24,6 +26,25 @@ enum ZwapWeeklyCalendarHandleFilter {
 
   /// Stop the action
   cancel,
+
+  /// For some exception this means to replace the item with an other one, for other have the same values of [cancel]
+  replace,
+}
+
+enum _ZwapWeeklyCalendarFilterErrors {
+  maxCount,
+  maxPerDay,
+  maxPerWeek,
+  maxPerWeekDay,
+  maxPerDayCustom,
+  maxPerWeekCustom,
+}
+
+class _ZwapPickFilterResponse {
+  ZwapWeeklyCalendarHandleFilter handler;
+  _ZwapWeeklyCalendarFilterErrors? error;
+
+  _ZwapPickFilterResponse(this.handler, {this.error});
 }
 
 class ZwapWeeklyCalendarTimes {
@@ -53,6 +74,8 @@ class ZwapWeeklyCalendarTimes {
 }
 
 class ZwapWeeklyCalendarPickFilter {
+  final int? maxCount;
+
   final int? maxPerDay;
   final int? maxPerWeek;
 
@@ -67,22 +90,38 @@ class ZwapWeeklyCalendarPickFilter {
 
   final FutureOr<ZwapWeeklyCalendarHandleFilter?> Function(TupleType<DateTime, TimeOfDay>)? onFilterCatch;
 
+  final ZwapWeeklyCalendarHandleFilter _defaultErrorHandler;
+
   ZwapWeeklyCalendarPickFilter.notPast({this.onFilterCatch, bool includeToday = true})
-      : this.minDay = includeToday ? DateTime.now() : DateTime.now().add(Duration(days: -1)),
+      : this.maxCount = null,
+        this.minDay = includeToday ? DateTime.now() : DateTime.now().add(Duration(days: -1)),
         this.maxPerDay = null,
         this.maxPerWeek = null,
         this.maxPerWeekDay = null,
         this.maxPerDayCustom = null,
         this.maxPerWeekCustom = null,
+        this._defaultErrorHandler = ZwapWeeklyCalendarHandleFilter.cancel,
         this.maxDay = null;
 
   ZwapWeeklyCalendarPickFilter.maxPerWeek(int maxPerWeek, {this.onFilterCatch})
-      : this.minDay = null,
+      : this.maxCount = null,
+        this.minDay = null,
         this.maxPerDay = null,
         this.maxPerWeek = maxPerWeek,
         this.maxPerWeekDay = null,
         this.maxPerDayCustom = null,
         this.maxPerWeekCustom = null,
+        this._defaultErrorHandler = ZwapWeeklyCalendarHandleFilter.cancel,
+        this.maxDay = null;
+
+  ZwapWeeklyCalendarPickFilter.maxSelected(this.maxCount, {this.onFilterCatch, ZwapWeeklyCalendarHandleFilter? defaultHandler})
+      : this.maxPerDay = null,
+        this.maxPerWeek = null,
+        this.maxPerWeekDay = null,
+        this.maxPerDayCustom = null,
+        this.maxPerWeekCustom = null,
+        this.minDay = null,
+        this._defaultErrorHandler = defaultHandler ?? ZwapWeeklyCalendarHandleFilter.cancel,
         this.maxDay = null;
 
   ZwapWeeklyCalendarPickFilter({
@@ -94,17 +133,27 @@ class ZwapWeeklyCalendarPickFilter {
     this.maxPerWeekCustom,
     this.maxDay,
     this.minDay,
-  });
+    this.maxCount,
+  }) : this._defaultErrorHandler = ZwapWeeklyCalendarHandleFilter.cancel;
 
-  Future<ZwapWeeklyCalendarHandleFilter> _evaluateFilter(Map<DateTime, List<TimeOfDay>> selected, _ZwapWeeklyCalendarPickerItem newItem) async {
+  Future<_ZwapPickFilterResponse> _evaluateFilter(Map<DateTime, List<TimeOfDay>> selected, _ZwapWeeklyCalendarPickerItem newItem) async {
     int _countWeekElements({DateTime? initialDate}) {
       DateTime _tmp = initialDate ?? newItem.date.pureDate;
 
-      DateTime _firstOfWeek = _tmp.firstOfWeek;
+      DateTime _firstOfWeek = _tmp.firstOfWeek.subtract(Duration(seconds: 100));
       DateTime _lastOfWeel = _firstOfWeek.add(Duration(days: 7));
 
       List<int> _subTotals = selected.keys.where((d) => d.isAfter(_firstOfWeek) && d.isBefore(_lastOfWeel)).map((d) => selected[d]?.length ?? 0).toList();
       return _subTotals.isEmpty ? 0 : _subTotals.reduce((v, e) => v += e);
+    }
+
+    bool _evaluateMaxCount() {
+      if (maxCount == null) return true;
+      try {
+        return (selected.keys.map((k) => selected[k]!.length).reduce((v, e) => v += e)) + 1 < maxCount!;
+      } catch (e) {
+        return true;
+      }
     }
 
     bool _evaluateMaxPerDay() {
@@ -117,12 +166,12 @@ class ZwapWeeklyCalendarPickFilter {
       return _countWeekElements() + 1 <= maxPerWeek!;
     }
 
-    bool _evaluateMacPerWeekDay() {
+    bool _evaluateMaxPerWeekDay() {
       if (maxPerWeekDay == null || maxPerWeekDay![newItem.date.weekday] == null) return true;
       return (selected[newItem.date.pureDate] ?? []).length + 1 <= maxPerWeekDay![newItem.date.weekday]!;
     }
 
-    bool _evaluateMapPerDayCustom() {
+    bool _evaluateMaxPerDayCustom() {
       if (maxPerDayCustom == null || !maxPerDayCustom!.containsKey(newItem.date.pureDate)) return true;
       return (selected[newItem.date] ?? []).length + 1 <= maxPerDayCustom![newItem.date.pureDate]!;
     }
@@ -143,13 +192,43 @@ class ZwapWeeklyCalendarPickFilter {
       return newItem.date.pureDate.isAfter(minDay!);
     }
 
-    bool _res = _evaluateMaxPerDay() && _evaluateMaxPerWeek() && _evaluateMacPerWeekDay() && _evaluateMapPerDayCustom() && _evaluateMaxPerWeekCustom() && _evaluateMaxDay() && _evaluateMinDay();
+    _ZwapWeeklyCalendarFilterErrors? _error = !_evaluateMaxCount()
+        ? _ZwapWeeklyCalendarFilterErrors.maxCount
+        : !_evaluateMaxPerDay()
+            ? _ZwapWeeklyCalendarFilterErrors.maxPerDay
+            : !_evaluateMaxPerWeek()
+                ? _ZwapWeeklyCalendarFilterErrors.maxPerWeek
+                : !_evaluateMaxPerWeekDay()
+                    ? _ZwapWeeklyCalendarFilterErrors.maxPerWeekDay
+                    : !_evaluateMaxPerDayCustom()
+                        ? _ZwapWeeklyCalendarFilterErrors.maxPerDayCustom
+                        : !_evaluateMaxPerWeekCustom()
+                            ? _ZwapWeeklyCalendarFilterErrors.maxPerWeekCustom
+                            : null;
+
+    if (_error != null && _defaultErrorHandler == ZwapWeeklyCalendarHandleFilter.replace)
+      return _ZwapPickFilterResponse(
+        ZwapWeeklyCalendarHandleFilter.replace,
+        error: _error,
+      );
+
+    bool _res = _evaluateMaxCount() &&
+        _evaluateMaxPerDay() &&
+        _evaluateMaxPerWeek() &&
+        _evaluateMaxPerWeekDay() &&
+        _evaluateMaxPerDayCustom() &&
+        _evaluateMaxPerWeekCustom() &&
+        _evaluateMaxDay() &&
+        _evaluateMinDay();
 
     ZwapWeeklyCalendarHandleFilter? _handler;
 
     if (!_res && onFilterCatch != null) _handler = await onFilterCatch!(TupleType(a: newItem.date, b: newItem.time));
 
-    return _res ? ZwapWeeklyCalendarHandleFilter.allow : _handler ?? ZwapWeeklyCalendarHandleFilter.cancel;
+    return _ZwapPickFilterResponse(
+      _res ? ZwapWeeklyCalendarHandleFilter.allow : _handler ?? ZwapWeeklyCalendarHandleFilter.cancel,
+      error: _handler == ZwapWeeklyCalendarHandleFilter.replace ? _error : null,
+    );
   }
 }
 
@@ -332,6 +411,8 @@ class ZwapWeeklyCalendarPickerProvider extends ChangeNotifier {
     //? Se elemento presente semplicemente rimuovo
     if (_i > -1) {
       _selected.removeAt(_i);
+      if (_onChange != null) _onChange!(_selected.map((i) => TupleType(a: i.date, b: i.time)).toList());
+
       notifyListeners();
       return;
     }
@@ -344,7 +425,37 @@ class ZwapWeeklyCalendarPickerProvider extends ChangeNotifier {
       else
         _organizedTimes[i.date.pureDate] = [i.time];
 
-    for (ZwapWeeklyCalendarPickFilter _f in _filters) if ((await _f._evaluateFilter(_organizedTimes, item)) == ZwapWeeklyCalendarHandleFilter.cancel) return;
+    for (ZwapWeeklyCalendarPickFilter _f in _filters) {
+      _ZwapPickFilterResponse _filterRes = await _f._evaluateFilter(_organizedTimes, item);
+      if (_filterRes.handler == ZwapWeeklyCalendarHandleFilter.cancel) return;
+      if (_filterRes.handler == ZwapWeeklyCalendarHandleFilter.replace) {
+        if (_filterRes.error == null) return;
+        try {
+          switch (_filterRes.error!) {
+            case _ZwapWeeklyCalendarFilterErrors.maxCount:
+              toggleItem(_selected.first);
+              break;
+            case _ZwapWeeklyCalendarFilterErrors.maxPerDay:
+              toggleItem(_selected.lastWhere((e) => e.date.isAtSameMomentAs(item.date)));
+              break;
+            case _ZwapWeeklyCalendarFilterErrors.maxPerWeek:
+              toggleItem(_selected.lastWhere((e) => e.date.firstOfWeek.isAtSameMomentAs(item.date.firstOfWeek)));
+              break;
+            case _ZwapWeeklyCalendarFilterErrors.maxPerWeekDay:
+              toggleItem(_selected.lastWhere((e) => e.date.weekday == item.date.weekday));
+              break;
+            case _ZwapWeeklyCalendarFilterErrors.maxPerDayCustom:
+              toggleItem(_selected.lastWhere((e) => e.date.isAtSameMomentAs(item.date)));
+              break;
+            case _ZwapWeeklyCalendarFilterErrors.maxPerWeekCustom:
+              toggleItem(_selected.lastWhere((e) => e.date.firstOfWeek.isAtSameMomentAs(item.date.firstOfWeek)));
+              break;
+          }
+        } catch (e) {
+          return;
+        }
+      }
+    }
 
     _selected.add(item);
 
@@ -368,28 +479,31 @@ class ZwapWeeklyCalendarPickerProvider extends ChangeNotifier {
 
   Map<DateTime, List<TimeOfDay>> get currentWeekTimes {
     final List<int> _weekDays = _showFilter?._showedWeekdays ?? [1, 2, 3, 4, 5, 6, 7];
-
     late Map<DateTime, List<TimeOfDay>> _res;
+    late List<TimeOfDay> _emptyDay;
 
     DateTime _tmp = DateTime.now();
 
     switch (_calendarTimes._type) {
       case _ZwapWeeklyCalendarTimesTypes.daily:
+        _emptyDay = [];
         _res = {
           for (int i in _weekDays)
-            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) _tmp: _calendarTimes._simgleDayTimes!,
+            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) _tmp.pureDate: _calendarTimes._simgleDayTimes!,
         };
         break;
       case _ZwapWeeklyCalendarTimesTypes.weekly:
+        _emptyDay = List.generate(_calendarTimes._weeklyTimes!.entries.firstOrNull?.value.length ?? 0, (i) => _kFakeDay);
         _res = {
           for (int i in _weekDays)
-            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) _tmp: _calendarTimes._weeklyTimes![__currentWeek.add(Duration(days: i)).weekday] ?? [],
+            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) _tmp.pureDate: _calendarTimes._weeklyTimes![__currentWeek.add(Duration(days: i - 1)).weekday] ?? _emptyDay,
         };
         break;
       case _ZwapWeeklyCalendarTimesTypes.custom:
+        _emptyDay = List.generate(_calendarTimes._customTimes!.entries.firstOrNull?.value.length ?? 0, (i) => _kFakeDay);
         _res = {
           for (int i in _weekDays)
-            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) _tmp: _calendarTimes._customTimes![__currentWeek.add(Duration(days: i))] ?? [],
+            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) _tmp.pureDate: _calendarTimes._customTimes![__currentWeek.add(Duration(days: i))] ?? _emptyDay,
         };
         break;
     }
@@ -476,6 +590,8 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
   }
 
   bool _isItemDisabled(_ZwapWeeklyCalendarPickerItem item) {
+    if (item.time.hour > 24) return true;
+
     final ZwapWeeklyCalendarShowFilter? _filter = widget._showFilter;
 
     if (_filter == null) return false;
@@ -508,7 +624,7 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
       child: Padding(
         padding: EdgeInsets.only(top: 20),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: 2),
@@ -585,7 +701,7 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
                             ),
                             child: Center(
                               child: ZwapText(
-                                text: "${time.hour}:${Utils.plotMinute(time.minute)}",
+                                text: time.hour > 24 ? "--:--" : "${time.hour}:${Utils.plotMinute(time.minute)}",
                                 textColor: isSelected
                                     ? isDisabled
                                         ? ZwapColors.primary800
@@ -623,6 +739,7 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
           final Map<DateTime, List<TimeOfDay>> _showedDays = context.select<ZwapWeeklyCalendarPickerProvider, Map<DateTime, List<TimeOfDay>>>((pro) => pro.currentWeekTimes);
 
           return Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -798,7 +915,7 @@ class _ZwapWeeklyCalendarPickerDaySelectorState extends State<_ZwapWeeklyCalenda
               left: _left,
               width: _width,
               child: InkWell(
-                onTap: () => print('adsfasf'),
+                onTap: () {},
                 onHover: (isHovered) => setState(() => _isHovered = isHovered),
                 borderRadius: BorderRadius.circular(4),
                 mouseCursor: SystemMouseCursors.move,

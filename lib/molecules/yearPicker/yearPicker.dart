@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -143,6 +144,11 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
   }
 
   void _focusNodeListener() {
+    if (!kIsWeb) {
+      if (_inputFocus.hasFocus) _inputFocus.unfocus();
+      return;
+    }
+
     if (_inputFocus.hasFocus && !_isOverlayOpened) _toggleOverlay();
     if (!_inputFocus.hasFocus && _isOverlayOpened) _toggleOverlay();
 
@@ -188,8 +194,7 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
       setState(() => _error = "Il dato inserito non è valido!"); //TODO: traduci
       return;
     }
-
-    _yearSelected(_tmpYear);
+    if (_tmpYear != _yearPickerProvider.selected) _yearSelected(_tmpYear);
   }
 
   void _yearSelected(int year) {
@@ -205,19 +210,24 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
       final _width = min(285, MediaQuery.of(context).size.width * 0.8);
 
       double _dx = (_yearInputKey.globalOffset?.dx ?? 0);
+      double _dy = (_yearInputKey.globalOffset?.dy ?? 0);
 
       if ((_inputSize?.width ?? 0) > _width) _dx += (_inputSize!.width - _width) / 2;
+      if (_dy + 265 + 70 > MediaQuery.of(context).size.height) _dy = max(MediaQuery.of(context).size.height - 320, 0);
 
       return ZwapOverlayEntryWidget(
         entity: _pickerOverlay,
         onAutoClose: () => _inputFocus.hasFocus ? _inputFocus.unfocus() : null,
         child: ZwapOverlayEntryChild(
-          top: (_yearInputKey.globalOffset?.dy ?? 0) + 70,
+          top: _dy,
           left: _dx,
           child: ChangeNotifierProvider.value(
             value: _yearPickerProvider,
             child: _ZwapYearPickerOverlayContent(
-              onYearSelected: (y) => _yearSelected(y),
+              onYearSelected: (y) {
+                _yearSelected(y);
+                if (_isOverlayOpened) _toggleOverlay();
+              },
             ),
           ),
         ),
@@ -269,11 +279,16 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
                         decoration: InputDecoration.collapsed(hintText: widget.hintText),
                         cursorColor: ZwapColors.shades100,
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        onTap: () {
+                          if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
+
+                          if (_inputFocus.hasFocus && !_isOverlayOpened) _toggleOverlay();
+                        },
                       ),
                     ),
                     SizedBox(width: 5),
                     AnimatedRotation(
-                      turns: _isOverlayOpened ? 0.5 : 0,
+                      turns: _isOverlayOpened ? 0 : 0.5,
                       duration: const Duration(milliseconds: 150),
                       child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(_isOverlayOpened)),
                     ),
