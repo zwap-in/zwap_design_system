@@ -61,16 +61,12 @@ class ZwapOverlayEntryWidget extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       child: GestureDetector(
         onTap: () => _close(),
-        child: RawKeyboardListener(
-          focusNode: FocusNode(),
-          onKey: (k) => k.logicalKey == LogicalKeyboardKey.escape ? _close() : null,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.transparent,
-            child: Stack(
-              children: [child],
-            ),
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.transparent,
+          child: Stack(
+            children: [child],
           ),
         ),
       ),

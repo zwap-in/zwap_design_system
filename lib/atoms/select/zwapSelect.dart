@@ -255,6 +255,13 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
     _inputController = TextEditingController(text: widget.selected);
     _inputFocus = FocusNode(onKey: (node, event) {
+      if (event.physicalKey == PhysicalKeyboardKey.escape && (_selectOverlay?.mounted ?? false)) {
+        if (widget.isRegular) _inputController.text = _provider.allValues[_selectedValues.firstOrNull ?? ''] ?? '';
+
+        if (_inputFocus.hasFocus) _inputFocus.unfocus();
+        return KeyEventResult.skipRemainingHandlers;
+      }
+
       if (event.physicalKey == PhysicalKeyboardKey.end || event.physicalKey == PhysicalKeyboardKey.enter || event.physicalKey == PhysicalKeyboardKey.tab) {
         _inputFocus.unfocus();
         _inputController.text = widget.values[_selectedValues] ?? '';

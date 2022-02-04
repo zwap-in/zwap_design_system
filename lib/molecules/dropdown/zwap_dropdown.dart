@@ -1,6 +1,7 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
@@ -241,7 +242,11 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
                         .toList()
                         .mapIndexed((i, k) => Container(
                               color: Colors.transparent,
-                              width: double.infinity,
+                              width: (decorations.overlayWidth != null
+                                  ? decorations.overlayWidth
+                                  : decorations.width == null
+                                      ? null
+                                      : decorations.width! + 20 - (decorations.contentPadding.left + decorations.contentPadding.right)),
                               margin: EdgeInsets.only(bottom: i != (widget.items.keys.toList().length - 1) ? decorations.itemSpacing : 0),
                               child: Material(
                                 color: k == _selectedItem
@@ -281,40 +286,44 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
   Widget build(BuildContext context) {
     final ZwapDropDownDecoration decorations = widget.decoration;
 
-    return Material(
-      color: decorations.backgroundColor,
-      borderRadius: BorderRadius.circular(decorations.borderRadius),
-      child: InkWell(
-        hoverColor: decorations.hoverColor,
+    return KeyboardListener(
+      focusNode: FocusNode()..requestFocus(),
+      onKeyEvent: (k) => k.logicalKey == LogicalKeyboardKey.escape && (_dropdownOverlay?.mounted ?? false) ? _toggleOverlay() : null,
+      child: Material(
+        color: decorations.backgroundColor,
         borderRadius: BorderRadius.circular(decorations.borderRadius),
-        onTap: () => _toggleOverlay(),
-        child: Container(
-          key: _dropdownKey,
-          width: decorations.width,
-          height: decorations.height ?? 50,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(decorations.borderRadius),
-          ),
-          padding: decorations.contentPadding,
-          child: Row(
-            children: [
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 150),
-                child: Container(
-                  key: ValueKey(this._selectedItem),
-                  child: widget.head,
-                ),
-              ),
-              if (widget.showArrow) ...[
-                Spacer(),
-                AnimatedRotation(
-                  turns: (this._dropdownOverlay?.mounted ?? false) ? 0 : 0.5,
+        child: InkWell(
+          hoverColor: decorations.hoverColor,
+          borderRadius: BorderRadius.circular(decorations.borderRadius),
+          onTap: () => _toggleOverlay(),
+          child: Container(
+            key: _dropdownKey,
+            width: decorations.width,
+            height: decorations.height ?? 50,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(decorations.borderRadius),
+            ),
+            padding: decorations.contentPadding,
+            child: Row(
+              children: [
+                AnimatedSwitcher(
                   duration: const Duration(milliseconds: 150),
-                  child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(this._dropdownOverlay != null)),
+                  child: Container(
+                    key: ValueKey(this._selectedItem),
+                    child: widget.head,
+                  ),
                 ),
+                if (widget.showArrow) ...[
+                  Spacer(),
+                  AnimatedRotation(
+                    turns: (this._dropdownOverlay?.mounted ?? false) ? 0 : 0.5,
+                    duration: const Duration(milliseconds: 150),
+                    child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(this._dropdownOverlay != null)),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
