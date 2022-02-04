@@ -309,7 +309,7 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
               if (widget.showArrow) ...[
                 Spacer(),
                 AnimatedRotation(
-                  turns: (this._dropdownOverlay?.mounted ?? false) ? 0.5 : 0,
+                  turns: (this._dropdownOverlay?.mounted ?? false) ? 0 : 0.5,
                   duration: const Duration(milliseconds: 150),
                   child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(this._dropdownOverlay != null)),
                 ),

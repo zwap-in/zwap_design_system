@@ -43,12 +43,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
-
-
-
-
-
   uses-material-design: true
 
   assets:
@@ -56,3 +50,37 @@ flutter:
     - assets/images/placeholders/
     - assets/images/icons/
 
+
+  fonts:
+    - family: SFUIText
+      fonts:
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Light.ttf
+          weight: 300
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Regular.ttf
+          weight: 400
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-RegularItalic.ttf
+          weight: 400
+          style: italic
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Medium.ttf
+          weight: 500
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Semibold.ttf
+          weight: 600
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-SemiboldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Bold.ttf
+          weight: 700
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Heavy.ttf
+          weight: 800
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-HeavyItalic.ttf
+          weight: 800
+          style: italic

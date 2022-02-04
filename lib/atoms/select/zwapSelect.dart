@@ -646,7 +646,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                     ),
                     SizedBox(width: 5),
                     AnimatedRotation(
-                      turns: (_selectOverlay?.mounted ?? false) ? 0.5 : 0,
+                      turns: (_selectOverlay?.mounted ?? false) ? 0 : 0.5,
                       duration: const Duration(milliseconds: 150),
                       child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(_selectOverlay?.mounted)),
                     ),

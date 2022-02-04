@@ -82,6 +82,8 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
 
   final TextOverflow? textOverflow;
 
+  final TextStyle? customTextStyle;
+
   ZwapText({
     Key? key,
     required this.text,
@@ -90,7 +92,20 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
     this.textAlign,
     this.maxLines,
     this.textOverflow,
-  }) : super(key: key);
+  })  : this.customTextStyle = null,
+        super(key: key);
+
+  ZwapText.customStyle({
+    Key? key,
+    required this.text,
+    required this.customTextStyle,
+    this.textAlign,
+    this.maxLines,
+    this.textOverflow,
+  })  : assert(customTextStyle != null),
+        this.zwapTextType = ZwapTextType.bodyRegular,
+        this.textColor = customTextStyle!.color ?? Colors.white,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +115,7 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
       overflow: textOverflow,
       textScaleFactor: 1,
       textAlign: this.textAlign,
-      style: getTextStyle(this.zwapTextType).apply(color: this.textColor),
+      style: customTextStyle ?? getTextStyle(this.zwapTextType).apply(color: this.textColor),
     );
   }
 

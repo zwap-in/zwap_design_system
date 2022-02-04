@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ZwapOverlayEntryChild extends StatelessWidget {
   final Widget child;
@@ -48,22 +49,28 @@ class ZwapOverlayEntryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!autoClose) return child;
 
+    void _close() {
+      entity?.remove();
+      if (onAutoClose != null) onAutoClose!();
+    }
+
     return Positioned(
       top: 0,
       left: 0,
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       child: GestureDetector(
-        onTap: () {
-          entity?.remove();
-          if (onAutoClose != null) onAutoClose!();
-        },
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: Colors.transparent,
-          child: Stack(
-            children: [child],
+        onTap: () => _close(),
+        child: RawKeyboardListener(
+          focusNode: FocusNode(),
+          onKey: (k) => k.logicalKey == LogicalKeyboardKey.escape ? _close() : null,
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.transparent,
+            child: Stack(
+              children: [child],
+            ),
           ),
         ),
       ),
