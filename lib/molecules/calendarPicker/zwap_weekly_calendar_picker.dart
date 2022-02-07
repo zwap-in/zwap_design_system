@@ -92,6 +92,9 @@ class ZwapWeeklyCalendarPickFilter {
 
   final ZwapWeeklyCalendarHandleFilter _defaultErrorHandler;
 
+  final bool Function(TupleType<DateTime, TimeOfDay> slot)? disableWhere;
+
+  /// This will visually disable all past slot
   ZwapWeeklyCalendarPickFilter.notPast({this.onFilterCatch, bool includeToday = true})
       : this.maxCount = null,
         this.minDay = includeToday ? DateTime.now() : DateTime.now().add(Duration(days: -1)),
@@ -101,9 +104,10 @@ class ZwapWeeklyCalendarPickFilter {
         this.maxPerDayCustom = null,
         this.maxPerWeekCustom = null,
         this._defaultErrorHandler = ZwapWeeklyCalendarHandleFilter.cancel,
+        this.disableWhere = null,
         this.maxDay = null;
 
-  ZwapWeeklyCalendarPickFilter.maxPerWeek(int maxPerWeek, {this.onFilterCatch})
+  ZwapWeeklyCalendarPickFilter.maxPerWeek(int maxPerWeek, {this.onFilterCatch, ZwapWeeklyCalendarHandleFilter? defaultHandler})
       : this.maxCount = null,
         this.minDay = null,
         this.maxPerDay = null,
@@ -111,11 +115,25 @@ class ZwapWeeklyCalendarPickFilter {
         this.maxPerWeekDay = null,
         this.maxPerDayCustom = null,
         this.maxPerWeekCustom = null,
-        this._defaultErrorHandler = ZwapWeeklyCalendarHandleFilter.cancel,
+        this._defaultErrorHandler = defaultHandler ?? ZwapWeeklyCalendarHandleFilter.cancel,
+        this.disableWhere = null,
         this.maxDay = null;
 
   ZwapWeeklyCalendarPickFilter.maxSelected(this.maxCount, {this.onFilterCatch, ZwapWeeklyCalendarHandleFilter? defaultHandler})
       : this.maxPerDay = null,
+        this.maxPerWeek = null,
+        this.maxPerWeekDay = null,
+        this.maxPerDayCustom = null,
+        this.maxPerWeekCustom = null,
+        this.minDay = null,
+        this._defaultErrorHandler = defaultHandler ?? ZwapWeeklyCalendarHandleFilter.cancel,
+        this.disableWhere = null,
+        this.maxDay = null;
+
+  /// This will visually disable all slots where [disableWhere(slot)] return true
+  ZwapWeeklyCalendarPickFilter.disableWhere(this.disableWhere, {this.onFilterCatch, ZwapWeeklyCalendarHandleFilter? defaultHandler})
+      : this.maxCount = null,
+        this.maxPerDay = null,
         this.maxPerWeek = null,
         this.maxPerWeekDay = null,
         this.maxPerDayCustom = null,
@@ -133,6 +151,7 @@ class ZwapWeeklyCalendarPickFilter {
     this.maxPerWeekCustom,
     this.maxDay,
     this.minDay,
+    this.disableWhere,
     this.maxCount,
   }) : this._defaultErrorHandler = ZwapWeeklyCalendarHandleFilter.cancel;
 
@@ -601,15 +620,16 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
 
     bool _isBeforeMin = false;
     bool _isAfterMax = false;
+    bool _isManuallyDisabled = false;
 
     for (ZwapWeeklyCalendarPickFilter f in widget.pickFilters) {
       if (f.minDay?.isAfter(item.date) ?? false) _isBeforeMin = true;
       if (f.maxDay?.isBefore(item.date) ?? false) _isAfterMax = true;
-
-      if (_isAfterMax || _isBeforeMin) break;
+      if (f.disableWhere != null && f.disableWhere!(TupleType(a: item.date, b: item.time))) _isManuallyDisabled = true;
+      if (_isAfterMax || _isBeforeMin || _isManuallyDisabled) break;
     }
 
-    return _isInDisabledList || _isInPast || _isBeforeMin || _isAfterMax;
+    return _isInDisabledList || _isManuallyDisabled || _isInPast || _isBeforeMin || _isAfterMax;
   }
 
   /// It retrieves all slots column
