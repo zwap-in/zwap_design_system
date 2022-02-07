@@ -632,6 +632,28 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
     return _isInDisabledList || _isManuallyDisabled || _isInPast || _isBeforeMin || _isAfterMax;
   }
 
+  Function _getDisabledCallbackOfItem(DateTime day, TimeOfDay time) {
+    _ZwapWeeklyCalendarPickerItem item = _ZwapWeeklyCalendarPickerItem(day, time);
+    Function? res;
+
+    if (widget._showFilter != null && widget._showFilter!._onDayTap[_ZwapWeeklyCalendarPickerItem(day, time)] != null)
+      res = () => widget._showFilter!._onDayTap[_ZwapWeeklyCalendarPickerItem(day, time)]!(TupleType(a: day, b: time));
+
+    if (res == null && widget.pickFilters.isNotEmpty) {
+      for (ZwapWeeklyCalendarPickFilter f in widget.pickFilters) {
+        if ((f.minDay?.isAfter(item.date) ?? false) && f.onFilterCatch != null)
+          res = () => f.onFilterCatch!(TupleType(a: day, b: time));
+        else if ((f.maxDay?.isBefore(item.date) ?? false) && f.onFilterCatch != null)
+          res = () => f.onFilterCatch!(TupleType(a: day, b: time));
+        else if (f.disableWhere != null && f.disableWhere!(TupleType(a: item.date, b: item.time)) && f.onFilterCatch != null) res = () => f.onFilterCatch!(TupleType(a: day, b: time));
+
+        if (res != null) break;
+      }
+    }
+
+    return res ?? () {};
+  }
+
   /// It retrieves all slots column
   Widget _getDaysSlot(BuildContext context, DateTime day) {
     day = day.pureDate;
@@ -674,20 +696,11 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
                       final bool isHovered = context.select<ZwapWeeklyCalendarPickerProvider, bool>((pro) => pro.hoveredItem?.date.pureDate == day && pro.hoveredItem?.time == time);
                       final bool isDisabled = _isItemDisabled(_ZwapWeeklyCalendarPickerItem(day, time));
 
-                      Function? _disabledCallBack = widget._showFilter != null
-                          ? widget._showFilter!._onDayTap[_ZwapWeeklyCalendarPickerItem(day, time)] != null
-                              ? () => widget._showFilter!._onDayTap[_ZwapWeeklyCalendarPickerItem(day, time)]!(TupleType(a: day, b: time))
-                              : null
-                          : null;
-
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 7.5),
                         child: InkWell(
-                          onTap: isDisabled
-                              ? _disabledCallBack == null
-                                  ? null
-                                  : () => _disabledCallBack()
-                              : () => context.read<ZwapWeeklyCalendarPickerProvider>().toggleItem(_ZwapWeeklyCalendarPickerItem(day, time)),
+                          onTap:
+                              isDisabled ? () => _getDisabledCallbackOfItem(day, time)() : () => context.read<ZwapWeeklyCalendarPickerProvider>().toggleItem(_ZwapWeeklyCalendarPickerItem(day, time)),
                           onHover: isDisabled ? null : (bool isHovered) => context.read<ZwapWeeklyCalendarPickerProvider>().hoveredItem = isHovered ? _ZwapWeeklyCalendarPickerItem(day, time) : null,
                           borderRadius: BorderRadius.circular(10),
                           hoverColor: Colors.transparent,
