@@ -66,7 +66,7 @@ class _ZwapStarsState extends State<ZwapStars> {
     if (index >= _tmpRating) {
       icon = new Icon(
         Icons.star_border,
-        color: _color,
+        color: ZwapColors.neutral500,
         size: widget.starSize,
       );
     } else if (index > _tmpRating - 1 && index < _tmpRating) {
@@ -86,7 +86,7 @@ class _ZwapStarsState extends State<ZwapStars> {
     return widget.onStarClickCallBack != null
         ? InkWell(
             onTap: () => this._clickStarRating(index),
-            onHover: (hovered) => setState(() => _hover = hovered ? index.toDouble() : null),
+            onHover: (hovered) => setState(() => _hover = hovered ? index.toDouble() + 1 : null),
             child: icon,
           )
         : icon;
