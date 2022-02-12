@@ -191,6 +191,9 @@ class ZwapDropDown extends StatefulWidget {
   /// If provided and can search is true, assigned to text input
   final FocusNode? focusNode;
 
+  /// Used to sort keys and consequently sort widgets
+  final int Function(String a, String b)? sortKeys;
+
   ZwapDropDown({
     Key? key,
     required this.head,
@@ -203,6 +206,7 @@ class ZwapDropDown extends StatefulWidget {
     this.canSearch = false,
     this.noResultMessage,
     this.focusNode,
+    this.sortKeys,
   }) : super(key: key);
 
   _ZwapDropDownState createState() => _ZwapDropDownState();
@@ -372,39 +376,41 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
                               controller: _scrollController,
                               child: Column(
                                 crossAxisAlignment: decorations.itemsAlignment,
-                                children: _showedItems.keys
-                                    .toList()
-                                    .mapIndexed((i, k) => Container(
-                                          color: Colors.transparent,
-                                          width: (decorations.overlayWidth != null
-                                              ? decorations.overlayWidth
-                                              : decorations.width == null
-                                                  ? null
-                                                  : decorations.width! + 20 - (decorations.contentPadding.left + decorations.contentPadding.right)),
-                                          margin: EdgeInsets.only(bottom: i != (widget.items.keys.toList().length - 1) ? decorations.itemSpacing : 0),
-                                          child: Material(
-                                            color: k == _selectedItem
-                                                ? decorations.selectedItemColor
-                                                : k == _hoveredItem
-                                                    ? decorations.itemHoverColor
-                                                    : decorations.overlayBackgroundColor,
+                                children: (widget.sortKeys == null ? _showedItems.keys.toList() : _showedItems.keys.toList()
+                                      ..sort(widget.sortKeys))
+                                    .mapIndexed(
+                                      (i, k) => Container(
+                                        color: Colors.transparent,
+                                        width: (decorations.overlayWidth != null
+                                            ? decorations.overlayWidth
+                                            : decorations.width == null
+                                                ? null
+                                                : decorations.width! + 20 - (decorations.contentPadding.left + decorations.contentPadding.right)),
+                                        margin: EdgeInsets.only(bottom: i != (widget.items.keys.toList().length - 1) ? decorations.itemSpacing : 0),
+                                        child: Material(
+                                          color: k == _selectedItem
+                                              ? decorations.selectedItemColor
+                                              : k == _hoveredItem
+                                                  ? decorations.itemHoverColor
+                                                  : decorations.overlayBackgroundColor,
+                                          borderRadius: BorderRadius.circular(decorations.hoverBorderRadius),
+                                          child: InkWell(
+                                            onTap: k != _selectedItem ? () => this._selectItem(k) : null,
+                                            hoverColor: decorations.itemHoverColor,
+                                            onHover: (val) => val ? _hoveredItem = k : _hoveredItem = null,
                                             borderRadius: BorderRadius.circular(decorations.hoverBorderRadius),
-                                            child: InkWell(
-                                              onTap: k != _selectedItem ? () => this._selectItem(k) : null,
-                                              hoverColor: decorations.itemHoverColor,
-                                              onHover: (val) => val ? _hoveredItem = k : _hoveredItem = null,
-                                              borderRadius: BorderRadius.circular(decorations.hoverBorderRadius),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.transparent,
-                                                  borderRadius: BorderRadius.circular(decorations.hoverBorderRadius),
-                                                ),
-                                                padding: decorations.insideItemPadding,
-                                                child: widget.items[k],
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.transparent,
+                                                borderRadius: BorderRadius.circular(decorations.hoverBorderRadius),
                                               ),
+                                              padding: decorations.insideItemPadding,
+                                              child: widget.items[k],
                                             ),
                                           ),
-                                        ))
+                                        ),
+                                      ),
+                                    )
                                     .toList(),
                               ),
                             ),
