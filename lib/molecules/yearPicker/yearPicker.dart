@@ -72,6 +72,8 @@ class ZwapYearPicker extends StatefulWidget {
 
   final Function(int year)? onYearSelected;
 
+  final String? invalidInputMessage;
+
   ZwapYearPicker({
     Key? key,
     required this.hintText,
@@ -81,6 +83,7 @@ class ZwapYearPicker extends StatefulWidget {
     this.maxYear,
     this.minYear,
     this.selectedYear,
+    this.invalidInputMessage,
   })  : assert((maxYear ?? DateTime.now().year + 30) > (minYear ?? 1900)),
         super(key: key);
 
@@ -152,8 +155,9 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
     if (_inputFocus.hasFocus && !_isOverlayOpened) _toggleOverlay();
     if (!_inputFocus.hasFocus && _isOverlayOpened) _toggleOverlay();
 
-    if (!_inputFocus.hasFocus && (_yearPickerProvider.selected == null || int.tryParse(_inputController.text) != _yearPickerProvider.selected) && _inputController.text.isNotEmpty)
-      _inputController.text = '${_yearPickerProvider.selected ?? ''}';
+    if (!_inputFocus.hasFocus &&
+        (_yearPickerProvider.selected == null || int.tryParse(_inputController.text) != _yearPickerProvider.selected) &&
+        _inputController.text.isNotEmpty) _inputController.text = '${_yearPickerProvider.selected ?? ''}';
   }
 
   void _toggleOverlay() {
@@ -191,7 +195,7 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
     int? _tmpYear = int.tryParse(_inputController.text);
 
     if (_tmpYear == null || _tmpYear < _minYear || _tmpYear > _maxYear) {
-      setState(() => _error = "Il dato inserito non è valido!"); //TODO: traduci
+      setState(() => _error = widget.invalidInputMessage);
       return;
     }
     if (_tmpYear != _yearPickerProvider.selected) _yearSelected(_tmpYear);
@@ -446,7 +450,8 @@ class _ZwapYearPickerOverlayContentState extends State<_ZwapYearPickerOverlayCon
                       onTap: () => context.read<_ZwapYearPickerProvider>().previousPage(),
                       hoverColor: ZwapColors.neutral200,
                       splashColor: ZwapColors.neutral300,
-                      child: Container(width: 40, height: 40, child: Icon(Icons.chevron_left, color: ZwapColors.neutral800), color: Colors.transparent),
+                      child:
+                          Container(width: 40, height: 40, child: Icon(Icons.chevron_left, color: ZwapColors.neutral800), color: Colors.transparent),
                     ),
                     ZwapText(
                       text: '$_firstYear-${_firstYear + 9}',
@@ -457,7 +462,8 @@ class _ZwapYearPickerOverlayContentState extends State<_ZwapYearPickerOverlayCon
                       onTap: () => context.read<_ZwapYearPickerProvider>().nextPage(),
                       hoverColor: ZwapColors.neutral200,
                       splashColor: ZwapColors.neutral300,
-                      child: Container(width: 40, height: 40, child: Icon(Icons.chevron_right, color: ZwapColors.neutral800), color: Colors.transparent),
+                      child:
+                          Container(width: 40, height: 40, child: Icon(Icons.chevron_right, color: ZwapColors.neutral800), color: Colors.transparent),
                     ),
                   ],
                 ),
