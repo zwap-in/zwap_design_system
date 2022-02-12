@@ -491,7 +491,9 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
                             key: ValueKey(this._selectedItem),
                             child: widget.head,
                           ),
-                        Flexible(
+                        Container(
+                          width: (decorations.width ?? 0 - 20).abs(),
+                          height: decorations.height ?? 50,
                           child: TextField(
                             controller: _searchController,
                             focusNode: _inputFocusNode,
