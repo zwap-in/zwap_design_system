@@ -501,6 +501,7 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
                             decoration: InputDecoration.collapsed(hintText: ""),
                             maxLines: 1,
                             cursorColor: ZwapColors.primary700,
+                            mouseCursor: SystemMouseCursors.basic,
                             onTap: () {
                               if (_dropdownOverlay?.mounted != true) _toggleOverlay();
                             },
