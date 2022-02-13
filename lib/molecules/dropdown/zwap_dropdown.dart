@@ -492,7 +492,6 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
                             child: widget.head,
                           ),
                         Container(
-                          width: (decorations.width ?? 0 - 20).abs(),
                           height: decorations.height ?? 50,
                           child: TextField(
                             controller: _searchController,
