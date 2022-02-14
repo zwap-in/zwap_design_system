@@ -248,13 +248,22 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
         Expanded(
           child: widget.zwapInfiniteScrollType == ZwapInfiniteScrollType.gridView ? this._getGridView(data) : this._getListView(data),
         ),
-        this._loading
-            ? Flexible(
-                child: CircularProgressIndicator(),
-                flex: 0,
-                fit: FlexFit.tight,
-              )
-            : Container()
+        Container(
+          height: 35,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: this._loading
+                ? Flexible(
+                    key: ValueKey('truesufgbajsbgaòbgòa'),
+                    child: CircularProgressIndicator(),
+                    flex: 0,
+                    fit: FlexFit.tight,
+                  )
+                : Container(
+                    key: ValueKey('falsedkgahsrughaòrgh'),
+                  ),
+          ),
+        ),
       ],
     );
   }
