@@ -1,4 +1,5 @@
 /// IMPORTING THIRD PARTY PACKAGES
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -22,6 +23,16 @@ enum ZwapInfiniteScrollType {
 /// The infinite scroll component
 class ZwapInfiniteScroll<T> extends StatefulWidget {
   /// It fetches more data from the API call
+  ///
+  /// If [initData] != null, pageNumber will start from 2, otherwise will start with 1.
+  ///
+  /// If [fetchMoreData] return an empty PageData<T>:
+  ///   * [pageNumber] will not be incremented
+  ///   * await [noDataDuration] before the next call
+  ///
+  /// otherwise:
+  ///   * [pageNumber]++;
+  ///   *  await [fetchDelayDuration] before the next call
   final Future<PageData<T>> Function(int pageNumber) fetchMoreData;
 
   /// It builds the child with the item builder
@@ -62,6 +73,9 @@ class ZwapInfiniteScroll<T> extends StatefulWidget {
   /// ! Used only if [expand] is true and [zwapInfiniteScrollType] is gridView
   final int? rowWidgetsCount;
 
+  final Duration noDataDuration;
+  final Duration fetchDelayDuration;
+
   /// If [filter] is provided is used to remove elements e that not satisfy `filter(e)` only from view
   final bool Function(T element)? filter;
 
@@ -81,6 +95,8 @@ class ZwapInfiniteScroll<T> extends StatefulWidget {
     this.customInternalPadding,
     this.expand = false,
     this.rowWidgetsCount,
+    this.fetchDelayDuration = const Duration(milliseconds: 300),
+    this.noDataDuration = const Duration(milliseconds: 1000),
     this.filter,
   })  : assert((!expand || zwapInfiniteScrollType == ZwapInfiniteScrollType.listView) || rowWidgetsCount != null,
             "If expand is true and zwapInfinityScrollType is gridView, rowWidgetsCount must be provided"),
@@ -96,11 +112,17 @@ class ZwapInfiniteScroll<T> extends StatefulWidget {
 
 /// The infinite scroll state
 class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
+  /// Used to update [_cansearch] after a delay
+  Timer? _updateCanSearchTimer;
+
+  /// Used to stop fetching more data in some conditions
+  bool _canFetchData = true;
+
   /// The future instance to render the data
   late Future<PageData<T>> _future;
 
   /// The scroll controller to manage the API calls
-  late ScrollController controller;
+  late ScrollController _scrollController;
 
   late bool Function(T e)? _filter;
 
@@ -114,37 +136,64 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
   void initState() {
     super.initState();
 
-    this.controller = widget.scrollController ?? ScrollController();
+    this._scrollController = widget.scrollController ?? ScrollController();
     _filter = widget.filter;
 
     this._future = widget.initData != null ? Future.delayed(Duration.zero, () => widget.initData!) : widget.fetchMoreData(this._pageNumber);
     this._pageNumber++;
-    this.controller.addListener(() async {
-      if (this.controller.position.atEdge && this.controller.position.pixels != 0 && !this._loading && !this.controller.position.outOfRange) {
-        setState(() {
-          this._loading = true;
-        });
-        PageData<T> tmp = await widget.fetchMoreData(this._pageNumber);
-        this._future.then((value) {
-          setState(() {
-            this._pageNumber++;
-            List<T> newCombinedList = new List<T>.from(value.data)..addAll(tmp.data);
-            value.data = newCombinedList;
-            this._loading = false;
-          });
-        });
-      }
-    });
+    this._scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() async {
+    final bool _isAtEdge =
+        _scrollController.position.atEdge && _scrollController.position.pixels != 0 && !_loading && !_scrollController.position.outOfRange;
+
+    if (_isAtEdge && !_canFetchData) print('ricerca bloccata');
+
+    if (_isAtEdge && _canFetchData) {
+      setState(() => this._loading = true);
+
+      final value = await _future;
+      PageData<T> tmp = await widget.fetchMoreData(this._pageNumber);
+      List<T> newCombinedList = new List<T>.from(value.data)..addAll(tmp.data);
+
+      _canFetchData = false;
+      _setCanFetchTimer(dataIsEmpty: tmp.data.isEmpty);
+      print('ricerca: ${tmp.data.isEmpty}');
+
+      setState(() {
+        if (tmp.data.isNotEmpty) _pageNumber++;
+        value.data = newCombinedList;
+        _loading = false;
+      });
+    }
+  }
+
+  void _setCanFetchTimer({bool dataIsEmpty = false}) {
+    if (_updateCanSearchTimer?.isActive ?? false) return;
+
+    if (dataIsEmpty)
+      _updateCanSearchTimer = Timer(widget.noDataDuration, () => _canFetchData = true);
+    else
+      _updateCanSearchTimer = Timer(widget.fetchDelayDuration, () => _canFetchData = true);
   }
 
   @override
   void didUpdateWidget(ZwapInfiniteScroll<T> oldWidget) {
+    if (!mounted) return;
     super.didUpdateWidget(oldWidget);
+
     if (widget.hasToReloadOnDidUpdate) {
       this._future = widget.initData != null ? Future.delayed(Duration.zero, () => widget.initData!) : widget.fetchMoreData(this._pageNumber);
     }
-    print(widget.filter);
     if (widget.filter != oldWidget.filter) setState(() => _filter = widget.filter);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _updateCanSearchTimer?.cancel();
+    super.dispose();
   }
 
   /// It builds the list with a grid view
@@ -152,7 +201,7 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
     return ResponsiveRow<List<Widget>>(
       customInternalPadding: widget.customInternalPadding,
       children: List<Widget>.generate(data.length, ((int index) => widget.getChildWidget(data[index]))),
-      controller: this.controller,
+      controller: this._scrollController,
     );
   }
 
@@ -208,7 +257,7 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
         shrinkWrap: widget.expand,
         padding: EdgeInsets.all(1.0),
         itemCount: data.length,
-        controller: this.controller,
+        controller: this._scrollController,
         itemBuilder: (BuildContext context, int index) {
           return widget.getChildWidget(data[index]);
         }));
@@ -254,13 +303,13 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
             duration: const Duration(milliseconds: 200),
             child: this._loading
                 ? Flexible(
-                    key: ValueKey('truesufgbajsbgaòbgòa'),
+                    key: ValueKey('true_sufgbajsbgaòbgòa'),
                     child: CircularProgressIndicator(),
                     flex: 0,
                     fit: FlexFit.tight,
                   )
                 : Container(
-                    key: ValueKey('falsedkgahsrughaòrgh'),
+                    key: ValueKey('false_dkgahsrughaòrgh'),
                   ),
           ),
         ),
