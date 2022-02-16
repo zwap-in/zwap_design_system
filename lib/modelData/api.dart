@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// Data model about the page results from any paginated API
 class PageData<T> {
@@ -15,6 +16,8 @@ class PageData<T> {
   String previous;
 
   PageData({required this.data, required this.count, required this.next, required this.previous});
+
+  factory PageData.empty() => PageData(count: 0, data: [], next: '', previous: '');
 
   factory PageData.fromJson(Map<String, dynamic> json, T callBack(Map<String, dynamic> json)) {
     return PageData(

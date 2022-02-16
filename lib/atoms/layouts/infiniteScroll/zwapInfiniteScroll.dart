@@ -304,12 +304,13 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
             child: this._loading
                 ? Flexible(
                     key: ValueKey('true_sufgbajsbgaòbgòa'),
-                    child: CircularProgressIndicator(),
+                    child: Container(height: 35, child: CircularProgressIndicator()),
                     flex: 0,
                     fit: FlexFit.tight,
                   )
                 : Container(
                     key: ValueKey('false_dkgahsrughaòrgh'),
+                    height: 35,
                   ),
           ),
         ),
