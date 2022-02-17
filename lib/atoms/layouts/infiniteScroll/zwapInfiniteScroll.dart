@@ -302,16 +302,8 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             child: this._loading
-                ? Flexible(
-                    key: ValueKey('true_sufgbajsbgaòbgòa'),
-                    child: Container(height: 35, child: CircularProgressIndicator()),
-                    flex: 0,
-                    fit: FlexFit.tight,
-                  )
-                : Container(
-                    key: ValueKey('false_dkgahsrughaòrgh'),
-                    height: 35,
-                  ),
+                ? Container(height: 35, width: 35, child: CircularProgressIndicator())
+                : Container(key: ValueKey('false_dkgahsrughaòrgh'), height: 35),
           ),
         ),
       ],
