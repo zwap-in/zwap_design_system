@@ -1,13 +1,11 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
-import 'package:taastrap/taastrap.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 import 'package:zwap_utils/zwap_utils.dart';
 import 'package:collection/collection.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/molecules/molecules.dart';
 
 class ZwapIconDropDownsDecoration {
   //? Container decoration

@@ -8,7 +8,7 @@ export 'text/text.dart';
 export 'typography/zwapTypography.dart';
 export 'layouts/zwapLayouts.dart';
 export 'logo/zwapLogo.dart';
-export 'button/zwapButton.dart';
+export 'button/zwap_button.dart';
 export 'card/zwapCard.dart';
 export 'checkbox/zwapCheckbox.dart';
 export 'input/zwapInput.dart';

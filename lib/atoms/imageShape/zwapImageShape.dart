@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class ZwapAvatarImageClipper extends CustomClipper<Path> {
@@ -10,8 +8,6 @@ class ZwapAvatarImageClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    final double _radius = min(radius, size.width * 0.5);
-
     return Path()
       ..moveTo(radius, 0)
       ..lineTo(size.width - radius, 0)

@@ -6,16 +6,12 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 
 /// It handles the state this for this tabBar
 class ZwapSecondaryTabBar extends StatefulWidget {
-
   /// The items inside the tabBar menu
   final List<String> items;
 
   final Function(String key) callBackClick;
 
-  ZwapSecondaryTabBar({Key? key, 
-    required this.items,
-    required this.callBackClick
-  }): super(key: key) {
+  ZwapSecondaryTabBar({Key? key, required this.items, required this.callBackClick}) : super(key: key) {
     assert(this.items.length == 2, "This type of tab bar must have a max of 2 items");
   }
 
@@ -24,7 +20,6 @@ class ZwapSecondaryTabBar extends StatefulWidget {
 
 /// Widget to display a secondary tab bar
 class _ZwapSecondaryTabBarState extends State<ZwapSecondaryTabBar> {
-
   /// The current selected item
   String currentSelected;
 
@@ -42,19 +37,18 @@ class _ZwapSecondaryTabBarState extends State<ZwapSecondaryTabBar> {
   }
 
   /// It handles the hoovering on item inside the horizontal tabBar
-  void _onHover(String? newItem){
-    setState((){
-      if(newItem != null){
+  void _onHover(String? newItem) {
+    setState(() {
+      if (newItem != null) {
         this.hooveredItem = newItem;
-      }
-      else{
+      } else {
         this.hooveredItem = "";
       }
     });
   }
 
   /// It builds the button widget inside this horizontal tabBar
-  Widget _getButtonWidget(int index){
+  Widget _getButtonWidget(int index) {
     return Flexible(
       child: Padding(
         padding: EdgeInsets.all(4),
@@ -62,17 +56,17 @@ class _ZwapSecondaryTabBarState extends State<ZwapSecondaryTabBar> {
           onExit: (_) => this._onHover(null),
           onEnter: (_) => this._onHover(widget.items[index]),
           child: ZwapButton(
-            lateralPadding: 37,
-            zwapButtonStatus: ZwapButtonStatus.defaultStatus,
-            zwapButtonContentType: ZwapButtonContentType.noIcon,
-            zwapButtonType: ZwapButtonType.secondary,
-            text: widget.items[index],
-            onPressedCallBack: () =>
-                this._onChange(widget.items[index]),
-            textColor: this.currentSelected == widget.items[index]
-                ? ZwapColors.neutral700
-                : this.hooveredItem == widget.items[index] ? ZwapColors.neutral500 : ZwapColors.neutral400,
-            buttonColor: this.currentSelected == widget.items[index] ? ZwapColors.shades0 : ZwapColors.neutral200,
+            margin: const EdgeInsets.symmetric(horizontal: 37),
+            decorations: ZwapButtonDecorations.secondary(
+              backgroundColor: this.currentSelected == widget.items[index] ? ZwapColors.shades0 : ZwapColors.neutral200,
+              contentColor: this.currentSelected == widget.items[index]
+                  ? ZwapColors.neutral700
+                  : this.hooveredItem == widget.items[index]
+                      ? ZwapColors.neutral500
+                      : ZwapColors.neutral400,
+            ),
+            buttonChild: ZwapButtonChild.text(text: widget.items[index]),
+            onTap: () => this._onChange(widget.items[index]),
           ),
         ),
       ),
@@ -81,15 +75,11 @@ class _ZwapSecondaryTabBarState extends State<ZwapSecondaryTabBar> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      decoration: BoxDecoration(
-          color: ZwapColors.neutral200,
-          borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.tabBarRadius))
-      ),
+      decoration: BoxDecoration(color: ZwapColors.neutral200, borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.tabBarRadius))),
       child: Padding(
         padding: EdgeInsets.all(ZwapRadius.defaultRadius),
         child: Row(

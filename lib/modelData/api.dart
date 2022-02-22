@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 /// Data model about the page results from any paginated API
 class PageData<T> {

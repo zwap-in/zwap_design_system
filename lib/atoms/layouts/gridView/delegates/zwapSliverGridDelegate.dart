@@ -1,5 +1,4 @@
 /// IMPORTING THIRD PARTY PACKAGES
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 /// Custom delegate for grid view with max height

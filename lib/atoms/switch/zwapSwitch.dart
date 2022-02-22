@@ -1,6 +1,5 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';

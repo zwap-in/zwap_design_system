@@ -6,8 +6,7 @@ import 'package:zwap_utils/zwap_utils.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 
 /// Custom popup to edit the social links related to this user
-class ResumeEditElements<T> extends StatelessWidget{
-
+class ResumeEditElements<T> extends StatelessWidget {
   /// The elements list to display inside this view
   final List<T> elements;
 
@@ -17,18 +16,12 @@ class ResumeEditElements<T> extends StatelessWidget{
   /// The callBack function to handle the add button click
   final Function() addElementCallBackClick;
 
-  ResumeEditElements({Key? key,
-    required this.elements,
-    required this.getElementWidget,
-    required this.addElementCallBackClick
-  }): super(key: key);
+  ResumeEditElements({Key? key, required this.elements, required this.getElementWidget, required this.addElementCallBackClick}) : super(key: key);
 
   /// It gets the elements list view
-  Widget _getElementsListView(){
+  Widget _getElementsListView() {
     return Column(
-      children: List<Widget>.generate(this.elements.length, ((int index) =>
-          this.getElementWidget(this.elements[index])
-      )),
+      children: List<Widget>.generate(this.elements.length, ((int index) => this.getElementWidget(this.elements[index]))),
     );
   }
 
@@ -39,12 +32,9 @@ class ResumeEditElements<T> extends StatelessWidget{
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
           child: ZwapButton(
-            verticalPadding: 15,
-            zwapButtonType: ZwapButtonType.editButton,
-            zwapButtonContentType: ZwapButtonContentType.noIcon,
-            zwapButtonStatus: ZwapButtonStatus.defaultStatus,
-            onPressedCallBack: () => this.addElementCallBackClick(),
-            text: Utils.translatedText("add_button"),
+            decorations: ZwapButtonDecorations.edit(),
+            buttonChild: ZwapButtonChild.text(text: Utils.translatedText("add_button")),
+            onTap: () => this.addElementCallBackClick(),
           ),
         ),
         Padding(
@@ -56,5 +46,4 @@ class ResumeEditElements<T> extends StatelessWidget{
       ],
     );
   }
-
 }
