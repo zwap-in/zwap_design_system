@@ -106,8 +106,8 @@ class ZwapButton extends StatefulWidget {
 
   final FocusNode? focusNode;
 
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final ZwapButtonDecorations? decorations;
   final EdgeInsets? margin;
 
