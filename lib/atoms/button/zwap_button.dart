@@ -277,6 +277,7 @@ class _ZwapButtonState extends State<ZwapButton> {
               fontSize: _child.fontSize.toDouble(),
               color: _contentColor,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       );
