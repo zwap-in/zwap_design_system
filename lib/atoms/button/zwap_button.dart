@@ -260,6 +260,7 @@ class _ZwapButtonState extends State<ZwapButton> {
 
     if (_child.text != null && _child.icon != null)
       return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _child.icon == null
               ? _child._customIcon!(_currentStatus)
