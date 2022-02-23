@@ -106,8 +106,8 @@ class ZwapButton extends StatefulWidget {
 
   final FocusNode? focusNode;
 
-  final double? width;
-  final double? height;
+  final double width;
+  final double height;
   final ZwapButtonDecorations? decorations;
   final EdgeInsets? margin;
 
@@ -258,9 +258,8 @@ class _ZwapButtonState extends State<ZwapButton> {
   Widget _buildZwapButtonChild(BuildContext context) {
     ZwapButtonChild _child = widget.buttonChild!;
 
-    if (_child.text != null && _child.icon != null)
+    if (_child.text != null && (_child.icon != null || _child._customIcon != null))
       return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _child.icon == null
               ? _child._customIcon!(_currentStatus)
@@ -277,7 +276,6 @@ class _ZwapButtonState extends State<ZwapButton> {
               fontSize: _child.fontSize.toDouble(),
               color: _contentColor,
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       );
