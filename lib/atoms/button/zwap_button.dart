@@ -1,7 +1,6 @@
 library zwap_button;
 
 /// IMPORTING THIRD PARTY PACKAGES
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:taastrap/taastrap.dart';
@@ -106,8 +105,8 @@ class ZwapButton extends StatefulWidget {
 
   final FocusNode? focusNode;
 
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final ZwapButtonDecorations? decorations;
   final EdgeInsets? margin;
 
@@ -260,6 +259,7 @@ class _ZwapButtonState extends State<ZwapButton> {
 
     if (_child.text != null && (_child.icon != null || _child._customIcon != null))
       return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _child.icon == null
               ? _child._customIcon!(_currentStatus)
@@ -276,6 +276,7 @@ class _ZwapButtonState extends State<ZwapButton> {
               fontSize: _child.fontSize.toDouble(),
               color: _contentColor,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       );
