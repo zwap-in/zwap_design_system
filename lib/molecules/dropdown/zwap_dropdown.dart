@@ -194,6 +194,8 @@ class ZwapDropDown extends StatefulWidget {
   /// Used to sort keys and consequently sort widgets
   final int Function(String a, String b)? sortKeys;
 
+  final FutureOr<void> Function(bool hasFocus)? onFocusChange;
+
   ZwapDropDown({
     Key? key,
     required this.head,
@@ -207,6 +209,7 @@ class ZwapDropDown extends StatefulWidget {
     this.noResultMessage,
     this.focusNode,
     this.sortKeys,
+    this.onFocusChange,
   }) : super(key: key);
 
   _ZwapDropDownState createState() => _ZwapDropDownState();
@@ -284,8 +287,12 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
     _provider.showTextField = widget.canSearch && _searchController.text.isNotEmpty;
   }
 
-  void _focusListener() {
-    if (_dropdownOverlay?.mounted ?? false) {
+  void _focusListener() async {
+    if (widget.onFocusChange != null) await widget.onFocusChange!(_inputFocusNode.hasFocus);
+
+    if (_inputFocusNode.hasFocus) {
+      Overlay.of(context)?.insert(_dropdownOverlay = _createOverlay());
+    } else if (_dropdownOverlay?.mounted ?? false) {
       _searchController.text = '';
       _inputFocusNode.unfocus();
     }
@@ -302,12 +309,12 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
     setState(() {});
   }
 
-  void _toggleOverlay() {
+  void _toggleOverlay() async {
     if (_dropdownOverlay?.mounted ?? false) {
+      if (widget.onFocusChange != null) await widget.onFocusChange!(false);
       _dropdownOverlay!.remove();
       _dropdownOverlay = null;
     } else {
-      Overlay.of(context)?.insert(_dropdownOverlay = _createOverlay());
       _inputFocusNode.requestFocus();
     }
 
