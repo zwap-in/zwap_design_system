@@ -263,7 +263,7 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
   @override
   void didUpdateWidget(covariant ZwapDropDown oldWidget) {
     if (widget.selectedItem != widget.selectedItem) setState(() => _selectedItem = widget.selectedItem);
-    if (!mapEquals(widget.items, oldWidget.items)) _provider.addAll(widget.items);
+    if (widget.items.length != oldWidget.items.length) _provider.addAll(widget.items);
 
     super.didUpdateWidget(oldWidget);
   }
@@ -288,11 +288,7 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
   }
 
   void _focusListener() async {
-    if (widget.onFocusChange != null) await widget.onFocusChange!(_inputFocusNode.hasFocus);
-
-    if (_inputFocusNode.hasFocus) {
-      Overlay.of(context)?.insert(_dropdownOverlay = _createOverlay());
-    } else if (_dropdownOverlay?.mounted ?? false) {
+    if (_dropdownOverlay?.mounted ?? false) {
       _searchController.text = '';
       _inputFocusNode.unfocus();
     }
@@ -311,11 +307,14 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
 
   void _toggleOverlay() async {
     if (_dropdownOverlay?.mounted ?? false) {
-      if (widget.onFocusChange != null) await widget.onFocusChange!(false);
       _dropdownOverlay!.remove();
       _dropdownOverlay = null;
     } else {
-      _inputFocusNode.requestFocus();
+      if (!_inputFocusNode.hasFocus) {
+        if (widget.onFocusChange != null) await widget.onFocusChange!(true);
+        _inputFocusNode.requestFocus();
+      }
+      Overlay.of(context)?.insert(_dropdownOverlay = _createOverlay());
     }
 
     setState(() {});
@@ -476,7 +475,9 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
           child: InkWell(
             hoverColor: decorations.hoverColor,
             borderRadius: BorderRadius.circular(decorations.borderRadius),
-            onTap: () => _toggleOverlay(),
+            onTap: () {
+              if (_dropdownOverlay?.mounted != true) _toggleOverlay();
+            },
             child: Container(
               key: _dropdownKey,
               width: decorations.width,
@@ -494,26 +495,32 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
                     child: Stack(
                       children: [
                         if (!_showTextFiels)
-                          Container(
-                            key: ValueKey(this._selectedItem),
-                            child: widget.head,
-                          ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextField(
-                            controller: _searchController,
-                            focusNode: _inputFocusNode,
-                            enabled: widget.canSearch,
-                            style: TextStyle(color: ZwapColors.neutral900, fontSize: 14, fontFamily: 'SFUIText', package: 'zwap_design_system'),
-                            decoration: InputDecoration.collapsed(hintText: ""),
-                            maxLines: 1,
-                            cursorColor: ZwapColors.primary700,
-                            mouseCursor: SystemMouseCursors.basic,
+                          GestureDetector(
                             onTap: () {
                               if (_dropdownOverlay?.mounted != true) _toggleOverlay();
                             },
+                            child: Container(
+                              key: ValueKey(this._selectedItem),
+                              child: widget.head,
+                            ),
                           ),
-                        ),
+                        if (widget.canSearch)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextField(
+                              controller: _searchController,
+                              focusNode: _inputFocusNode,
+                              enabled: widget.canSearch,
+                              style: TextStyle(color: ZwapColors.neutral900, fontSize: 14, fontFamily: 'SFUIText', package: 'zwap_design_system'),
+                              decoration: InputDecoration.collapsed(hintText: ""),
+                              maxLines: 1,
+                              cursorColor: ZwapColors.primary700,
+                              mouseCursor: SystemMouseCursors.basic,
+                              onTap: () {
+                                if (_dropdownOverlay?.mounted != true) _toggleOverlay();
+                              },
+                            ),
+                          ),
                       ],
                     ),
                   ),
