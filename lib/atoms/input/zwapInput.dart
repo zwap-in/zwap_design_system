@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zwap_design_system/atoms/text_controller/initial_text_controller.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -77,6 +78,10 @@ class ZwapInput extends StatefulWidget {
   /// If [controller] is not null this field is ignored
   final String? initialValue;
 
+  final TextCapitalization? textCapitalization;
+
+  final List<TextInputFormatter>? inputFormatters;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -102,6 +107,8 @@ class ZwapInput extends StatefulWidget {
     this.fixedInitialText,
     this.fixedInitialTextStyle,
     this.initialValue,
+    this.inputFormatters,
+    this.textCapitalization,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = false,
         super(key: key);
@@ -130,6 +137,8 @@ class ZwapInput extends StatefulWidget {
     this.fixedInitialText,
     this.fixedInitialTextStyle,
     this.initialValue,
+    this.inputFormatters,
+    this.textCapitalization,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = true,
         this.showSuccess = false,
@@ -154,7 +163,8 @@ class _ZwapInputState extends State<ZwapInput> {
 
     _controller = widget.controller ??
         (widget.fixedInitialText != null
-            ? InitialTextController(text: widget.initialValue, fixedInitialString: widget.fixedInitialText!, fixedInitialStringStyle: widget.fixedInitialTextStyle)
+            ? InitialTextController(
+                text: widget.initialValue, fixedInitialString: widget.fixedInitialText!, fixedInitialStringStyle: widget.fixedInitialTextStyle)
             : TextEditingController(text: widget.initialValue));
     _focusNode = widget.focusNode ?? FocusNode();
 
@@ -190,7 +200,8 @@ class _ZwapInputState extends State<ZwapInput> {
     return new InputDecoration(
       enabledBorder: _getZwapInputBorder(_getBorderColor(_focusNode.hasFocus ? ZwapColors.primary300 : ZwapColors.neutral300)),
       focusedBorder: _getZwapInputBorder(_getBorderColor(ZwapColors.primary300)),
-      disabledBorder: _getZwapInputBorder(_getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)),
+      disabledBorder:
+          _getZwapInputBorder(_getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)),
       contentPadding: widget.internalPadding,
       prefixText: widget.prefixText,
       hoverColor: ZwapColors.primary300,
@@ -229,7 +240,7 @@ class _ZwapInputState extends State<ZwapInput> {
       minLines: widget.minLines,
       autofillHints: widget.autofillHints != null ? [widget.autofillHints!] : null,
       onChanged: widget.onChanged != null ? (String newValue) => widget.onChanged!(_getOnChangedValue(newValue)) : null,
-      textCapitalization: TextCapitalization.sentences,
+      textCapitalization: widget.textCapitalization ?? TextCapitalization.sentences,
       cursorColor: ZwapColors.shades100,
       obscureText: widget.textInputType == TextInputType.visiblePassword,
       textAlign: TextAlign.start,
@@ -240,6 +251,7 @@ class _ZwapInputState extends State<ZwapInput> {
       readOnly: widget.readOnly,
       enableInteractiveSelection: !widget.readOnly,
       onTap: widget.onTap,
+      inputFormatters: widget.inputFormatters,
     );
   }
 

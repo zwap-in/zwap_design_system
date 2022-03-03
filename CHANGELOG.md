@@ -346,3 +346,6 @@
 
 ## 0.1.486
 * Fixed PageData next and previus can be null, added utils constructors
+
+## 0.1.487
+* ZwapInput added custom TextCapitalization and InputFormatters
