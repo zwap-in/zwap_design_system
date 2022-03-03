@@ -9,21 +9,28 @@ class PageData<T> {
   int count;
 
   /// Error message in case of error
-  String next;
+  String? next;
 
   /// Has a next page?
-  String previous;
+  String? previous;
 
   PageData({required this.data, required this.count, required this.next, required this.previous});
 
-  factory PageData.empty() => PageData(count: 0, data: [], next: '', previous: '');
+  factory PageData.empty() => PageData(count: 0, data: [], next: null, previous: null);
+
+  factory PageData.fromList(List<T> values, {bool thereAreMore = true}) => PageData(
+        count: thereAreMore ? values.length + 1 : values.length,
+        data: values,
+        next: thereAreMore ? '' : null,
+        previous: null,
+      );
 
   factory PageData.fromJson(Map<String, dynamic> json, T callBack(Map<String, dynamic> json)) {
     return PageData(
         data: List<T>.generate(json['results'].length, ((element) => callBack(json['results'][element]))),
         count: json['count'] ?? 0,
-        next: json['next'] ?? "",
-        previous: json['previous'] ?? "");
+        next: json['next'],
+        previous: json['previous']);
   }
 
   @override

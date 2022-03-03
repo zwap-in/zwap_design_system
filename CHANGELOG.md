@@ -342,3 +342,7 @@
 ## 0.0.85
 
 * Fixed input tag state
+
+
+## 0.1.486
+* Fixed PageData next and previus can be null, added utils constructors
