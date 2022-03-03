@@ -349,3 +349,6 @@
 
 ## 0.1.487
 * ZwapInput added custom TextCapitalization and InputFormatters
+
+## 0.1.488
+* Beta version of selectable text

@@ -59,8 +59,9 @@ TextStyle getTextStyle(ZwapTextType typeText) {
 
 /// It plots the text size in base of the current style and current chars
 Size getTextSize(String text, ZwapTextType textType, {double? maxWidth}) {
-  final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: getTextStyle(textType)), maxLines: 1, textDirection: TextDirection.ltr)
-    ..layout(minWidth: 0, maxWidth: maxWidth ?? double.infinity);
+  final TextPainter textPainter =
+      TextPainter(text: TextSpan(text: text, style: getTextStyle(textType)), maxLines: 1, textDirection: TextDirection.ltr)
+        ..layout(minWidth: 0, maxWidth: maxWidth ?? double.infinity);
   return textPainter.size;
 }
 
@@ -84,6 +85,8 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
 
   final TextStyle? customTextStyle;
 
+  final bool _selectable;
+
   ZwapText({
     Key? key,
     required this.text,
@@ -93,6 +96,7 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
     this.maxLines,
     this.textOverflow,
   })  : this.customTextStyle = null,
+        _selectable = false,
         super(key: key);
 
   ZwapText.customStyle({
@@ -104,11 +108,34 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
     this.textOverflow,
   })  : assert(customTextStyle != null),
         this.zwapTextType = ZwapTextType.bodyRegular,
+        _selectable = false,
         this.textColor = customTextStyle!.color ?? Colors.white,
+        super(key: key);
+
+  /// Beta
+  ZwapText.selectable({
+    Key? key,
+    required this.text,
+    required this.zwapTextType,
+    required this.textColor,
+    this.textAlign,
+    this.maxLines,
+    this.textOverflow,
+  })  : this.customTextStyle = null,
+        _selectable = true,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (_selectable)
+      return SelectableText(
+        this.text,
+        maxLines: maxLines,
+        textScaleFactor: 1,
+        textAlign: this.textAlign,
+        style: customTextStyle ?? getTextStyle(this.zwapTextType).apply(color: this.textColor),
+      );
+
     return Text(
       this.text,
       maxLines: maxLines,
