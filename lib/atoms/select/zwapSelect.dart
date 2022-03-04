@@ -1,4 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,6 +105,13 @@ class ZwapSelect extends StatefulWidget {
   final String? label;
 
   /// If not null and user scrolls to the end this function will be called and new items will be automatically added
+  ///
+  /// [pageNumber] is auto incremented only if the response is not empty.
+  ///
+  /// * Delays between [fetchMoreData] invocations are started after the response
+  /// * Delays are cleared on text value changes
+  ///
+  /// See [betweenFetchDuration] and [onEmptyResponseDuration] to delay details
   final Future<Map<String, String>> Function(String inputValue, int pageNumber)? fetchMoreData;
 
   /// The initial page number used for call fetchMoreData callback
@@ -110,13 +119,19 @@ class ZwapSelect extends StatefulWidget {
 
   /// The custom values to display inside this widget, divided by category
   ///
-  /// ! VALUES MUST HAVE DIFFERENT KEYS EVENT IN DIFFERENT CATEGORIES !
+  /// ! VALUES MUST HAVE DIFFERENT KEYS EVEN IN DIFFERENT CATEGORIES !
   ///
   /// ! If [canAddItem] is true make sure to manually add new items both in [selected]/[selectedValues] and [valuesByCategory]
   /// otherwise some unwonted thing can happen !
   ///
   /// { [category]: { [key]: [value] } }
   final Map<String, Map<String, String>> valuesByCategory;
+
+  /// Used to wait a delay between the [fetchMoreData] callbacks
+  final Duration betweenFetchDuration;
+
+  /// Used to wait a delay between the [fetchMoreData] callbacks if one reply with empty responses
+  final Duration onEmptyResponseDuration;
 
   final _ZwapSelectTypes _type;
   final bool _hasCategories;
@@ -135,6 +150,8 @@ class ZwapSelect extends StatefulWidget {
     this.label,
     this.fetchMoreData,
     this.initialPageNumber = 1,
+    this.betweenFetchDuration = const Duration(milliseconds: 800),
+    this.onEmptyResponseDuration = const Duration(seconds: 10),
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
         this.valuesByCategory = {},
@@ -154,6 +171,8 @@ class ZwapSelect extends StatefulWidget {
     this.maxOverlayHeight,
     this.label,
     this.fetchMoreData,
+    this.betweenFetchDuration = const Duration(milliseconds: 800),
+    this.onEmptyResponseDuration = const Duration(seconds: 10),
     this.initialPageNumber = 1,
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
@@ -170,6 +189,8 @@ class ZwapSelect extends StatefulWidget {
     Key? key,
     required this.values,
     required this.callBackFunction,
+    this.betweenFetchDuration = const Duration(milliseconds: 800),
+    this.onEmptyResponseDuration = const Duration(seconds: 10),
     this.selectedValues = const [],
     this.hintText = '',
     this.canAddItem = false,
@@ -191,6 +212,8 @@ class ZwapSelect extends StatefulWidget {
     required this.valuesByCategory,
     required this.callBackFunction,
     this.selectedValues = const [],
+    this.betweenFetchDuration = const Duration(milliseconds: 800),
+    this.onEmptyResponseDuration = const Duration(seconds: 10),
     this.hintText = '',
     this.canAddItem = false,
     this.onAddItem,
@@ -243,7 +266,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
   List<String> get categories => widget.valuesByCategory.keys.toList();
 
-  //TODO: controlla richiesta vuota e a che ricerca apparteneva => no richieste infinite
+  Timer? _updateCanSearchTimer;
+  bool _canSearch = true;
 
   @override
   void initState() {
@@ -262,7 +286,9 @@ class _ZwapSelectState extends State<ZwapSelect> {
         return KeyEventResult.skipRemainingHandlers;
       }
 
-      if (event.physicalKey == PhysicalKeyboardKey.end || event.physicalKey == PhysicalKeyboardKey.enter || event.physicalKey == PhysicalKeyboardKey.tab) {
+      if (event.physicalKey == PhysicalKeyboardKey.end ||
+          event.physicalKey == PhysicalKeyboardKey.enter ||
+          event.physicalKey == PhysicalKeyboardKey.tab) {
         _inputFocus.unfocus();
         _inputController.text = widget.values[_selectedValues] ?? '';
 
@@ -296,11 +322,21 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
   void _controllerListener() {
     _provider.searched = _inputController.text;
+    _updateCanSearchTimer?.cancel();
     _requestData(forcePageToOne: true);
   }
 
   void _scrollControllerListener() async {
-    if (_overlayScrollController.position.atEdge && _overlayScrollController.position.pixels != 0 && !_provider.isLoading && !_overlayScrollController.position.outOfRange) _requestData();
+    final bool _isAtEnd = _overlayScrollController.position.atEdge &&
+        _overlayScrollController.position.pixels != 0 &&
+        !_provider.isLoading &&
+        !_overlayScrollController.position.outOfRange;
+
+    if (_isAtEnd && _canSearch) {
+      _canSearch = false;
+      _updateCanSearchTimer?.cancel();
+      _requestData(forcePageToOne: _inputController.text.isNotEmpty);
+    }
   }
 
   _requestData({bool forcePageToOne = false}) async {
@@ -310,7 +346,9 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
     Map<String, String> tmp = await widget.fetchMoreData!(forcePageToOne ? _inputController.text : '', forcePageToOne ? 1 : _pageNumber);
 
-    if (!forcePageToOne) _pageNumber += 1;
+    _updateCanSearchTimer = Timer(tmp.isEmpty ? widget.onEmptyResponseDuration : widget.betweenFetchDuration, () => _canSearch = true);
+
+    if (!forcePageToOne && tmp.isNotEmpty) _pageNumber += 1;
 
     _provider.addNewValues(tmp);
     _provider.setLoading(false);
@@ -318,8 +356,10 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
   @override
   void didUpdateWidget(covariant ZwapSelect oldWidget) {
-    if (!mapEquals(oldWidget.values, widget.values)) WidgetsBinding.instance?.addPostFrameCallback((_) => _provider.originalValuesChanged(widget.values));
-    if (widget.isRegular && widget.selected != oldWidget.selected) WidgetsBinding.instance?.addPostFrameCallback((_) => onChangeValue(widget.selected, callCallback: false));
+    if (!mapEquals(oldWidget.values, widget.values))
+      WidgetsBinding.instance?.addPostFrameCallback((_) => _provider.originalValuesChanged(widget.values));
+    if (widget.isRegular && widget.selected != oldWidget.selected)
+      WidgetsBinding.instance?.addPostFrameCallback((_) => onChangeValue(widget.selected, callCallback: false));
     if (widget.isMultiple && !listEquals(widget.selectedValues, oldWidget.selectedValues))
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         setState(() => _selectedValues = widget.selectedValues);
@@ -387,7 +427,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
               String _searchedValue = context.select<_ZwapSelectProvider, String>((pro) => pro.searchedValue);
               List<String> _selectedValues = context.select<_ZwapSelectProvider, List<String>>((pro) => pro.selectedValues);
 
-              Map<String, String> _toShowValues = Map.from(_allValues)..removeWhere((k, v) => v.isNotEmpty && !v.toLowerCase().trim().contains(_searchedValue.toLowerCase().trim()));
+              Map<String, String> _toShowValues = Map.from(_allValues)
+                ..removeWhere((k, v) => v.isNotEmpty && !v.toLowerCase().trim().contains(_searchedValue.toLowerCase().trim()));
 
               return ZwapOverlayEntryWidget(
                 entity: _selectOverlay,
@@ -436,7 +477,9 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                           color: Colors.transparent,
                                           width: double.infinity,
                                           child: Material(
-                                            color: '_random_key_for_this_item_2341234112341252456375' == _hoveredItem ? ZwapColors.neutral100 : ZwapColors.shades0,
+                                            color: '_random_key_for_this_item_2341234112341252456375' == _hoveredItem
+                                                ? ZwapColors.neutral100
+                                                : ZwapColors.shades0,
                                             borderRadius: BorderRadius.circular(8),
                                             child: InkWell(
                                               onTap: () {
@@ -455,7 +498,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                 });
                                               },
                                               hoverColor: ZwapColors.neutral100,
-                                              onHover: (hovered) => setState(() => _hoveredItem = hovered ? '_random_key_for_this_item_2341234112341252456375' : null),
+                                              onHover: (hovered) =>
+                                                  setState(() => _hoveredItem = hovered ? '_random_key_for_this_item_2341234112341252456375' : null),
                                               borderRadius: BorderRadius.circular(8),
                                               child: Container(
                                                 width: double.infinity,
@@ -468,9 +512,12 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                   children: [
                                                     ZwapTextMultiStyle(
                                                       texts: {
-                                                        '${_inputController.text}': TupleType(a: null, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.shades100)),
-                                                        ' not here? ': TupleType(a: null, b: TupleType(a: ZwapTextType.bodyRegular, b: ZwapColors.shades100)),
-                                                        'Add it here': TupleType(a: null, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.shades100)),
+                                                        '${_inputController.text}':
+                                                            TupleType(a: null, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.shades100)),
+                                                        ' not here? ':
+                                                            TupleType(a: null, b: TupleType(a: ZwapTextType.bodyRegular, b: ZwapColors.shades100)),
+                                                        'Add it here':
+                                                            TupleType(a: null, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.shades100)),
                                                       },
                                                     )
                                                   ],
@@ -810,7 +857,9 @@ class _ZwapOverlayChildrenList extends StatelessWidget {
                       children: valuesByCategory[cat]!
                           .keys
                           .toList()
-                          .mapIndexed((i, key) => _singleElementWidget(catI + 1 == valuesByCategory.keys.length && i + 1 == valuesByCategory[cat]!.keys.length, key, indent: true))
+                          .mapIndexed((i, key) => _singleElementWidget(
+                              catI + 1 == valuesByCategory.keys.length && i + 1 == valuesByCategory[cat]!.keys.length, key,
+                              indent: true))
                           .toList(),
                     ),
                   ],

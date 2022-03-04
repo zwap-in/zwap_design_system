@@ -352,3 +352,6 @@
 
 ## 0.1.488
 * Beta version of selectable text
+
+## 0.1.489
+* ZwapSelect added delay between fetch and on empty responses
