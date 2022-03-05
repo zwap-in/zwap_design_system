@@ -32,7 +32,7 @@ class ResumeEditElements<T> extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
           child: ZwapButton(
-            decorations: ZwapButtonDecorations.edit(),
+            decorations: ZwapButtonDecorations.quaternary(),
             buttonChild: ZwapButtonChild.text(text: Utils.translatedText("add_button")),
             onTap: () => this.addElementCallBackClick(),
           ),

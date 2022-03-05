@@ -3,7 +3,6 @@ library zwap_button;
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:taastrap/taastrap.dart';
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 
 import '../constants/zwapConstants.dart';
@@ -174,6 +173,7 @@ class _ZwapButtonState extends State<ZwapButton> {
   bool _focussed = false;
   bool _hovered = false;
   bool _disabled = false;
+  bool _pressed = false;
 
   @override
   void initState() {
@@ -206,8 +206,10 @@ class _ZwapButtonState extends State<ZwapButton> {
     required T? hover,
     required T? disabled,
     required T? focussed,
+    required T? pressed,
   }) {
     if (_disabled) return disabled;
+    if (_pressed) return pressed;
     if (_hovered) return hover;
     if (_focussed) return focussed;
     return normal;
@@ -217,12 +219,14 @@ class _ZwapButtonState extends State<ZwapButton> {
       normal: _decorations.gradient == null ? _decorations.backgroundColor : null,
       disabled: _decorations.disabledGradient == null ? _decorations.disabledColor : null,
       focussed: _decorations.focussedGradient == null ? _decorations.focussedColor : null,
+      pressed: _decorations.pressedGradient == null ? _decorations.pressedColor : null,
       hover: _decorations.hoverGradient == null ? _decorations.hoverColor : null);
 
   Gradient? get _gradient => _getCurrentValueByStatus<Gradient>(
         normal: _decorations.gradient,
         disabled: _decorations.disabledGradient,
         focussed: _decorations.focussedGradient,
+        pressed: _decorations.pressedGradient,
         hover: _decorations.hoverGradient,
       );
 
@@ -230,6 +234,7 @@ class _ZwapButtonState extends State<ZwapButton> {
         normal: _decorations.border,
         hover: _decorations.hoverBorder,
         disabled: _decorations.disabledBorder,
+        pressed: _decorations.pressedBorder,
         focussed: _decorations.focussedBorder,
       );
 
@@ -237,6 +242,7 @@ class _ZwapButtonState extends State<ZwapButton> {
         normal: _decorations.shadow,
         hover: _decorations.hoverShadow,
         disabled: _decorations.disabledShadow,
+        pressed: _decorations.pressedShadow,
         focussed: _decorations.focussedShadow,
       );
 
@@ -244,6 +250,7 @@ class _ZwapButtonState extends State<ZwapButton> {
         normal: _decorations.contentColor,
         hover: _decorations.hoverContentColor,
         disabled: _decorations.disabledContentColor,
+        pressed: _decorations.pressedContentColor,
         focussed: _decorations.focussedContentColor,
       );
 
@@ -308,17 +315,25 @@ class _ZwapButtonState extends State<ZwapButton> {
         opacity: widget.hide ? 0 : 1,
         child: GestureDetector(
           onTap: widget.onTap,
-          onLongPress: widget.onLongTap,
+          onLongPress: () {
+            if (_pressed) setState(() => _pressed = false);
+            if (widget.onLongTap != null) widget.onLongTap!();
+          },
+          onTapDown: (_) => !_pressed ? setState(() => _pressed = true) : null,
+          onTapUp: (_) => _pressed ? setState(() => _pressed = false) : null,
           child: FocusableActionDetector(
             focusNode: _focusNode,
             enabled: !widget.disabled,
             onShowFocusHighlight: (hasFocus) => setState(() => _focussed = hasFocus),
-            onShowHoverHighlight: (hasHover) => setState(() => _hovered = hasHover),
+            onShowHoverHighlight: (hasHover) {
+              if (!hasHover && _pressed) setState(() => _pressed = false);
+              setState(() => _hovered = hasHover);
+            },
             actions: _actions,
             shortcuts: _shortcuts,
             mouseCursor: _disabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+              duration: _pressed ?  Duration.zero : const Duration(milliseconds: 200),
               padding: _decorations.internalPadding,
               width: widget.width,
               height: widget.height,

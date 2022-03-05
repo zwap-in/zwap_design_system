@@ -57,7 +57,7 @@ class _ZwapSecondaryTabBarState extends State<ZwapSecondaryTabBar> {
           onEnter: (_) => this._onHover(widget.items[index]),
           child: ZwapButton(
             margin: const EdgeInsets.symmetric(horizontal: 37),
-            decorations: ZwapButtonDecorations.secondary(
+            decorations: ZwapButtonDecorations.secondaryLight(
               backgroundColor: this.currentSelected == widget.items[index] ? ZwapColors.shades0 : ZwapColors.neutral200,
               contentColor: this.currentSelected == widget.items[index]
                   ? ZwapColors.neutral700
