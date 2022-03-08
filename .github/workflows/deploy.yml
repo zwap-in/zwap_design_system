@@ -13,13 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Install Flutter
-        uses: subosito/flutter-action@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # The flutter action needs java so include it
+      - uses: actions/setup-java@v1
         with:
-          flutter-version: '1.9.1+hotfix.6'
-      - name: Install dependencies
-        run: flutter pub get
+          java-version: '12.x'
+      # Include the flutter action
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      # Get flutter packages
+      - run: flutter pub get
       - name: Analyze
         run: flutter analyze
       - name: Run tests
