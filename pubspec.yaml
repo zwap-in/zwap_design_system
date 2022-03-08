@@ -4,7 +4,7 @@ version: 0.1.491
 homepage: https://github.com/zwap-in/zwap_design_system
 
 environment:
-  sdk: ">=2.13.0 <3.0.0"
+  sdk: ">=2.5.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
