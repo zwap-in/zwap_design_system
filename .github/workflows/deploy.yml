@@ -1,0 +1,59 @@
+name: Publish Package
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.9.1+hotfix.6'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Run tests
+        run: flutter test
+      - name: Setup Pub Credentials
+        shell: bash
+        env:
+          PUB_DEV_PUBLISH_ACCESS_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}
+          PUB_DEV_PUBLISH_REFRESH_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_REFRESH_TOKEN }}
+          PUB_DEV_PUBLISH_TOKEN_ENDPOINT: ${{ secrets.PUB_DEV_PUBLISH_TOKEN_ENDPOINT }}
+          PUB_DEV_PUBLISH_EXPIRATION: ${{ secrets.PUB_DEV_PUBLISH_EXPIRATION }}
+        run: |
+          sh ./pub_login.sh
+      - name: Check Publish Warnings
+        run: pub publish --dry-run
+      - name: Publish Package
+        run: pub publish -f
+      - name: Send custom JSON data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          payload: |
+            {
+              "text": "New commit on Zwap Design System Kit package",
+              "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "GitHub Action build zwap design system kit package result: ${{ job.status }}\nSummary: ${{ github.event.head_commit.message }}"
+                    }
+                  }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_PACKAGE }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
