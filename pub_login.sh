@@ -24,6 +24,7 @@ if [ -z "${PUB_DEV_PUBLISH_EXPIRATION}" ]; then
 fi
 
 sudo mkdir ~/.pub-cache/
+sudo touch ~/.pub-cache/credentials.json
 cat <<EOF > ~/.pub-cache/credentials.json
 {
   "accessToken":"${PUB_DEV_PUBLISH_ACCESS_TOKEN}",
