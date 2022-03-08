@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 
 enum DeviceType { smartphone, tablet, desktop }
 enum DeviceBrand { apple, android, other }
