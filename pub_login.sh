@@ -23,8 +23,7 @@ if [ -z "${PUB_DEV_PUBLISH_EXPIRATION}" ]; then
   exit 1
 fi
 
-sudo mkdir ~/.pub-cache/
-sudo touch ~/.pub-cache/credentials.json
+mkdir -p ~/.pub-cache
 cat <<EOF > ~/.pub-cache/credentials.json
 {
   "accessToken":"${PUB_DEV_PUBLISH_ACCESS_TOKEN}",
