@@ -33,9 +33,7 @@ dependencies:
 
   linked_scroll_controller: ^0.2.0
 
-  shared_preferences: 2.0.8
-
-  universal_html: ^1.2.1
+  shared_preferences: ^2.0.8
 
 
 dev_dependencies:

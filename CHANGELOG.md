@@ -361,3 +361,6 @@
 * New ZwapColors: Primary500, Primary600, Primary700Dark, Primary900Dark, Neutral300Dark,Error25, Error50 
 * ZwapButtons added pressed state
 * ZwapButtonDecorations from Design System 2.0
+
+## 0.1.491
+* Added github actions pipeline
