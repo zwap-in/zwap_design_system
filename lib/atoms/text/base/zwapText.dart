@@ -54,6 +54,36 @@ TextStyle getTextStyle(ZwapTextType typeText) {
       return GoogleFonts.lato(textStyle: ZwapTypography.bodyRegular());
     case ZwapTextType.bodySemiBold:
       return GoogleFonts.lato(textStyle: ZwapTypography.bodySemiBold());
+    case ZwapTextType.extraHeading:
+      return GoogleFonts.lato(textStyle: ZwapTypography.extraHeading);
+    case ZwapTextType.bigHeading:
+      return GoogleFonts.lato(textStyle: ZwapTypography.bigHeading);
+    case ZwapTextType.mediumHeading:
+      return GoogleFonts.lato(textStyle: ZwapTypography.mediumHeading);
+    case ZwapTextType.semiboldH1:
+      return GoogleFonts.lato(textStyle: ZwapTypography.semiboldH1);
+    case ZwapTextType.heavyH1:
+      return GoogleFonts.lato(textStyle: ZwapTypography.heavyH1);
+    case ZwapTextType.semiboldH2:
+      return GoogleFonts.lato(textStyle: ZwapTypography.semiboldH2);
+    case ZwapTextType.heavyH2:
+      return GoogleFonts.lato(textStyle: ZwapTypography.heavyH2);
+    case ZwapTextType.semiboldH3:
+      return GoogleFonts.lato(textStyle: ZwapTypography.semiboldH3);
+    case ZwapTextType.heavyH3:
+      return GoogleFonts.lato(textStyle: ZwapTypography.heavyH3);
+    case ZwapTextType.smallBodyMedium:
+      return GoogleFonts.lato(textStyle: ZwapTypography.smallBodyMedium);
+    case ZwapTextType.smallBodyRegular:
+      return GoogleFonts.lato(textStyle: ZwapTypography.smallBodyRegular);
+    case ZwapTextType.mediumBody:
+      return GoogleFonts.lato(textStyle: ZwapTypography.mediumBody);
+    case ZwapTextType.bigBodyRegular:
+      return GoogleFonts.lato(textStyle: ZwapTypography.bigBodyRegular);
+    case ZwapTextType.bigBodySemibold:
+      return GoogleFonts.lato(textStyle: ZwapTypography.bigBodySemibold);
+    case ZwapTextType.textButton:
+      return GoogleFonts.lato(textStyle: ZwapTypography.textButton);
   }
 }
 

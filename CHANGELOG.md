@@ -365,5 +365,8 @@
 ## 0.1.491
 * Added github actions pipeline
 
-## 0.1.492
+## 0.1.493
 * Added Border and IconColor properties to ZwapIconDropDowns
+
+## 0.1.494
+* Added new text styles to ZwapTypography and ZwapText
