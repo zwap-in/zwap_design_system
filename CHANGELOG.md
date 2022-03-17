@@ -364,3 +364,6 @@
 
 ## 0.1.491
 * Added github actions pipeline
+
+## 0.1.492
+* Added Border and IconColor properties to ZwapIconDropDowns

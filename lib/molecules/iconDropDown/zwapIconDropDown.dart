@@ -22,6 +22,9 @@ class ZwapIconDropDownsDecoration {
   final int selectedItemTextSize;
   final int itemTextSize;
 
+  final Border? border;
+  final Color iconColor;
+
   //? Dropdown overlay decoration
   final Color itemHoverColor;
   final Color overlayBackgroundColor;
@@ -62,8 +65,11 @@ class ZwapIconDropDownsDecoration {
     this.itemTextSize = 14,
     Color? selectedItemColor,
     Color? itemHoverColor,
+    this.border,
+    Color? iconColor,
     this.insideItemPadding = const EdgeInsets.symmetric(horizontal: 17, vertical: 3),
   })  : this.titleTextStyle = titleTextStyle ?? ZwapTextType.captionRegular,
+        this.iconColor = iconColor ?? const Color.fromRGBO(50, 50, 50, 1),
         this.selectedItemTextStyle = selectedItemTextStyle ?? ZwapTextType.captionRegular,
         this.itemsTextStyle = itemsTextStyle ?? ZwapTextType.captionRegular,
         this.titleTextColor = titleTextColor ?? ZwapColors.neutral700,
@@ -100,31 +106,34 @@ class ZwapIconDropDownsDecoration {
     EdgeInsets? overlayContentPadding,
     double? itemSpacing,
     Color? selectedItemColor,
+    Border? border,
+    Color? iconColor,
   }) {
     return ZwapIconDropDownsDecoration(
-      height: height ?? this.height,
-      width: width ?? this.width,
-      titleTextStyle: titleTextStyle ?? this.titleTextStyle,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      titleTextColor: titleTextColor ?? this.titleTextColor,
-      borderRadius: borderRadius ?? this.borderRadius,
-      contentPadding: contentPadding ?? this.contentPadding,
-      hoverColor: hoverColor ?? this.hoverColor,
-      titleTextSize: titleTextSize ?? this.titleTextSize,
-      selectedItemTextSize: selectedItemTextSize ?? this.selectedItemTextSize,
-      itemTextSize: itemTextSize ?? this.itemTextSize,
-      itemHoverColor: itemHoverColor ?? this.itemHoverColor,
-      overlayBackgroundColor: overlayBackgroundColor ?? this.overlayBackgroundColor,
-      selectedItemTextStyle: selectedItemTextStyle ?? this.selectedItemTextStyle,
-      itemsTextStyle: itemsTextStyle ?? this.itemsTextStyle,
-      selectedItemTextColor: selectedItemTextColor ?? this.selectedItemTextColor,
-      itemsTextColor: itemsTextColor ?? this.itemsTextColor,
-      overlayBorderRadius: overlayBorderRadius ?? this.overlayBorderRadius,
-      hoverBorderRadius: hoverBorderRadius ?? this.hoverBorderRadius,
-      overlayContentPadding: overlayContentPadding ?? this.overlayContentPadding,
-      itemSpacing: itemSpacing ?? this.itemSpacing,
-      selectedItemColor: selectedItemColor ?? this.selectedItemColor,
-    );
+        height: height ?? this.height,
+        width: width ?? this.width,
+        titleTextStyle: titleTextStyle ?? this.titleTextStyle,
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        titleTextColor: titleTextColor ?? this.titleTextColor,
+        borderRadius: borderRadius ?? this.borderRadius,
+        contentPadding: contentPadding ?? this.contentPadding,
+        hoverColor: hoverColor ?? this.hoverColor,
+        titleTextSize: titleTextSize ?? this.titleTextSize,
+        selectedItemTextSize: selectedItemTextSize ?? this.selectedItemTextSize,
+        itemTextSize: itemTextSize ?? this.itemTextSize,
+        itemHoverColor: itemHoverColor ?? this.itemHoverColor,
+        overlayBackgroundColor: overlayBackgroundColor ?? this.overlayBackgroundColor,
+        selectedItemTextStyle: selectedItemTextStyle ?? this.selectedItemTextStyle,
+        itemsTextStyle: itemsTextStyle ?? this.itemsTextStyle,
+        selectedItemTextColor: selectedItemTextColor ?? this.selectedItemTextColor,
+        itemsTextColor: itemsTextColor ?? this.itemsTextColor,
+        overlayBorderRadius: overlayBorderRadius ?? this.overlayBorderRadius,
+        hoverBorderRadius: hoverBorderRadius ?? this.hoverBorderRadius,
+        overlayContentPadding: overlayContentPadding ?? this.overlayContentPadding,
+        itemSpacing: itemSpacing ?? this.itemSpacing,
+        selectedItemColor: selectedItemColor ?? this.selectedItemColor,
+        border: border ?? this.border,
+        iconColor: iconColor ?? this.iconColor);
   }
 }
 
@@ -141,7 +150,9 @@ class ZwapIconDropDowns extends StatefulWidget {
 
   final ZwapIconDropDownsDecoration decoration;
 
-  ZwapIconDropDowns({Key? key, required this.emojiItems, required this.onSelectCallBack, this.selectedItem, this.decoration = const ZwapIconDropDownsDecoration()}) : super(key: key);
+  ZwapIconDropDowns(
+      {Key? key, required this.emojiItems, required this.onSelectCallBack, this.selectedItem, this.decoration = const ZwapIconDropDownsDecoration()})
+      : super(key: key);
 
   _ZwapIconDropDownsState createState() => _ZwapIconDropDownsState();
 }
@@ -294,6 +305,7 @@ class _ZwapIconDropDownsState extends State<ZwapIconDropDowns> {
           decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(decorations.borderRadius),
+            border: decorations.border,
           ),
           padding: decorations.contentPadding,
           child: Row(
@@ -302,6 +314,7 @@ class _ZwapIconDropDownsState extends State<ZwapIconDropDowns> {
                 duration: const Duration(milliseconds: 150),
                 child: Row(
                   key: ValueKey(this._selectedItem),
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ZwapText(
                       text: this.selectedItem.emojiChar(),
@@ -321,7 +334,7 @@ class _ZwapIconDropDownsState extends State<ZwapIconDropDowns> {
               AnimatedRotation(
                 turns: (this._dropdownOverlay?.mounted ?? false) ? 0 : 0.5,
                 duration: const Duration(milliseconds: 150),
-                child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(this._dropdownOverlay != null)),
+                child: Icon(Icons.keyboard_arrow_up, color: decorations.iconColor, key: ValueKey(this._dropdownOverlay != null)),
               ),
             ],
           ),
