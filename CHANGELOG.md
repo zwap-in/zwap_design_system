@@ -370,3 +370,6 @@
 
 ## 0.1.494
 * Added new text styles to ZwapTypography and ZwapText
+
+## 0.1.495
+* Added new text styles to ZwapTypography and ZwapText + textAlign propery in ZwapTextMultiStyle
