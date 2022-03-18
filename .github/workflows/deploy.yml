@@ -36,9 +36,9 @@ jobs:
         run: |
           sh ./pub_login.sh
       - name: Check Publish Warnings
-        run: pub publish --dry-run
+        run: flutter pub publish --dry-run
       - name: Publish Package
-        run: pub publish -f
+        run: flutter pub publish -f
       - name: Send custom JSON data to Slack workflow
         id: slack
         uses: slackapi/slack-github-action@v1.18.0

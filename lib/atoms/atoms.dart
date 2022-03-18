@@ -19,3 +19,4 @@ export 'lineItem/zwapLineItem.dart';
 export 'toolTip/zwapToolTip.dart';
 export 'dropdownSearch/dropdownSearch.dart';
 export 'overlayEntryWidget/zwapOverlayEntryWidget.dart';
+export 'imageShape/zwapImageShape.dart';
