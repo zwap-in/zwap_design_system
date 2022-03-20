@@ -87,7 +87,8 @@ class ZwapTextMultiStyle extends StatelessWidget {
     else
       children = _getTexts();
 
-    if (_isCustomStyle && textsWithCustomStyles.any((t) => t.linkToUri != null)) return _LinkedMultyStyleText(textSpans: textsWithCustomStyles);
+    if (_isCustomStyle && textsWithCustomStyles.any((t) => t.linkToUri != null))
+      return _LinkedMultyStyleText(textSpans: textsWithCustomStyles, textAlign: textAlign);
 
     return RichText(
       text: TextSpan(children: List<TextSpan>.generate(children.length, (index) => children[index])),

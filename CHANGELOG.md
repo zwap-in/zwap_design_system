@@ -388,3 +388,6 @@
 
 ## 0.1.501
 * Added onEditingComplete propery to ZwapInput
+
+## 0.1.502
+* Fixed TextAlign in ZwapMultiStyleText
