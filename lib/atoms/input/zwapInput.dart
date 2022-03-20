@@ -87,6 +87,8 @@ class ZwapInput extends StatefulWidget {
 
   final double? borderRadius;
 
+  final void Function()? onEditingComplete;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -117,6 +119,7 @@ class ZwapInput extends StatefulWidget {
     this.suffixWidget,
     this.prefixWidget,
     this.borderRadius,
+    this.onEditingComplete,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = false,
         super(key: key);
@@ -150,6 +153,7 @@ class ZwapInput extends StatefulWidget {
     this.suffixWidget,
     this.prefixWidget,
     this.borderRadius,
+    this.onEditingComplete,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = true,
         this.showSuccess = false,
@@ -263,6 +267,7 @@ class _ZwapInputState extends State<ZwapInput> {
       enableInteractiveSelection: !widget.readOnly,
       onTap: widget.onTap,
       inputFormatters: widget.inputFormatters,
+      onEditingComplete: widget.onEditingComplete,
     );
   }
 

@@ -385,3 +385,6 @@
 
 ## 0.1.500
 * Fixed bug on ZwapButton that allow user to click even if disabled
+
+## 0.1.501
+* Added onEditingComplete propery to ZwapInput
