@@ -82,6 +82,11 @@ class ZwapInput extends StatefulWidget {
 
   final List<TextInputFormatter>? inputFormatters;
 
+  final Widget? prefixWidget;
+  final Widget? suffixWidget;
+
+  final double? borderRadius;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -109,6 +114,9 @@ class ZwapInput extends StatefulWidget {
     this.initialValue,
     this.inputFormatters,
     this.textCapitalization,
+    this.suffixWidget,
+    this.prefixWidget,
+    this.borderRadius,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = false,
         super(key: key);
@@ -139,6 +147,9 @@ class ZwapInput extends StatefulWidget {
     this.initialValue,
     this.inputFormatters,
     this.textCapitalization,
+    this.suffixWidget,
+    this.prefixWidget,
+    this.borderRadius,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = true,
         this.showSuccess = false,
@@ -191,7 +202,7 @@ class _ZwapInputState extends State<ZwapInput> {
   }
 
   InputBorder _getZwapInputBorder(Color borderColor) => OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.buttonRadius)),
+        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
         borderSide: BorderSide(color: borderColor, width: 1, style: BorderStyle.solid),
       );
 
@@ -213,14 +224,14 @@ class _ZwapInputState extends State<ZwapInput> {
               color: ZwapColors.neutral400,
               size: 24,
             )
-          : null,
+          : widget.prefixWidget,
       suffixIcon: widget.showSuccess || widget.suffixIcon != null
           ? Icon(
               widget.showSuccess ? Icons.check : widget.suffixIcon,
               color: widget.showSuccess ? ZwapColors.success800 : ZwapColors.neutral700,
               size: 24,
             )
-          : null,
+          : widget.suffixWidget,
     );
   }
 
@@ -288,7 +299,7 @@ class _ZwapInputState extends State<ZwapInput> {
             highlightColor: Colors.transparent,
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(ZwapRadius.buttonRadius)),
+                borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
                 border: Border.all(
                   color: widget.disabled
                       ? _getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)
