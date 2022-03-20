@@ -17,6 +17,8 @@ enum ZwapLinkTarget {
 
 class ZwapTextSpan {
   final String text;
+
+  ///! if one of the text spans has links this will be ignored
   final TapGestureRecognizer? gestureRecognizer;
 
   final TextStyle textStyle;
@@ -128,35 +130,28 @@ class _LinkedMultyStyleTextState extends State<_LinkedMultyStyleText> {
       uri: currentUri,
       target: currentLinkTarget ?? LinkTarget.defaultTarget,
       builder: (context, followLink) {
-        Function(ZwapTextSpan) _launch = (ZwapTextSpan span) {
-          if (span.gestureRecognizer?.onTap != null) span.gestureRecognizer!.onTap!();
-          if (followLink != null) followLink();
-        };
-
-        return RichText(
-          text: TextSpan(
-              children: widget.textSpans
-                  .map(
-                    (span) => TextSpan(
-                      text: span.text,
-                      mouseCursor: span.linkToUri != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
-                      style: span.textStyle,
-                      onEnter: (_) {
-                        print(followLink);
-                        setState(() {
-                          currentUri = span.linkToUri;
-                          currentLinkTarget = _getLinkTarget(span.linkTarget);
-                        });
-                      },
-                      onExit: (_) => setState(() {
-                        currentUri = null;
-                        currentLinkTarget = null;
-                      }),
-                      recognizer: (span.gestureRecognizer ?? TapGestureRecognizer())..onTap = _launch(span),
-                    ),
-                  )
-                  .toList()),
-          textAlign: widget.textAlign ?? TextAlign.start,
+        return GestureDetector(
+          onTap: followLink,
+          child: RichText(
+            text: TextSpan(
+                children: widget.textSpans
+                    .map(
+                      (span) => TextSpan(
+                        text: span.text,
+                        mouseCursor: span.linkToUri != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+                        style: span.textStyle,
+                        onEnter: (_) {
+                          print(followLink);
+                          setState(() {
+                            currentUri = span.linkToUri;
+                            currentLinkTarget = _getLinkTarget(span.linkTarget);
+                          });
+                        },
+                      ),
+                    )
+                    .toList()),
+            textAlign: widget.textAlign ?? TextAlign.start,
+          ),
         );
       },
     );

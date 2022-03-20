@@ -391,3 +391,6 @@
 
 ## 0.1.502
 * Fixed TextAlign in ZwapMultiStyleText
+
+## 0.1.503
+* Fixed ZwapTextMultiStyle problem
