@@ -382,3 +382,6 @@
 
 ## 0.1.499
 * Added loading state to ZwapButton
+
+## 0.1.500
+* Fixed bug on ZwapButton that allow user to click even if disabled

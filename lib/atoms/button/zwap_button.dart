@@ -329,7 +329,7 @@ class _ZwapButtonState extends State<ZwapButton> {
         duration: const Duration(milliseconds: 200),
         opacity: widget.hide ? 0 : 1,
         child: GestureDetector(
-          onTap: _loading ? null : widget.onTap,
+          onTap: (_loading || _disabled) ? null : widget.onTap,
           onLongPress: () {
             if (_pressed) setState(() => _pressed = false);
             if (widget.onLongTap != null) widget.onLongTap!();
