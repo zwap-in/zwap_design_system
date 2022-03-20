@@ -374,7 +374,7 @@
 ## 0.1.495
 * Added new text styles to ZwapTypography and ZwapText + textAlign propery in ZwapTextMultiStyle
 
-## 0.1.497
+## 0.1.498
 * Animation in ZwapCheckbox and rounded icon instead of normal one
 * Added open eye and closed eye in ZwapIcons
 * Added custom prefix and suffix in ZwapInput
