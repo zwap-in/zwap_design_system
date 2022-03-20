@@ -379,3 +379,6 @@
 * Added open eye and closed eye in ZwapIcons
 * Added custom prefix and suffix in ZwapInput
 * New ZwapTextMultiStyle with custom text styles and Link support
+
+## 0.1.499
+* Added loading state to ZwapButton
