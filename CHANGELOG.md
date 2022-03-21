@@ -402,3 +402,6 @@
 * New component ZwapPercentWidget
 * Zwap Shadows are now constants
 * Added some new styles to ZwapTypography
+
+## 0.1.506
+* Improvements to ZwapPercentWidget decorations

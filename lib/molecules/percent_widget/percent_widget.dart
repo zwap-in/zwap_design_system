@@ -3,6 +3,41 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import 'package:zwap_design_system/atoms/atoms.dart';
 
+class ZwapPercentIndicatorDecorations {
+  final double radius;
+  final double lineWidth;
+  final Color backgroundColor;
+  final Color valueColor;
+
+  const ZwapPercentIndicatorDecorations({
+    required this.radius,
+    required this.lineWidth,
+    required this.backgroundColor,
+    required this.valueColor,
+  });
+
+  const ZwapPercentIndicatorDecorations.descrutive({
+    this.radius = 30,
+    this.lineWidth = 6,
+    this.backgroundColor = ZwapColors.error200,
+    this.valueColor = ZwapColors.error400,
+  });
+
+  ZwapPercentIndicatorDecorations copyWith({
+    double? radius,
+    double? lineWidth,
+    Color? backgroundColor,
+    Color? valueColor,
+  }) {
+    return ZwapPercentIndicatorDecorations(
+      radius: radius ?? this.radius,
+      lineWidth: lineWidth ?? this.lineWidth,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      valueColor: valueColor ?? this.valueColor,
+    );
+  }
+}
+
 class ZwapPercentWidgetDecorations {
   //? Container decorations
   final Color backgroundColor;
@@ -13,8 +48,9 @@ class ZwapPercentWidgetDecorations {
 
   //? Percent indicator decorations
 
-  //? Content indicator decorations
+  final ZwapPercentIndicatorDecorations percentIndicatorDecorations;
 
+  //? Content indicator decorations
   /// Prefer use styles from `ZwapTypography`
   final TextStyle titleStyle;
 
@@ -28,6 +64,7 @@ class ZwapPercentWidgetDecorations {
     required this.borderRadius,
     required this.titleStyle,
     required this.subtitleStyle,
+    required this.percentIndicatorDecorations,
     this.border,
   });
 
@@ -39,7 +76,41 @@ class ZwapPercentWidgetDecorations {
     this.subtitleStyle: ZwapTypography.extraSmallBodyRegular,
     this.border,
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+    this.percentIndicatorDecorations = const ZwapPercentIndicatorDecorations.descrutive(),
   });
+
+  const ZwapPercentWidgetDecorations.flat({
+    this.backgroundColor = ZwapColors.shades0,
+    this.shadows = const [],
+    this.borderRadius = const BorderRadius.all(const Radius.circular(30)),
+    this.titleStyle: ZwapTypography.bigBodyBold,
+    this.subtitleStyle: ZwapTypography.extraSmallBodyRegular,
+    this.border,
+    this.contentPadding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+    this.percentIndicatorDecorations = const ZwapPercentIndicatorDecorations.descrutive(),
+  });
+
+  ZwapPercentWidgetDecorations copyWith({
+    Color? backgroundColor,
+    List<BoxShadow>? shadows,
+    BorderRadius? borderRadius,
+    Border? border,
+    EdgeInsets? contentPadding,
+    ZwapPercentIndicatorDecorations? percentIndicatorDecorations,
+    TextStyle? titleStyle,
+    TextStyle? subtitleStyle,
+  }) {
+    return ZwapPercentWidgetDecorations(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      shadows: shadows ?? this.shadows,
+      borderRadius: borderRadius ?? this.borderRadius,
+      border: border ?? this.border,
+      contentPadding: contentPadding ?? this.contentPadding,
+      percentIndicatorDecorations: percentIndicatorDecorations ?? this.percentIndicatorDecorations,
+      titleStyle: titleStyle ?? this.titleStyle,
+      subtitleStyle: subtitleStyle ?? this.subtitleStyle,
+    );
+  }
 }
 
 class ZwapPercentWidgetPercentContent {
@@ -127,6 +198,7 @@ class _ZwapPercentWidgetState extends State<ZwapPercentWidget> {
   }
 
   ZwapPercentWidgetDecorations get decorations => widget.decorations;
+  ZwapPercentIndicatorDecorations get indicatorDecorations => widget.decorations.percentIndicatorDecorations;
 
   @override
   Widget build(BuildContext context) {
@@ -148,12 +220,12 @@ class _ZwapPercentWidgetState extends State<ZwapPercentWidget> {
             flex: 0,
             child: CircularPercentIndicator(
               percent: widget.percentValue,
-              radius: 30,
+              radius: indicatorDecorations.radius,
               animation: true,
-              lineWidth: 6,
-              backgroundColor: ZwapColors.error200,
+              lineWidth: indicatorDecorations.lineWidth,
+              backgroundColor: indicatorDecorations.backgroundColor,
               fillColor: Colors.transparent,
-              progressColor: ZwapColors.error400,
+              progressColor: indicatorDecorations.valueColor,
               circularStrokeCap: CircularStrokeCap.round,
               center: Center(
                 child: widget.insidePercentContent._showPercent
