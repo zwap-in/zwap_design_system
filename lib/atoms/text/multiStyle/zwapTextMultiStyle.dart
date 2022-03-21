@@ -141,7 +141,6 @@ class _LinkedMultyStyleTextState extends State<_LinkedMultyStyleText> {
                         mouseCursor: span.linkToUri != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
                         style: span.textStyle,
                         onEnter: (_) {
-                          print(followLink);
                           setState(() {
                             currentUri = span.linkToUri;
                             currentLinkTarget = _getLinkTarget(span.linkTarget);

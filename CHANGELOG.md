@@ -411,3 +411,11 @@
 
 ## 0.1.508
 * Added dynamic animation duration to ZwapButtonDecorations
+
+## 0.1.509
+* ZwapWeeklyCalendarPicker now auto fill missing slots making all days same slot lenght
+*  **ZwapStories** allow to quickly see and test DesignSystem widgets. Supported widgets:
+    * ZwapButton
+    * ZwapPercentWidget
+    * ZwapWeeklyCalendarPicker
+* Removed all `print()´ calls inside components
