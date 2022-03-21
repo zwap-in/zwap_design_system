@@ -47,6 +47,9 @@ class ZwapButtonDecorations {
   final Color? focussedContentColor;
   final Color? pressedContentColor;
 
+  /// The duration of the animations between states
+  final Duration? animationDuration;
+
   static _ZwapVideoPlatformButtonsDecorations get videoPlatformDecorations => _ZwapVideoPlatformButtonsDecorations();
 
   ZwapButtonDecorations({
@@ -77,6 +80,7 @@ class ZwapButtonDecorations {
     this.pressedContentColor,
     this.pressedGradient,
     this.pressedShadow,
+    this.animationDuration,
   });
 
   /// [borderWitdh] Not used if custom border is provided
@@ -109,6 +113,7 @@ class ZwapButtonDecorations {
     BoxShadow? pressedShadow,
     Color? pressedContentColor,
     double? borderWitdh,
+    this.animationDuration,
   })  : this.backgroundColor = backgroundColor ?? ZwapColors.primary900,
         this.focussedColor = focussedColor ?? ZwapColors.primary700,
         this.hoverColor = hoverColor ?? ZwapColors.primary700,
@@ -167,6 +172,7 @@ class ZwapButtonDecorations {
     BoxShadow? pressedShadow,
     Color? pressedContentColor,
     double? borderWitdh,
+    this.animationDuration,
   })  : this.backgroundColor = backgroundColor ?? ZwapColors.primary900Dark,
         this.focussedColor = focussedColor ?? ZwapColors.primary700Dark,
         this.hoverColor = hoverColor ?? ZwapColors.primary700Dark,
@@ -224,6 +230,7 @@ class ZwapButtonDecorations {
     BoxShadow? pressedShadow,
     Color? pressedContentColor,
     double? borderWitdh,
+    this.animationDuration,
   })  : this.backgroundColor = backgroundColor ?? ZwapColors.shades0,
         this.focussedColor = focussedColor ?? ZwapColors.primary100,
         this.hoverColor = hoverColor ?? ZwapColors.primary100,
@@ -281,6 +288,7 @@ class ZwapButtonDecorations {
     BoxShadow? pressedShadow,
     Color? pressedContentColor,
     double? borderWitdh,
+    this.animationDuration,
   })  : this.backgroundColor = backgroundColor ?? ZwapColors.shades0,
         this.focussedColor = focussedColor ?? ZwapColors.shades0,
         this.hoverColor = hoverColor ?? ZwapColors.shades0,
@@ -338,6 +346,7 @@ class ZwapButtonDecorations {
     BoxShadow? pressedShadow,
     Color? pressedContentColor,
     double? borderWitdh,
+    this.animationDuration,
   })  : this.backgroundColor = backgroundColor ?? ZwapColors.neutral300,
         this.focussedColor = focussedColor ?? ZwapColors.primary100,
         this.hoverColor = hoverColor ?? ZwapColors.primary100,
@@ -395,6 +404,7 @@ class ZwapButtonDecorations {
     BoxShadow? pressedShadow,
     Color? pressedContentColor,
     double? borderWitdh,
+    this.animationDuration,
   })  : this.backgroundColor = backgroundColor ?? ZwapColors.shades0,
         this.focussedColor = focussedColor ?? ZwapColors.primary100,
         this.hoverColor = hoverColor ?? ZwapColors.primary100,
@@ -452,6 +462,7 @@ class ZwapButtonDecorations {
     BoxShadow? pressedShadow,
     Color? pressedContentColor,
     double? borderWitdh,
+    this.animationDuration,
   })  : this.backgroundColor = backgroundColor ?? ZwapColors.error50,
         this.focussedColor = focussedColor ?? ZwapColors.error50,
         this.hoverColor = hoverColor ?? ZwapColors.error50,
@@ -509,6 +520,7 @@ class ZwapButtonDecorations {
     BoxShadow? pressedShadow,
     Color? pressedContentColor,
     double? borderWitdh,
+    this.animationDuration,
   })  : this.backgroundColor = backgroundColor ?? ZwapColors.shades0,
         this.focussedColor = focussedColor ?? ZwapColors.shades0,
         this.hoverColor = hoverColor ?? ZwapColors.shades0,

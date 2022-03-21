@@ -408,3 +408,6 @@
 
 ## 0.1.507
 * Refactoriong ZwapButtonDecorations with new colors
+
+## 0.1.508
+* Added dynamic animation duration to ZwapButtonDecorations
