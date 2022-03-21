@@ -148,8 +148,6 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
     final bool _isAtEdge =
         _scrollController.position.atEdge && _scrollController.position.pixels != 0 && !_loading && !_scrollController.position.outOfRange;
 
-    if (_isAtEdge && !_canFetchData) print('ricerca bloccata');
-
     if (_isAtEdge && _canFetchData) {
       setState(() => this._loading = true);
 
@@ -159,8 +157,6 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
 
       _canFetchData = false;
       _setCanFetchTimer(dataIsEmpty: tmp.data.isEmpty);
-      print('ricerca: ${tmp.data.isEmpty}');
-
       setState(() {
         if (tmp.data.isNotEmpty) _pageNumber++;
         value.data = newCombinedList;

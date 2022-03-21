@@ -5,8 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:provider/provider.dart';
-import 'package:zwap_design_system/molecules/molecules.dart';
 import 'package:zwap_utils/zwap_utils.dart';
+
+import 'package:zwap_design_system/molecules/molecules.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
@@ -15,8 +16,6 @@ import 'package:zwap_design_system/molecules/scrollArrows/zwapScrollArrow.dart';
 import 'package:collection/collection.dart';
 import 'package:zwap_design_system/extensions/dateTimeExtension.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
-
-const TimeOfDay _kFakeDay = TimeOfDay(hour: 25, minute: 00);
 
 enum _ZwapWeeklyCalendarTimesTypes { daily, weekly, custom }
 
@@ -38,6 +37,26 @@ enum _ZwapWeeklyCalendarFilterErrors {
   maxPerWeekDay,
   maxPerDayCustom,
   maxPerWeekCustom,
+}
+
+class _CustomTimeOfDay extends TimeOfDay {
+  final bool hidden;
+
+  _CustomTimeOfDay({required this.hidden, required int hour, required int minute}) : super(hour: hour, minute: minute);
+
+  _CustomTimeOfDay.fromTimeOfDay(TimeOfDay timeOfDay, {this.hidden = false}) : super(hour: timeOfDay.hour, minute: timeOfDay.minute);
+
+  _CustomTimeOfDay copyWith({
+    bool? hidden,
+    int? hour,
+    int? minute,
+  }) {
+    return _CustomTimeOfDay(
+      hidden: hidden ?? this.hidden,
+      hour: hour ?? this.hour,
+      minute: minute ?? this.minute,
+    );
+  }
 }
 
 class _ZwapPickFilterResponse {
@@ -162,7 +181,8 @@ class ZwapWeeklyCalendarPickFilter {
       DateTime _firstOfWeek = _tmp.firstOfWeek.subtract(Duration(seconds: 100));
       DateTime _lastOfWeel = _firstOfWeek.add(Duration(days: 7));
 
-      List<int> _subTotals = selected.keys.where((d) => d.isAfter(_firstOfWeek) && d.isBefore(_lastOfWeel)).map((d) => selected[d]?.length ?? 0).toList();
+      List<int> _subTotals =
+          selected.keys.where((d) => d.isAfter(_firstOfWeek) && d.isBefore(_lastOfWeel)).map((d) => selected[d]?.length ?? 0).toList();
       return _subTotals.isEmpty ? 0 : _subTotals.reduce((v, e) => v += e);
     }
 
@@ -196,7 +216,8 @@ class ZwapWeeklyCalendarPickFilter {
     }
 
     bool _evaluateMaxPerWeekCustom() {
-      if (maxPerWeekCustom == null || (!maxPerDayCustom!.keys.map((k) => k.firstOfWeek.pureDate).contains(newItem.date.firstOfWeek.pureDate))) return true;
+      if (maxPerWeekCustom == null || (!maxPerDayCustom!.keys.map((k) => k.firstOfWeek.pureDate).contains(newItem.date.firstOfWeek.pureDate)))
+        return true;
 
       return _countWeekElements() + 1 <= maxPerDayCustom!.map((k, v) => MapEntry(k.firstOfWeek.pureDate, v))[newItem.date.firstOfWeek]!;
     }
@@ -319,20 +340,28 @@ class ZwapWeeklyCalendarShowFilter {
         this._showedWeekdays = [1, 2, 3, 4, 5, 6, 7],
         this._firstDay = null,
         this._lastDay = null,
-        this._disabledItems = [_ZwapWeeklyCalendarPickerItem(date, time)],
-        this._onDayTap = {_ZwapWeeklyCalendarPickerItem(date, time): onDayTap};
+        this._disabledItems = [_ZwapWeeklyCalendarPickerItem(date, _CustomTimeOfDay.fromTimeOfDay(time, hidden: true))],
+        this._onDayTap = {_ZwapWeeklyCalendarPickerItem(date, _CustomTimeOfDay.fromTimeOfDay(time, hidden: true)): onDayTap};
 
   /// If [onThoseDaysTap] is not null, [onDayTap] will be ignored
   ZwapWeeklyCalendarShowFilter.disableItems(List<TupleType<DateTime, TimeOfDay>> disabledItems,
-      {Function(TupleType<DateTime, TimeOfDay>)? onThoseDaysTap, Map<TupleType<DateTime, TimeOfDay>, Function(TupleType<DateTime, TimeOfDay>)?>? onDayTap})
+      {Function(TupleType<DateTime, TimeOfDay>)? onThoseDaysTap,
+      Map<TupleType<DateTime, TimeOfDay>, Function(TupleType<DateTime, TimeOfDay>)?>? onDayTap})
       : _disablePast = false,
         this._showedWeekdays = [1, 2, 3, 4, 5, 6, 7],
         this._firstDay = null,
         this._lastDay = null,
-        this._disabledItems = disabledItems.map((e) => _ZwapWeeklyCalendarPickerItem(e.a, e.b)).toList(),
+        this._disabledItems =
+            disabledItems.map((e) => _ZwapWeeklyCalendarPickerItem(e.a, _CustomTimeOfDay.fromTimeOfDay(e.b, hidden: true))).toList(),
         this._onDayTap = onThoseDaysTap != null
-            ? {for (TupleType<DateTime, TimeOfDay> t in disabledItems) _ZwapWeeklyCalendarPickerItem(t.a, t.b): onThoseDaysTap}
-            : {for (TupleType<DateTime, TimeOfDay> t in onDayTap?.keys ?? []) _ZwapWeeklyCalendarPickerItem(t.a, t.b): onDayTap![t]};
+            ? {
+                for (TupleType<DateTime, TimeOfDay> t in disabledItems)
+                  _ZwapWeeklyCalendarPickerItem(t.a, _CustomTimeOfDay.fromTimeOfDay(t.b, hidden: true)): onThoseDaysTap,
+              }
+            : {
+                for (TupleType<DateTime, TimeOfDay> t in onDayTap?.keys ?? [])
+                  _ZwapWeeklyCalendarPickerItem(t.a, _CustomTimeOfDay.fromTimeOfDay(t.b, hidden: true)): onDayTap![t],
+              };
 
   /// Merge two filters and return a new filter with more relevant paramether between both
   ZwapWeeklyCalendarShowFilter _mergeWith(ZwapWeeklyCalendarShowFilter other) {
@@ -361,7 +390,7 @@ class ZwapWeeklyCalendarShowFilter {
 
 class _ZwapWeeklyCalendarPickerItem {
   final DateTime date;
-  final TimeOfDay time;
+  final _CustomTimeOfDay time;
 
   const _ZwapWeeklyCalendarPickerItem(this.date, this.time);
 
@@ -496,38 +525,81 @@ class ZwapWeeklyCalendarPickerProvider extends ChangeNotifier {
   void nextWeek() => _currentWeek = __currentWeek.add(Duration(days: 7, hours: 23)).firstOfWeek;
   void precedentWeek() => _currentWeek = __currentWeek.add(Duration(days: -7, hours: 23)).firstOfWeek;
 
-  Map<DateTime, List<TimeOfDay>> get currentWeekTimes {
+  Map<DateTime, List<_CustomTimeOfDay>> get currentWeekTimes {
+    late List<_CustomTimeOfDay> _dayTimesSummary;
+
     final List<int> _weekDays = _showFilter?._showedWeekdays ?? [1, 2, 3, 4, 5, 6, 7];
-    late Map<DateTime, List<TimeOfDay>> _res;
-    late List<TimeOfDay> _emptyDay;
+    late Map<DateTime, List<_CustomTimeOfDay>> _res;
+    late List<TimeOfDay> _emptyDays;
 
     DateTime _tmp = DateTime.now();
 
+    List<_CustomTimeOfDay> _fillTimesOfDay(List<Object> _times) {
+      if (_times.isEmpty) return [];
+
+      late List<_CustomTimeOfDay> _converted;
+      if (_times.first.runtimeType == TimeOfDay)
+        _converted = (_times as List<TimeOfDay>).map((t) => _CustomTimeOfDay.fromTimeOfDay(t)).toList();
+      else
+        _converted = _times as List<_CustomTimeOfDay>;
+
+      if (_converted.length >= _dayTimesSummary.length) return _converted;
+
+      List<_CustomTimeOfDay> _missingTimes = (List<_CustomTimeOfDay>.from(_dayTimesSummary)..removeWhere((time) => _times.contains(time)))
+          .map((time) => time.copyWith(hidden: true))
+          .toList();
+      return [..._converted, ..._missingTimes];
+    }
+
     switch (_calendarTimes._type) {
       case _ZwapWeeklyCalendarTimesTypes.daily:
-        _emptyDay = [];
+        _dayTimesSummary = {
+          for (int i in _weekDays)
+            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) ..._calendarTimes._simgleDayTimes!,
+        }.toList().map((t) => _CustomTimeOfDay.fromTimeOfDay(t)).toList();
+
         _res = {
           for (int i in _weekDays)
-            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) _tmp.pureDate: _calendarTimes._simgleDayTimes!,
+            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) _tmp.pureDate: _fillTimesOfDay(_calendarTimes._simgleDayTimes!),
         };
+
         break;
       case _ZwapWeeklyCalendarTimesTypes.weekly:
-        _emptyDay = List.generate(_calendarTimes._weeklyTimes!.entries.firstOrNull?.value.length ?? 0, (i) => _kFakeDay);
+        _dayTimesSummary = {
+          ..._calendarTimes._weeklyTimes!.entries.map((e) => e.value).reduce((v, e) => [...v, ...e]),
+        }.toList().map((t) => _CustomTimeOfDay.fromTimeOfDay(t)).toList();
+
+        _emptyDays = List<TimeOfDay>.from(_calendarTimes._weeklyTimes!.entries.firstOrNull?.value ?? [])
+            .map((t) => _CustomTimeOfDay.fromTimeOfDay(t, hidden: true))
+            .toList();
+
         _res = {
           for (int i in _weekDays)
-            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) _tmp.pureDate: _calendarTimes._weeklyTimes![__currentWeek.add(Duration(days: i - 1)).weekday] ?? _emptyDay,
+            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1))))
+              _tmp.pureDate: _fillTimesOfDay(_calendarTimes._weeklyTimes![__currentWeek.add(Duration(days: i - 1)).weekday] ?? _emptyDays),
         };
         break;
       case _ZwapWeeklyCalendarTimesTypes.custom:
-        _emptyDay = List.generate(_calendarTimes._customTimes!.entries.firstOrNull?.value.length ?? 0, (i) => _kFakeDay);
+        _dayTimesSummary = {
+          for (int i in _weekDays)
+            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1))))
+              ..._calendarTimes._customTimes![__currentWeek.add(Duration(days: i))] ?? [],
+        }.toList().map((t) => _CustomTimeOfDay.fromTimeOfDay(t)).toList();
+
+        _emptyDays = List<TimeOfDay>.from(_calendarTimes._weeklyTimes!.entries.firstOrNull?.value ?? [])
+            .map((t) => _CustomTimeOfDay.fromTimeOfDay(t, hidden: true))
+            .toList();
+
         _res = {
           for (int i in _weekDays)
-            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1)))) _tmp.pureDate: _calendarTimes._customTimes![__currentWeek.add(Duration(days: i))] ?? _emptyDay,
+            if (_checkDay(_tmp = __currentWeek.add(Duration(days: i - 1))))
+              _tmp.pureDate: _fillTimesOfDay(_calendarTimes._customTimes![__currentWeek.add(Duration(days: i))] ?? _emptyDays),
         };
         break;
     }
 
-    return _res.map((k, v) => MapEntry<DateTime, List<TimeOfDay>>(k.pureDate, v..sort((a, b) => a.hour.compareTo(b.hour) == 0 ? a.minute.compareTo(b.minute) : a.hour.compareTo(b.hour))));
+    return _res.map((k, v) => MapEntry<DateTime, List<_CustomTimeOfDay>>(
+        k.pureDate, v..sort((a, b) => a.hour.compareTo(b.hour) == 0 ? a.minute.compareTo(b.minute) : a.hour.compareTo(b.hour))));
   }
 
   void widgetSelectedUpdated(List<_ZwapWeeklyCalendarPickerItem> items) {
@@ -584,6 +656,9 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
 
   late final ZwapWeeklyCalendarPickerProvider _provider;
 
+  //? Il componente farà che tutti i giorni abbiano tutti gli orari in comune, ovviamente abilitando solo quelli presenti nei times forniti
+  late List<TimeOfDay> _timesSummary;
+
   @override
   void initState() {
     super.initState();
@@ -593,7 +668,7 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
       filters: widget.pickFilters,
       initialDate: widget.initialDay,
       showFilter: widget._showFilter,
-      initialSelectedItems: widget.selected?.map((i) => _ZwapWeeklyCalendarPickerItem(i.a, i.b)).toList(),
+      initialSelectedItems: widget.selected?.map((i) => _ZwapWeeklyCalendarPickerItem(i.a, _CustomTimeOfDay.fromTimeOfDay(i.b))).toList(),
       onChange: widget.onChange,
     );
 
@@ -603,13 +678,15 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
 
   @override
   void didUpdateWidget(covariant ZwapWeeklyCalendarPicker oldWidget) {
-    if (!listEquals(widget.selected, oldWidget.selected)) _provider.widgetSelectedUpdated(widget.selected?.map((i) => _ZwapWeeklyCalendarPickerItem(i.a, i.b)).toList() ?? []);
+    if (!listEquals(widget.selected, oldWidget.selected))
+      _provider
+          .widgetSelectedUpdated(widget.selected?.map((i) => _ZwapWeeklyCalendarPickerItem(i.a, _CustomTimeOfDay.fromTimeOfDay(i.b))).toList() ?? []);
 
     super.didUpdateWidget(oldWidget);
   }
 
   bool _isItemDisabled(_ZwapWeeklyCalendarPickerItem item) {
-    if (item.time.hour > 24) return true;
+    if (item.time.hidden) return true;
 
     final ZwapWeeklyCalendarShowFilter? _filter = widget._showFilter;
 
@@ -632,7 +709,9 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
     return _isInDisabledList || _isManuallyDisabled || _isInPast || _isBeforeMin || _isAfterMax;
   }
 
-  Function _getDisabledCallbackOfItem(DateTime day, TimeOfDay time) {
+  Function _getDisabledCallbackOfItem(DateTime day, _CustomTimeOfDay time) {
+    if (time.hidden) return () {};
+
     _ZwapWeeklyCalendarPickerItem item = _ZwapWeeklyCalendarPickerItem(day, time);
     Function? res;
 
@@ -645,7 +724,8 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
           res = () => f.onFilterCatch!(TupleType(a: day, b: time));
         else if ((f.maxDay?.isBefore(item.date) ?? false) && f.onFilterCatch != null)
           res = () => f.onFilterCatch!(TupleType(a: day, b: time));
-        else if (f.disableWhere != null && f.disableWhere!(TupleType(a: item.date, b: item.time)) && f.onFilterCatch != null) res = () => f.onFilterCatch!(TupleType(a: day, b: time));
+        else if (f.disableWhere != null && f.disableWhere!(TupleType(a: item.date, b: item.time)) && f.onFilterCatch != null)
+          res = () => f.onFilterCatch!(TupleType(a: day, b: time));
 
         if (res != null) break;
       }
@@ -659,7 +739,8 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
     day = day.pureDate;
 
     String weekDayName = Constants.weekDayAbbrName()[day.weekday]!;
-    final Map<DateTime, List<TimeOfDay>> _showedDays = context.select<ZwapWeeklyCalendarPickerProvider, Map<DateTime, List<TimeOfDay>>>((pro) => pro.currentWeekTimes);
+    final Map<DateTime, List<_CustomTimeOfDay>> _showedDays =
+        context.select<ZwapWeeklyCalendarPickerProvider, Map<DateTime, List<_CustomTimeOfDay>>>((pro) => pro.currentWeekTimes);
 
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
@@ -691,17 +772,23 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: _showedDays[day]!.map(
-                    (TimeOfDay time) {
-                      final bool isSelected = context.select<ZwapWeeklyCalendarPickerProvider, bool>((pro) => pro.selected.any((s) => s.date.pureDate == day && s.time == time));
-                      final bool isHovered = context.select<ZwapWeeklyCalendarPickerProvider, bool>((pro) => pro.hoveredItem?.date.pureDate == day && pro.hoveredItem?.time == time);
+                    (_CustomTimeOfDay time) {
+                      final bool isSelected = context
+                          .select<ZwapWeeklyCalendarPickerProvider, bool>((pro) => pro.selected.any((s) => s.date.pureDate == day && s.time == time));
+                      final bool isHovered = context.select<ZwapWeeklyCalendarPickerProvider, bool>(
+                          (pro) => pro.hoveredItem?.date.pureDate == day && pro.hoveredItem?.time == time);
                       final bool isDisabled = _isItemDisabled(_ZwapWeeklyCalendarPickerItem(day, time));
 
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 7.5),
                         child: InkWell(
-                          onTap:
-                              isDisabled ? () => _getDisabledCallbackOfItem(day, time)() : () => context.read<ZwapWeeklyCalendarPickerProvider>().toggleItem(_ZwapWeeklyCalendarPickerItem(day, time)),
-                          onHover: isDisabled ? null : (bool isHovered) => context.read<ZwapWeeklyCalendarPickerProvider>().hoveredItem = isHovered ? _ZwapWeeklyCalendarPickerItem(day, time) : null,
+                          onTap: isDisabled
+                              ? () => _getDisabledCallbackOfItem(day, time)()
+                              : () => context.read<ZwapWeeklyCalendarPickerProvider>().toggleItem(_ZwapWeeklyCalendarPickerItem(day, time)),
+                          onHover: isDisabled
+                              ? null
+                              : (bool isHovered) => context.read<ZwapWeeklyCalendarPickerProvider>().hoveredItem =
+                                  isHovered ? _ZwapWeeklyCalendarPickerItem(day, time) : null,
                           borderRadius: BorderRadius.circular(10),
                           hoverColor: Colors.transparent,
                           splashColor: Colors.transparent,
@@ -734,7 +821,7 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
                             ),
                             child: Center(
                               child: ZwapText(
-                                text: time.hour > 24 ? "--:--" : "${time.hour}:${Utils.plotMinute(time.minute)}",
+                                text: time.hidden ? "--:--" : "${time.hour}:${Utils.plotMinute(time.minute)}",
                                 textColor: isSelected
                                     ? isDisabled
                                         ? ZwapColors.primary800
@@ -769,7 +856,8 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
       ],
       child: LayoutBuilder(
         builder: (context, size) {
-          final Map<DateTime, List<TimeOfDay>> _showedDays = context.select<ZwapWeeklyCalendarPickerProvider, Map<DateTime, List<TimeOfDay>>>((pro) => pro.currentWeekTimes);
+          final Map<DateTime, List<TimeOfDay>> _showedDays =
+              context.select<ZwapWeeklyCalendarPickerProvider, Map<DateTime, List<TimeOfDay>>>((pro) => pro.currentWeekTimes);
 
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -895,7 +983,8 @@ class _ZwapWeeklyCalendarPickerDaySelectorState extends State<_ZwapWeeklyCalenda
 
   @override
   Widget build(BuildContext context) {
-    final List<int> _showedWeekDays = context.select<ZwapWeeklyCalendarPickerProvider, List<int>>((pro) => pro.currentWeekTimes.keys.map((k) => k.weekday).toList());
+    final List<int> _showedWeekDays =
+        context.select<ZwapWeeklyCalendarPickerProvider, List<int>>((pro) => pro.currentWeekTimes.keys.map((k) => k.weekday).toList());
     final double _scrollWidth = _showedWeekDays.length * 70;
 
     double? _left;

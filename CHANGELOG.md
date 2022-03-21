@@ -373,3 +373,49 @@
 
 ## 0.1.495
 * Added new text styles to ZwapTypography and ZwapText + textAlign propery in ZwapTextMultiStyle
+
+## 0.1.498
+* Animation in ZwapCheckbox and rounded icon instead of normal one
+* Added open eye and closed eye in ZwapIcons
+* Added custom prefix and suffix in ZwapInput
+* New ZwapTextMultiStyle with custom text styles and Link support
+
+## 0.1.499
+* Added loading state to ZwapButton
+
+## 0.1.500
+* Fixed bug on ZwapButton that allow user to click even if disabled
+
+## 0.1.501
+* Added onEditingComplete propery to ZwapInput
+
+## 0.1.502
+* Fixed TextAlign in ZwapMultiStyleText
+
+## 0.1.503
+* Fixed ZwapTextMultiStyle problem
+
+## 0.1.504
+* ZwapInput now have obscure property and autofillHints is a list of String
+
+## 0.1.505
+* New component ZwapPercentWidget
+* Zwap Shadows are now constants
+* Added some new styles to ZwapTypography
+
+## 0.1.506
+* Improvements to ZwapPercentWidget decorations
+
+## 0.1.507
+* Refactoriong ZwapButtonDecorations with new colors
+
+## 0.1.508
+* Added dynamic animation duration to ZwapButtonDecorations
+
+## 0.1.509
+* ZwapWeeklyCalendarPicker now auto fill missing slots making all days same slot lenght
+*  **ZwapStories** allow to quickly see and test DesignSystem widgets. Supported widgets:
+    * ZwapButton
+    * ZwapPercentWidget
+    * ZwapWeeklyCalendarPicker
+* Removed all `print()´ calls inside components

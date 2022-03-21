@@ -51,8 +51,6 @@ class _ZwapSelectProvider extends ChangeNotifier {
   }
 
   void selectedChanged(List<String> selected) {
-    print(selected);
-
     selectedValues = List.from(selected);
     notifyListeners();
   }

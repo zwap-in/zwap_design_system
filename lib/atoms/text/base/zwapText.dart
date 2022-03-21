@@ -80,12 +80,18 @@ TextStyle getTextStyle(ZwapTextType typeText) {
       return GoogleFonts.lato(textStyle: ZwapTypography.mediumBodyRegular);
     case ZwapTextType.mediumBodyMedium:
       return GoogleFonts.lato(textStyle: ZwapTypography.mediumBodyMedium);
+    case ZwapTextType.mediumBodyBold:
+      return GoogleFonts.lato(textStyle: ZwapTypography.mediumBodyBold);
     case ZwapTextType.bigBodyRegular:
       return GoogleFonts.lato(textStyle: ZwapTypography.bigBodyRegular);
     case ZwapTextType.bigBodySemibold:
       return GoogleFonts.lato(textStyle: ZwapTypography.bigBodySemibold);
+    case ZwapTextType.bigBodyBold:
+      return GoogleFonts.lato(textStyle: ZwapTypography.bigBodyBold);
     case ZwapTextType.textButton:
       return GoogleFonts.lato(textStyle: ZwapTypography.textButton);
+    case ZwapTextType.extraSmallBodyRegular:
+      return GoogleFonts.lato(textStyle: ZwapTypography.extraSmallBodyRegular);
   }
 }
 

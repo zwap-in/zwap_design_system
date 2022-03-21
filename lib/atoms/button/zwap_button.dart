@@ -1,5 +1,7 @@
 library zwap_button;
 
+import 'dart:math';
+
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +101,9 @@ class ZwapButton extends StatefulWidget {
   /// If [true] button will be disabled
   final bool disabled;
 
+  /// Il true a loading indicator will be showed instead of button child
+  final bool loading;
+
   /// Opacity of this button: hide ? 0 : 1
   final bool hide;
 
@@ -135,6 +140,7 @@ class ZwapButton extends StatefulWidget {
     this.onTap,
     this.actions,
     this.shortcuts,
+    this.loading = false,
     Key? key,
   })  : this.child = null,
         this.buttonChild = buttonChild,
@@ -154,6 +160,7 @@ class ZwapButton extends StatefulWidget {
     this.onTap,
     this.actions,
     this.shortcuts,
+    this.loading = false,
     Key? key,
   })  : this.buttonChild = null,
         this.child = child,
@@ -175,6 +182,8 @@ class _ZwapButtonState extends State<ZwapButton> {
   bool _disabled = false;
   bool _pressed = false;
 
+  bool _loading = false;
+
   @override
   void initState() {
     _focusNode = widget.focusNode ?? FocusNode();
@@ -182,6 +191,8 @@ class _ZwapButtonState extends State<ZwapButton> {
 
     _focussed = _focusNode.hasFocus;
     _disabled = widget.disabled;
+
+    _loading = widget.loading;
 
     _actions = widget.actions ??
         {
@@ -198,6 +209,8 @@ class _ZwapButtonState extends State<ZwapButton> {
   @override
   void didUpdateWidget(ZwapButton oldWidget) {
     if (widget.disabled != _disabled) setState(() => _disabled = widget.disabled);
+    if (widget.loading != _loading) setState(() => _loading = widget.loading);
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -208,6 +221,8 @@ class _ZwapButtonState extends State<ZwapButton> {
     required T? focussed,
     required T? pressed,
   }) {
+    if (_loading) return normal;
+
     if (_disabled) return disabled;
     if (_pressed) return pressed;
     if (_hovered) return hover;
@@ -314,7 +329,7 @@ class _ZwapButtonState extends State<ZwapButton> {
         duration: const Duration(milliseconds: 200),
         opacity: widget.hide ? 0 : 1,
         child: GestureDetector(
-          onTap: widget.onTap,
+          onTap: (_loading || _disabled) ? null : widget.onTap,
           onLongPress: () {
             if (_pressed) setState(() => _pressed = false);
             if (widget.onLongTap != null) widget.onLongTap!();
@@ -333,7 +348,7 @@ class _ZwapButtonState extends State<ZwapButton> {
             shortcuts: _shortcuts,
             mouseCursor: _disabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
             child: AnimatedContainer(
-              duration: _pressed ?  Duration.zero : const Duration(milliseconds: 200),
+              duration: _pressed ? Duration.zero : (_decorations.animationDuration ?? const Duration(milliseconds: 200)),
               padding: _decorations.internalPadding,
               width: widget.width,
               height: widget.height,
@@ -345,7 +360,19 @@ class _ZwapButtonState extends State<ZwapButton> {
                 borderRadius: _decorations.borderRadius,
                 border: _border,
               ),
-              child: widget.buttonChild == null ? widget.child!(_currentStatus) : _buildZwapButtonChild(context),
+              child: _loading
+                  ? Center(
+                      child: Container(
+                          height: min(24, widget.height ?? 0 - 4),
+                          width: min(24, widget.width ?? 0 - 4),
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(_contentColor ?? ZwapColors.shades0),
+                            strokeWidth: 1.2,
+                          )),
+                    )
+                  : widget.buttonChild == null
+                      ? widget.child!(_currentStatus)
+                      : _buildZwapButtonChild(context),
             ),
           ),
         ),

@@ -30,7 +30,7 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
   /// The status with a default value equal to unselected
   ZwapCheckBoxStatus _status = ZwapCheckBoxStatus.unselected;
 
-  final IconData _checkBoxIcon = Icons.check;
+  final IconData _checkBoxIcon = Icons.check_rounded;
 
   @override
   void initState() {
@@ -40,7 +40,9 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
 
   /// It handles the tap on this component
   void _onTap() {
-    this._changeStatus(this._status == ZwapCheckBoxStatus.selected || this._status == ZwapCheckBoxStatus.selectedHover ? ZwapCheckBoxStatus.unselected : ZwapCheckBoxStatus.selected);
+    this._changeStatus(this._status == ZwapCheckBoxStatus.selected || this._status == ZwapCheckBoxStatus.selectedHover
+        ? ZwapCheckBoxStatus.unselected
+        : ZwapCheckBoxStatus.selected);
   }
 
   void _changeStatus(ZwapCheckBoxStatus status) {
@@ -157,7 +159,8 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
       onTap: () => this._onTap(),
       child: Padding(
         padding: EdgeInsets.only(right: 4),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
           decoration: this._getBoxDecoration(),
           child: Padding(
             padding: EdgeInsets.all(2),

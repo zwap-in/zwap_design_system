@@ -1,6 +1,6 @@
 name: zwap_design_system
 description: This is a package to build a standard design system kit for any zwap projects
-version: 0.1.497
+version: 0.1.509
 homepage: https://github.com/zwap-in/zwap_design_system
 
 environment:
@@ -35,8 +35,14 @@ dependencies:
 
   shared_preferences: ^2.0.8
 
+<<<<<<< HEAD
   font_awesome_flutter: 9.1.0
 
+=======
+  url_launcher: ^6.0.20
+
+  percent_indicator: ^4.0.0
+>>>>>>> master
 
 dev_dependencies:
   flutter_test:
