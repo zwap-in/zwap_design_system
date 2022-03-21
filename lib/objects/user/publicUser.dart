@@ -122,8 +122,8 @@ class PublicUser{
       statuses: json.containsKey("statuses") ? List<StatusModel>.generate(json['statuses'].length, (index) => StatusModel.fromJson(json['statuses'][index])) : null,
       topOfMind: json['top_of_mind'],
       spaces: json.containsKey("spaces") ? List<Membership>.generate(json['spaces'].length, (index) => Membership.fromJson(json['spaces'][index])) : null,
-      invitedBy: PublicUser.fromJson(json),
-      languages: json.containsKey("languages") ? List<LanguageData>.generate(json['languages'].length, (index) => LanguageData.fromJson(json['languages'][index])) : null
+        invitedBy: json['invited_by'] != null ? PublicUser.fromJson(json['invited_by']) : null,
+        languages: json.containsKey("languages") ? List<LanguageData>.generate(json['languages'].length, (index) => LanguageData.fromJson(json['languages'][index])) : null
     );
   }
 
