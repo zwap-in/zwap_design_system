@@ -405,3 +405,6 @@
 
 ## 0.1.506
 * Improvements to ZwapPercentWidget decorations
+
+## 0.1.507
+* Refactoriong ZwapButtonDecorations with new colors
