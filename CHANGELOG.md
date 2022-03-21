@@ -394,3 +394,11 @@
 
 ## 0.1.503
 * Fixed ZwapTextMultiStyle problem
+
+## 0.1.504
+* ZwapInput now have obscure property and autofillHints is a list of String
+
+## 0.1.505
+* New component ZwapPercentWidget
+* Zwap Shadows are now constants
+* Added some new styles to ZwapTypography

@@ -6,7 +6,12 @@ class CustomBoxShadow extends BoxShadow {
   /// Custom blur style
   final BlurStyle blurStyle;
 
-  const CustomBoxShadow({Color color = const Color(0xFF000000), Offset offset = Offset.zero, double blurRadius = 0.0, this.blurStyle = BlurStyle.inner, double spreadRadius = 4})
+  const CustomBoxShadow(
+      {Color color = const Color(0xFF000000),
+      Offset offset = Offset.zero,
+      double blurRadius = 0.0,
+      this.blurStyle = BlurStyle.inner,
+      double spreadRadius = 4})
       : super(color: color, offset: offset, blurRadius: blurRadius, spreadRadius: 4);
 
   @override
@@ -25,32 +30,32 @@ class CustomBoxShadow extends BoxShadow {
 /// Constants class to rendering different kind of box shadows
 class ZwapShadow {
   /// None box shadow level
-  static BoxShadow? get levelZero => null;
+  static const BoxShadow? levelZero = null;
 
   /// The first level of shadow
-  static BoxShadow get levelOne => BoxShadow(
-        color: Color.fromRGBO(193, 193, 193, 0.25),
-        blurRadius: 11,
-        spreadRadius: 4,
-        blurStyle: BlurStyle.normal,
-        offset: Offset(0, 4),
-      );
+  static const BoxShadow levelOne = const BoxShadow(
+    color: Color.fromRGBO(193, 193, 193, 0.25),
+    blurRadius: 11,
+    spreadRadius: 4,
+    blurStyle: BlurStyle.normal,
+    offset: Offset(0, 4),
+  );
 
   /// The second level of shadow
-  static BoxShadow get levelTwo => CustomBoxShadow(
-        color: Color.fromRGBO(193, 193, 193, 0.25),
-        blurRadius: 16,
-        spreadRadius: 0,
-        blurStyle: BlurStyle.normal,
-        offset: Offset(0, 8),
-      );
+  static const BoxShadow levelTwo = CustomBoxShadow(
+    color: Color.fromRGBO(193, 193, 193, 0.25),
+    blurRadius: 16,
+    spreadRadius: 0,
+    blurStyle: BlurStyle.normal,
+    offset: Offset(0, 8),
+  );
 
   /// The third level of shadow
-  static BoxShadow get levelThree => BoxShadow(
-        color: Color.fromRGBO(193, 193, 193, 0.3),
-        blurRadius: 30,
-        spreadRadius: 4,
-        blurStyle: BlurStyle.normal,
-        offset: Offset(0, 24),
-      );
+  static const BoxShadow levelThree = BoxShadow(
+    color: Color.fromRGBO(193, 193, 193, 0.3),
+    blurRadius: 30,
+    spreadRadius: 4,
+    blurStyle: BlurStyle.normal,
+    offset: Offset(0, 24),
+  );
 }

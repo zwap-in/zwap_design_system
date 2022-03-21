@@ -46,8 +46,8 @@ class ZwapInput extends StatefulWidget {
   /// The on key callBack function
   final Function(String value)? keyCallBackFunction;
 
-  /// The optional autofill hints inside the input text
-  final String? autofillHints;
+  /// Autofill hints inside the input text
+  final List<String> autofillHints;
 
   final FocusNode? focusNode;
 
@@ -89,6 +89,17 @@ class ZwapInput extends StatefulWidget {
 
   final void Function()? onEditingComplete;
 
+  /// Is true text will be obscured
+  final bool obscure;
+
+  /// If `textInputType == TextInputType.visiblePassword` text will be obscure automatically
+  ///
+  /// Real reason: Lots of components may use version before 0.504
+  /// In those versions text was oscured only if `textInputType == TextInputType.visiblePassword`.
+  ///
+  /// Default `true`
+  final bool autoObscureIfPassword;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -104,7 +115,7 @@ class ZwapInput extends StatefulWidget {
     this.keyCallBackFunction,
     this.helperText,
     this.helperTextIsError = true,
-    this.autofillHints,
+    this.autofillHints = const [],
     this.focusNode,
     this.prefixText,
     this.showSuccess = false,
@@ -120,6 +131,8 @@ class ZwapInput extends StatefulWidget {
     this.prefixWidget,
     this.borderRadius,
     this.onEditingComplete,
+    this.obscure = false,
+    this.autoObscureIfPassword = true,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = false,
         super(key: key);
@@ -142,7 +155,7 @@ class ZwapInput extends StatefulWidget {
     this.keyCallBackFunction,
     this.helperText,
     this.helperTextIsError = true,
-    this.autofillHints,
+    this.autofillHints = const [],
     this.focusNode,
     this.prefixText,
     this.fixedInitialText,
@@ -154,6 +167,8 @@ class ZwapInput extends StatefulWidget {
     this.prefixWidget,
     this.borderRadius,
     this.onEditingComplete,
+    this.obscure = false,
+    this.autoObscureIfPassword = true,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = true,
         this.showSuccess = false,
@@ -253,11 +268,11 @@ class _ZwapInputState extends State<ZwapInput> {
       keyboardType: widget.textInputType,
       maxLines: widget.maxLines,
       minLines: widget.minLines,
-      autofillHints: widget.autofillHints != null ? [widget.autofillHints!] : null,
+      autofillHints: widget.autofillHints,
       onChanged: widget.onChanged != null ? (String newValue) => widget.onChanged!(_getOnChangedValue(newValue)) : null,
       textCapitalization: widget.textCapitalization ?? TextCapitalization.sentences,
       cursorColor: ZwapColors.shades100,
-      obscureText: widget.textInputType == TextInputType.visiblePassword,
+      obscureText: (widget.autoObscureIfPassword && widget.textInputType == TextInputType.visiblePassword) || widget.obscure,
       textAlign: TextAlign.start,
       focusNode: widget.readOnly ? FocusNode() : _focusNode,
       style: getTextStyle(ZwapTextType.bodyRegular).apply(color: widget.disabled ? ZwapColors.neutral300 : ZwapColors.neutral700),
