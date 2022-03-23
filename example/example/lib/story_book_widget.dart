@@ -1,21 +1,18 @@
+import 'package:example/main.dart';
 import 'package:example/stories.dart';
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:provider/provider.dart';
 
-class StoryBookWidget extends StatefulWidget {
+class StoryBookWidget extends StatelessWidget {
   const StoryBookWidget({Key? key}) : super(key: key);
 
   @override
-  State<StoryBookWidget> createState() => _StoryBookWidgetState();
-}
-
-class _StoryBookWidgetState extends State<StoryBookWidget> {
-  ZwapStories _currentStory = stories.first.story;
-
-  @override
   Widget build(BuildContext context) {
+    final ZwapStories _currentStory = context.select<StoryProvider, ZwapStories>((pro) => pro.currentStory);
+
     return Scaffold(
-      appBar: AppBar(title: Text("Zwap ~ Storybook")),
+      appBar: AppBar(title: const Text("Zwap ~ Storybook")),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: Row(
@@ -26,7 +23,7 @@ class _StoryBookWidgetState extends State<StoryBookWidget> {
               decoration: BoxDecoration(color: ZwapColors.neutral200, borderRadius: BorderRadius.circular(20)),
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               child: Column(
-                children: stories.map((e) => _getStorySelector(e)).toList(),
+                children: stories.map((e) => _getStorySelector(e, () => context.read<StoryProvider>().currentStory = e.story)).toList(),
               ),
             ),
             Expanded(
@@ -38,12 +35,12 @@ class _StoryBookWidgetState extends State<StoryBookWidget> {
     );
   }
 
-  Widget _getStorySelector(ZwapStory story) {
+  Widget _getStorySelector(ZwapStory story, Function() onTap) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        onTap: () => setState(() => _currentStory = story.story),
+        onTap: onTap,
         mouseCursor: SystemMouseCursors.click,
         child: ListTile(
           title: Text(
@@ -51,7 +48,7 @@ class _StoryBookWidgetState extends State<StoryBookWidget> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: Icon(Icons.chevron_right),
+          trailing: const Icon(Icons.chevron_right),
         ),
       ),
     );

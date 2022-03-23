@@ -75,6 +75,8 @@ class ZwapColors {
 
   static const Color error50 = Color(0xFFFFF2F4);
 
+  static const Color error100 = Color(0xFFffff2f4);
+
   static const Color error200 = Color(0xFFFFDBE0);
 
   static const Color error300 = Color(0xFFFF8F9E);
@@ -98,6 +100,10 @@ class ZwapColors {
   static const Color primary500 = Color(0xffe5ebff);
 
   static const Color primary600 = Color(0xffdfe3ff);
+
+  static const Color transparent = Color(0x00000000);
+
+  static const Color whiteTransparent = Color(0x000ffffff);
 
   /// It retrieves a random color from this predefined list
   static Color getRandomColor({bool is200 = false}) {

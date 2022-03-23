@@ -5,10 +5,8 @@ import 'package:taastrap/taastrap.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
 
-
 /// Standard component to render a checkbox with Zwap standard style
 class ZwapCheckBoxText extends StatelessWidget {
-
   /// The text inside this checkbox component
   final String text;
 
@@ -21,19 +19,14 @@ class ZwapCheckBoxText extends StatelessWidget {
   /// On text click on checkbox
   final Function()? onTextClick;
 
-  ZwapCheckBoxText({Key? key,
-    required this.text,
-    required this.onCheckBoxClick,
-    this.initialValue = false,
-    this.onTextClick
-  }) : super(key: key);
-
+  ZwapCheckBoxText({Key? key, required this.text, required this.onCheckBoxClick, this.initialValue = false, this.onTextClick}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget text = ZwapText(
       text: this.text,
-      zwapTextType: getMultipleConditions<ZwapTextType>(ZwapTextType.bodyRegular, ZwapTextType.bodyRegular, ZwapTextType.captionRegular, ZwapTextType.captionRegular, ZwapTextType.captionRegular),
+      zwapTextType: getMultipleConditions<ZwapTextType>(
+          ZwapTextType.bodyRegular, ZwapTextType.bodyRegular, ZwapTextType.captionRegular, ZwapTextType.captionRegular, ZwapTextType.captionRegular),
       textColor: this.onTextClick != null ? ZwapColors.primary700 : ZwapColors.neutral800,
     );
     return Row(
@@ -42,18 +35,20 @@ class ZwapCheckBoxText extends StatelessWidget {
           fit: FlexFit.tight,
           flex: 0,
           child: ZwapCheckBox(
-            initialValue: this.initialValue,
+            value: this.initialValue,
             onCheckBoxClick: (bool value) => this.onCheckBoxClick(value),
           ),
         ),
         Expanded(
             child: Padding(
-              padding: EdgeInsets.only(left: 6),
-              child: this.onTextClick != null ? InkWell(
-                onTap: () => this.onTextClick!(),
-                child: text,
-              ) : text,
-            ))
+          padding: EdgeInsets.only(left: 6),
+          child: this.onTextClick != null
+              ? InkWell(
+                  onTap: () => this.onTextClick!(),
+                  child: text,
+                )
+              : text,
+        ))
       ],
     );
   }
