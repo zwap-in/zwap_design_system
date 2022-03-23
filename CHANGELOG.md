@@ -436,3 +436,6 @@
 * Added few new TextStyle in ZwapTypography
 * Added safe text constructor in ZwapTextMultiStyle and zwapTextType property in ZwapTextSpan
 * Created ZwapInput story (incomplete)
+
+## 0.1.520
+* Fixed bugs in onChanged callback of ZwapInput

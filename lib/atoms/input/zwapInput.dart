@@ -303,7 +303,7 @@ class _ZwapInputState extends State<ZwapInput> {
   /// It gets the input field
   TextField _getInputWidget({required InputDecoration decorations}) {
     String _getOnChangedValue(String value) {
-      if (widget.fixedInitialText != null) return value.substring(widget.fixedInitialText!.length + 1);
+      if (widget.fixedInitialText != null) return value.substring(widget.fixedInitialText!.length);
       return value;
     }
 
@@ -356,9 +356,7 @@ class _ZwapInputState extends State<ZwapInput> {
         duration: const Duration(milliseconds: 200),
         curve: Curves.decelerate,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: _realTextLenght >= widget.minLenght ? ZwapColors.success300 : ZwapColors.neutral300
-        ),
+            borderRadius: BorderRadius.circular(20), color: _realTextLenght >= widget.minLenght ? ZwapColors.success300 : ZwapColors.neutral300),
         height: 2,
         width: _realTextLenght >= widget.minLenght
             ? _containerKey.globalPaintBounds?.width ?? 0
