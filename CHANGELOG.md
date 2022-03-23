@@ -423,3 +423,6 @@
 ## 0.1.516
 * Refactoring of ZwapCheckBox
 * Added ZwapCheckBoxDecorations and ZwapCheckBoxStateDecorations and design sysem defaults
+
+## 0.1.517
+* Graphic fix in ZwapCheckBox

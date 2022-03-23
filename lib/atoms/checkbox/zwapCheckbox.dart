@@ -179,6 +179,54 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
     super.didUpdateWidget(oldWidget);
   }
 
+  Color? get _currentColor => _value == null
+      ? _disabled
+          ? _decorations.indeterminate.disabledColor
+          : _error
+              ? _decorations.indeterminate.errorColor
+              : _isHovered
+                  ? _decorations.indeterminate.hoverColor
+                  : _decorations.indeterminate.color
+      : _value!
+          ? _disabled
+              ? _decorations.selected.disabledColor
+              : _error
+                  ? _decorations.selected.errorColor
+                  : _isHovered
+                      ? _decorations.selected.hoverColor
+                      : _decorations.selected.color
+          : _disabled
+              ? _decorations.unselected.disabledColor
+              : _error
+                  ? _decorations.unselected.errorColor
+                  : _isHovered
+                      ? _decorations.unselected.hoverColor
+                      : _decorations.unselected.color;
+
+  Border? get _currentBorder => _value == null
+      ? _disabled
+          ? _decorations.indeterminate.disabledBorder
+          : _error
+              ? _decorations.indeterminate.errorBorder
+              : _isHovered
+                  ? _decorations.indeterminate.hoverBorder
+                  : _decorations.indeterminate.border
+      : _value!
+          ? _disabled
+              ? _decorations.selected.disabledBorder
+              : _error
+                  ? _decorations.selected.errorBorder
+                  : _isHovered
+                      ? _decorations.selected.hoverBorder
+                      : _decorations.selected.border
+          : _disabled
+              ? _decorations.unselected.disabledBorder
+              : _error
+                  ? _decorations.unselected.errorBorder
+                  : _isHovered
+                      ? _decorations.unselected.hoverBorder
+                      : _decorations.unselected.border;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -201,53 +249,11 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
           padding: EdgeInsets.only(right: 4),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
+            height: getMultipleConditions<double>(17, 17, 16, 15, 15) + 4,
+            width: getMultipleConditions<double>(17, 17, 16, 15, 15) + 4,
             decoration: BoxDecoration(
-              color: _value == null
-                  ? _disabled
-                      ? _decorations.indeterminate.disabledColor
-                      : _error
-                          ? _decorations.indeterminate.errorColor
-                          : _isHovered
-                              ? _decorations.indeterminate.hoverColor
-                              : _decorations.indeterminate.color
-                  : _value!
-                      ? _disabled
-                          ? _decorations.selected.disabledColor
-                          : _error
-                              ? _decorations.selected.errorColor
-                              : _isHovered
-                                  ? _decorations.selected.hoverColor
-                                  : _decorations.selected.color
-                      : _disabled
-                          ? _decorations.unselected.disabledColor
-                          : _error
-                              ? _decorations.unselected.errorColor
-                              : _isHovered
-                                  ? _decorations.unselected.hoverColor
-                                  : _decorations.unselected.color,
-              border: _value == null
-                  ? _disabled
-                      ? _decorations.indeterminate.disabledBorder
-                      : _error
-                          ? _decorations.indeterminate.errorBorder
-                          : _isHovered
-                              ? _decorations.indeterminate.hoverBorder
-                              : _decorations.indeterminate.border
-                  : _value!
-                      ? _disabled
-                          ? _decorations.selected.disabledBorder
-                          : _error
-                              ? _decorations.selected.errorBorder
-                              : _isHovered
-                                  ? _decorations.selected.hoverBorder
-                                  : _decorations.selected.border
-                      : _disabled
-                          ? _decorations.unselected.disabledBorder
-                          : _error
-                              ? _decorations.unselected.errorBorder
-                              : _isHovered
-                                  ? _decorations.unselected.hoverBorder
-                                  : _decorations.unselected.border,
+              color: _currentColor,
+              border: _currentBorder,
               borderRadius: BorderRadius.all(
                 (_value == null
                         ? _decorations.indeterminate.borderRadius
@@ -257,26 +263,25 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
                     Radius.circular(4),
               ),
             ),
-            child: Padding(
-              padding: EdgeInsets.all(2),
-              child: Container(
-                height: getMultipleConditions<double>(17, 17, 16, 15, 15) + 4,
-                width: getMultipleConditions<double>(17, 17, 16, 15, 15) + 4,
-                key: ValueKey(_value),
-                child: _value == null
-                    ? Icon(
-                        Icons.remove_rounded,
-                        color: ZwapColors.shades0,
-                        size: getMultipleConditions<double>(17, 17, 16, 15, 15),
-                      )
-                    : _value!
-                        ? Icon(
-                            Icons.check_rounded,
-                            color: ZwapColors.shades0,
-                            size: getMultipleConditions<double>(17, 17, 16, 15, 15),
-                          )
-                        : Container(),
-              ),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: double.infinity,
+              width: double.infinity,
+              child: _value == null
+                  ? Icon(
+                      Icons.remove_rounded,
+                      key: UniqueKey(),
+                      color: ZwapColors.shades0,
+                      size: getMultipleConditions<double>(17, 17, 16, 15, 15),
+                    )
+                  : _value!
+                      ? Icon(
+                          Icons.check_rounded,
+                          key: UniqueKey(),
+                          color: ZwapColors.shades0,
+                          size: getMultipleConditions<double>(17, 17, 16, 15, 15),
+                        )
+                      : Container(),
             ),
           ),
         ),
