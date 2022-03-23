@@ -420,6 +420,6 @@
     * ZwapWeeklyCalendarPicker
 * Removed all `print()´ calls inside components
 
-## 0.1.511
+## 0.1.512
 * Refactoring of ZwapCheckBox
 * Added ZwapCheckBoxDecorations and ZwapCheckBoxStateDecorations and design sysem defaults
