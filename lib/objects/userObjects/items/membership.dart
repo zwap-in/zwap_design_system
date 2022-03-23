@@ -36,43 +36,12 @@ class Membership {
     required this.brandImage,
   });
 
-  Membership copyWith({
-    int? pk,
-    String? name,
-    String? domain,
-    String? brandImage,
-  }) {
-    return Membership(
-      pk: pk ?? this.pk,
-      name: name ?? this.name,
-      domain: domain ?? this.domain,
-      brandImage: brandImage ?? this.brandImage,
-    );
+  factory Membership.fromJson(Map<String, dynamic> json){
+    return Membership(pk: json['pk'],
+        name: json['membership_name'],
+        domain: json['membership_domain'],
+        brandImage: json['brand_image']);
   }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'pk': pk,
-      'membership_name': name,
-      'membership_domain': domain,
-      'brand_image': brandImage,
-    };
-  }
-
-  factory Membership.fromMap(Map<String, dynamic> map) {
-    assert(map['pk']?.toInt() != null);
-
-    return Membership(
-      pk: map['pk']?.toInt(),
-      name: map['membership_name'] ?? '',
-      domain: map['membership_domain'] ?? '',
-      brandImage: map['brand_image'] ?? '',
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Membership.fromJson(String source) => Membership.fromMap(json.decode(source));
 
   @override
   String toString() {
