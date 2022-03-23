@@ -413,7 +413,24 @@ class _ZwapSelectState extends State<ZwapSelect> {
     setState(() {});
   }
 
+  bool get openReverse => (_selectKey.globalOffset?.dy ?? 0) + 45 + 150 >= MediaQuery.of(context).size.height - 50;
+
   OverlayEntry _createOverlay() {
+    final double _top = (_selectKey.globalOffset?.dy ?? 0) + 45;
+    final double _bottom = MediaQuery.of(context).size.height - _top + 45;
+
+    double _maxHeight = widget.maxOverlayHeight ?? MediaQuery.of(context).size.height * 0.3;
+
+    //? If reverse open is true, overlay will be show above inpu
+    bool _reverseOpen = false;
+
+    if (_top + _maxHeight >= MediaQuery.of(context).size.height - 50) {
+      if (openReverse)
+        _reverseOpen = true;
+      else
+        _maxHeight = MediaQuery.of(context).size.height - 50 - _top;
+    }
+
     return OverlayEntry(
       builder: (context) {
         return ChangeNotifierProvider.value(
@@ -436,7 +453,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
                   if (_inputFocus.hasFocus) _inputFocus.unfocus();
                 },
                 child: ZwapOverlayEntryChild(
-                  top: (_selectKey.globalOffset?.dy ?? 0) + 45,
+                  top: _reverseOpen ? null : _top,
+                  bottom: _reverseOpen ? _bottom : null,
                   left: _selectKey.globalOffset?.dx ?? 0,
                   child: TweenAnimationBuilder<double>(
                     duration: const Duration(milliseconds: 350),
@@ -447,22 +465,33 @@ class _ZwapSelectState extends State<ZwapSelect> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: ZwapColors.neutral300,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(4),
-                            bottomRight: Radius.circular(4),
-                          ),
+                          borderRadius: openReverse
+                              ? BorderRadius.only(
+                                  topLeft: Radius.circular(4),
+                                  topRight: Radius.circular(4),
+                                )
+                              : BorderRadius.only(
+                                  bottomLeft: Radius.circular(4),
+                                  bottomRight: Radius.circular(4),
+                                ),
                         ),
                         child: Container(
                           width: (_selectKey.globalPaintBounds?.size.width ?? 2) - 2,
                           decoration: BoxDecoration(
                             color: ZwapColors.shades0,
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(4),
-                              bottomRight: Radius.circular(4),
-                            ),
+                            borderRadius: openReverse
+                                ? BorderRadius.only(
+                                    topLeft: Radius.circular(4),
+                                    topRight: Radius.circular(4),
+                                  )
+                                : BorderRadius.only(
+                                    bottomLeft: Radius.circular(4),
+                                    bottomRight: Radius.circular(4),
+                                  ),
                           ),
-                          margin: const EdgeInsets.only(bottom: 1, left: 1, right: 1),
-                          constraints: BoxConstraints(maxHeight: widget.maxOverlayHeight ?? MediaQuery.of(context).size.height * 0.3),
+                          margin:
+                              openReverse ? const EdgeInsets.only(top: 1, left: 1, right: 1) : const EdgeInsets.only(bottom: 1, left: 1, right: 1),
+                          constraints: BoxConstraints(maxHeight: _maxHeight),
                           child: SingleChildScrollView(
                             controller: _overlayScrollController,
                             padding: const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 13),
@@ -508,6 +537,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                 padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
                                                 child: Row(
                                                   children: [
+                                                    //TODO: traduci
                                                     ZwapTextMultiStyle(
                                                       texts: {
                                                         '${_inputController.text}':
@@ -527,7 +557,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                       else
                                         Material(
                                           child: ZwapText(
-                                            text: "Nessun risulatato",
+                                            text: "No results",
                                             zwapTextType: ZwapTextType.bodyRegular,
                                             textColor: ZwapColors.shades100,
                                           ),
@@ -541,6 +571,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                               onItemTap: (key) => onChangeValue(key),
                                               selectedValues: _selectedValues,
                                               valuesByCategory: _getToShowValuesByCategory(_toShowValues),
+                                              reverse: _reverseOpen,
                                             )
                                           : _ZwapOverlayChildrenList(
                                               hoveredItem: _hoveredItem,
@@ -548,6 +579,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                               onItemTap: (key) => onChangeValue(key),
                                               selectedValues: _selectedValues,
                                               values: _toShowValues,
+                                              reverse: _reverseOpen,
                                             ),
                                       if (_isLoading)
                                         Center(
@@ -616,19 +648,31 @@ class _ZwapSelectState extends State<ZwapSelect> {
             SizedBox(height: 5),
           ],
           InkWell(
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             onHover: (bool value) => setState(() => _isHovered = value),
             onTap: () {
               if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
             },
             child: Container(
               decoration: (_selectOverlay?.mounted ?? false)
-                  ? BoxDecoration(
-                      color: ZwapColors.neutral300,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(4),
-                        topRight: Radius.circular(4),
-                      ),
-                    )
+                  ? openReverse
+                      ? BoxDecoration(
+                          color: ZwapColors.neutral300,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(4),
+                            bottomRight: Radius.circular(4),
+                          ),
+                        )
+                      : BoxDecoration(
+                          color: ZwapColors.neutral300,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(4),
+                            topRight: Radius.circular(4),
+                          ),
+                        )
                   : BoxDecoration(
                       color: this._isHovered ? ZwapColors.primary300 : ZwapColors.neutral300,
                       borderRadius: BorderRadius.circular(4),
@@ -639,13 +683,22 @@ class _ZwapSelectState extends State<ZwapSelect> {
                 decoration: BoxDecoration(
                   color: ZwapColors.shades0,
                   borderRadius: (_selectOverlay?.mounted ?? false)
-                      ? BorderRadius.only(
-                          topLeft: Radius.circular(4),
-                          topRight: Radius.circular(4),
-                        )
+                      ? openReverse
+                          ? BorderRadius.only(
+                              bottomLeft: Radius.circular(4),
+                              bottomRight: Radius.circular(4),
+                            )
+                          : BorderRadius.only(
+                              topLeft: Radius.circular(4),
+                              topRight: Radius.circular(4),
+                            )
                       : BorderRadius.circular(4),
                 ),
-                margin: _selectOverlay?.mounted ?? false ? const EdgeInsets.only(top: 1, left: 1, right: 1) : const EdgeInsets.all(1),
+                margin: _selectOverlay?.mounted ?? false
+                    ? openReverse
+                        ? const EdgeInsets.only(bottom: 1, left: 1, right: 1)
+                        : const EdgeInsets.only(top: 1, left: 1, right: 1)
+                    : const EdgeInsets.all(1),
                 padding: const EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10),
                 child: Row(
                   children: [
@@ -749,6 +802,8 @@ class _ZwapTag extends StatelessWidget {
 }
 
 class _ZwapOverlayChildrenList extends StatelessWidget {
+  final bool reverse;
+
   final Map<String, String> values;
   final Map<String, Map<String, String>> valuesByCategory;
 
@@ -766,6 +821,7 @@ class _ZwapOverlayChildrenList extends StatelessWidget {
     required this.hoveredItem,
     required this.onHoverItem,
     required this.onItemTap,
+    this.reverse = false,
     Key? key,
   })  : this.valuesByCategory = const {},
         this._hasCategories = false,
@@ -777,6 +833,7 @@ class _ZwapOverlayChildrenList extends StatelessWidget {
     required this.hoveredItem,
     required this.onHoverItem,
     required this.onItemTap,
+    this.reverse = false,
     Key? key,
   })  : this.values = const {},
         this._hasCategories = true,

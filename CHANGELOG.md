@@ -426,3 +426,6 @@
 
 ## 0.1.517
 * Graphic fix in ZwapCheckBox
+
+## 0.1.518
+* Now ZwapSelect overlay will auto resize to not overflow outside the bottom side of the screen. If size should be < 150 logical px, ZwapSelect will show select overlay above the input
