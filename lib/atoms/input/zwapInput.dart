@@ -1,6 +1,9 @@
 /// IMPORTING THIRD PARTY PACKAGES
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/text_controller/initial_text_controller.dart';
 
 /// IMPORTING LOCAL PACKAGES
@@ -8,6 +11,7 @@ import 'package:zwap_design_system/atoms/constants/zwapConstants.dart';
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 import 'package:zwap_design_system/atoms/typography/zwapTypography.dart';
 import 'package:zwap_design_system/atoms/text/text.dart';
+import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
 /// Custom component for a standard input with a predefined Zwap style
 class ZwapInput extends StatefulWidget {
@@ -100,6 +104,27 @@ class ZwapInput extends StatefulWidget {
   /// Default `true`
   final bool autoObscureIfPassword;
 
+  /// If <= 0 nothing change
+  ///
+  /// If > 0:
+  /// * A min lenght string will be showed under the input on le left: "characters: lenght/minLenght"
+  /// * If `showMinLenghtIndicator == true` a dynamic bar will be showed on bottom (inside the input container)
+  ///
+  /// Default `0`
+  final int minLenght;
+
+  /// Works only if [minLenght] > 0. Tipically used with collapsed input
+  ///
+  /// See [minLenght] property for details
+  ///
+  /// Default `true`
+  final bool showMinLenghtIndicator;
+
+  /// If true a clear all button will be showd under the input on the right
+  ///
+  /// Default `false`
+  final bool showClearAll;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -133,6 +158,9 @@ class ZwapInput extends StatefulWidget {
     this.onEditingComplete,
     this.obscure = false,
     this.autoObscureIfPassword = true,
+    this.minLenght = 0,
+    this.showMinLenghtIndicator = true,
+    this.showClearAll = false,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = false,
         super(key: key);
@@ -169,6 +197,9 @@ class ZwapInput extends StatefulWidget {
     this.onEditingComplete,
     this.obscure = false,
     this.autoObscureIfPassword = true,
+    this.minLenght = 0,
+    this.showMinLenghtIndicator = true,
+    this.showClearAll = false,
   })  : assert(fixedInitialText == null || controller == null),
         this._isCollapsed = true,
         this.showSuccess = false,
@@ -179,6 +210,8 @@ class ZwapInput extends StatefulWidget {
 
 /// It handles the input state
 class _ZwapInputState extends State<ZwapInput> {
+  final GlobalKey _containerKey = GlobalKey();
+
   /// The input value controller
   late TextEditingController _controller;
 
@@ -200,18 +233,31 @@ class _ZwapInputState extends State<ZwapInput> {
 
     _hasFocus = _focusNode.hasFocus;
 
+    _controller.addListener(_controllerListener);
     _focusNode.addListener(_focusListener);
+
+    //? Min lenght indicator requires the _containerKey to be mounted in order to wolrk properly, so add a post frame setState callback solve this needing
+    if (_showMinLenghtIndicator) WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {}));
   }
 
   void _focusListener() {
     if (_hasFocus != _focusNode.hasFocus) setState(() => _hasFocus = _focusNode.hasFocus);
   }
 
+  void _controllerListener() {
+    if (_showMinLenghtIndicator) setState(() {});
+  }
+
   @override
   void dispose() {
+    _controller.removeListener(_controllerListener);
     _focusNode.removeListener(_focusListener);
     super.dispose();
   }
+
+  bool get _showMinLenghtIndicator => widget.minLenght > 0 && widget.showMinLenghtIndicator;
+  int get _realTextLenght =>
+      widget.fixedInitialText != null ? max(0, _controller.text.length - widget.fixedInitialText!.length) : _controller.text.length;
 
   Color _getBorderColor(Color defaultColor, {Color? successColor, Color? errorColor}) {
     if (widget.helperText != null && widget.helperTextIsError) return errorColor ?? ZwapColors.error300;
@@ -265,7 +311,7 @@ class _ZwapInputState extends State<ZwapInput> {
       controller: this._controller,
       scrollPadding: EdgeInsets.zero,
       enabled: !widget.disabled,
-      keyboardType: widget.textInputType,
+      keyboardType: widget._isCollapsed ? TextInputType.multiline : widget.textInputType,
       maxLines: widget.maxLines,
       minLines: widget.minLines,
       autofillHints: widget.autofillHints,
@@ -303,6 +349,54 @@ class _ZwapInputState extends State<ZwapInput> {
     );
   }
 
+  Widget _minLenghtIndicatorWidget() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.decelerate,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: _realTextLenght >= widget.minLenght ? ZwapColors.success300 : ZwapColors.neutral300
+        ),
+        height: 2,
+        width: _realTextLenght >= widget.minLenght
+            ? _containerKey.globalPaintBounds?.width ?? 0
+            : (_containerKey.globalPaintBounds?.width ?? 0) * (_realTextLenght / widget.minLenght),
+      ),
+    );
+  }
+
+  Widget _bottomContent() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if (_showMinLenghtIndicator)
+            ZwapTextMultiStyle.safeText(
+              textSpans: [
+                //TODO: traduci
+                ZwapTextSpan.fromZwapTypography(text: "caratteri: ", textType: ZwapTextType.smallBodyRegular),
+                ZwapTextSpan.fromZwapTypography(text: "$_realTextLenght", textType: ZwapTextType.smallBodyBold),
+                ZwapTextSpan.fromZwapTypography(text: "/${widget.minLenght}", textType: ZwapTextType.smallBodyRegular),
+              ],
+            ),
+          if (widget.showClearAll)
+            InkWell(
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: () => _controller.text = '',
+              child: ZwapText(text: "clear all", zwapTextType: ZwapTextType.smallBodyRegular, textColor: ZwapColors.primary700),
+            ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget._isCollapsed)
@@ -312,35 +406,63 @@ class _ZwapInputState extends State<ZwapInput> {
           if (widget.label != null) this._getLabel(),
           InkWell(
             onHover: (hover) => setState(() => _isHovered = hover),
-            onTap: () {},
+            onTap: () => _focusNode.requestFocus(),
             focusColor: Colors.transparent,
             hoverColor: Colors.transparent,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
-                border: Border.all(
-                  color: widget.disabled
-                      ? _getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)
-                      : (_focusNode.hasFocus || _isHovered)
-                          ? _getBorderColor(ZwapColors.primary300)
-                          : _getBorderColor(ZwapColors.neutral300),
-                  width: 1,
-                  style: BorderStyle.solid,
+            mouseCursor: SystemMouseCursors.text,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
+              child: Container(
+                key: _containerKey,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
+                  border: Border.all(
+                    color: widget.disabled
+                        ? _getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)
+                        : (_focusNode.hasFocus || _isHovered)
+                            ? _getBorderColor(ZwapColors.primary300)
+                            : _getBorderColor(ZwapColors.neutral300),
+                    width: 1,
+                    style: BorderStyle.solid,
+                  ),
                 ),
-              ),
-              padding: widget.internalPadding,
-              child: _getInputWidget(
-                decorations: InputDecoration.collapsed(
-                  hintText: widget.placeholder!,
-                  hintStyle: getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
-                  enabled: !widget.disabled,
-                  hoverColor: ZwapColors.primary300,
+                padding: _showMinLenghtIndicator
+                    ? widget.internalPadding.copyWith(
+                        bottom: 0,
+                        right: (widget.borderRadius ?? ZwapRadius.buttonRadius) / 2,
+                        left: (widget.borderRadius ?? ZwapRadius.buttonRadius) / 2,
+                      )
+                    : widget.internalPadding,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: _showMinLenghtIndicator
+                          ? EdgeInsets.only(
+                              left: max(0, widget.internalPadding.left - (widget.borderRadius ?? ZwapRadius.buttonRadius) / 2),
+                              right: max(0, widget.internalPadding.right - (widget.borderRadius ?? ZwapRadius.buttonRadius) / 2),
+                            )
+                          : EdgeInsets.zero,
+                      child: _getInputWidget(
+                        decorations: InputDecoration.collapsed(
+                          hintText: widget.placeholder!,
+                          hintStyle: getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
+                          enabled: !widget.disabled,
+                          hoverColor: ZwapColors.primary300,
+                        ),
+                      ),
+                    ),
+                    if (_showMinLenghtIndicator) ...[
+                      SizedBox(height: widget.internalPadding.bottom),
+                      _minLenghtIndicatorWidget(),
+                    ],
+                  ],
                 ),
               ),
             ),
           ),
+          if (widget.minLenght > 0 || widget.showClearAll) _bottomContent(),
           Container(
             width: double.infinity,
             child: AnimatedSize(
@@ -365,6 +487,7 @@ class _ZwapInputState extends State<ZwapInput> {
       children: [
         if (widget.label != null) this._getLabel(),
         this._getInputWidget(decorations: this._getTextFieldDecoration()),
+        if (widget.minLenght > 0 || widget.showClearAll) _bottomContent(),
         Container(
           width: double.infinity,
           child: AnimatedSize(

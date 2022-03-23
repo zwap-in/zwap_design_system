@@ -72,10 +72,12 @@ TextStyle getTextStyle(ZwapTextType typeText) {
       return GoogleFonts.lato(textStyle: ZwapTypography.semiboldH3);
     case ZwapTextType.heavyH3:
       return GoogleFonts.lato(textStyle: ZwapTypography.heavyH3);
-    case ZwapTextType.smallBodyMedium:
-      return GoogleFonts.lato(textStyle: ZwapTypography.smallBodyMedium);
     case ZwapTextType.smallBodyRegular:
       return GoogleFonts.lato(textStyle: ZwapTypography.smallBodyRegular);
+    case ZwapTextType.smallBodyMedium:
+      return GoogleFonts.lato(textStyle: ZwapTypography.smallBodyMedium);
+    case ZwapTextType.smallBodyBold:
+      return GoogleFonts.lato(textStyle: ZwapTypography.smallBodyBold);
     case ZwapTextType.mediumBodyRegular:
       return GoogleFonts.lato(textStyle: ZwapTypography.mediumBodyRegular);
     case ZwapTextType.mediumBodyMedium:

@@ -429,3 +429,10 @@
 
 ## 0.1.518
 * Now ZwapSelect overlay will auto resize to not overflow outside the bottom side of the screen. If size should be < 150 logical px, ZwapSelect will show select overlay above the input
+
+## 0.1.519
+* Fixed bugs in InitialTextController
+* Added minLengh, showMinLenghtIndicator and showClearAll properties to ZwapInput
+* Added few new TextStyle in ZwapTypography
+* Added safe text constructor in ZwapTextMultiStyle and zwapTextType property in ZwapTextSpan
+* Created ZwapInput story (incomplete)

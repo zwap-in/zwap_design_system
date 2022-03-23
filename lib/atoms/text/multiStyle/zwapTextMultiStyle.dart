@@ -37,6 +37,14 @@ class ZwapTextSpan {
     this.linkTarget = ZwapLinkTarget.defaultTarget,
   });
 
+  ZwapTextSpan.fromZwapTypography({
+    required this.text,
+    required ZwapTextType textType,
+    this.linkToUri,
+    this.gestureRecognizer,
+    this.linkTarget = ZwapLinkTarget.defaultTarget,
+  }) : this.textStyle = getTextStyle(textType);
+
   TextSpan toTextSpan() => TextSpan(text: text, style: textStyle, recognizer: gestureRecognizer);
 }
 
@@ -47,7 +55,7 @@ class ZwapTextMultiStyle extends StatelessWidget {
   /// Each text with a custom type and custom color and optionally a recognizer
   final Map<String, TupleType<TapGestureRecognizer?, TupleType<ZwapTextType, Color>>> texts;
 
-  final List<ZwapTextSpan> textsWithCustomStyles;
+  final List<ZwapTextSpan> textSpans;
 
   final TextAlign? textAlign;
 
@@ -55,13 +63,16 @@ class ZwapTextMultiStyle extends StatelessWidget {
     Key? key,
     required this.texts,
     this.textAlign,
-  })  : this.textsWithCustomStyles = [],
+  })  : this.textSpans = [],
         this._isCustomStyle = false,
         super(key: key);
 
-  ZwapTextMultiStyle.customStyles({
+  /// This components allow you to display multiple style text using ZwapTextSpans and not a Map<String, ...>
+  ///
+  /// Doing so, you can put multiple time the same string
+  ZwapTextMultiStyle.safeText({
     Key? key,
-    required this.textsWithCustomStyles,
+    required this.textSpans,
     this.textAlign,
   })  : this.texts = {},
         this._isCustomStyle = true,
@@ -85,12 +96,11 @@ class ZwapTextMultiStyle extends StatelessWidget {
     late List<TextSpan> children;
 
     if (_isCustomStyle)
-      children = this.textsWithCustomStyles.map((e) => e.toTextSpan()).toList();
+      children = this.textSpans.map((e) => e.toTextSpan()).toList();
     else
       children = _getTexts();
 
-    if (_isCustomStyle && textsWithCustomStyles.any((t) => t.linkToUri != null))
-      return _LinkedMultyStyleText(textSpans: textsWithCustomStyles, textAlign: textAlign);
+    if (_isCustomStyle && textSpans.any((t) => t.linkToUri != null)) return _LinkedMultyStyleText(textSpans: textSpans, textAlign: textAlign);
 
     return RichText(
       text: TextSpan(children: List<TextSpan>.generate(children.length, (index) => children[index])),

@@ -46,6 +46,6 @@ class StoryProvider extends ChangeNotifier {
   set currentStory(ZwapStories value) => value != _currentStory ? {_currentStory = value, notifyListeners()} : null;
 
   StoryProvider()
-      : _currentStory = ZwapStories.buttons,
+      : _currentStory = ZwapStories.input,
         super();
 }
