@@ -439,3 +439,6 @@
 
 ## 0.1.520
 * Fixed bugs in onChanged callback of ZwapInput
+
+## 0.1.521
+* Updated Provider version
