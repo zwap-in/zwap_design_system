@@ -1,17 +1,23 @@
+library percent;
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import 'package:zwap_design_system/atoms/atoms.dart';
 
+part './simple_percent_widget.dart';
+
 class ZwapPercentIndicatorDecorations {
   final double radius;
   final double lineWidth;
+  final double backgoundLineWidth;
   final Color backgroundColor;
   final Color valueColor;
 
   const ZwapPercentIndicatorDecorations({
     required this.radius,
     required this.lineWidth,
+    required this.backgoundLineWidth,
     required this.backgroundColor,
     required this.valueColor,
   });
@@ -19,19 +25,30 @@ class ZwapPercentIndicatorDecorations {
   const ZwapPercentIndicatorDecorations.descrutive({
     this.radius = 30,
     this.lineWidth = 6,
+    this.backgoundLineWidth = 6,
     this.backgroundColor = ZwapColors.error200,
     this.valueColor = ZwapColors.error400,
+  });
+
+  const ZwapPercentIndicatorDecorations.success({
+    this.radius = 90,
+    this.lineWidth = 14,
+    this.backgoundLineWidth = 6,
+    this.backgroundColor = ZwapColors.neutral200,
+    this.valueColor = ZwapColors.success400,
   });
 
   ZwapPercentIndicatorDecorations copyWith({
     double? radius,
     double? lineWidth,
+    double? backgoundLineWidth,
     Color? backgroundColor,
     Color? valueColor,
   }) {
     return ZwapPercentIndicatorDecorations(
       radius: radius ?? this.radius,
       lineWidth: lineWidth ?? this.lineWidth,
+      backgoundLineWidth: backgoundLineWidth ?? this.backgoundLineWidth,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       valueColor: valueColor ?? this.valueColor,
     );
@@ -118,14 +135,16 @@ class ZwapPercentWidgetPercentContent {
   ///
   /// Show [customWidget] otherwise
   final bool _showPercent;
+  final TextStyle? percentTextStyle;
   final Widget? _customWidget;
 
-  const ZwapPercentWidgetPercentContent.percent()
+  const ZwapPercentWidgetPercentContent.percent({this.percentTextStyle})
       : this._showPercent = true,
         this._customWidget = null;
 
   const ZwapPercentWidgetPercentContent.custom({required Widget content})
       : this._customWidget = content,
+        this.percentTextStyle = null,
         this._showPercent = false;
 }
 
@@ -223,18 +242,25 @@ class _ZwapPercentWidgetState extends State<ZwapPercentWidget> {
               radius: indicatorDecorations.radius,
               animation: true,
               lineWidth: indicatorDecorations.lineWidth,
+              backgroundWidth: indicatorDecorations.backgoundLineWidth,
               backgroundColor: indicatorDecorations.backgroundColor,
               fillColor: Colors.transparent,
               progressColor: indicatorDecorations.valueColor,
               circularStrokeCap: CircularStrokeCap.round,
               center: Center(
                 child: widget.insidePercentContent._showPercent
-                    ? ZwapText(
-                        text: "${_percentValue * 100}%",
-                        zwapTextType: ZwapTextType.mediumBodyBold,
-                        textColor: ZwapColors.neutral600,
-                        textAlign: TextAlign.center,
-                      )
+                    ? widget.insidePercentContent.percentTextStyle == null
+                        ? ZwapText(
+                            text: "${_percentValue * 100}%",
+                            zwapTextType: ZwapTextType.mediumBodyBold,
+                            textColor: ZwapColors.neutral600,
+                            textAlign: TextAlign.center,
+                          )
+                        : ZwapText.customStyle(
+                            text: "${_percentValue * 100}%",
+                            customTextStyle: widget.insidePercentContent.percentTextStyle,
+                            textAlign: TextAlign.center,
+                          )
                     : widget.insidePercentContent._customWidget!,
               ),
             ),

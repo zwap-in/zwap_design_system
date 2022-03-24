@@ -11,6 +11,22 @@ class ZwapPercentStory extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          ZwapText(text: "Simple ZwapPercent", zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.neutral800),
+          SizedBox(height: 8),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ZwapSimplePercent(),
+              SizedBox(width: 20),
+              ZwapSimplePercent(
+                radius: 40,
+                decorations: ZwapPercentIndicatorDecorations.success(lineWidth: 7, backgoundLineWidth: 3),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          ZwapText(text: "Normal ZwapPercent", zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.neutral800),
+          SizedBox(height: 8),
           ZwapPercentWidget(
             percentValue: 0.87,
             title: "Pro day left",

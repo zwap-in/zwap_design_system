@@ -442,3 +442,7 @@
 
 ## 0.1.521
 * Updated Provider version
+
+## 0.1.522
+* Added ZwapSimplePercent to show only the percent circular indicator
+* Added backgroundLineWidth property to ZwapPercentIndicatorDecorations

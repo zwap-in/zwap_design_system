@@ -1,6 +1,6 @@
 import 'package:example/stories.dart';
 import 'package:example/stories/zwap_buttons_story.dart';
-import 'package:example/stories/zwap_percent.dart';
+import 'package:example/stories/zwap_percent_story.dart';
 import 'package:example/story_book_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
