@@ -446,3 +446,6 @@
 ## 0.1.522
 * Added ZwapSimplePercent to show only the percent circular indicator
 * Added backgroundLineWidth property to ZwapPercentIndicatorDecorations
+
+## 0.1.523
+* Added new gradients: ButtonGrad and ButtonGradHover to ZwapColors

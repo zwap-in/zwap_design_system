@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/atoms/input/zwapInput.dart';
+import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
+import 'package:zwap_design_system/atoms/text_controller/tegs_text_conroller.dart';
 
 class ZwapInputStory extends StatelessWidget {
   const ZwapInputStory({Key? key}) : super(key: key);
@@ -25,6 +26,12 @@ class ZwapInputStory extends StatelessWidget {
               borderRadius: 4,
               showClearAll: true,
             ),
+            SizedBox(height: 40),
+            ZwapInput(
+              label: "Input Beta",
+              controller: TagsTextController(text: "ciaociaociao"),
+            ),
+            SizedBox(height: 20),
           ],
         ),
       ),

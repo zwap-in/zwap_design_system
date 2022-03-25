@@ -53,17 +53,11 @@ class ZwapPercentStory extends StatelessWidget {
               width: 93,
               buttonChild: ZwapButtonChild.text(text: "✨ Upgrade"),
               decorations: ZwapButtonDecorations(
-                  gradient: LinearGradient(colors: [Color(0xffF8606B), Color(0xffF32478)], begin: Alignment.topLeft, end: Alignment.bottomRight),
-                  hoverGradient: LinearGradient(
-                      colors: [Color.fromARGB(255, 243, 76, 87), Color.fromARGB(255, 236, 22, 108)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomCenter),
-                  disabledGradient:
-                      LinearGradient(colors: [Color(0xffF8606B), Color(0xffF32478)], begin: Alignment.topLeft, end: Alignment.bottomRight),
-                  focussedGradient:
-                      LinearGradient(colors: [Color(0xffF8606B), Color(0xffF32478)], begin: Alignment.topLeft, end: Alignment.bottomRight),
-                  pressedGradient:
-                      LinearGradient(colors: [Color(0xffF8606B), Color(0xffF32478)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                  gradient: ZwapColors.buttonGrad,
+                  hoverGradient: ZwapColors.buttonGradHover,
+                  disabledGradient: ZwapColors.buttonGrad,
+                  focussedGradient: ZwapColors.buttonGrad,
+                  pressedGradient: ZwapColors.buttonGrad,
                   contentColor: ZwapColors.shades0,
                   hoverContentColor: ZwapColors.shades0,
                   disabledContentColor: ZwapColors.shades0,

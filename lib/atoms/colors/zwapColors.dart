@@ -2,6 +2,7 @@
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 
 /// The zwap standard colors
 class ZwapColors {
@@ -138,4 +139,9 @@ class ZwapColors {
     };
     return randomMapping[randomColor]!;
   }
+
+  static const LinearGradient buttonGrad =
+      LinearGradient(colors: [Color(0xffF8606B), Color(0xffF32478)], begin: Alignment.topLeft, end: Alignment.bottomRight);
+  static const LinearGradient buttonGradHover = LinearGradient(
+      colors: [Color.fromARGB(255, 243, 76, 87), Color.fromARGB(255, 236, 22, 108)], begin: Alignment.topLeft, end: Alignment.bottomCenter);
 }
