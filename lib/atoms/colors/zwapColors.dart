@@ -84,6 +84,8 @@ class ZwapColors {
 
   static const Color error400 = Color(0xFFFF7385);
 
+  static const Color error500 = Color(0xFFFF3047);
+
   static const Color error700 = Color(0xFFFF3047);
 
   static const Color error800 = Color(0xFFB52232);

@@ -449,3 +449,6 @@
 
 ## 0.1.523
 * Added new gradients: ButtonGrad and ButtonGradHover to ZwapColors
+
+## 0.1.524
+* Added error500 to ZwapColors
