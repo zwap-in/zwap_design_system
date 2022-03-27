@@ -452,3 +452,6 @@
 
 ## 0.1.524
 * Added error500 to ZwapColors
+
+## 0.1.525
+* New ZwapStars and ZwapStarsRating title is optional

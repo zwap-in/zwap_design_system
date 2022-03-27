@@ -9,9 +9,6 @@ enum ZwapStarsPosition { center, start }
 
 /// Custom component to rendering some stars icon as a star rating widget
 class ZwapStars extends StatefulWidget {
-  /// The title for this rating bar component
-  final String ratingTitle;
-
   /// The stars max number
   final int starCount;
 
@@ -30,7 +27,8 @@ class ZwapStars extends StatefulWidget {
   /// Custom callBack to handle the start component click
   final Function(double newStarRating)? onStarClickCallBack;
 
-  ZwapStars({Key? key, required this.ratingTitle, required this.zwapStarsPosition, required this.starSize, this.starCount = 5, this.rating = .0, this.color, this.onStarClickCallBack})
+  ZwapStars(
+      {Key? key, required this.zwapStarsPosition, required this.starSize, this.starCount = 5, this.rating = .0, this.color, this.onStarClickCallBack})
       : super(key: key);
 
   _ZwapStarsState createState() => _ZwapStarsState(this.rating);
