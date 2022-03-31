@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:zwap_design_system/atoms/atoms.dart';
 
 final List<String> dictionary = [
@@ -7,25 +8,40 @@ final List<String> dictionary = [
   'sette',
 ];
 
+class ZwapTextTag {
+  final String content;
+  final bool selected;
+  ZwapTextTag({
+    required this.content,
+    required this.selected,
+  });
+}
+
+final kZwapTextTagString = '__';
+
 class TagsTextController extends TextEditingController {
   /// key: position on first character of the tag
   /// value: lenght of the tag content
-  Map<int, String> tags = {};
+  Map<int, ZwapTextTag> tags = {};
 
   TagsTextController({String? text}) : super();
 
-  Map<int, String> _buildTags() {
-    Map<int, String> _tmp = {};
+  String _buildTags(String newValue) {
+    Map<int, ZwapTextTag> _tmp = {};
+    String _text = newValue;
 
-    for (int i = 0; i < text.length; i++) {
+    for (int i = 0; i < _text.length; i++) {
       for (int j = 0; j < dictionary.length; j++)
         if (text.indexOf(dictionary[j], i) == i) {
-          _tmp[i] = dictionary[j];
-          i += dictionary[j].length;
+          _tmp[i] = ZwapTextTag(content: dictionary[j], selected: false);
+
+          print("Before: $_text");
+          _text = '${_text.substring(0, i)}$kZwapTextTagString${_text.substring(i + dictionary[j].length)}';
+          print("After: $_text");
         }
     }
-
-    return _tmp;
+    tags = {...tags, ..._tmp};
+    return _text;
   }
 
   /* /// Check if current selection is inside a tag
@@ -45,26 +61,14 @@ class TagsTextController extends TextEditingController {
 
   @override
   set value(TextEditingValue newValue) {
-    Map<int, String> _tmp = _buildTags();
+    final String text = _buildTags(newValue.text);
 
-    if (_tmp.isNotEmpty) {
-      int removed = 0;
+    if(text.isNotEmpty)
+    try {
+    print(text[value.selection.baseOffset]);
+    } catch(e) {}
 
-      for (int index in _tmp.keys) {
-        newValue = newValue.copyWith(
-            text: '${newValue.text.substring(0, index - removed)}${newValue.text.substring(index + _tmp[index]!.length - removed)}');
-        removed += _tmp[index]!.length;
-      }
-
-      tags = {...tags, ..._tmp};
-    }
-
-    /* int? _tmp;
-
-    if (selection.isCollapsed && (_tmp = _isInsideSelection()) != null)
-      newValue = newValue.copyWith(selection: TextSelection.collapsed(offset: _tmp!)); */
-
-    super.value = newValue;
+    super.value = newValue.copyWith(text: text);
   }
 
   @override
@@ -88,8 +92,8 @@ class TagsTextController extends TextEditingController {
 
     for (int index = 0; index < text.length; index++) {
       if (tags.containsKey(index)) {
-        _spans.add(WidgetSpan(child: _TagWidget(content: tags[index]!)));
-        index++;
+        _spans.add(WidgetSpan(child: _TagWidget(content: tags[index]!.content)));
+        index += 2;
         continue;
       }
 
@@ -100,7 +104,7 @@ class TagsTextController extends TextEditingController {
       }
 
       _spans.add(TextSpan(text: text.substring(index, _nextKey)));
-      index = _nextKey;
+      index = _nextKey - 1;
     }
 
     return _spans;

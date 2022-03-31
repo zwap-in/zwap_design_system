@@ -29,7 +29,7 @@ class ZwapInputStory extends StatelessWidget {
             SizedBox(height: 40),
             ZwapInput(
               label: "Input Beta",
-              controller: TagsTextController(text: "ciaociaociao"),
+              controller: TagsTextController(),
             ),
             SizedBox(height: 20),
           ],

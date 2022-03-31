@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:zwap_design_system/utils/maximum_fractional_digits.dart';
 
 part './simple_percent_widget.dart';
 
@@ -138,11 +139,14 @@ class ZwapPercentWidgetPercentContent {
   final TextStyle? percentTextStyle;
   final Widget? _customWidget;
 
-  const ZwapPercentWidgetPercentContent.percent({this.percentTextStyle})
+  ///The maximum fractional digits insert the percentage
+  final int maximumFractionalDigits;
+
+  const ZwapPercentWidgetPercentContent.percent({this.percentTextStyle, this.maximumFractionalDigits = 2})
       : this._showPercent = true,
         this._customWidget = null;
 
-  const ZwapPercentWidgetPercentContent.custom({required Widget content})
+  const ZwapPercentWidgetPercentContent.custom({required Widget content, this.maximumFractionalDigits = 2})
       : this._customWidget = content,
         this.percentTextStyle = null,
         this._showPercent = false;
@@ -241,6 +245,7 @@ class _ZwapPercentWidgetState extends State<ZwapPercentWidget> {
               percent: widget.percentValue,
               radius: indicatorDecorations.radius,
               animation: true,
+              animateFromLastPercent: true,
               lineWidth: indicatorDecorations.lineWidth,
               backgroundWidth: indicatorDecorations.backgoundLineWidth,
               backgroundColor: indicatorDecorations.backgroundColor,
@@ -251,13 +256,13 @@ class _ZwapPercentWidgetState extends State<ZwapPercentWidget> {
                 child: widget.insidePercentContent._showPercent
                     ? widget.insidePercentContent.percentTextStyle == null
                         ? ZwapText(
-                            text: "${_percentValue * 100}%",
+                            text: "${(_percentValue * 100).getMximumFractionsDigits(2)}%",
                             zwapTextType: ZwapTextType.mediumBodyBold,
                             textColor: ZwapColors.neutral600,
                             textAlign: TextAlign.center,
                           )
                         : ZwapText.customStyle(
-                            text: "${_percentValue * 100}%",
+                            text: "${(_percentValue * 100).getMximumFractionsDigits(2)}%",
                             customTextStyle: widget.insidePercentContent.percentTextStyle,
                             textAlign: TextAlign.center,
                           )

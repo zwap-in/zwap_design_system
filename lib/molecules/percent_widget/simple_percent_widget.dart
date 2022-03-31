@@ -26,27 +26,14 @@ class ZwapSimplePercent extends StatefulWidget {
 }
 
 class _ZwapSimplePercentState extends State<ZwapSimplePercent> {
-  late double _value;
-
-  @override
-  void initState() {
-    _value = widget.value;
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant ZwapSimplePercent oldWidget) {
-    if (widget.value != _value) setState(() => _value = widget.value);
-
-    super.didUpdateWidget(oldWidget);
-  }
-
   @override
   Widget build(BuildContext context) {
     return CircularPercentIndicator(
+      key: ValueKey('fadafdfad'),
       percent: widget.value,
       radius: widget.radius > 0 ? widget.radius : widget.decorations.radius,
       animation: true,
+      animateFromLastPercent: true,
       lineWidth: widget.decorations.lineWidth,
       backgroundWidth: widget.decorations.backgoundLineWidth,
       backgroundColor: widget.decorations.backgroundColor,
@@ -57,13 +44,13 @@ class _ZwapSimplePercentState extends State<ZwapSimplePercent> {
         child: widget.insidePercentContent._showPercent
             ? widget.insidePercentContent.percentTextStyle == null
                 ? ZwapText(
-                    text: "${_value * 100}%",
+                    text: "${(widget.value * 100).getMximumFractionsDigits(2)}%",
                     zwapTextType: ZwapTextType.mediumBodyBold,
                     textColor: ZwapColors.neutral600,
                     textAlign: TextAlign.center,
                   )
                 : ZwapText.customStyle(
-                    text: "${_value * 100}%",
+                    text: "${(widget.value * 100).getMximumFractionsDigits(2)}%",
                     customTextStyle: widget.insidePercentContent.percentTextStyle,
                     textAlign: TextAlign.center,
                   )

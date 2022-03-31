@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:zwap_design_system/molecules/percent_widget/percent_widget.dart';
 import 'package:zwap_design_system/zwap_design_system.dart';
 
-class ZwapPercentStory extends StatelessWidget {
+class ZwapPercentStory extends StatefulWidget {
   const ZwapPercentStory({Key? key}) : super(key: key);
+
+  @override
+  State<ZwapPercentStory> createState() => _ZwapPercentStoryState();
+}
+
+class _ZwapPercentStoryState extends State<ZwapPercentStory> {
+  double _value = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -11,15 +18,20 @@ class ZwapPercentStory extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Slider(
+            onChanged: (v) => setState(() => _value = v),
+            value: _value,
+          ),
           ZwapText(text: "Simple ZwapPercent", zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.neutral800),
           SizedBox(height: 8),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ZwapSimplePercent(),
+              ZwapSimplePercent(value: _value),
               SizedBox(width: 20),
               ZwapSimplePercent(
                 radius: 40,
+                value: _value,
                 decorations: ZwapPercentIndicatorDecorations.success(lineWidth: 7, backgoundLineWidth: 3),
               ),
             ],
@@ -28,7 +40,7 @@ class ZwapPercentStory extends StatelessWidget {
           ZwapText(text: "Normal ZwapPercent", zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.neutral800),
           SizedBox(height: 8),
           ZwapPercentWidget(
-            percentValue: 0.87,
+            percentValue: _value,
             title: "Pro day left",
             subtitle: "Your account will be downgraded to our free plan in 6 days",
             insidePercentContent: ZwapPercentWidgetPercentContent.custom(
@@ -70,7 +82,7 @@ class ZwapPercentStory extends StatelessWidget {
           ),
           SizedBox(height: 20),
           ZwapPercentWidget(
-            percentValue: 0.87,
+            percentValue: _value,
             title: "Pro day left",
             subtitle: "Your account will be downgraded to our free plan in 6 days",
             button: ZwapButton(
