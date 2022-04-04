@@ -57,6 +57,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  extended_text_field:
+    dependency: "direct main"
+    description:
+      name: extended_text_field
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "10.0.0"
+  extended_text_library:
+    dependency: transitive
+    description:
+      name: extended_text_library
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -536,7 +550,7 @@ packages:
       path: "../.."
       relative: true
     source: path
-    version: "0.1.525"
+    version: "0.1.526"
   zwap_utils:
     dependency: "direct main"
     description:

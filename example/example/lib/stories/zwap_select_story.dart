@@ -14,6 +14,7 @@ class ZwapSelectStory extends StatefulWidget {
 
 class _ZwapSelectStoryState extends State<ZwapSelectStory> {
   String? _selected;
+  List<String> _multipleSelected = [];
 
   double __top = 0;
   set _top(double value) {
@@ -52,6 +53,27 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                     label: "Zwap Select",
                     callBackFunction: (value, _) => setState(() => _selected = value),
                     selected: _selected,
+                    initialPageNumber: 2,
+                    betweenFetchDuration: const Duration(seconds: 2),
+                    onEmptyResponseDuration: const Duration(seconds: 10),
+                  ),
+                ),
+              ),
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 30),
+                top: __top + 100,
+                left: 250,
+                child: Container(
+                  width: 500,
+                  child: ZwapSelect.multiple(
+                    canSearch: true,
+                    values: Map.fromEntries(List.generate(
+                        50, (i) => MapEntry<String, String>(i.toString(), '$i-$i•$i ${i % 3 == 0 ? 'djhfasjdhflajsdh fadhfdjfh adjf agh' : ''}'))),
+                    fetchMoreData: (String newQuery, int pageNumber) async => {},
+                    hintText: "Seleziona un elemento",
+                    label: "Zwap Select",
+                    callBackFunction: (_, value) => setState(() => _multipleSelected = value ?? []),
+                    selectedValues: _multipleSelected,
                     initialPageNumber: 2,
                     betweenFetchDuration: const Duration(seconds: 2),
                     onEmptyResponseDuration: const Duration(seconds: 10),

@@ -47,6 +47,7 @@ dependencies:
 
   taastrap: ^0.1.29
 
+  extended_text_field: ^10.0.0
 
 
 dev_dependencies:

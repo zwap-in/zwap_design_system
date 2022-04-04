@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
-import 'package:zwap_design_system/atoms/text_controller/tegs_text_conroller.dart';
+import 'package:zwap_design_system/atoms/text_controller/tags_text_conroller.dart';
 
 class ZwapInputStory extends StatelessWidget {
   const ZwapInputStory({Key? key}) : super(key: key);
@@ -31,6 +31,8 @@ class ZwapInputStory extends StatelessWidget {
               label: "Input Beta",
               controller: TagsTextController(),
             ),
+            SizedBox(height: 20),
+            ZwapInputWithTags(),
             SizedBox(height: 20),
           ],
         ),

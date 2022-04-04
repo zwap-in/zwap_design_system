@@ -776,9 +776,8 @@ class _ZwapTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(minWidth: 30, maxWidth: 120),
       decoration: BoxDecoration(color: ZwapColors.primary700, borderRadius: BorderRadius.circular(4)),
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -790,10 +789,10 @@ class _ZwapTag extends StatelessWidget {
               textOverflow: TextOverflow.ellipsis,
             ),
           ),
-          SizedBox(width: 5),
+          SizedBox(width: 7),
           GestureDetector(
             onTap: () => onCancel != null ? onCancel!(tagKey) : null,
-            child: ZwapIcons.icons('close', iconColor: ZwapColors.shades0, iconSize: 20),
+            child: Center(child: ZwapIcons.icons('close', iconColor: ZwapColors.shades0, iconSize: 15)),
           ),
         ],
       ),

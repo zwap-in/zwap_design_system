@@ -455,3 +455,9 @@
 
 ## 0.1.525
 * Now ZwapStars and ZwapStarsRating title is optional
+
+## 0.1.526
+* Added animateFromLastPercent and maximumFractionalDigits to ZwapPercent and ZwapSimplePercent
+
+## 0.1.527
+* ZwapSelect multuple (with tags) improved
