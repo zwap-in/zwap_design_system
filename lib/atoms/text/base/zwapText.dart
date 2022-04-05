@@ -35,65 +35,65 @@ class FontSizeDevice {
 TextStyle getTextStyle(ZwapTextType typeText) {
   switch (typeText) {
     case ZwapTextType.h1:
-      return GoogleFonts.lato(textStyle: ZwapTypography.h1());
+      return ZwapTypography.h1();
     case ZwapTextType.h2:
-      return GoogleFonts.lato(textStyle: ZwapTypography.h2());
+      return ZwapTypography.h2();
     case ZwapTextType.h3:
-      return GoogleFonts.lato(textStyle: ZwapTypography.h3());
+      return ZwapTypography.h3();
     case ZwapTextType.h4:
-      return GoogleFonts.lato(textStyle: ZwapTypography.h4());
+      return ZwapTypography.h4();
     case ZwapTextType.h5:
-      return GoogleFonts.lato(textStyle: ZwapTypography.h5());
+      return ZwapTypography.h5();
     case ZwapTextType.captionRegular:
-      return GoogleFonts.lato(textStyle: ZwapTypography.captionRegular());
+      return ZwapTypography.captionRegular();
     case ZwapTextType.captionSemiBold:
-      return GoogleFonts.lato(textStyle: ZwapTypography.captionSemiBold());
+      return ZwapTypography.captionSemiBold();
     case ZwapTextType.buttonText:
-      return GoogleFonts.lato(textStyle: ZwapTypography.buttonText());
+      return ZwapTypography.buttonText();
     case ZwapTextType.bodyRegular:
-      return GoogleFonts.lato(textStyle: ZwapTypography.bodyRegular());
+      return ZwapTypography.bodyRegular();
     case ZwapTextType.bodySemiBold:
-      return GoogleFonts.lato(textStyle: ZwapTypography.bodySemiBold());
+      return ZwapTypography.bodySemiBold();
     case ZwapTextType.extraHeading:
-      return GoogleFonts.lato(textStyle: ZwapTypography.extraHeading);
+      return ZwapTypography.extraHeading;
     case ZwapTextType.bigHeading:
-      return GoogleFonts.lato(textStyle: ZwapTypography.bigHeading);
+      return ZwapTypography.bigHeading;
     case ZwapTextType.mediumHeading:
-      return GoogleFonts.lato(textStyle: ZwapTypography.mediumHeading);
+      return ZwapTypography.mediumHeading;
     case ZwapTextType.semiboldH1:
-      return GoogleFonts.lato(textStyle: ZwapTypography.semiboldH1);
+      return ZwapTypography.semiboldH1;
     case ZwapTextType.heavyH1:
-      return GoogleFonts.lato(textStyle: ZwapTypography.heavyH1);
+      return ZwapTypography.heavyH1;
     case ZwapTextType.semiboldH2:
-      return GoogleFonts.lato(textStyle: ZwapTypography.semiboldH2);
+      return ZwapTypography.semiboldH2;
     case ZwapTextType.heavyH2:
-      return GoogleFonts.lato(textStyle: ZwapTypography.heavyH2);
+      return ZwapTypography.heavyH2;
     case ZwapTextType.semiboldH3:
-      return GoogleFonts.lato(textStyle: ZwapTypography.semiboldH3);
+      return ZwapTypography.semiboldH3;
     case ZwapTextType.heavyH3:
-      return GoogleFonts.lato(textStyle: ZwapTypography.heavyH3);
+      return ZwapTypography.heavyH3;
     case ZwapTextType.smallBodyRegular:
-      return GoogleFonts.lato(textStyle: ZwapTypography.smallBodyRegular);
+      return ZwapTypography.smallBodyRegular;
     case ZwapTextType.smallBodyMedium:
-      return GoogleFonts.lato(textStyle: ZwapTypography.smallBodyMedium);
+      return ZwapTypography.smallBodyMedium;
     case ZwapTextType.smallBodyBold:
-      return GoogleFonts.lato(textStyle: ZwapTypography.smallBodyBold);
+      return ZwapTypography.smallBodyBold;
     case ZwapTextType.mediumBodyRegular:
-      return GoogleFonts.lato(textStyle: ZwapTypography.mediumBodyRegular);
+      return ZwapTypography.mediumBodyRegular;
     case ZwapTextType.mediumBodyMedium:
-      return GoogleFonts.lato(textStyle: ZwapTypography.mediumBodyMedium);
+      return ZwapTypography.mediumBodyMedium;
     case ZwapTextType.mediumBodyBold:
-      return GoogleFonts.lato(textStyle: ZwapTypography.mediumBodyBold);
+      return ZwapTypography.mediumBodyBold;
     case ZwapTextType.bigBodyRegular:
-      return GoogleFonts.lato(textStyle: ZwapTypography.bigBodyRegular);
+      return ZwapTypography.bigBodyRegular;
     case ZwapTextType.bigBodySemibold:
-      return GoogleFonts.lato(textStyle: ZwapTypography.bigBodySemibold);
+      return ZwapTypography.bigBodySemibold;
     case ZwapTextType.bigBodyBold:
-      return GoogleFonts.lato(textStyle: ZwapTypography.bigBodyBold);
+      return ZwapTypography.bigBodyBold;
     case ZwapTextType.textButton:
-      return GoogleFonts.lato(textStyle: ZwapTypography.textButton);
+      return ZwapTypography.textButton;
     case ZwapTextType.extraSmallBodyRegular:
-      return GoogleFonts.lato(textStyle: ZwapTypography.extraSmallBodyRegular);
+      return ZwapTypography.extraSmallBodyRegular;
   }
 }
 

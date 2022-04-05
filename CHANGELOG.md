@@ -461,3 +461,6 @@
 
 ## 0.1.527
 * ZwapSelect multuple (with tags) improved
+
+## 0.1.528
+* ZwapText now have always SFUIText as Font Family
