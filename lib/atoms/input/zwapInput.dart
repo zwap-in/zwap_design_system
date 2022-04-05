@@ -7,10 +7,6 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/text_controller/initial_text_controller.dart';
 
 /// IMPORTING LOCAL PACKAGES
-import 'package:zwap_design_system/atoms/constants/zwapConstants.dart';
-import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
-import 'package:zwap_design_system/atoms/typography/zwapTypography.dart';
-import 'package:zwap_design_system/atoms/text/text.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
 /// Custom component for a standard input with a predefined Zwap style
@@ -125,6 +121,11 @@ class ZwapInput extends StatefulWidget {
   /// Default `false`
   final bool showClearAll;
 
+  /// This will be used to translate 'zwap_input_characters' and 'zwap_input_clear_all' keys
+  ///
+  /// It must be not null if [minLenght] != 0 or [showClearAll] is true
+  final String Function(String key)? translateKey;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -161,7 +162,9 @@ class ZwapInput extends StatefulWidget {
     this.minLenght = 0,
     this.showMinLenghtIndicator = true,
     this.showClearAll = false,
+    this.translateKey,
   })  : assert(fixedInitialText == null || controller == null),
+        assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
         super(key: key);
 
@@ -200,7 +203,9 @@ class ZwapInput extends StatefulWidget {
     this.minLenght = 0,
     this.showMinLenghtIndicator = true,
     this.showClearAll = false,
+    this.translateKey,
   })  : assert(fixedInitialText == null || controller == null),
+        assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
         this.showSuccess = false,
         super(key: key);
@@ -376,7 +381,7 @@ class _ZwapInputState extends State<ZwapInput> {
             ZwapTextMultiStyle.safeText(
               textSpans: [
                 //TODO: traduci
-                ZwapTextSpan.fromZwapTypography(text: "caratteri: ", textType: ZwapTextType.smallBodyRegular),
+                ZwapTextSpan.fromZwapTypography(text: "${widget.translateKey!('zwap_input_characters')}: ", textType: ZwapTextType.smallBodyRegular),
                 ZwapTextSpan.fromZwapTypography(text: "$_realTextLenght", textType: ZwapTextType.smallBodyBold),
                 ZwapTextSpan.fromZwapTypography(text: "/${widget.minLenght}", textType: ZwapTextType.smallBodyRegular),
               ],
@@ -388,7 +393,11 @@ class _ZwapInputState extends State<ZwapInput> {
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () => _controller.text = '',
-              child: ZwapText(text: "clear all", zwapTextType: ZwapTextType.smallBodyRegular, textColor: ZwapColors.primary700),
+              child: ZwapText(
+                text: widget.translateKey!('zwap_input_clear_all'),
+                zwapTextType: ZwapTextType.smallBodyRegular,
+                textColor: ZwapColors.primary700,
+              ),
             ),
         ],
       ),

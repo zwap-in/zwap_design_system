@@ -464,3 +464,6 @@
 
 ## 0.1.528
 * ZwapText now have always SFUIText as Font Family
+
+## 0.1.529
+* ZwapText now have translateKey property to handle different languages
