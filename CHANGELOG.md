@@ -467,3 +467,6 @@
 
 ## 0.1.529
 * ZwapText now have translateKey property to handle different languages
+
+## 0.1.530
+* Added MarqueeWidget to atoms
