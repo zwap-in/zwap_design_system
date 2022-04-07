@@ -6,7 +6,7 @@ import 'package:zwap_design_system/objects/userObjects/userObjects.dart';
 import 'publicUser.dart';
 
 /// Data model about the public profile user data
-class NetworkUser {
+class NetworkUser extends PublicUser {
   final String email;
 
   NetworkUser({
@@ -30,7 +30,27 @@ class NetworkUser {
     List<Membership>? spaces,
     InvitedByUser? invitedBy,
     List<LanguageData>? languages,
-  });
+  }) : super(
+          pk: pk,
+          name: name,
+          surname: surname,
+          username: username,
+          bio: bio,
+          isTopUser: isTopUser,
+          totalMeetings: totalMeetings,
+          isPremium: isPremium,
+          avatarImage: avatarImage,
+          location: location,
+          opportunities: opportunities,
+          statuses: statuses,
+          socials: socials,
+          topOfMind: topOfMind,
+          spaces: spaces,
+          invitedBy: invitedBy,
+          languages: languages,
+          company: companyData,
+          role: roleData,
+        );
 
   factory NetworkUser.fromJson(Map<String, dynamic> json) {
     return NetworkUser(

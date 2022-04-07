@@ -473,3 +473,6 @@
 
 ## 0.1.531
 * Improvements in ProfileCard widget
+
+## 0.1.532
+* Fix some class problems
