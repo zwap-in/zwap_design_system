@@ -470,3 +470,6 @@
 
 ## 0.1.530
 * Added MarqueeWidget to atoms
+
+## 0.1.531
+* Improvements in ProfileCard widget

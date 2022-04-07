@@ -1,8 +1,7 @@
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/objects/objects.dart';
 
-class PublicUser{
-
+class PublicUser {
   /// Primary key about the user data
   final int pk;
 
@@ -46,7 +45,7 @@ class PublicUser{
   final List<Membership>? spaces;
 
   /// Optionally user who invited this user data
-  final PublicUser? invitedBy;
+  final InvitedByUser? invitedBy;
 
   /// Optionally list of languages for this user data
   List<LanguageData>? languages;
@@ -103,29 +102,36 @@ class PublicUser{
 
   bool get hasMinimumInfo => this.getStatuses.length >= 3 && this.bio != null && this.avatarImage != null && this.getOpportunities.length >= 1;
 
-  factory PublicUser.fromJson(Map<String, dynamic> json){
+  factory PublicUser.fromJson(Map<String, dynamic> json) {
     return PublicUser(
-      pk: json['pk'],
-      name: json['name'],
-      surname: json['surname'],
-      username: json['username'],
-      isTopUser: json['is_top_user'],
-      isPremium: json['is_premium'],
-      totalMeetings: json['total_meetings'],
-      bio: json['bio'],
-      avatarImage: json['avatar_image'] ?? "",
+        pk: json['pk'],
+        name: json['name'],
+        surname: json['surname'],
+        username: json['username'],
+        isTopUser: json['is_top_user'],
+        isPremium: json['is_premium'],
+        totalMeetings: json['total_meetings'],
+        bio: json['bio'],
+        avatarImage: json['avatar_image'] ?? "",
         location: json.containsKey("location") && json['location'] != null ? CityData.fromJson(json['location']) : null,
         role: json.containsKey("role") && json['role'] != null ? RoleData.fromJson(json['role']) : null,
         company: json.containsKey("company") && json['company'] != null ? CompanyData.fromJson(json['company']) : null,
-        opportunities: json.containsKey("opportunities") && json['opportunities'] != null ? List<Opportunity>.generate(json['opportunities'].length, (index) => Opportunity.fromJson(json['opportunities'][index])) : null,
-        socials: json.containsKey("socials") && json['socials'] != null ? List<SocialLink>.generate(json['socials'].length, (index) => SocialLink.fromJson(json['socials'][index])) : null,
-        statuses: json.containsKey("statuses") && json['statuses'] != null ? List<StatusModel>.generate(json['statuses'].length, (index) => StatusModel.fromJson(json['statuses'][index])) : null,
+        opportunities: json.containsKey("opportunities") && json['opportunities'] != null
+            ? List<Opportunity>.generate(json['opportunities'].length, (index) => Opportunity.fromJson(json['opportunities'][index]))
+            : null,
+        socials: json.containsKey("socials") && json['socials'] != null
+            ? List<SocialLink>.generate(json['socials'].length, (index) => SocialLink.fromJson(json['socials'][index]))
+            : null,
+        statuses: json.containsKey("statuses") && json['statuses'] != null
+            ? List<StatusModel>.generate(json['statuses'].length, (index) => StatusModel.fromJson(json['statuses'][index]))
+            : null,
         topOfMind: json['top_of_mind'],
-        spaces: json.containsKey("spaces") && json['spaces'] != null ? List<Membership>.generate(json['spaces'].length, (index) => Membership.fromJson(json['spaces'][index])) : null,
+        spaces: json.containsKey("spaces") && json['spaces'] != null
+            ? List<Membership>.generate(json['spaces'].length, (index) => Membership.fromJson(json['spaces'][index]))
+            : null,
         invitedBy: null,
-        languages: json.containsKey("languages") && json['languages'] != null ? List<LanguageData>.generate(json['languages'].length, (index) => LanguageData.fromJson(json['languages'][index])) : null
-    );
+        languages: json.containsKey("languages") && json['languages'] != null
+            ? List<LanguageData>.generate(json['languages'].length, (index) => LanguageData.fromJson(json['languages'][index]))
+            : null);
   }
-
-
 }

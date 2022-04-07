@@ -11,7 +11,6 @@ import 'subComponents/meetingInfo.dart';
 
 /// Component to show the profile info inside the profile screen
 class ProfileInfo extends StatelessWidget {
-
   final int totalMeetings;
 
   final String username;
@@ -20,16 +19,16 @@ class ProfileInfo extends StatelessWidget {
 
   final String roleCompanyInfo;
 
-  final PublicUser? invitedBy;
+  final InvitedByUser? invitedBy;
 
-  ProfileInfo({
-    Key? key,
-    required this.totalMeetings,
-    required this.username,
-    required this.locationInfo,
-    required this.roleCompanyInfo,
-    required this.invitedBy
-  }) : super(key: key);
+  ProfileInfo(
+      {Key? key,
+      required this.totalMeetings,
+      required this.username,
+      required this.locationInfo,
+      required this.roleCompanyInfo,
+      required this.invitedBy})
+      : super(key: key);
 
   /// It retrieves the widgets about the info of the user
   String _getInfoWidgets() {
