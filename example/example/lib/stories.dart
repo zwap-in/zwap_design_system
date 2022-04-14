@@ -3,6 +3,7 @@ import 'package:example/stories/zwap_checkbox_story.dart';
 import 'package:example/stories/zwap_input_story.dart';
 import 'package:example/stories/zwap_percent_story.dart';
 import 'package:example/stories/zwap_select_story.dart';
+import 'package:example/stories/zwap_tutorial_overlay_story.dart';
 import 'package:example/stories/zwap_weekly_calendar_pickert.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ enum ZwapStories {
   checkbox,
   input,
   select,
+  tutorialOverlay,
 }
 
 class ZwapStory {
@@ -59,5 +61,10 @@ List<ZwapStory> stories = [
     name: "ZwapSelect",
     builder: (context) => const ZwapSelectStory(),
     story: ZwapStories.select,
+  ),
+  ZwapStory(
+    name: "Tutoria Overlay",
+    builder: (context) =>  ZwapTutorialOverlayStory(),
+    story: ZwapStories.tutorialOverlay,
   )
 ];

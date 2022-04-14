@@ -27,7 +27,6 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
       onPointerSignal: (signal) {
         if (signal is PointerScrollEvent) {
           setState(() => _top = __top - signal.scrollDelta.dy);
-          print(signal.device);
         }
       },
       child: SingleChildScrollView(

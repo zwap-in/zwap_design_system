@@ -24,8 +24,6 @@ class TagsTextController extends TextEditingController {
 
   @override
   set value(TextEditingValue newValue) {
-    print(newValue);
-
     super.value = newValue;
   }
 

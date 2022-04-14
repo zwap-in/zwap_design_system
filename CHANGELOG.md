@@ -476,3 +476,14 @@
 
 ## 0.1.532
 * Fix some class problems
+
+## 0.1.533
+* Added Zwap Tutorial Overlay library: 
+    - ZwapTutorialOverlayFocusWidget 
+    - ZwapTutorialOverlayEntry 
+    - ZwapSimpleTutorialWidget 
+    - ZwapComplexTutorialWidget
+    - ZwapTutorialStep and ZwapTutorialStepContent
+    - ZwapTutorialController
+    - ZwapTutorialAnimatedBackgroundBlur
+    - _ZwapTutorialOverlayWrapper, _StepWidget, _MultipleStepWidget

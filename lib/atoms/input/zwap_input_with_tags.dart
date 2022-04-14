@@ -29,7 +29,6 @@ class _ZwapInputWithTagsState extends State<ZwapInputWithTags> {
 class _MyBuilder extends SpecialTextSpanBuilder {
   @override
   SpecialText? createSpecialText(String flag, {TextStyle? textStyle, SpecialTextGestureTapCallback? onTap, required int index}) {
-    print(flag);
     if (stringhe.contains(flag))
       return _Tag(
         startFlag: flag,
