@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/molecules/tutorial_overlay/zwap_tutorial_overlay.dart';
+import 'package:provider/provider.dart';
+
+class FakeProvider extends ChangeNotifier {
+  int get constantInt => 4;
+}
 
 class ZwapTutorialOverlayStory extends StatefulWidget {
   ZwapTutorialOverlayStory({Key? key}) : super(key: key);
@@ -12,12 +17,13 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
   late final ZwapTutorialController _controller;
   final GlobalKey _key = GlobalKey();
 
+  final FakeProvider _fakeProvider = FakeProvider();
+
   @override
   void initState() {
     super.initState();
 
     _controller = ZwapTutorialController(
-      betweenStepCallback: (a, b) => print('$a - $b'),
       insertOverlayCallback: (entry) => Overlay.of(context)?.insert(entry),
       steps: [
         ZwapTutorialStep(
@@ -44,7 +50,12 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<FakeProvider>.value(
+          value: _fakeProvider,
+        )
+      ],
       child: Center(
         child: Column(
           children: [
@@ -99,6 +110,10 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
                 entry = ZwapTutorialOverlayEntry(
                   uniqueKey: GlobalKey(),
                   builder: (_) => ZwapSimpleTutorialWidget(
+                    focusWidgetWrapper: (context, child) => ChangeNotifierProvider.value(
+                      value: _fakeProvider,
+                      child: child,
+                    ),
                     width: 320,
                     focusWidgetKey: _key,
                     onClose: () => entry.remove(),
@@ -117,11 +132,13 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
                 child: ZwapTutorialOverlayFocusWidget(
                   key: _key,
                   childBuilder: (context) {
+                    final int fakeInt = context.read<FakeProvider>().constantInt;
+
                     return Container(
                       width: 200,
                       height: 100,
                       color: Colors.blue,
-                      child: Center(child: Text("SINGOLO")),
+                      child: Center(child: Text("SINGOLO $fakeInt")),
                     );
                   },
                 ),

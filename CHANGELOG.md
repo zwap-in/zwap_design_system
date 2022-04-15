@@ -487,3 +487,6 @@
     - ZwapTutorialController
     - ZwapTutorialAnimatedBackgroundBlur
     - _ZwapTutorialOverlayWrapper, _StepWidget, _MultipleStepWidget
+
+## 0.1.534
+* Added the focusWidgetWrapper arg in ZwapSimpleTutorialWidget and ZwapComplexTutorialWidget for dublicate widget that depends on providers

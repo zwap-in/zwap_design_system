@@ -2,6 +2,13 @@ part of zwap_tutorial_overlay;
 
 class ZwapSimpleTutorialWidget extends StatefulWidget {
   final GlobalKey focusWidgetKey;
+
+  /// ? Why: Usually some widgets depends on providers or inherited data that fail to be
+  /// retrived in a different context
+  ///
+  /// Wrapping the provided child inside a copy of the needed providers will solve this issue
+  final Widget Function(BuildContext context, Widget child)? focusWidgetWrapper;
+
   final double? width;
   final double? height;
   final Color? backgroundColor;
@@ -21,6 +28,7 @@ class ZwapSimpleTutorialWidget extends StatefulWidget {
     Key? key,
     required this.focusWidgetKey,
     required this.child,
+    this.focusWidgetWrapper,
     this.width,
     this.height,
     this.backgroundColor,
@@ -84,7 +92,12 @@ class _ZwapSimpleTutorialWidgetState extends State<ZwapSimpleTutorialWidget> wit
                       scale: 1.05,
                       child: IgnorePointer(
                         ignoring: true,
-                        child: Builder(builder: (_focusWidgetKey.currentWidget as ZwapTutorialOverlayFocusWidget).childBuilder),
+                        child: Builder(
+                          builder: widget.focusWidgetWrapper != null
+                              ? (context) => widget.focusWidgetWrapper!(
+                                  context, Builder(builder: (_focusWidgetKey.currentWidget as ZwapTutorialOverlayFocusWidget).childBuilder))
+                              : (_focusWidgetKey.currentWidget as ZwapTutorialOverlayFocusWidget).childBuilder,
+                        ),
                       ),
                     )
                   : Container(),

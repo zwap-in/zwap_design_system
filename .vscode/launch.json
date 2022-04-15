@@ -1,0 +1,57 @@
+{
+    // Usare IntelliSense per informazioni sui possibili attributi.
+    // Al passaggio del mouse vengono visualizzate le descrizioni degli attributi esistenti.
+    // Per altre informazioni, visitare: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "zwap_design_system",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "zwap_design_system (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "zwap_design_system (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "example (chrome)",
+            "cwd": "example/example",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-port",
+                "4000",
+            ]
+        },
+        {
+            "name": "example (chrome --profile mode)",
+            "cwd": "example/example",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "args": [
+                "--web-port",
+                "4000",
+            ]
+        },
+        {
+            "name": "example (chrome --release mode)",
+            "cwd": "example/example",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "args": [
+                "--web-port",
+                "4000",
+            ]
+        }
+    ]
+}
