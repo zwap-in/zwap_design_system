@@ -284,12 +284,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
         return KeyEventResult.skipRemainingHandlers;
       }
 
-      if (event.physicalKey == PhysicalKeyboardKey.end ||
-          event.physicalKey == PhysicalKeyboardKey.enter ||
-          event.physicalKey == PhysicalKeyboardKey.tab) {
-        _inputFocus.unfocus();
-        _inputController.text = widget.values[_selectedValues] ?? '';
-
+      if (event.physicalKey == PhysicalKeyboardKey.end || event.physicalKey == PhysicalKeyboardKey.tab) {
+        _continueKeyPressed();
         return KeyEventResult.handled;
       }
 
@@ -350,6 +346,20 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
     _provider.addNewValues(tmp);
     _provider.setLoading(false);
+  }
+
+  /// Called when text field is submitted with a physical key (such as: end, enter and tab keys)
+  /// 
+  /// ! Called even when overlay auto close
+  void _continueKeyPressed() {
+    _inputFocus.unfocus();
+
+    if (_inputController.text.trim().isNotEmpty &&
+        !widget.values.containsKey(_inputController.text.trim()) &&
+        widget.canAddItem &&
+        widget.onAddItem != null) widget.onAddItem!(_inputController.text.trim());
+
+    if (widget.isRegular) _inputController.text = _provider.allValues[_selectedValues.firstOrNull ?? ''] ?? '';
   }
 
   @override
@@ -447,11 +457,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
               return ZwapOverlayEntryWidget(
                 entity: _selectOverlay,
-                onAutoClose: () {
-                  if (widget.isRegular) _inputController.text = _provider.allValues[_selectedValues.firstOrNull ?? ''] ?? '';
-
-                  if (_inputFocus.hasFocus) _inputFocus.unfocus();
-                },
+                onAutoClose: () => _continueKeyPressed(),
                 child: ZwapOverlayEntryChild(
                   top: _reverseOpen ? null : _top,
                   bottom: _reverseOpen ? _bottom : null,
@@ -656,7 +662,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
             onTap: () {
               if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
             },
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
               decoration: (_selectOverlay?.mounted ?? false)
                   ? openReverse
                       ? BoxDecoration(
@@ -717,6 +724,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                     focusNode: _inputFocus,
                                     decoration: InputDecoration.collapsed(hintText: widget.hintText),
                                     cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
+                                    keyboardType: TextInputType.none,
+                                    onSubmitted: (_) => _continueKeyPressed(),
                                   ),
                                 ),
                               ),

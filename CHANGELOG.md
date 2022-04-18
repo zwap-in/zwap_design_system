@@ -489,4 +489,7 @@
     - _ZwapTutorialOverlayWrapper, _StepWidget, _MultipleStepWidget
 
 ## 0.1.534
-* Added the focusWidgetWrapper arg in ZwapSimpleTutorialWidget and ZwapComplexTutorialWidget for dublicate widget that depends on providers
+* Added the focusWidgetWrapper arg in ZwapSimpleTutorialWidget and ZwapComplexTutorialWidget for duplicate widget that depends on providers
+
+## 0.1.535
+* Now ZwapSelect calls onAddItem callback if required and overlay has been closed with enter, tab or esc key, or by clicking outside it

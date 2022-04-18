@@ -1,20 +1,20 @@
 part of zwap_tutorial_overlay;
 
 class ZwapSimpleTutorialWidget extends StatefulWidget {
-  final GlobalKey focusWidgetKey;
+  final GlobalKey  focusWidgetKey;
 
   /// ? Why: Usually some widgets depends on providers or inherited data that fail to be
   /// retrived in a different context
   ///
   /// Wrapping the provided child inside a copy of the needed providers will solve this issue
-  final Widget Function(BuildContext context, Widget child)? focusWidgetWrapper;
+  final Widget Function(BuildContext context, Widget child)?  focusWidgetWrapper;
 
-  final double? width;
-  final double? height;
-  final Color? backgroundColor;
-  final ZwapTutorialStepContent child;
-  final Function()? onClose;
-  final bool showClose;
+  final double?  width;
+  final double?  height;
+  final Color?  backgroundColor;
+  final ZwapTutorialStepContent  child;
+  final Function()?  onClose;
+  final bool  showClose;
 
   /// The translate offset of the overlay, if zero the overlay if in the bottom center of the focus widget
   ///
@@ -22,7 +22,7 @@ class ZwapSimpleTutorialWidget extends StatefulWidget {
   final Offset overlayOffset;
 
   /// If true clicking outside the overlay will make it close
-  final bool dismissable;
+  final bool dismissible;
 
   const ZwapSimpleTutorialWidget({
     Key? key,
@@ -34,7 +34,7 @@ class ZwapSimpleTutorialWidget extends StatefulWidget {
     this.backgroundColor,
     this.showClose = true,
     this.onClose,
-    this.dismissable = false,
+    this.dismissible = false,
     this.overlayOffset = Offset.zero,
   }) : super(key: key);
 
@@ -78,7 +78,7 @@ class _ZwapSimpleTutorialWidgetState extends State<ZwapSimpleTutorialWidget> wit
         child: Stack(
           children: [
             GestureDetector(
-              onTap: widget.dismissable ? widget.onClose : null,
+              onTap: widget.dismissible ? widget.onClose : null,
               child: ZwapTutorialAnimatedBackgroundBlur(
                 duration: const Duration(milliseconds: 300),
                 sigma: 10,

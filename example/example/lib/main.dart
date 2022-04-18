@@ -8,6 +8,7 @@ import 'package:taastrap/mediaQueries/components/generic/generic.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_utils/zwap_utils/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +30,16 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
               title: 'Zwap ~ Storybook',
               theme: ThemeData(primaryColor: ZwapColors.primary700),
-              home: const StoryBookWidget(),
+              home: Builder(
+                builder: (context) {
+                  final bool _loading = context.select<StoryProvider, bool>((pro) => pro.loading);
+                  if (_loading)
+                    return const Center(
+                        child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(ZwapColors.primary700), strokeWidth: 1.8));
+
+                  return const StoryBookWidget();
+                },
+              ),
             ),
           ),
         );
@@ -39,13 +49,33 @@ class MyApp extends StatelessWidget {
 }
 
 class StoryProvider extends ChangeNotifier {
+  bool _loading = true;
   late ZwapStories _currentStory;
 
   ZwapStories get currentStory => _currentStory;
+  bool get loading => _loading;
 
-  set currentStory(ZwapStories value) => value != _currentStory ? {_currentStory = value, notifyListeners()} : null;
+  set currentStory(ZwapStories value) {
+    if (value != _currentStory) {
+      _currentStory = value;
+      notifyListeners();
 
-  StoryProvider()
-      : _currentStory = ZwapStories.tutorialOverlay,
-        super();
+      _saveStory(value);
+    }
+  }
+
+  StoryProvider() : super() {
+    _initialize();
+  }
+
+  Future _initialize() async {
+    final int _firstIndex = (await SharedPreferences.getInstance()).getInt('story') ?? 0;
+    _currentStory = ZwapStories.values[_firstIndex];
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future _saveStory(ZwapStories story) async {
+    (await SharedPreferences.getInstance()).setInt('story', story.index);
+  }
 }

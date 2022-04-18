@@ -46,7 +46,12 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                   width: 300,
                   child: ZwapSelect(
                     canSearch: true,
-                    values: Map.fromEntries(List.generate(50, (i) => MapEntry<String, String>(i.toString(), '$i-$i•$i'))),
+                    canAddItem: true,
+                    onAddItem: (value) => setState(() => _selected = value),
+                    values: {
+                      ...Map.fromEntries(List.generate(50, (i) => MapEntry<String, String>(i.toString(), '$i'))),
+                      if (_selected != null &&(int.tryParse(_selected ?? '') ?? 50) >= 50 ) _selected!: _selected!,
+                    },
                     fetchMoreData: (String newQuery, int pageNumber) async => {},
                     hintText: "Seleziona un elemento",
                     label: "Zwap Select",
