@@ -493,3 +493,6 @@
 
 ## 0.1.535
 * Now ZwapSelect calls onAddItem callback if required and overlay has been closed with enter, tab or esc key, or by clicking outside it
+
+## 0.1.536
+* Added ZwapButtonDecorations.gradient decorations

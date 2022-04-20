@@ -220,6 +220,50 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Tooltip(
+                      message: "Text - Gradient",
+                      child: ZwapButton(
+                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        height: 40,
+                        width: 88,
+                        buttonChild: ZwapButtonChild.text(text: "Label"),
+                        loading: _loading,
+                        disabled: _disabled,
+                        decorations: ZwapButtonDecorations.gradient(),
+                      ),
+                    ),
+                    Tooltip(
+                      message: "Text and Icon - Gradient",
+                      child: ZwapButton(
+                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        height: 44,
+                        buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
+                        decorations: ZwapButtonDecorations.gradient(),
+                        loading: _loading,
+                        disabled: _disabled,
+                      ),
+                    ),
+                    Tooltip(
+                      message: "Icon - Gradient",
+                      child: ZwapButton(
+                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        height: 40,
+                        width: 44,
+                        buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                        loading: _loading,
+                        disabled: _disabled,
+                        decorations: ZwapButtonDecorations.gradient(
+                          borderRadius: BorderRadius.circular(100),
+                          internalPadding: const EdgeInsets.all(8),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Tooltip(
                       message: "Text - Primary Dark",
                       child: ZwapButton(
                         margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),

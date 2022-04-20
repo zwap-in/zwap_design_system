@@ -26,10 +26,6 @@
             "cwd": "example/example",
             "request": "launch",
             "type": "dart",
-            "args": [
-                "--web-port",
-                "4000",
-            ]
         },
         {
             "name": "example (chrome --profile mode)",
@@ -37,10 +33,7 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
-            "args": [
-                "--web-port",
-                "4000",
-            ]
+         
         },
         {
             "name": "example (chrome --release mode)",
@@ -48,10 +41,7 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",
-            "args": [
-                "--web-port",
-                "4000",
-            ]
+           
         }
     ]
 }
