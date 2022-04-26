@@ -496,3 +496,6 @@
 
 ## 0.1.536
 * Added ZwapButtonDecorations.gradient decorations
+
+## 0.1.537
+* Added cta to ZwapSimpleTutorialOverlay

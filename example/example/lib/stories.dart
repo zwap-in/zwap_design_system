@@ -1,12 +1,11 @@
 import 'package:example/stories/zwap_buttons_story.dart';
 import 'package:example/stories/zwap_checkbox_story.dart';
 import 'package:example/stories/zwap_input_story.dart';
+import 'package:example/stories/zwap_modal_story.dart';
 import 'package:example/stories/zwap_percent_story.dart';
 import 'package:example/stories/zwap_select_story.dart';
 import 'package:example/stories/zwap_tutorial_overlay_story.dart';
 import 'package:example/stories/zwap_weekly_calendar_pickert.dart';
-import 'package:flutter/material.dart';
-
 import 'package:flutter/material.dart';
 
 enum ZwapStories {
@@ -17,6 +16,7 @@ enum ZwapStories {
   input,
   select,
   tutorialOverlay,
+  modals,
 }
 
 class ZwapStory {
@@ -63,8 +63,13 @@ List<ZwapStory> stories = [
     story: ZwapStories.select,
   ),
   ZwapStory(
-    name: "Tutoria Overlay",
-    builder: (context) =>  ZwapTutorialOverlayStory(),
+    name: "Tutorial Overlay",
+    builder: (context) => ZwapTutorialOverlayStory(),
     story: ZwapStories.tutorialOverlay,
+  ),
+  ZwapStory(
+    name: "Zwap Modal",
+    builder: (context) => ZwapModalStory(),
+    story: ZwapStories.modals,
   )
 ];

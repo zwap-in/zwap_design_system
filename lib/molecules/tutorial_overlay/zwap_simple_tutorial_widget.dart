@@ -1,20 +1,23 @@
 part of zwap_tutorial_overlay;
 
 class ZwapSimpleTutorialWidget extends StatefulWidget {
-  final GlobalKey  focusWidgetKey;
+  final GlobalKey focusWidgetKey;
 
   /// ? Why: Usually some widgets depends on providers or inherited data that fail to be
   /// retrived in a different context
   ///
   /// Wrapping the provided child inside a copy of the needed providers will solve this issue
-  final Widget Function(BuildContext context, Widget child)?  focusWidgetWrapper;
+  final Widget Function(BuildContext context, Widget child)? focusWidgetWrapper;
 
-  final double?  width;
-  final double?  height;
-  final Color?  backgroundColor;
-  final ZwapTutorialStepContent  child;
-  final Function()?  onClose;
-  final bool  showClose;
+  final double? width;
+  final double? height;
+  final Color? backgroundColor;
+  final ZwapTutorialStepContent child;
+  final Function()? onClose;
+  final bool showClose;
+
+  /// If provided showed as footer of the overlay
+  final ZwapButton? cta;
 
   /// The translate offset of the overlay, if zero the overlay if in the bottom center of the focus widget
   ///
@@ -36,6 +39,7 @@ class ZwapSimpleTutorialWidget extends StatefulWidget {
     this.onClose,
     this.dismissible = false,
     this.overlayOffset = Offset.zero,
+    this.cta,
   }) : super(key: key);
 
   @override
@@ -109,6 +113,7 @@ class _ZwapSimpleTutorialWidgetState extends State<ZwapSimpleTutorialWidget> wit
                 animation: _animationController,
                 builder: (context, child) => Opacity(opacity: _animationController.value, child: child),
                 child: _StepWidget(
+                  cta: widget.cta,
                   color: widget.backgroundColor ?? ZwapColors.shades0,
                   height: widget.height,
                   width: widget.width,

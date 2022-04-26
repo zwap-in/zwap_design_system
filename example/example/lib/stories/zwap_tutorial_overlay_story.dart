@@ -1,4 +1,6 @@
+import 'package:example/stories/zwap_buttons_story.dart';
 import 'package:flutter/material.dart';
+import 'package:zwap_design_system/atoms/button/zwap_button.dart';
 import 'package:zwap_design_system/molecules/tutorial_overlay/zwap_tutorial_overlay.dart';
 import 'package:provider/provider.dart';
 
@@ -121,6 +123,13 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
                       title: "Sono un coso singolo",
                       subtitle: "Enim et commodo ea deserunt est qui sint sit veniam ipsum esse proident voluptate.",
                       leading: Text('🐝', style: TextStyle(fontSize: 32)),
+                    ),
+                    cta: ZwapButton(
+                      buttonChild: ZwapButtonChild.text(text: 'Fatto'),
+                      decorations: ZwapButtonDecorations.quaternary(pressedBorder: null),
+                      height: 35,
+                      width: 130,
+                      onTap: () => entry.remove(),
                     ),
                   ),
                 );

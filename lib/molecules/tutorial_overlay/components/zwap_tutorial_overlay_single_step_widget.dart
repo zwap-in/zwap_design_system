@@ -10,6 +10,8 @@ class _StepWidget extends StatelessWidget {
   final bool showClose;
   final Function()? onClose;
 
+  final ZwapButton? cta;
+
   const _StepWidget({
     Key? key,
     this.width,
@@ -18,6 +20,7 @@ class _StepWidget extends StatelessWidget {
     required this.step,
     required this.showClose,
     this.onClose,
+    this.cta,
   }) : super(key: key);
 
   @override
@@ -28,7 +31,7 @@ class _StepWidget extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(15), boxShadow: [ZwapShadow.levelOne]),
-        padding: const EdgeInsets.only(top: 20, bottom: 32, left: 18, right: 18),
+        padding: EdgeInsets.only(top: 20, bottom: cta == null ? 32 : 14, left: 18, right: 18),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -64,6 +67,10 @@ class _StepWidget extends StatelessWidget {
                           textColor: ZwapColors.neutral500,
                           textAlign: TextAlign.center,
                         ),
+                      if (cta != null) ...[
+                        SizedBox(height: 8),
+                        cta!,
+                      ]
                     ],
                   ),
           ],
