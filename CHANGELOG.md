@@ -499,3 +499,6 @@
 
 ## 0.1.537
 * Added cta to ZwapSimpleTutorialOverlay
+
+## 0.1.538
+* Some little performance improvements on ZwapInfiniteScroll
