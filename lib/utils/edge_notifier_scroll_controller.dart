@@ -2,16 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class EndNotifierScrollController extends ScrollController {
+class EdgeNotifierScrollController extends ScrollController {
   bool _canNotify = true;
 
-  final Function() onEndReached;
+  final Function()? onEndReached;
+  final Function()? onStartReached;
 
   /// If provided EndNotifierScrollControler will wait until this duration is passed before call the callback again
   final Duration? delayDuration;
 
-  EndNotifierScrollController({
-    required this.onEndReached,
+  EdgeNotifierScrollController({
+    this.onEndReached,
+    this.onStartReached,
     this.delayDuration,
     String? debugLabel,
     double initialScrollOffset = 0,
@@ -28,8 +30,11 @@ class EndNotifierScrollController extends ScrollController {
   void _notifyOnEndReaced() {
     if (!(hasClients && _canNotify)) return;
 
-    if (position.atEdge && offset != 0) {
-      onEndReached();
+    if (position.atEdge) {
+      if (offset != 0 && onEndReached != null)
+        onEndReached!();
+      else if (onStartReached != null) onStartReached!();
+
       if (delayDuration != null) {
         _canNotify = false;
         Future.delayed(delayDuration!, () => _canNotify = true);

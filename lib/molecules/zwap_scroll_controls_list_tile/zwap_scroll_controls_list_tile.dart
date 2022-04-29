@@ -7,6 +7,7 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 import '../scroll_arrow/zwap_scroll_arrow.dart';
 
 // TODO: add subtitle, leading, trailing and other properties
+// TODO: change onShowAllTap to onViewAllTap
 
 /// This widget consist in a title, an arrow icon near the title and if [showScrollContols] is true a left/rigth scroll comand icons, arranged horizontally.
 class ZwapScrollControlsListTile extends StatefulWidget {

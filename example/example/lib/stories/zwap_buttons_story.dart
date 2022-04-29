@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/utils/end_notifier_scroll_controller.dart';
+import 'package:zwap_design_system/utils/edge_notifier_scroll_controller.dart';
 
 class ZwapButtonsStory extends StatefulWidget {
   const ZwapButtonsStory({Key? key}) : super(key: key);
@@ -42,7 +42,10 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
         ),
         Expanded(
           child: SingleChildScrollView(
-            controller: EndNotifierScrollController(onEndReached: () => print('endReached'), delayDuration: const Duration(seconds: 2),),
+            controller: EdgeNotifierScrollController(
+              onEndReached: () => print('endReached'),
+              delayDuration: const Duration(seconds: 2),
+            ),
             padding: const EdgeInsets.symmetric(vertical: 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,

@@ -513,3 +513,7 @@
 * Added ZwapScrollItems story to ZwapStoryBook
 * Added EndNotifierScrollController component
 * Marked ZwapInfineScroll as deprecated
+
+## 0.1.541
+* Changed EndNotifierScrollController to EdgeNotifierScrollControler: onStartReached propery added
+
