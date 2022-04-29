@@ -7,7 +7,6 @@ export 'moleculesText/moleculesText.dart';
 export 'openToTag/zwapOpenToTag.dart';
 export 'progress/progress.dart';
 export 'rangeSlider/zwapRangeSlider.dart';
-export 'scrollArrows/zwapScrollArrow.dart';
 export 'starRating/zwapStarRating.dart';
 export 'statusBadge/zwapStatusBadge.dart';
 export 'statusTag/zwapStatusTag.dart';

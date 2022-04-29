@@ -5,6 +5,7 @@ import 'dart:math';
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 
 import '../constants/zwapConstants.dart';
@@ -26,6 +27,8 @@ class ZwapButtonStatusDescription {
   });
 }
 
+enum ZwapButtonIconPosition { left, right }
+
 /// To set colors see [ZwapButtonDecorations]
 class ZwapButtonChild {
   final String? text;
@@ -34,6 +37,8 @@ class ZwapButtonChild {
 
   final IconData? icon;
   final int iconSize;
+
+  final ZwapButtonIconPosition iconPosition;
 
   final Widget Function(ZwapButtonStatusDescription)? _customIcon;
 
@@ -47,6 +52,7 @@ class ZwapButtonChild {
         this.icon = null,
         this.iconSize = 24,
         this.spaceBetween = 0,
+        this.iconPosition = ZwapButtonIconPosition.left,
         this._customIcon = null;
 
   ZwapButtonChild.textWithIcon({
@@ -56,6 +62,7 @@ class ZwapButtonChild {
     this.fontWeight = FontWeight.w400,
     this.spaceBetween = 5,
     this.iconSize = 24,
+    this.iconPosition = ZwapButtonIconPosition.left,
   })  : this.text = text,
         this._customIcon = null,
         this.icon = icon;
@@ -66,6 +73,7 @@ class ZwapButtonChild {
     this.spaceBetween = 5,
     this.fontSize = 14,
     this.fontWeight = FontWeight.w400,
+    this.iconPosition = ZwapButtonIconPosition.left,
   })  : this.text = text,
         this._customIcon = icon,
         this.iconSize = 24,
@@ -78,6 +86,7 @@ class ZwapButtonChild {
         this.icon = icon,
         this._customIcon = null,
         this.spaceBetween = 0,
+        this.iconPosition = ZwapButtonIconPosition.left,
         this.fontSize = 14,
         this.fontWeight = FontWeight.w400;
 
@@ -87,6 +96,7 @@ class ZwapButtonChild {
   })  : this.text = null,
         this.icon = null,
         this.fontWeight = FontWeight.w400,
+        this.iconPosition = ZwapButtonIconPosition.left,
         this.spaceBetween = 0,
         this._customIcon = icon,
         this.fontSize = 14;
@@ -282,15 +292,18 @@ class _ZwapButtonState extends State<ZwapButton> {
     if (_child.text != null && (_child.icon != null || _child._customIcon != null))
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _child.icon == null
-              ? _child._customIcon!(_currentStatus)
-              : Icon(
-                  _child.icon!,
-                  size: _child.iconSize.toDouble(),
-                  color: _contentColor,
-                ),
-          SizedBox(width: _child.spaceBetween),
+          if (_child.iconPosition == ZwapButtonIconPosition.left) ...[
+            _child.icon == null
+                ? _child._customIcon!(_currentStatus)
+                : Icon(
+                    _child.icon!,
+                    size: _child.iconSize.toDouble(),
+                    color: _contentColor,
+                  ),
+            SizedBox(width: _child.spaceBetween),
+          ],
           Text(
             _child.text!,
             style: ZwapTypography.buttonText().copyWith(
@@ -300,6 +313,16 @@ class _ZwapButtonState extends State<ZwapButton> {
             ),
             textAlign: TextAlign.center,
           ),
+          if (_child.iconPosition == ZwapButtonIconPosition.right) ...[
+            SizedBox(width: _child.spaceBetween),
+            _child.icon == null
+                ? _child._customIcon!(_currentStatus)
+                : Icon(
+                    _child.icon!,
+                    size: _child.iconSize.toDouble(),
+                    color: _contentColor,
+                  ),
+          ],
         ],
       );
 
@@ -346,7 +369,11 @@ class _ZwapButtonState extends State<ZwapButton> {
             },
             actions: _actions,
             shortcuts: _shortcuts,
-            mouseCursor: _disabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
+            mouseCursor: widget.hide
+                ? SystemMouseCursors.basic
+                : _disabled
+                    ? SystemMouseCursors.forbidden
+                    : SystemMouseCursors.click,
             child: AnimatedContainer(
               duration: _pressed ? Duration.zero : (_decorations.animationDuration ?? const Duration(milliseconds: 200)),
               padding: _decorations.internalPadding,

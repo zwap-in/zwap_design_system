@@ -502,3 +502,14 @@
 
 ## 0.1.538
 * Some little performance improvements on ZwapInfiniteScroll
+
+## 0.1.539
+* Big fixing
+
+## 0.1.540
+* Added ZwapSrollControlsListTime 
+* Refactoring of ZwapScrollArrow
+* Added key property to ZwapIcons
+* Added ZwapScrollItems story to ZwapStoryBook
+* Added EndNotifierScrollController component
+* Marked ZwapInfineScroll as deprecated

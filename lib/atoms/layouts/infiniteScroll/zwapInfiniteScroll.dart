@@ -21,6 +21,8 @@ enum ZwapInfiniteScrollType {
 }
 
 /// The infinite scroll component
+@Deprecated(
+    "ZwapInfiniteScroll will be removed in the future versions of zwap_design_system.\nImplement your own list and provide a EndNotifierScrollController() as scroll controller to archive the same result")
 class ZwapInfiniteScroll<T> extends StatefulWidget {
   /// It fetches more data from the API call
   ///
@@ -218,6 +220,7 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
 
   Widget _getExpandedListView(List<T> data) {
     return ListView.builder(
+      controller: _scrollController,
       itemCount: data.length,
       scrollDirection: widget.axisDirection ?? Axis.vertical,
       itemBuilder: (_, i) {
@@ -250,6 +253,7 @@ class _ZwapInfiniteScrollState<T> extends State<ZwapInfiniteScroll<T>> {
   Widget _getListView(List<T> data) {
     return this._getParentListView(
       ListView.builder(
+        controller: _scrollController,
         scrollDirection: widget.axisDirection!,
         shrinkWrap: widget.expand,
         padding: EdgeInsets.all(1.0),

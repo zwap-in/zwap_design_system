@@ -127,13 +127,14 @@ class ZwapIcons {
   };
 
   /// The mapping data for each icons
-  static SvgPicture icons(String iconName, {double? iconSize, Color? iconColor}) {
+  static SvgPicture icons(String iconName, {double? iconSize, Color? iconColor, Key? key}) {
     return SvgPicture.asset(
       ZwapIcons.iconsPath[iconName]!,
       color: iconColor ?? null,
       package: ZwapIcons.fontPackage,
       width: iconSize ?? getMultipleConditions<double>(32, 30, 28, 26, 24),
       height: iconSize ?? getMultipleConditions<double>(32, 30, 28, 26, 24),
+      key: key,
     );
   }
 }

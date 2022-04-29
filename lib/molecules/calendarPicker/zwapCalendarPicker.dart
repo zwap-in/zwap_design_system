@@ -6,7 +6,8 @@ import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/molecules/scrollArrows/zwapScrollArrow.dart';
+
+import '../scroll_arrow/zwap_scroll_arrow.dart';
 
 /// The state of the calendar picker
 class ZwapCalendarPickerState extends ChangeNotifier {
@@ -34,7 +35,8 @@ class ZwapCalendarPickerState extends ChangeNotifier {
   /// The set of the dates that must be disabled
   final Set<DateTime>? disabledDates;
 
-  ZwapCalendarPickerState({required this.dateEnd, required this.slotsPerDay, required this.selectedDates, required this.maxSelections, this.disabledDates}) {
+  ZwapCalendarPickerState(
+      {required this.dateEnd, required this.slotsPerDay, required this.selectedDates, required this.maxSelections, this.disabledDates}) {
     Map<DateTime, List<TimeOfDay>> daysPlotted = this._plotDaysSlot();
     this.currentDate = daysPlotted.keys.first;
     this.dateStart = daysPlotted.keys.first;
@@ -87,7 +89,9 @@ class ZwapCalendarPickerState extends ChangeNotifier {
     while (i < this._getMaxSlotsView) {
       DateTime tmpCheck = DateTime(now.year, now.month, now.day);
       DateTime tmpCheckTwo = DateTime(tmp.year, tmp.month, tmp.day);
-      if (this.slotsPerDay.keys.toList().contains(tmp.weekday) && this.slotsPerDay.containsKey(tmp.weekday) && !tmpCheck.isAtSameMomentAs(tmpCheckTwo)) {
+      if (this.slotsPerDay.keys.toList().contains(tmp.weekday) &&
+          this.slotsPerDay.containsKey(tmp.weekday) &&
+          !tmpCheck.isAtSameMomentAs(tmpCheckTwo)) {
         finals[tmp] = this.slotsPerDay[tmp.weekday]!;
         i++;
       }
@@ -227,15 +231,17 @@ class ZwapCalendarPicker extends StatelessWidget {
 
   /// It gets the calendar picker title section
   Widget _getCalendarPickerTitle(ZwapCalendarPickerState provider) {
-    int _currentMonth = (provider.currentDate!.add(Duration(days: provider.slotsPerDay.keys.firstWhere((e) => provider.slotsPerDay.keys.every((_e) => e <= _e)) - 1))).month;
+    int _currentMonth =
+        (provider.currentDate!.add(Duration(days: provider.slotsPerDay.keys.firstWhere((e) => provider.slotsPerDay.keys.every((_e) => e <= _e)) - 1)))
+            .month;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
           child: ZwapScrollArrow(
-            isRight: false,
-            onClickCallBack: () => provider.changeStart(false),
+            direction: ZwapScrollArrowDirection.left,
+            onTap: () => provider.changeStart(false),
           ),
           flex: 0,
           fit: FlexFit.tight,
@@ -257,8 +263,8 @@ class ZwapCalendarPicker extends StatelessWidget {
         ),
         Flexible(
           child: ZwapScrollArrow(
-            isRight: true,
-            onClickCallBack: () => provider.changeStart(true),
+            direction: ZwapScrollArrowDirection.right,
+            onTap: () => provider.changeStart(true),
           ),
           fit: FlexFit.tight,
           flex: 0,

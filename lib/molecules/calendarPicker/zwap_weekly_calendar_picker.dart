@@ -11,11 +11,12 @@ import 'package:zwap_design_system/molecules/molecules.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/molecules/scrollArrows/zwapScrollArrow.dart';
 
 import 'package:collection/collection.dart';
 import 'package:zwap_design_system/extensions/dateTimeExtension.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
+
+import '../scroll_arrow/zwap_scroll_arrow.dart';
 
 enum _ZwapWeeklyCalendarTimesTypes { daily, weekly, custom }
 
@@ -867,8 +868,8 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
                 children: [
                   Flexible(
                     child: ZwapScrollArrow(
-                      isRight: false,
-                      onClickCallBack: () => context.read<ZwapWeeklyCalendarPickerProvider>().precedentWeek(),
+                      direction: ZwapScrollArrowDirection.left,
+                      onTap: () => context.read<ZwapWeeklyCalendarPickerProvider>().precedentWeek(),
                     ),
                     flex: 0,
                     fit: FlexFit.tight,
@@ -890,8 +891,8 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
                   ),
                   Flexible(
                     child: ZwapScrollArrow(
-                      isRight: true,
-                      onClickCallBack: () => context.read<ZwapWeeklyCalendarPickerProvider>().nextWeek(),
+                      direction: ZwapScrollArrowDirection.right,
+                      onTap: () => context.read<ZwapWeeklyCalendarPickerProvider>().nextWeek(),
                     ),
                     fit: FlexFit.tight,
                     flex: 0,
