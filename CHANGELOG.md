@@ -517,3 +517,7 @@
 ## 0.1.541
 * Changed EndNotifierScrollController to EdgeNotifierScrollControler: onStartReached propery added
 
+## 0.1.542
+* Added trailing to ZwapSrollControlsListTime
+
+

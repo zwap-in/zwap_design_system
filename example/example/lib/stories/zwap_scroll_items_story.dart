@@ -28,6 +28,8 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
   bool _isAtStart = true;
   bool _isAtEnd = false;
 
+  bool _isRowLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -96,6 +98,14 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
                   ZwapSwitch(predefinedValue: _showViewAll, handleCallBack: (v) => setState(() => _showViewAll = v)),
                 ],
               ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ZwapText(text: 'Set Row Loading', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
+                  SizedBox(width: 20),
+                  ZwapSwitch(predefinedValue: _isRowLoading, handleCallBack: (v) => setState(() => _isRowLoading = v)),
+                ],
+              ),
             ],
           ),
         ),
@@ -156,7 +166,7 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
                     showViewAll: _showViewAll,
                     onLeftScrollControlTap: () {},
                     onRigthScrollControlTap: () {},
-                    onShowAllTap: () {},
+                    onViewAllTap: () {},
                   ),
                   SizedBox(height: 50),
                   ZwapText(text: "ZwapScrollControlsListTile Use Example", zwapTextType: ZwapTextType.bigBodyBold, textColor: ZwapColors.neutral800),
@@ -184,9 +194,19 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.fastOutSlowIn);
                     },
-                    onShowAllTap: () {
+                    onViewAllTap: () {
                       ZwapToasts.showSuccessToast("Vedi tutti cliccato", context: context);
                     },
+                    trailing: _isRowLoading
+                        ? Container(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1.3,
+                              valueColor: AlwaysStoppedAnimation(ZwapColors.primary700),
+                            ),
+                          )
+                        : null,
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width - 400,

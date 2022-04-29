@@ -16,7 +16,7 @@ class ZwapScrollControlsListTile extends StatefulWidget {
   final Function()? onLeftScrollControlTap;
   final Function()? onRigthScrollControlTap;
 
-  final Function()? onShowAllTap;
+  final Function()? onViewAllTap;
 
   final bool leftEnabled;
   final bool rigthEnabled;
@@ -24,6 +24,12 @@ class ZwapScrollControlsListTile extends StatefulWidget {
   final bool showScrollControls;
 
   final bool showViewAll;
+
+  /// If provided this widget will be displaed in the left of the scroll controls, or oa the end of the row if the scroll controls are hidden
+  final Widget? trailing;
+
+  /// The rigth margin of trailing widget
+  final double? trailingPadding;
 
   /// Used to translate (<key>: <english value>):
   /// * view_all: "View all"
@@ -41,7 +47,9 @@ class ZwapScrollControlsListTile extends StatefulWidget {
     this.showViewAll = true,
     this.onLeftScrollControlTap,
     this.onRigthScrollControlTap,
-    this.onShowAllTap,
+    this.onViewAllTap,
+    this.trailing,
+    this.trailingPadding,
   }) : super(key: key);
 
   @override
@@ -83,7 +91,7 @@ class _ZwapScrollControlsListTileState extends State<ZwapScrollControlsListTile>
           children: [
             ConstrainedBox(
               constraints: getMultipleConditions(false, false, false, true, true)
-                  ? BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.45)
+                  ? BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 200)
                   : BoxConstraints(),
               child: ZwapText(
                 text: widget.title,
@@ -97,7 +105,7 @@ class _ZwapScrollControlsListTileState extends State<ZwapScrollControlsListTile>
               switchInCurve: Curves.decelerate,
               child: ZwapButton(
                 height: 30,
-                width: 120,
+                width: 110,
                 buttonChild: ZwapButtonChild.textWithIcon(
                   text: widget.translateKeyFunction!('view_all'),
                   icon: Icons.arrow_forward,
@@ -109,41 +117,50 @@ class _ZwapScrollControlsListTileState extends State<ZwapScrollControlsListTile>
                 ),
                 decorations: ZwapButtonDecorations.quaternary(internalPadding: EdgeInsets.zero),
                 hide: !_showViewAll,
-                onTap: widget.onShowAllTap,
+                onTap: widget.onViewAllTap,
               ),
             ),
           ],
         ),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          switchInCurve: Curves.decelerate,
-          child: _showControls
-              ? Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      child: ZwapScrollArrow(
-                        direction: ZwapScrollArrowDirection.left,
-                        disabled: !_leftEnabled,
-                        onTap: widget.onLeftScrollControlTap,
-                      ),
-                      flex: 0,
-                      fit: FlexFit.tight,
-                    ),
-                    SizedBox(width: 15),
-                    Flexible(
-                      child: ZwapScrollArrow(
-                        direction: ZwapScrollArrowDirection.right,
-                        disabled: !_rightEnabled,
-                        onTap: widget.onRigthScrollControlTap,
-                      ),
-                      flex: 0,
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.trailing != null) ...[
+              widget.trailing!,
+              SizedBox(width: widget.trailingPadding ?? 25),
+            ],
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              switchInCurve: Curves.decelerate,
+              child: _showControls
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Flexible(
+                          child: ZwapScrollArrow(
+                            direction: ZwapScrollArrowDirection.left,
+                            disabled: !_leftEnabled,
+                            onTap: widget.onLeftScrollControlTap,
+                          ),
+                          flex: 0,
+                          fit: FlexFit.tight,
+                        ),
+                        SizedBox(width: 15),
+                        Flexible(
+                          child: ZwapScrollArrow(
+                            direction: ZwapScrollArrowDirection.right,
+                            disabled: !_rightEnabled,
+                            onTap: widget.onRigthScrollControlTap,
+                          ),
+                          flex: 0,
+                        )
+                      ],
                     )
-                  ],
-                )
-              : Container(),
-        ),
+                  : Container(),
+            ),
+          ],
+        )
       ],
     );
   }

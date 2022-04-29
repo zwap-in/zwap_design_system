@@ -2,6 +2,7 @@ import 'package:example/main.dart';
 import 'package:example/stories.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:taastrap/taastrap.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:provider/provider.dart';
 
