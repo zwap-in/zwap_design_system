@@ -520,4 +520,12 @@
 ## 0.1.542
 * Added trailing to ZwapSrollControlsListTime
 
-
+## 0.1.543
+* Removed ZwapCalendarPicker
+* Refactoring of ZwapWeeklyCalendarPicker:
+    * ZwapWeeklyCalendarPickFilter and ZwapWeeklyCalendarShowFilter are more cleaned and organized.
+    Use ZwapWeeklyCalendarPickFilter to handle letting the user selecting some slots, chose dinamically which slots checking and return a ZwapWeeklyCalendarHandleFilter (one of allow, cancel or replace).
+    Use ZwapWeeklyCalendarShowFilter to manage which slots hide (ie: not printed on screen) or disable (ie: assuming the disabled state decorations)
+    * Customize all or only some of the slots with differend and fully customizable WeeklyCalendarPickerDatSlotWidget. Simply use the  .customizeItem(...) or .customizeItems(...) ZwapWeeklyCalendarShowFilter filters to provide a WCPDateSlotWidgetDecorations object. Or the parameter in the _ZwapWeeklyCalendarPickerItem: daySlotDecoration
+    * Use one of the five ZwapWeeklyCalendarPickFilter different filters to manage every different case of picking and one of the six ZwapWeeklyCalendarPickMaxFilter filters to manage the maximum selectable items count.
+    * Now ZwapWeeklyCalendarPicker day slots are animated

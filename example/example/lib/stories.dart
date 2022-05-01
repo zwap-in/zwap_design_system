@@ -6,7 +6,7 @@ import 'package:example/stories/zwap_percent_story.dart';
 import 'package:example/stories/zwap_scroll_items_story.dart';
 import 'package:example/stories/zwap_select_story.dart';
 import 'package:example/stories/zwap_tutorial_overlay_story.dart';
-import 'package:example/stories/zwap_weekly_calendar_pickert.dart';
+import 'package:example/stories/zwap_weekly_calendar_pickert_story.dart';
 import 'package:flutter/material.dart';
 
 enum ZwapStories {
@@ -46,7 +46,7 @@ List<ZwapStory> stories = [
   ),
   ZwapStory(
     name: "ZwapWeeklyCalendarPicker",
-    builder: (context) => const ZwapCalendarPickerStory(),
+    builder: (context) => const ZwapWeeklyCalendarPickerStory(),
     story: ZwapStories.weeklyCalendarPicker,
   ),
   ZwapStory(

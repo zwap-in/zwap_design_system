@@ -1,6 +1,6 @@
 export 'avatar/zwapAvatar.dart';
 export 'blurComponent/zwapBlurComponent.dart';
-export 'calendarPicker/zwapCalendarPicker.dart';
+export 'weekly_calendar_picker/zwap_weekly_calendar_picker.dart';
 export 'iconDropDown/zwapIconDropDown.dart';
 export 'loadingButton/zwapLoadingButton.dart';
 export 'moleculesText/moleculesText.dart';
