@@ -5,6 +5,7 @@ import 'package:example/stories/zwap_modal_story.dart';
 import 'package:example/stories/zwap_percent_story.dart';
 import 'package:example/stories/zwap_scroll_items_story.dart';
 import 'package:example/stories/zwap_select_story.dart';
+import 'package:example/stories/zwap_text_story.dart';
 import 'package:example/stories/zwap_tutorial_overlay_story.dart';
 import 'package:example/stories/zwap_weekly_calendar_pickert_story.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ enum ZwapStories {
   tutorialOverlay,
   modals,
   scrollItems,
+  text,
 }
 
 class ZwapStory {
@@ -78,5 +80,10 @@ List<ZwapStory> stories = [
     name: "Zwap Scroll Items",
     builder: (context) => ZwapScrollItemsStory(),
     story: ZwapStories.scrollItems,
-  )
+  ),
+  ZwapStory(
+    name: "Zwap Texts",
+    builder: (context) => ZwapTextStory(),
+    story: ZwapStories.text,
+  ),
 ];

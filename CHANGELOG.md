@@ -529,3 +529,7 @@
     * Customize all or only some of the slots with differend and fully customizable WeeklyCalendarPickerDatSlotWidget. Simply use the  .customizeItem(...) or .customizeItems(...) ZwapWeeklyCalendarShowFilter filters to provide a WCPDateSlotWidgetDecorations object. Or the parameter in the _ZwapWeeklyCalendarPickerItem: daySlotDecoration
     * Use one of the five ZwapWeeklyCalendarPickFilter different filters to manage every different case of picking and one of the six ZwapWeeklyCalendarPickMaxFilter filters to manage the maximum selectable items count.
     * Now ZwapWeeklyCalendarPicker day slots are animated
+
+## 0.1.544
+* Marked ZwapLongText as deprecated
+* Added ZwapExpandableText

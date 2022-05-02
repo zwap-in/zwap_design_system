@@ -7,8 +7,8 @@ import 'package:zwap_utils/zwap_utils.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 
 /// Custom component to crop long text with a read more option
+@Deprecated("ZwapLongText has been deprecate and should not be used.\nUse ZwapExpandableText insead.")
 class ZwapLongText extends StatefulWidget {
-
   /// The text inside this component
   final String text;
 
@@ -56,7 +56,7 @@ class _ZwapLongTextState extends State<ZwapLongText> {
     }
   }
 
-  void didUpdateWidget(ZwapLongText oldWidget){
+  void didUpdateWidget(ZwapLongText oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.text.length > widget.maxChars) {
       firstHalf = widget.text.substring(0, widget.maxChars);
@@ -71,20 +71,22 @@ class _ZwapLongTextState extends State<ZwapLongText> {
   Widget _getText() {
     TapGestureRecognizer recognizer = TapGestureRecognizer();
     recognizer.onTap = () => {
-      setState(() {
-        flag = !flag;
-      })
-    };
+          setState(() {
+            flag = !flag;
+          })
+        };
     return ZwapTextMultiStyle(
       texts: {
-        flag ? (firstHalf + "...") : (firstHalf + secondHalf): TupleType(a: null, b: TupleType(a: ZwapTextType.bodyRegular, b: ZwapColors.neutral600)),
-        flag ? " ${widget.readMoreText}" : " ${widget.readLessText}": TupleType(a: recognizer, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.neutral700))
+        flag ? (firstHalf + "...") : (firstHalf + secondHalf):
+            TupleType(a: null, b: TupleType(a: ZwapTextType.bodyRegular, b: ZwapColors.neutral600)),
+        flag ? " ${widget.readMoreText}" : " ${widget.readLessText}":
+            TupleType(a: recognizer, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.neutral700))
       },
     );
   }
 
   /// It gets the normal text widget
-  Widget normalText(){
+  Widget normalText() {
     return ZwapText(
       text: firstHalf,
       textColor: ZwapColors.neutral600,
@@ -94,6 +96,6 @@ class _ZwapLongTextState extends State<ZwapLongText> {
 
   @override
   Widget build(BuildContext context) {
-    return secondHalf.isEmpty ? this.normalText()  : this._getText();
+    return secondHalf.isEmpty ? this.normalText() : this._getText();
   }
 }
