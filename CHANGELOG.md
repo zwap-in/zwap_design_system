@@ -533,3 +533,6 @@
 ## 0.1.544
 * Marked ZwapLongText as deprecated
 * Added ZwapExpandableText
+
+## 0.1.545
+* Refactoring of ZwapPrimaryTabBar

@@ -105,6 +105,13 @@ Size getTextSize(String text, ZwapTextType textType, {double? maxWidth}) {
   return textPainter.size;
 }
 
+Size getTextSizeFromCustomStyle(String text, TextStyle textStyle, {double? maxWidth}) {
+  final TextPainter textPainter =
+      TextPainter(text: TextSpan(text: text, style: textStyle), maxLines: 1, textDirection: TextDirection.ltr)
+        ..layout(minWidth: 0, maxWidth: maxWidth ?? double.infinity);
+  return textPainter.size;
+}
+
 /// Component to rendering text in base of style and device type
 class ZwapText extends StatelessWidget implements ResponsiveWidget {
   /// The text to display inside this rendering

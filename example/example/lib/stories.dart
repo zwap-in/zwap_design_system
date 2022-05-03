@@ -5,6 +5,7 @@ import 'package:example/stories/zwap_modal_story.dart';
 import 'package:example/stories/zwap_percent_story.dart';
 import 'package:example/stories/zwap_scroll_items_story.dart';
 import 'package:example/stories/zwap_select_story.dart';
+import 'package:example/stories/zwap_tab_bars_story.dart';
 import 'package:example/stories/zwap_text_story.dart';
 import 'package:example/stories/zwap_tutorial_overlay_story.dart';
 import 'package:example/stories/zwap_weekly_calendar_pickert_story.dart';
@@ -21,6 +22,7 @@ enum ZwapStories {
   modals,
   scrollItems,
   text,
+  tabbar,
 }
 
 class ZwapStory {
@@ -85,5 +87,10 @@ List<ZwapStory> stories = [
     name: "Zwap Texts",
     builder: (context) => ZwapTextStory(),
     story: ZwapStories.text,
+  ),
+  ZwapStory(
+    name: "Zwap Tab Bars",
+    builder: (context) => ZwapTabBarsStory(),
+    story: ZwapStories.tabbar,
   ),
 ];
