@@ -537,6 +537,9 @@
 ## 0.1.545
 * Refactoring of ZwapPrimaryTabBar
 
-## 0.1.545
+## 0.1.546
 * Now ZwapMultiStyle text is called ZwapRichText and its main constructor is deprecated
 * ZwapTextSpan now support children with recursive text syles (as the Flutter TextSpan)
+
+## 0.1.547
+* Added hover state in ZwapPrimarTabBar

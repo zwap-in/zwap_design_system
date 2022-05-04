@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
 
+//TODO (Marchetti): Let the user choose more decorations (such as hover tab style, min width and else)
+
 /// Component to rendering the tab bar as menu
 class ZwapPrimaryTabBar extends StatefulWidget {
   final List<String> tabs;
@@ -172,13 +174,17 @@ class __TabItemWidgetState extends State<_TabItemWidget> {
                   ? ZwapText(
                       key: ValueKey(_selected),
                       text: widget.name,
-                      textColor: _selected ? widget.textColor : ZwapColors.neutral500,
+                      textColor: _selected
+                          ? widget.textColor
+                          : _isHovered
+                              ? ZwapColors.neutral800
+                              : ZwapColors.neutral500,
                       zwapTextType: widget.textType,
                     )
                   : ZwapText.customStyle(
                       key: ValueKey(_selected),
                       text: widget.name,
-                      customTextStyle: widget._customStyle!,
+                      customTextStyle: _isHovered && !_selected ? widget._customStyle!.copyWith(color: ZwapColors.neutral800) : widget._customStyle!,
                     ),
             ),
             SizedBox(height: 9.5),
