@@ -14,7 +14,7 @@ export 'checkbox/zwapCheckbox.dart';
 export 'input/zwapInput.dart';
 export 'select/zwapSelect.dart';
 export 'stars/zwapStar.dart';
-export 'switch/zwapSwitch.dart';
+export 'switch/zwap_switch.dart';
 export 'lineItem/zwapLineItem.dart';
 export 'toolTip/zwapToolTip.dart';
 export 'dropdownSearch/dropdownSearch.dart';

@@ -543,3 +543,6 @@
 
 ## 0.1.547
 * Added hover state in ZwapPrimarTabBar
+
+## 0.1.548
+* Added resposive ZwapSwitch

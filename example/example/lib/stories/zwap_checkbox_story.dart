@@ -26,22 +26,22 @@ class _ZwapCheckBoxStoryState extends State<ZwapCheckBoxStory> {
               ZwapText(text: 'Force value', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
               SizedBox(width: 20),
               ZwapSwitch(
-                predefinedValue: _value,
-                handleCallBack: (v) => setState(() => _value = v),
+                value: _value ?? true,
+                onValueChange: (v) => setState(() => _value = v),
               ),
               SizedBox(width: 20),
               ZwapText(text: 'Disabled State', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
               SizedBox(width: 20),
               ZwapSwitch(
-                predefinedValue: _disabled,
-                handleCallBack: (v) => setState(() => _disabled = v),
+                value: _disabled,
+                onValueChange: (v) => setState(() => _disabled = v),
               ),
               SizedBox(width: 20),
               ZwapText(text: 'Error State', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
               SizedBox(width: 20),
               ZwapSwitch(
-                predefinedValue: _error,
-                handleCallBack: (v) => setState(() => _error = v),
+                value: _error,
+                onValueChange: (v) => setState(() => _error = v),
               ),
               SizedBox(width: 20),
               ZwapButton(

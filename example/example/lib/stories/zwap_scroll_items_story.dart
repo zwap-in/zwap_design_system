@@ -55,7 +55,7 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
                 children: [
                   ZwapText(text: 'Enable Rigth', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   SizedBox(width: 20),
-                  ZwapSwitch(predefinedValue: _enabledLeft, handleCallBack: (v) => setState(() => _enabledLeft = v)),
+                  ZwapSwitch(value: _enabledLeft, onValueChange: (v) => setState(() => _enabledLeft = v)),
                 ],
               ),
               Row(
@@ -63,7 +63,7 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
                 children: [
                   ZwapText(text: 'Enable Left', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   SizedBox(width: 20),
-                  ZwapSwitch(predefinedValue: _enableRigth, handleCallBack: (v) => setState(() => _enableRigth = v)),
+                  ZwapSwitch(value: _enableRigth, onValueChange: (v) => setState(() => _enableRigth = v)),
                 ],
               ),
               Row(
@@ -71,7 +71,7 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
                 children: [
                   ZwapText(text: 'Enable Top', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   SizedBox(width: 20),
-                  ZwapSwitch(predefinedValue: _enableTop, handleCallBack: (v) => setState(() => _enableTop = v)),
+                  ZwapSwitch(value: _enableTop, onValueChange: (v) => setState(() => _enableTop = v)),
                 ],
               ),
               Row(
@@ -79,7 +79,7 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
                 children: [
                   ZwapText(text: 'Enable Bottom', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   SizedBox(width: 20),
-                  ZwapSwitch(predefinedValue: _enabledBottom, handleCallBack: (v) => setState(() => _enabledBottom = v)),
+                  ZwapSwitch(value: _enabledBottom, onValueChange: (v) => setState(() => _enabledBottom = v)),
                 ],
               ),
               Row(
@@ -87,7 +87,7 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
                 children: [
                   ZwapText(text: 'Enable Scroll Controls', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   SizedBox(width: 20),
-                  ZwapSwitch(predefinedValue: _enableScrollControls, handleCallBack: (v) => setState(() => _enableScrollControls = v)),
+                  ZwapSwitch(value: _enableScrollControls, onValueChange: (v) => setState(() => _enableScrollControls = v)),
                 ],
               ),
               Row(
@@ -95,7 +95,7 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
                 children: [
                   ZwapText(text: 'Enable View All', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   SizedBox(width: 20),
-                  ZwapSwitch(predefinedValue: _showViewAll, handleCallBack: (v) => setState(() => _showViewAll = v)),
+                  ZwapSwitch(value: _showViewAll, onValueChange: (v) => setState(() => _showViewAll = v)),
                 ],
               ),
               Row(
@@ -103,7 +103,7 @@ class _ZwapScrollItemsStoryState extends State<ZwapScrollItemsStory> {
                 children: [
                   ZwapText(text: 'Set Row Loading', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   SizedBox(width: 20),
-                  ZwapSwitch(predefinedValue: _isRowLoading, handleCallBack: (v) => setState(() => _isRowLoading = v)),
+                  ZwapSwitch(value: _isRowLoading, onValueChange: (v) => setState(() => _isRowLoading = v)),
                 ],
               ),
             ],

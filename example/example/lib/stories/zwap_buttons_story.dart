@@ -26,7 +26,7 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                 children: [
                   ZwapText(text: 'Loading State', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   SizedBox(width: 20),
-                  ZwapSwitch(predefinedValue: _loading, handleCallBack: (v) => setState(() => _loading = v)),
+                  ZwapSwitch(value: _loading, onValueChange: (v) => setState(() => _loading = v)),
                 ],
               ),
               Row(
@@ -34,7 +34,7 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                 children: [
                   ZwapText(text: 'Disabled State', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   SizedBox(width: 20),
-                  ZwapSwitch(predefinedValue: _disabled, handleCallBack: (v) => setState(() => _disabled = v)),
+                  ZwapSwitch(value: _disabled, onValueChange: (v) => setState(() => _disabled = v)),
                 ],
               ),
             ],
