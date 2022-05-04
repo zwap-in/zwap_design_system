@@ -14,7 +14,7 @@ class InviterInfo extends StatelessWidget {
     return this.invitedBy != null
         ? Padding(
             padding: EdgeInsets.symmetric(vertical: 1.5),
-            child: ZwapTextMultiStyle(
+            child: ZwapRichText(
               texts: {
                 Utils.translatedText("invited_by"): TupleType(a: null, b: TupleType(a: ZwapTextType.bodyRegular, b: ZwapColors.neutral500)),
                 " ${this.invitedBy!.name} ${this.invitedBy!.surname}": TupleType(

@@ -544,7 +544,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                 child: Row(
                                                   children: [
                                                     //TODO: traduci
-                                                    ZwapTextMultiStyle(
+                                                    ZwapRichText(
                                                       texts: {
                                                         '${_inputController.text}':
                                                             TupleType(a: null, b: TupleType(a: ZwapTextType.bodySemiBold, b: ZwapColors.shades100)),

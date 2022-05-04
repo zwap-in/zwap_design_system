@@ -378,7 +378,7 @@ class _ZwapInputState extends State<ZwapInput> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           if (_showMinLenghtIndicator)
-            ZwapTextMultiStyle.safeText(
+            ZwapRichText.safeText(
               textSpans: [
                 //TODO: traduci
                 ZwapTextSpan.fromZwapTypography(text: "${widget.translateKey!('zwap_input_characters')}: ", textType: ZwapTextType.smallBodyRegular),

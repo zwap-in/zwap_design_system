@@ -52,6 +52,26 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
               'see_more': 'Vedi tutto',
             }[key]!,
           ),
+          SizedBox(height: 22),
+          ZwapRichText.safeText(
+            textSpans: [
+              ZwapTextSpan.fromZwapTypography(
+                text: "Ullamco elit proident duis laboris sint labore aliquip laborum voluptate tempor eu laborum.",
+                textType: ZwapTextType.bigBodyBold,
+                textColor: ZwapColors.warning400,
+                children: [
+                  ZwapTextSpan(text: "  <Proident dolore quis culpa anim laborum.>  "),
+                  ZwapTextSpan(text: "  <ciao>  ", textStyle: TextStyle(fontWeight: FontWeight.w200)),
+                  ZwapTextSpan(text: "...."),
+                ],
+              ),
+              ZwapTextSpan.fromZwapTypography(
+                text: "Mollit incididunt sunt deserunt qui veniam sunt magna.",
+                textType: ZwapTextType.smallBodyRegular,
+                textColor: ZwapColors.success400,
+              ),
+            ],
+          ),
         ],
       ),
     );

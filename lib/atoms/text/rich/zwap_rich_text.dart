@@ -2,12 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/link.dart';
+import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_utils/zwap_utils.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import '../../typography/zwapTypography.dart';
 
 import '../base/zwapText.dart';
+
+//TODO (Marchetti): Move ZwapType and Color in a ZwapTextStyle and standardize all types
 
 enum ZwapLinkTarget {
   blank,
@@ -18,10 +21,13 @@ enum ZwapLinkTarget {
 class ZwapTextSpan {
   final String text;
 
+  List<ZwapTextSpan> children;
+
+  /// TODO (Marchetti): Add the co-existency of gesture recognizer and link widger
   ///! if one of the text spans has links this will be ignored
   final TapGestureRecognizer? gestureRecognizer;
 
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   /// if != null link widget will be added on this textspan only
   final Uri? linkToUri;
@@ -31,26 +37,37 @@ class ZwapTextSpan {
 
   ZwapTextSpan({
     required this.text,
-    required this.textStyle,
+    this.textStyle,
+    this.children = const [],
     this.linkToUri,
     this.gestureRecognizer,
     this.linkTarget = ZwapLinkTarget.defaultTarget,
   });
 
+  /// **Warning** color is not applied is textType is null
   ZwapTextSpan.fromZwapTypography({
     required this.text,
-    required ZwapTextType textType,
+    ZwapTextType? textType,
+    Color? textColor,
     this.linkToUri,
+    this.children = const [],
     this.gestureRecognizer,
     this.linkTarget = ZwapLinkTarget.defaultTarget,
-  }) : this.textStyle = getTextStyle(textType);
+  }) : this.textStyle = textType == null ? null : getTextStyle(textType).copyWith(color: textColor);
 
-  TextSpan toTextSpan() => TextSpan(text: text, style: textStyle, recognizer: gestureRecognizer);
+  TextSpan _toTextSpan() => TextSpan(
+        text: text,
+        style: textStyle,
+        recognizer: gestureRecognizer,
+        children: this.children.map((zwapTS) => zwapTS._toTextSpan()).toList(),
+      );
 }
 
 /// Component to rendering multi text style
-class ZwapTextMultiStyle extends StatelessWidget {
-  final bool _isCustomStyle;
+///
+/// If no style is provided to this widget or to a text spans tree, DefaultTextStyle will be used
+class ZwapRichText extends StatelessWidget {
+  final bool _isSafeText;
 
   /// Each text with a custom type and custom color and optionally a recognizer
   final Map<String, TupleType<TapGestureRecognizer?, TupleType<ZwapTextType, Color>>> texts;
@@ -59,23 +76,39 @@ class ZwapTextMultiStyle extends StatelessWidget {
 
   final TextAlign? textAlign;
 
-  ZwapTextMultiStyle({
+  final TextStyle? style;
+
+  @Deprecated("Use the ZwapRichText.safeText(...) instead. This will be removed in the future.")
+  ZwapRichText({
     Key? key,
     required this.texts,
+    this.style,
     this.textAlign,
   })  : this.textSpans = [],
-        this._isCustomStyle = false,
+        this._isSafeText = false,
         super(key: key);
 
   /// This components allow you to display multiple style text using ZwapTextSpans and not a Map<String, ...>
   ///
   /// Doing so, you can put multiple time the same string
-  ZwapTextMultiStyle.safeText({
+  ZwapRichText.safeText({
     Key? key,
     required this.textSpans,
+    this.style,
     this.textAlign,
   })  : this.texts = {},
-        this._isCustomStyle = true,
+        this._isSafeText = true,
+        super(key: key);
+
+  ZwapRichText.zwapTypografy({
+    Key? key,
+    required this.textSpans,
+    required ZwapTextType textType,
+    Color? textColor,
+    this.textAlign,
+  })  : this.texts = {},
+        this.style = getTextStyle(textType).copyWith(color: textColor),
+        this._isSafeText = true,
         super(key: key);
 
   /// It write each text with correct style and correct color
@@ -95,15 +128,18 @@ class ZwapTextMultiStyle extends StatelessWidget {
   Widget build(BuildContext context) {
     late List<TextSpan> children;
 
-    if (_isCustomStyle)
-      children = this.textSpans.map((e) => e.toTextSpan()).toList();
+    if (_isSafeText)
+      children = this.textSpans.map((e) => e._toTextSpan()).toList();
     else
       children = _getTexts();
 
-    if (_isCustomStyle && textSpans.any((t) => t.linkToUri != null)) return _LinkedMultyStyleText(textSpans: textSpans, textAlign: textAlign);
+    if (_isSafeText && textSpans.any((t) => t.linkToUri != null)) return _LinkedMultyStyleText(textSpans: textSpans, textAlign: textAlign);
 
     return RichText(
-      text: TextSpan(children: List<TextSpan>.generate(children.length, (index) => children[index])),
+      text: TextSpan(
+        children: List<TextSpan>.generate(children.length, (index) => children[index]),
+        style: style,
+      ),
       textAlign: textAlign ?? TextAlign.start,
     );
   }
@@ -113,7 +149,14 @@ class _LinkedMultyStyleText extends StatefulWidget {
   final List<ZwapTextSpan> textSpans;
   final TextAlign? textAlign;
 
-  const _LinkedMultyStyleText({required this.textSpans, this.textAlign, Key? key}) : super(key: key);
+  final TextStyle? style;
+
+  const _LinkedMultyStyleText({
+    required this.textSpans,
+    this.textAlign,
+    this.style,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<_LinkedMultyStyleText> createState() => _LinkedMultyStyleTextState();
@@ -144,6 +187,7 @@ class _LinkedMultyStyleTextState extends State<_LinkedMultyStyleText> {
           onTap: followLink,
           child: RichText(
             text: TextSpan(
+                style: widget.style,
                 children: widget.textSpans
                     .map(
                       (span) => TextSpan(

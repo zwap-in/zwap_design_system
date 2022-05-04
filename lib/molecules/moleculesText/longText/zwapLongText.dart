@@ -75,7 +75,7 @@ class _ZwapLongTextState extends State<ZwapLongText> {
             flag = !flag;
           })
         };
-    return ZwapTextMultiStyle(
+    return ZwapRichText(
       texts: {
         flag ? (firstHalf + "...") : (firstHalf + secondHalf):
             TupleType(a: null, b: TupleType(a: ZwapTextType.bodyRegular, b: ZwapColors.neutral600)),

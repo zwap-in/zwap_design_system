@@ -1,2 +1,2 @@
 export 'base/zwapText.dart';
-export 'multiStyle/zwapTextMultiStyle.dart';
+export 'rich/zwap_rich_text.dart';
