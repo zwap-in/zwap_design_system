@@ -546,3 +546,9 @@
 
 ## 0.1.548
 * Added resposive ZwapSwitch
+
+## 0.1.549
+* Fixed a problem in ZwapTypography
+
+## 0.1.550
+* Now ZwapTextSpan.fromZwapTypography(...) can apply only the color without replacing style

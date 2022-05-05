@@ -122,8 +122,7 @@ class _ExpandableTextState extends State<ZwapExpandableText> {
                     }),
                     child: ZwapText(
                       text: widget.translateKey('see_more'),
-                      zwapTextType:
-                          getMultipleConditions(false, false, false, true, true) ? ZwapTextType.mediumBodyMedium : ZwapTextType.bigBodySemibold,
+                      zwapTextType: ZwapTextType.smallBodyMedium,
                       textColor: ZwapColors.neutral700,
                     ),
                   ),
@@ -137,8 +136,7 @@ class _ExpandableTextState extends State<ZwapExpandableText> {
                     }),
                     child: ZwapText(
                       text: widget.translateKey('see_less'),
-                      zwapTextType:
-                          getMultipleConditions(false, false, false, true, true) ? ZwapTextType.mediumBodyMedium : ZwapTextType.bigBodySemibold,
+                      zwapTextType: ZwapTextType.smallBodyMedium,
                       textColor: ZwapColors.neutral700,
                     ),
                   ),

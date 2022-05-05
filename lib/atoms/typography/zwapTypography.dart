@@ -50,101 +50,131 @@ enum ZwapTextType {
 class ZwapTypography {
   static TextStyle h1() {
     return TextStyle(
-        fontSize: 24,
-        letterSpacing: 0,
-        fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.normal,
-        height: 1.6,
-        color: ZwapColors.shades100,
-        fontFamily: 'SFUIText');
+      fontSize: 24,
+      letterSpacing: 0,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      height: 1.6,
+      color: ZwapColors.shades100,
+      fontFamily: 'SFUIText',
+      package: 'zwap_design_system',
+    );
   }
 
   static TextStyle h2() {
     return TextStyle(
-        fontSize: 20,
-        letterSpacing: 0,
-        fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.normal,
-        height: 1.6,
-        color: ZwapColors.shades100,
-        fontFamily: 'SFUIText');
+      fontSize: 20,
+      letterSpacing: 0,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      height: 1.6,
+      color: ZwapColors.shades100,
+      fontFamily: 'SFUIText',
+      package: 'zwap_design_system',
+    );
   }
 
   static TextStyle h3() {
     return TextStyle(
-        fontSize: 16,
-        letterSpacing: 0,
-        fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.normal,
-        height: 1.5,
-        color: ZwapColors.shades100,
-        fontFamily: 'SFUIText');
+      fontSize: 16,
+      letterSpacing: 0,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      height: 1.5,
+      color: ZwapColors.shades100,
+      fontFamily: 'SFUIText',
+      package: 'zwap_design_system',
+    );
   }
 
   static TextStyle h4() {
     return TextStyle(
-        fontSize: 14, fontWeight: FontWeight.w600, fontStyle: FontStyle.normal, height: 1.43, color: ZwapColors.shades100, fontFamily: 'SFUIText');
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      height: 1.43,
+      color: ZwapColors.shades100,
+      fontFamily: 'SFUIText',
+      package: 'zwap_design_system',
+    );
   }
 
   static TextStyle h5() {
     return TextStyle(
-        fontSize: 11, fontWeight: FontWeight.w500, fontStyle: FontStyle.normal, height: 1.8, color: ZwapColors.shades100, fontFamily: 'SFUIText');
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.normal,
+      height: 1.8,
+      color: ZwapColors.shades100,
+      fontFamily: 'SFUIText',
+      package: 'zwap_design_system',
+    );
   }
 
   static TextStyle captionRegular() {
     return TextStyle(
-        fontSize: 11,
-        letterSpacing: 0,
-        fontWeight: FontWeight.w400,
-        fontStyle: FontStyle.normal,
-        height: 1.45,
-        color: ZwapColors.shades100,
-        fontFamily: 'SFUIText');
+      fontSize: 11,
+      letterSpacing: 0,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      height: 1.45,
+      color: ZwapColors.shades100,
+      fontFamily: 'SFUIText',
+      package: 'zwap_design_system',
+    );
   }
 
   static TextStyle captionSemiBold() {
     return TextStyle(
-        fontSize: 11,
-        letterSpacing: 0,
-        fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.normal,
-        height: 1.45,
-        color: ZwapColors.shades100,
-        fontFamily: 'SFUIText');
+      fontSize: 11,
+      letterSpacing: 0,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      height: 1.45,
+      color: ZwapColors.shades100,
+      fontFamily: 'SFUIText',
+      package: 'zwap_design_system',
+    );
   }
 
   /// This is the old version (design system 1.) of buttonText
   static TextStyle buttonText() {
     return TextStyle(
-        fontSize: 14,
-        letterSpacing: 0,
-        fontWeight: FontWeight.w500,
-        fontStyle: FontStyle.normal,
-        height: 1.43,
-        color: ZwapColors.shades100,
-        fontFamily: 'SFUIText');
+      fontSize: 14,
+      letterSpacing: 0,
+      fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.normal,
+      height: 1.43,
+      color: ZwapColors.shades100,
+      fontFamily: 'SFUIText',
+      package: 'zwap_design_system',
+    );
   }
 
   static TextStyle bodyRegular() {
     return TextStyle(
-        fontSize: 14,
-        letterSpacing: 0,
-        fontWeight: FontWeight.w400,
-        fontStyle: FontStyle.normal,
-        height: 1.43,
-        color: ZwapColors.shades100,
-        fontFamily: 'SFUIText');
+      fontSize: 14,
+      letterSpacing: 0,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      height: 1.43,
+      color: ZwapColors.shades100,
+      fontFamily: 'SFUIText',
+      package: 'zwap_design_system',
+    );
   }
 
   static TextStyle bodySemiBold() {
     return TextStyle(
-        fontSize: 14,
-        letterSpacing: 0,
-        fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.normal,
-        height: 1.43,
-        color: ZwapColors.shades100,
-        fontFamily: 'SFUIText');
+      fontSize: 14,
+      letterSpacing: 0,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      height: 1.43,
+      color: ZwapColors.shades100,
+      fontFamily: 'SFUIText',
+      package: 'zwap_design_system',
+    );
   }
   //? see https://websemantics.uk/tools/font-size-conversion-pixel-point-em-rem-percent/ for convertions
 

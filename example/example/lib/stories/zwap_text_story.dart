@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/molecules/moleculesText/zwap_expandable_text.dart';
-import 'package:zwap_design_system/molecules/percent_widget/percent_widget.dart';
-import 'package:zwap_design_system/molecules/zwap_modal/zwap_modal.dart';
 import 'package:zwap_design_system/zwap_design_system.dart';
-import 'package:provider/provider.dart';
 
 class ZwapTextStory extends StatefulWidget {
   const ZwapTextStory({Key? key}) : super(key: key);
@@ -61,7 +58,11 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                 textColor: ZwapColors.warning400,
                 children: [
                   ZwapTextSpan(text: "  <Proident dolore quis culpa anim laborum.>  "),
-                  ZwapTextSpan(text: "  <ciao>  ", textStyle: TextStyle(fontWeight: FontWeight.w200)),
+                  ZwapTextSpan.fromZwapTypography(
+                    text: "  <in bb>  ",
+                  ),
+                  ZwapTextSpan.fromZwapTypography(text: "  <in verde>  ", textColor: ZwapColors.success400),
+                  ZwapTextSpan(text: "  <ciao>  ", textStyle: TextStyle(fontWeight: FontWeight.w200, decoration: TextDecoration.lineThrough)),
                   ZwapTextSpan(text: "...."),
                 ],
               ),

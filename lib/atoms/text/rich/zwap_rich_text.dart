@@ -10,7 +10,7 @@ import '../../typography/zwapTypography.dart';
 
 import '../base/zwapText.dart';
 
-//TODO (Marchetti): Move ZwapType and Color in a ZwapTextStyle and standardize all types
+//FEATURE (Marchetti): Move ZwapType and Color in a ZwapTextStyle and standardize all types
 
 enum ZwapLinkTarget {
   blank,
@@ -23,7 +23,7 @@ class ZwapTextSpan {
 
   List<ZwapTextSpan> children;
 
-  /// TODO (Marchetti): Add the co-existency of gesture recognizer and link widger
+  /// FEATURE (Marchetti): Add the co-existency of gesture recognizer and link widger
   ///! if one of the text spans has links this will be ignored
   final TapGestureRecognizer? gestureRecognizer;
 
@@ -44,7 +44,6 @@ class ZwapTextSpan {
     this.linkTarget = ZwapLinkTarget.defaultTarget,
   });
 
-  /// **Warning** color is not applied is textType is null
   ZwapTextSpan.fromZwapTypography({
     required this.text,
     ZwapTextType? textType,
@@ -53,7 +52,11 @@ class ZwapTextSpan {
     this.children = const [],
     this.gestureRecognizer,
     this.linkTarget = ZwapLinkTarget.defaultTarget,
-  }) : this.textStyle = textType == null ? null : getTextStyle(textType).copyWith(color: textColor);
+  }) : this.textStyle = textType == null
+            ? textColor != null
+                ? TextStyle(color: textColor)
+                : null
+            : getTextStyle(textType).copyWith(color: textColor);
 
   TextSpan _toTextSpan() => TextSpan(
         text: text,
