@@ -242,7 +242,7 @@ class _ZwapInputState extends State<ZwapInput> {
     _focusNode.addListener(_focusListener);
 
     //? Min lenght indicator requires the _containerKey to be mounted in order to wolrk properly, so add a post frame setState callback solve this needing
-    if (_showMinLenghtIndicator) WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {}));
+    if (_showMinLenghtIndicator) WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   void _focusListener() {

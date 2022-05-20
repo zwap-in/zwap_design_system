@@ -131,7 +131,7 @@ class _ModalBody extends StatelessWidget {
         final outAnimation = Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0))
             .animate(CurvedAnimation(parent: animation, curve: Curves.decelerate.flipped));
 
-        WidgetsBinding.instance?.addPostFrameCallback((_) => _previousIndex = step.index);
+        WidgetsBinding.instance.addPostFrameCallback((_) => _previousIndex = step.index);
 
         if (child.key == ValueKey(step)) {
           return ClipRect(
