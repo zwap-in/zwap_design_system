@@ -367,11 +367,11 @@ class _ZwapSelectState extends State<ZwapSelect> {
   @override
   void didUpdateWidget(covariant ZwapSelect oldWidget) {
     if (!mapEquals(oldWidget.values, widget.values))
-      WidgetsBinding.instance.addPostFrameCallback((_) => _provider.originalValuesChanged(widget.values));
+      WidgetsBinding.instance?.addPostFrameCallback((_) => _provider.originalValuesChanged(widget.values));
     if (widget.isRegular && widget.selected != oldWidget.selected)
-      WidgetsBinding.instance.addPostFrameCallback((_) => onChangeValue(widget.selected, callCallback: false));
+      WidgetsBinding.instance?.addPostFrameCallback((_) => onChangeValue(widget.selected, callCallback: false));
     if (widget.isMultiple && !listEquals(widget.selectedValues, oldWidget.selectedValues))
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
         setState(() => _selectedValues = widget.selectedValues);
         _provider.selectedChanged(widget.selectedValues);
       });

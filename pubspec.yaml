@@ -1,6 +1,6 @@
 name: zwap_design_system
 description: This is a package to build a standard design system kit for any zwap projects
-version: 0.1.551
+version: 0.1.554
 homepage: https://github.com/zwap-in/zwap_design_system
 
 environment:
@@ -42,11 +42,15 @@ dependencies:
   percent_indicator: ^4.0.0
 
   extended_text_field: ^10.0.0
+  freezed: ^1.1.1
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  build_runner: ^2.1.8
+  json_serializable: ^6.1.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

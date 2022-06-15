@@ -1,11 +1,16 @@
+library zwap_modal;
+
 import 'package:flutter/material.dart';
 import 'package:taastrap/utils/utils.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 
-enum _NewModalTopLeftWidgetType { backButton }
-enum _NewModalTopRightWidgetType { close }
-enum _NewModalBottomWidgetType { loading, singleButton, doubleButton }
+//TODO: standardizza per modale a più passaggi
+
+part './components/modal_top_left_widget.dart';
+part './components/modal_top_rigth_widget.dart';
+part './components/modal_bottom_widget.dart';
+part './components/modal_multi_step_widget.dart';
 
 Future<T?> showNewZwapModal<T>(BuildContext context, Widget child) async {
   return showGeneralDialog<T>(
@@ -22,148 +27,14 @@ Future<T?> showNewZwapModal<T>(BuildContext context, Widget child) async {
   );
 }
 
-class NewModalTopLeftWidget extends StatelessWidget {
-  final Function()? onTap;
-
-  final _NewModalTopLeftWidgetType _type;
-
-  NewModalTopLeftWidget.backButton({this.onTap}) : this._type = _NewModalTopLeftWidgetType.backButton;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (_type) {
-      case _NewModalTopLeftWidgetType.backButton:
-        return InkWell(
-          onTap: onTap,
-          child: ZwapIcons.icons("arrow_left", iconColor: ZwapColors.shades100),
-        );
-    }
-  }
-}
-
-class NewModalTopRightWidget extends StatelessWidget {
-  final Function()? onClose;
-
-  final _NewModalTopRightWidgetType _type;
-
-  NewModalTopRightWidget.closeButton({this.onClose}) : this._type = _NewModalTopRightWidgetType.close;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (_type) {
-      case _NewModalTopRightWidgetType.close:
-        return InkWell(
-          onTap: this.onClose != null ? () => this.onClose!() : () => {},
-          child: ZwapIcons.icons("close", iconColor: ZwapColors.neutral400),
-        );
-    }
-  }
-}
-
-class NewModalBottomWidget extends StatelessWidget {
-  final _NewModalBottomWidgetType _type;
-
-  final Function()? onTapButton;
-  final Function()? onTapSecondButton;
-
-  final String? buttonText;
-  final String? secondButtonText;
-
-  final bool enabled;
-  final bool secondEnabled;
-
-  final Color? loaderColor;
-
-  NewModalBottomWidget.loader({
-    required this.loaderColor,
-    Key? key,
-  })  : assert(loaderColor != null, "A loader widget must have a not null color"),
-        this._type = _NewModalBottomWidgetType.loading,
-        this.onTapButton = null,
-        this.onTapSecondButton = null,
-        this.buttonText = null,
-        this.secondButtonText = null,
-        this.enabled = false,
-        this.secondEnabled = false,
-        super(key: key);
-
-  /// All value must be not null
-  NewModalBottomWidget.singleButton({
-    required this.buttonText,
-    required this.onTapButton,
-    this.enabled = true,
-    Key? key,
-  })  : assert(buttonText != null),
-        this._type = _NewModalBottomWidgetType.singleButton,
-        this.loaderColor = null,
-        this.onTapSecondButton = null,
-        this.secondButtonText = null,
-        this.secondEnabled = false,
-        super(key: key);
-
-  NewModalBottomWidget.doubleButton({
-    required this.buttonText,
-    required this.onTapButton,
-    required this.onTapSecondButton,
-    required this.secondButtonText,
-    this.enabled = true,
-    this.secondEnabled = true,
-    Key? key,
-  })  : assert(buttonText != null && secondButtonText != null),
-        this._type = _NewModalBottomWidgetType.doubleButton,
-        this.loaderColor = null,
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    switch (_type) {
-      case _NewModalBottomWidgetType.loading:
-        return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(loaderColor)));
-      case _NewModalBottomWidgetType.singleButton:
-        return Padding(
-          padding: EdgeInsets.symmetric(vertical: 7),
-          child: ZwapButton(
-            width: double.infinity,
-            height: 50,
-            buttonChild: ZwapButtonChild.text(text: buttonText!),
-            decorations: ZwapButtonDecorations.primaryLight(internalPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20)),
-            disabled: !enabled,
-            onTap: enabled ? onTapButton : null,
-          ),
-        );
-      case _NewModalBottomWidgetType.doubleButton:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 7),
-              child: ZwapButton(
-                width: double.infinity,
-                height: 50,
-                buttonChild: ZwapButtonChild.text(text: buttonText!),
-                decorations: ZwapButtonDecorations.primaryLight(internalPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20)),
-                disabled: !enabled,
-                onTap: enabled ? onTapButton : null,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 7),
-              child: ZwapButton(
-                width: double.infinity,
-                height: 50,
-                buttonChild: ZwapButtonChild.text(text: secondButtonText!),
-                decorations: ZwapButtonDecorations.tertiary(internalPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20)),
-                disabled: !enabled,
-                onTap: secondEnabled ? onTapSecondButton : null,
-              ),
-            ),
-          ],
-        );
-    }
-  }
-}
-
-///Modal Component to show a popup
+/// Modal Component to show a popup
+///
+/// There are some standardized component to fastly implement
+/// complete modals:
+/// * NewModalBottomWidget (loading, single button, dobule button)
+/// * NewModalTopRigthWidget (close)
+/// * NewModalTopLeftWidget (back button)
+/// * NewModalMultuStepWidget (for handle multi step inside the modal)
 class NewModal extends StatefulWidget {
   final Widget? title;
 
@@ -195,13 +66,13 @@ class NewModal extends StatefulWidget {
 
   final bool showDivider;
 
-  const NewModal({
+  NewModal({
     required this.width,
+    this.topLeftWidget,
+    this.title,
+    this.topRightWidget,
     this.bodyWidget,
     this.bottomWidget,
-    this.topRightWidget,
-    this.title,
-    this.topLeftWidget,
     this.topWidget,
     this.scrollable = true,
     this.showDivider = true,
@@ -269,7 +140,8 @@ class _NewModalState extends State<NewModal> {
     );
   }
 
-  Widget _getBodySection() {
+  /// Render the single body widget
+  Widget _getSingleBodySection() {
     if (widget.scrollable)
       return Flexible(
         child: SingleChildScrollView(
@@ -278,9 +150,13 @@ class _NewModalState extends State<NewModal> {
             left: widget.addPaddingToBodyWidget ? _horizontalPadding : 0,
             right: widget.addPaddingToBodyWidget ? _horizontalPadding : 0,
           ),
-          child: Container(key: _bodyKey, child: widget.bodyWidget),
+          child: Container(
+            key: _bodyKey,
+            child: widget.bodyWidget ?? Container(),
+          ),
         ),
       );
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 200),
       child: Container(
@@ -309,7 +185,7 @@ class _NewModalState extends State<NewModal> {
             children: [
               _getTitleSection(),
               if (widget.showDivider) Divider(height: 2, thickness: 1, color: ZwapColors.neutral300),
-              _getBodySection(),
+              _getSingleBodySection(),
               if (widget.bottomWidget != null)
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 200),

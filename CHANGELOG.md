@@ -552,3 +552,9 @@
 
 ## 0.1.550
 * Now ZwapTextSpan.fromZwapTypography(...) can apply only the color without replacing style
+
+## 0.1.552
+* Added textStyle and disabledTextStyle fields to ZwapInput
+
+## 0.1.553
+* Added cursorColor field to ZwapInput

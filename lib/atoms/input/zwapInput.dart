@@ -126,6 +126,15 @@ class ZwapInput extends StatefulWidget {
   /// It must be not null if [minLenght] != 0 or [showClearAll] is true
   final String Function(String key)? translateKey;
 
+  /// The value text style
+  final TextStyle? textStyle;
+
+  /// The value text style when [disabled] is true
+  final TextStyle? disabledTextStyle;
+
+  /// The input cursor color
+  final Color? cursorColor;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -163,6 +172,9 @@ class ZwapInput extends StatefulWidget {
     this.showMinLenghtIndicator = true,
     this.showClearAll = false,
     this.translateKey,
+    this.textStyle,
+    this.disabledTextStyle,
+    this.cursorColor,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -204,6 +216,9 @@ class ZwapInput extends StatefulWidget {
     this.showMinLenghtIndicator = true,
     this.showClearAll = false,
     this.translateKey,
+    this.textStyle,
+    this.disabledTextStyle,
+    this.cursorColor,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -242,7 +257,7 @@ class _ZwapInputState extends State<ZwapInput> {
     _focusNode.addListener(_focusListener);
 
     //? Min lenght indicator requires the _containerKey to be mounted in order to wolrk properly, so add a post frame setState callback solve this needing
-    if (_showMinLenghtIndicator) WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    if (_showMinLenghtIndicator) WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {}));
   }
 
   void _focusListener() {
@@ -322,11 +337,13 @@ class _ZwapInputState extends State<ZwapInput> {
       autofillHints: widget.autofillHints,
       onChanged: widget.onChanged != null ? (String newValue) => widget.onChanged!(_getOnChangedValue(newValue)) : null,
       textCapitalization: widget.textCapitalization ?? TextCapitalization.sentences,
-      cursorColor: ZwapColors.shades100,
+      cursorColor: widget.cursorColor ?? ZwapColors.shades100,
       obscureText: (widget.autoObscureIfPassword && widget.textInputType == TextInputType.visiblePassword) || widget.obscure,
       textAlign: TextAlign.start,
       focusNode: widget.readOnly ? FocusNode() : _focusNode,
-      style: getTextStyle(ZwapTextType.bodyRegular).apply(color: widget.disabled ? ZwapColors.neutral300 : ZwapColors.neutral700),
+      style: widget.disabled
+          ? widget.disabledTextStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral300)
+          : widget.textStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral700),
       decoration: decorations,
       onSubmitted: widget.keyCallBackFunction,
       readOnly: widget.readOnly,
