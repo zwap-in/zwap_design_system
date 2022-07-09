@@ -17,10 +17,10 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
   /// Called when "back" button is pressed
   final Function()? onBack;
 
-  /// Is true a "back" button will be showed
+  /// Is true a "back" button will be shown
   final bool showBack;
 
-  /// If true an "end" button will be showed instead of the "forward" button
+  /// If true an "end" button will be shown instead of the "forward" button
   final bool showEnd;
 
   /// Called when "forward" (or "end" if showEnd is true) button is pressed
@@ -31,7 +31,7 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
   ///  By default offset is Offset.zero
   final Offset overlayOffset;
 
-  /// If true a close icon will be showed and user can finish the tutorial in this step
+  /// If true a close icon will be shown and user can finish the tutorial in this step
   ///
   /// Is showClose is true the step can be dismissed clicking outside the tutorial widget
   final bool showClose;

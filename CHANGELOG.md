@@ -558,3 +558,9 @@
 
 ## 0.1.553
 * Added cursorColor field to ZwapInput
+
+## 0.1.554
+* Added NewModalMultiStepBody widget to handle multiple step modals easily
+
+## 0.1.554
+* Added isSelected and selectedDecoration to ZwapButton. New selected logic added

@@ -10,10 +10,10 @@ class _MultipleStepWidget extends StatelessWidget {
   /// Is showClose is true the step can be dismissed clicking outside the tutorial widget
   final bool showClose;
 
-  /// Is true a "back" button will be showed
+  /// Is true a "back" button will be shown
   final bool showBack;
 
-  /// If true an "end" button will be showed instead of the "forward" button
+  /// If true an "end" button will be shown instead of the "forward" button
   final bool showEnd;
 
   /// Called when the close icon is pressed

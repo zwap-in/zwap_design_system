@@ -58,6 +58,7 @@ class ZwapIcons {
     'twitter': 'assets/images/icons/twitter.svg',
     'message': 'assets/images/icons/message.svg',
     'search': 'assets/images/icons/search.svg',
+    'search2': 'assets/images/icons/search_2.svg',
     'arrow_down': 'assets/images/icons/arrow_down.svg',
     'folder': 'assets/images/icons/folder.svg',
     'more_square': 'assets/images/icons/more_square.svg',

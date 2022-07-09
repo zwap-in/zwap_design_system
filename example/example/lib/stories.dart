@@ -4,6 +4,7 @@ import 'package:example/stories/zwap_input_story.dart';
 import 'package:example/stories/zwap_modal_story.dart';
 import 'package:example/stories/zwap_percent_story.dart';
 import 'package:example/stories/zwap_scroll_items_story.dart';
+import 'package:example/stories/zwap_search_bar_story.dart';
 import 'package:example/stories/zwap_select_story.dart';
 import 'package:example/stories/zwap_tab_bars_story.dart';
 import 'package:example/stories/zwap_text_story.dart';
@@ -23,6 +24,7 @@ enum ZwapStories {
   scrollItems,
   text,
   tabbar,
+  search,
 }
 
 class ZwapStory {
@@ -92,5 +94,10 @@ List<ZwapStory> stories = [
     name: "Zwap Tab Bars",
     builder: (context) => ZwapTabBarsStory(),
     story: ZwapStories.tabbar,
+  ),
+  ZwapStory(
+    name: "Zwap Search Bar",
+    builder: (context) => ZwapSearchBarStory(),
+    story: ZwapStories.search,
   ),
 ];

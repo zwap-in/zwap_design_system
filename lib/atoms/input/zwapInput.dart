@@ -56,7 +56,7 @@ class ZwapInput extends StatefulWidget {
   ///The text showed under the input
   final String? helperText;
 
-  ///If [true] helperText will be showed as error, else as regular text
+  ///If [true] helperText will be shown as error, else as regular text
   final bool helperTextIsError;
 
   final bool showSuccess;
@@ -103,8 +103,8 @@ class ZwapInput extends StatefulWidget {
   /// If <= 0 nothing change
   ///
   /// If > 0:
-  /// * A min lenght string will be showed under the input on le left: "characters: lenght/minLenght"
-  /// * If `showMinLenghtIndicator == true` a dynamic bar will be showed on bottom (inside the input container)
+  /// * A min lenght string will be shown under the input on le left: "characters: lenght/minLenght"
+  /// * If `showMinLenghtIndicator == true` a dynamic bar will be shown on bottom (inside the input container)
   ///
   /// Default `0`
   final int minLenght;

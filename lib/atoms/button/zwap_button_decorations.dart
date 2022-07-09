@@ -51,6 +51,7 @@ class ZwapButtonDecorations {
   final Duration? animationDuration;
 
   static _ZwapVideoPlatformButtonsDecorations get videoPlatformDecorations => _ZwapVideoPlatformButtonsDecorations();
+  static _ZwapSelectableButtonDecorations get selectableButtonDecorations => _ZwapSelectableButtonDecorations();
 
   ZwapButtonDecorations({
     this.border,
@@ -817,6 +818,168 @@ class ZwapButtonDecorations {
 }
 
 */
+}
+
+class _ZwapSelectableButtonDecorations {
+  ZwapButtonDecorations defaultDecorations({
+    Border? border,
+    Border? disabledBorder,
+    Border? focussedBorder,
+    Border? hoverBorder,
+    Color? backgroundColor,
+    BorderRadius? borderRadius,
+    Color? disabledColor,
+    Gradient? disabledGradient,
+    Gradient? gradient,
+    Color? hoverColor,
+    Gradient? hoverGradient,
+    Color? focussedColor,
+    Gradient? focussedGradient,
+    BoxShadow? shadow,
+    BoxShadow? hoverShadow,
+    EdgeInsets? internalPadding,
+    BoxShadow? disabledShadow,
+    BoxShadow? focussedShadow,
+    Color? contentColor,
+    Color? hoverContentColor,
+    Color? disabledContentColor,
+    Color? focussedContentColor,
+    Color? pressedColor,
+    Border? pressedBorder,
+    Gradient? pressedGradient,
+    BoxShadow? pressedShadow,
+    Color? pressedContentColor,
+    double? borderWitdh,
+    Duration? animationDuration,
+  }) =>
+      ZwapButtonDecorations(
+        borderRadius: borderRadius ?? BorderRadius.circular(8),
+        backgroundColor: backgroundColor ?? ZwapColors.neutral50,
+        border: border ?? null,
+        contentColor: contentColor ?? ZwapColors.primary900Dark,
+        disabledBorder: disabledBorder ?? null,
+        disabledColor: disabledColor ?? ZwapColors.neutral50,
+        disabledContentColor: disabledContentColor ?? ZwapColors.text65,
+        hoverBorder: hoverBorder ?? null,
+        hoverColor: hoverColor ?? ZwapColors.primary900Dark,
+        hoverContentColor: hoverContentColor ?? ZwapColors.shades0,
+        hoverShadow: hoverShadow ??
+            BoxShadow(
+              blurRadius: 24,
+              spreadRadius: -8,
+              color: ZwapColors.primary900Dark.withOpacity(0.4),
+              offset: Offset(0, 12),
+            ),
+        focussedBorder: focussedBorder ?? null,
+        focussedColor: focussedColor ?? ZwapColors.primary900Dark,
+        focussedContentColor: focussedContentColor ?? ZwapColors.shades0,
+        focussedShadow: focussedShadow ??
+            BoxShadow(
+              blurRadius: 24,
+              spreadRadius: -8,
+              color: ZwapColors.primary900Dark.withOpacity(0.4),
+              offset: Offset(0, 12),
+            ),
+        pressedBorder: pressedBorder ?? null,
+        pressedColor: pressedColor ?? ZwapColors.primary900Dark.withOpacity(0.6),
+        pressedContentColor: pressedContentColor ?? ZwapColors.shades0,
+        pressedShadow: pressedShadow ??
+            BoxShadow(
+              blurRadius: 24,
+              spreadRadius: -8,
+              color: ZwapColors.primary900Dark.withOpacity(0.4),
+              offset: Offset(0, 12),
+            ),
+        animationDuration: animationDuration,
+        disabledGradient: disabledGradient,
+        disabledShadow: disabledShadow,
+        focussedGradient: focussedGradient,
+        gradient: gradient,
+        hoverGradient: hoverGradient,
+        internalPadding: internalPadding ?? const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+        pressedGradient: pressedGradient,
+        shadow: shadow,
+      );
+
+  ZwapButtonDecorations selectedDecorations({
+    Border? border,
+    Border? disabledBorder,
+    Border? focussedBorder,
+    Border? hoverBorder,
+    Color? backgroundColor,
+    BorderRadius? borderRadius,
+    Color? disabledColor,
+    Gradient? disabledGradient,
+    Gradient? gradient,
+    Color? hoverColor,
+    Gradient? hoverGradient,
+    Color? focussedColor,
+    Gradient? focussedGradient,
+    BoxShadow? shadow,
+    BoxShadow? hoverShadow,
+    EdgeInsets? internalPadding,
+    BoxShadow? disabledShadow,
+    BoxShadow? focussedShadow,
+    Color? contentColor,
+    Color? hoverContentColor,
+    Color? disabledContentColor,
+    Color? focussedContentColor,
+    Color? pressedColor,
+    Border? pressedBorder,
+    Gradient? pressedGradient,
+    BoxShadow? pressedShadow,
+    Color? pressedContentColor,
+    double? borderWitdh,
+    Duration? animationDuration,
+  }) =>
+      ZwapButtonDecorations(
+        borderRadius: borderRadius ?? BorderRadius.circular(8),
+        backgroundColor: backgroundColor ?? ZwapColors.primary50,
+        border: border ?? Border.all(color: ZwapColors.primary700),
+        contentColor: contentColor ?? ZwapColors.primary900Dark,
+        disabledBorder: disabledBorder ?? Border.all(color: ZwapColors.primary700),
+        disabledColor: disabledColor ?? ZwapColors.primary50,
+        disabledContentColor: disabledContentColor ?? ZwapColors.text65,
+        hoverBorder: hoverBorder ?? null,
+        hoverColor: hoverColor ?? ZwapColors.primary900Dark,
+        hoverContentColor: hoverContentColor ?? ZwapColors.shades0,
+        hoverShadow: hoverShadow ??
+            BoxShadow(
+              blurRadius: 24,
+              spreadRadius: -8,
+              color: ZwapColors.primary900Dark.withOpacity(0.4),
+              offset: Offset(0, 12),
+            ),
+        focussedBorder: focussedBorder ?? null,
+        focussedColor: focussedColor ?? ZwapColors.primary900Dark,
+        focussedContentColor: focussedContentColor ?? ZwapColors.shades0,
+        focussedShadow: focussedShadow ??
+            BoxShadow(
+              blurRadius: 24,
+              spreadRadius: -8,
+              color: ZwapColors.primary900Dark.withOpacity(0.4),
+              offset: Offset(0, 12),
+            ),
+        pressedBorder: pressedBorder ?? null,
+        pressedColor: pressedColor ?? ZwapColors.primary900Dark.withOpacity(0.6),
+        pressedContentColor: pressedContentColor ?? ZwapColors.shades0,
+        pressedShadow: pressedShadow ??
+            BoxShadow(
+              blurRadius: 24,
+              spreadRadius: -8,
+              color: ZwapColors.primary900Dark.withOpacity(0.4),
+              offset: Offset(0, 12),
+            ),
+        animationDuration: animationDuration,
+        disabledGradient: disabledGradient,
+        disabledShadow: disabledShadow,
+        focussedGradient: focussedGradient,
+        gradient: gradient,
+        hoverGradient: hoverGradient,
+        internalPadding: internalPadding ?? const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+        pressedGradient: pressedGradient,
+        shadow: shadow,
+      );
 }
 
 class _ZwapVideoPlatformButtonsDecorations {

@@ -13,6 +13,8 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
   bool _disabled = false;
   bool _loading = false;
 
+  bool _isSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -512,6 +514,36 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                     ],
                   ),
                 ),
+                SizedBox(height: 30),
+                ZwapText(
+                  text: "A strange concept of button",
+                  zwapTextType: ZwapTextType.bigBodySemibold,
+                  textColor: ZwapColors.primary900Dark,
+                ),
+                SizedBox(height: 8),
+                ZwapButton.customChild(
+                  margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                  height: 260,
+                  width: 208,
+                  isSelected: _isSelected,
+                  selectedDecorations: ZwapButtonDecorations.selectableButtonDecorations.selectedDecorations(),
+                  child: (state) => Column(
+                    children: [
+                      Icon(Icons.tab, size: 35, color: ZwapColors.primary700),
+                      SizedBox(height: 20),
+                      ZwapText(
+                        text: "Press me",
+                        zwapTextType: ZwapTextType.mediumBodyRegular,
+                        textColor: ZwapColors.primary900Dark,
+                      ),
+                    ],
+                  ),
+                  loading: _loading,
+                  disabled: _disabled,
+                  decorations: ZwapButtonDecorations.selectableButtonDecorations.defaultDecorations(),
+                  onTap: () => setState(() => _isSelected = !_isSelected),
+                ),
+                SizedBox(height: 230),
               ],
             ),
           ),

@@ -13,17 +13,42 @@ import '../typography/zwapTypography.dart';
 
 part './zwap_button_decorations.dart';
 
+//FEATURE: In line buttons (2 bottoni uno affiano all'altro -> su schemi piccoli uno sotto l'altro)
+
+/// Used as argument of the callback when custom childs are builded.
+///
+/// Usually used to make the custom child of the button dynamic in base
+/// of the current ZwapButton status
 class ZwapButtonStatusDescription {
+  /// Is true if the button is hovered
   final bool isHovered;
+
+  /// Is true if the button is focussed
   final bool isFocussed;
+
+  /// Is true if the button is disabled
   final bool isDisabled;
+
+  /// Is true if the button is hidden
   final bool isHidden;
+
+  /// Is true if the button is selected
+  final bool isSelected;
+
+  /// The current ZwapButton decorations
+  final ZwapButtonDecorations? decorations;
+
+  /// The decoration used when [isSelected] is true
+  final ZwapButtonDecorations? selectedDecorations;
 
   ZwapButtonStatusDescription._({
     required this.isDisabled,
     required this.isFocussed,
     required this.isHovered,
     required this.isHidden,
+    required this.isSelected,
+    required this.decorations,
+    required this.selectedDecorations,
   });
 }
 
@@ -111,7 +136,7 @@ class ZwapButton extends StatefulWidget {
   /// If [true] button will be disabled
   final bool disabled;
 
-  /// Il true a loading indicator will be showed instead of button child
+  /// Il true a loading indicator will be shown instead of button child
   final bool loading;
 
   /// Opacity of this button: hide ? 0 : 1
@@ -136,6 +161,15 @@ class ZwapButton extends StatefulWidget {
   /// The map of shortcuts that the [ShortcutManager] will be given to manage.
   final Map<ShortcutActivator, Intent>? shortcuts;
 
+  /// Some buttons can be use as "triggers" and have a selected state.
+  ///
+  /// Simply, when [isSelected] is true, [selectedDecorations] are
+  /// used instead of [decorations].
+  final bool isSelected;
+
+  /// Used when [isSelected] is true
+  final ZwapButtonDecorations? selectedDecorations;
+
   const ZwapButton({
     required ZwapButtonChild buttonChild,
     this.decorations,
@@ -151,6 +185,8 @@ class ZwapButton extends StatefulWidget {
     this.actions,
     this.shortcuts,
     this.loading = false,
+    this.isSelected = false,
+    this.selectedDecorations,
     Key? key,
   })  : this.child = null,
         this.buttonChild = buttonChild,
@@ -171,6 +207,8 @@ class ZwapButton extends StatefulWidget {
     this.actions,
     this.shortcuts,
     this.loading = false,
+    this.isSelected = false,
+    this.selectedDecorations,
     Key? key,
   })  : this.buttonChild = null,
         this.child = child,
@@ -183,6 +221,7 @@ class ZwapButton extends StatefulWidget {
 class _ZwapButtonState extends State<ZwapButton> {
   late final FocusNode _focusNode;
   late final ZwapButtonDecorations _decorations;
+  late final ZwapButtonDecorations _selectedDecorations;
 
   late final Map<Type, Action<Intent>>? _actions;
   late final Map<ShortcutActivator, Intent>? _shortcuts;
@@ -191,16 +230,19 @@ class _ZwapButtonState extends State<ZwapButton> {
   bool _hovered = false;
   bool _disabled = false;
   bool _pressed = false;
+  bool _selected = false;
 
   bool _loading = false;
 
   @override
   void initState() {
     _focusNode = widget.focusNode ?? FocusNode();
-    _decorations = widget.decorations ?? ZwapButtonDecorations();
+    _decorations = widget.decorations ?? ZwapButtonDecorations.primaryLight();
+    _selectedDecorations = widget.selectedDecorations ?? ZwapButtonDecorations.primaryLight();
 
     _focussed = _focusNode.hasFocus;
     _disabled = widget.disabled;
+    _selected = widget.isSelected;
 
     _loading = widget.loading;
 
@@ -220,6 +262,7 @@ class _ZwapButtonState extends State<ZwapButton> {
   void didUpdateWidget(ZwapButton oldWidget) {
     if (widget.disabled != _disabled) setState(() => _disabled = widget.disabled);
     if (widget.loading != _loading) setState(() => _loading = widget.loading);
+    if (widget.isSelected != _selected) setState(() => _selected = widget.isSelected);
 
     super.didUpdateWidget(oldWidget);
   }
@@ -230,7 +273,22 @@ class _ZwapButtonState extends State<ZwapButton> {
     required T? disabled,
     required T? focussed,
     required T? pressed,
+    required T? selectedNormal,
+    required T? selectedHover,
+    required T? selectedDisabled,
+    required T? selectedFocussed,
+    required T? selectedPressed,
   }) {
+    if (_selected) {
+      if (_loading) return selectedNormal;
+
+      if (_disabled) return selectedDisabled;
+      if (_pressed) return selectedPressed;
+      if (_hovered) return selectedHover;
+      if (_focussed) return selectedFocussed;
+      return selectedNormal;
+    }
+
     if (_loading) return normal;
 
     if (_disabled) return disabled;
@@ -241,11 +299,17 @@ class _ZwapButtonState extends State<ZwapButton> {
   }
 
   Color? get _color => _getCurrentValueByStatus<Color>(
-      normal: _decorations.gradient == null ? _decorations.backgroundColor : null,
-      disabled: _decorations.disabledGradient == null ? _decorations.disabledColor : null,
-      focussed: _decorations.focussedGradient == null ? _decorations.focussedColor : null,
-      pressed: _decorations.pressedGradient == null ? _decorations.pressedColor : null,
-      hover: _decorations.hoverGradient == null ? _decorations.hoverColor : null);
+        normal: _decorations.gradient == null ? _decorations.backgroundColor : null,
+        disabled: _decorations.disabledGradient == null ? _decorations.disabledColor : null,
+        focussed: _decorations.focussedGradient == null ? _decorations.focussedColor : null,
+        pressed: _decorations.pressedGradient == null ? _decorations.pressedColor : null,
+        hover: _decorations.hoverGradient == null ? _decorations.hoverColor : null,
+        selectedNormal: _selectedDecorations.gradient == null ? _selectedDecorations.backgroundColor : null,
+        selectedDisabled: _selectedDecorations.disabledGradient == null ? _selectedDecorations.disabledColor : null,
+        selectedFocussed: _selectedDecorations.focussedGradient == null ? _selectedDecorations.focussedColor : null,
+        selectedPressed: _selectedDecorations.pressedGradient == null ? _selectedDecorations.pressedColor : null,
+        selectedHover: _selectedDecorations.hoverGradient == null ? _selectedDecorations.hoverColor : null,
+      );
 
   Gradient? get _gradient => _getCurrentValueByStatus<Gradient>(
         normal: _decorations.gradient,
@@ -253,6 +317,11 @@ class _ZwapButtonState extends State<ZwapButton> {
         focussed: _decorations.focussedGradient,
         pressed: _decorations.pressedGradient,
         hover: _decorations.hoverGradient,
+        selectedNormal: _selectedDecorations.gradient,
+        selectedDisabled: _selectedDecorations.disabledGradient,
+        selectedFocussed: _selectedDecorations.focussedGradient,
+        selectedPressed: _selectedDecorations.pressedGradient,
+        selectedHover: _selectedDecorations.hoverGradient,
       );
 
   Border? get _border => _getCurrentValueByStatus(
@@ -261,6 +330,11 @@ class _ZwapButtonState extends State<ZwapButton> {
         disabled: _decorations.disabledBorder,
         pressed: _decorations.pressedBorder,
         focussed: _decorations.focussedBorder,
+        selectedNormal: _selectedDecorations.border,
+        selectedHover: _selectedDecorations.hoverBorder,
+        selectedDisabled: _selectedDecorations.disabledBorder,
+        selectedPressed: _selectedDecorations.pressedBorder,
+        selectedFocussed: _selectedDecorations.focussedBorder,
       );
 
   BoxShadow? get _shadow => _getCurrentValueByStatus(
@@ -269,6 +343,11 @@ class _ZwapButtonState extends State<ZwapButton> {
         disabled: _decorations.disabledShadow,
         pressed: _decorations.pressedShadow,
         focussed: _decorations.focussedShadow,
+        selectedNormal: _selectedDecorations.shadow,
+        selectedHover: _selectedDecorations.hoverShadow,
+        selectedDisabled: _selectedDecorations.disabledShadow,
+        selectedPressed: _selectedDecorations.pressedShadow,
+        selectedFocussed: _selectedDecorations.focussedShadow,
       );
 
   Color? get _contentColor => _getCurrentValueByStatus(
@@ -277,6 +356,11 @@ class _ZwapButtonState extends State<ZwapButton> {
         disabled: _decorations.disabledContentColor,
         pressed: _decorations.pressedContentColor,
         focussed: _decorations.focussedContentColor,
+        selectedNormal: _selectedDecorations.contentColor,
+        selectedHover: _selectedDecorations.hoverContentColor,
+        selectedDisabled: _selectedDecorations.disabledContentColor,
+        selectedPressed: _selectedDecorations.pressedContentColor,
+        selectedFocussed: _selectedDecorations.focussedContentColor,
       );
 
   ZwapButtonStatusDescription get _currentStatus => ZwapButtonStatusDescription._(
@@ -284,6 +368,9 @@ class _ZwapButtonState extends State<ZwapButton> {
         isFocussed: _focussed,
         isHovered: _hovered,
         isHidden: widget.hide,
+        isSelected: _selected,
+        decorations: _decorations,
+        selectedDecorations: _selectedDecorations,
       );
 
   Widget _buildZwapButtonChild(BuildContext context) {

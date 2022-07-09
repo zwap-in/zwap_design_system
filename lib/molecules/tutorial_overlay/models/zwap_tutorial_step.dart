@@ -11,7 +11,7 @@ class ZwapTutorialStep {
   final double? height;
   final Color? backgroundColor;
 
-  /// If true a close icon will be showed and user can finish the tutorial in this step
+  /// If true a close icon will be shown and user can finish the tutorial in this step
   final bool showClose;
 
   /// The translate offset of the overlay, if zero the overlay if in the bottom center of the focus widget

@@ -36,7 +36,7 @@ class ZwapTextSpan {
   final ZwapLinkTarget linkTarget;
 
   ZwapTextSpan({
-    required this.text,
+    required this.text, 
     this.textStyle,
     this.children = const [],
     this.linkToUri,

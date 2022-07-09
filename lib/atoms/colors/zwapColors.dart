@@ -108,6 +108,8 @@ class ZwapColors {
 
   static const Color whiteTransparent = Color(0x000ffffff);
 
+  static const Color text65 = Color(0xff595A8F);
+
   /// It retrieves a random color from this predefined list
   static Color getRandomColor({bool is200 = false}) {
     late List<Color> colors;
