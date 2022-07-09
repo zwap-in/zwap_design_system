@@ -453,6 +453,7 @@ class _ZwapButtonState extends State<ZwapButton> {
             onShowHoverHighlight: (hasHover) {
               if (!hasHover && _pressed) setState(() => _pressed = false);
               setState(() => _hovered = hasHover);
+              if (widget.onHover != null) widget.onHover!(hasHover);
             },
             actions: _actions,
             shortcuts: _shortcuts,

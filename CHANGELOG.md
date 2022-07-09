@@ -562,5 +562,8 @@
 ## 0.1.554
 * Added NewModalMultiStepBody widget to handle multiple step modals easily
 
-## 0.1.554
+## 0.1.555
 * Added isSelected and selectedDecoration to ZwapButton. New selected logic added
+
+## 0.1.556
+* Fixed a problem with onHover callback of ZwapButton
