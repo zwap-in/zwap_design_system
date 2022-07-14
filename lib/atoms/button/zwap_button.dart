@@ -170,6 +170,12 @@ class ZwapButton extends StatefulWidget {
   /// Used when [isSelected] is true
   final ZwapButtonDecorations? selectedDecorations;
 
+  /// If different from 0 is used to animate button from bottom
+  ///
+  /// The provided value will be the "heigth" of the empty space
+  /// under the button
+  final double hoverElevation;
+
   const ZwapButton({
     required ZwapButtonChild buttonChild,
     this.decorations,
@@ -187,6 +193,7 @@ class ZwapButton extends StatefulWidget {
     this.loading = false,
     this.isSelected = false,
     this.selectedDecorations,
+    this.hoverElevation = 0,
     Key? key,
   })  : this.child = null,
         this.buttonChild = buttonChild,
@@ -209,6 +216,7 @@ class ZwapButton extends StatefulWidget {
     this.loading = false,
     this.isSelected = false,
     this.selectedDecorations,
+    this.hoverElevation = 0,
     Key? key,
   })  : this.buttonChild = null,
         this.child = child,
@@ -433,8 +441,15 @@ class _ZwapButtonState extends State<ZwapButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: widget.margin,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.decelerate,
+      margin: (widget.margin ?? EdgeInsets.zero).add(widget.hoverElevation != 0
+          ? EdgeInsets.only(
+              top: _hovered ? 0 : widget.hoverElevation,
+              bottom: _hovered ? widget.hoverElevation : 0,
+            )
+          : EdgeInsets.zero),
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 200),
         opacity: widget.hide ? 0 : 1,

@@ -567,3 +567,6 @@
 
 ## 0.1.556
 * Fixed a problem with onHover callback of ZwapButton
+
+## 0.1.557
+* Added hoverElevation to ZwapButton

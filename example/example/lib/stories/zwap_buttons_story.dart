@@ -525,6 +525,7 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                   margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                   height: 260,
                   width: 208,
+                  hoverElevation: 4,
                   isSelected: _isSelected,
                   selectedDecorations: ZwapButtonDecorations.selectableButtonDecorations.selectedDecorations(),
                   child: (state) => Column(
