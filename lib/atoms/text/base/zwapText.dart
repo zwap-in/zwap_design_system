@@ -157,6 +157,7 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
         _selectable = false,
         this.textColor = customTextStyle!.color ?? Colors.white,
         super(key: key);
+        
 
   /// Beta
   ZwapText.selectable({

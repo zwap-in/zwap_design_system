@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zwap_design_system/atoms/text/base/zwap_gradient_text.dart';
 import 'package:zwap_design_system/molecules/moleculesText/zwap_expandable_text.dart';
 import 'package:zwap_design_system/zwap_design_system.dart';
 
@@ -66,12 +67,46 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                   ZwapTextSpan(text: "...."),
                 ],
               ),
+              ZwapGradientTextSpan.fromZwapTypography(
+                text: "Mollit  veniam sunt magna.",
+                textType: ZwapTextType.bigBodySemibold,
+                colors: [Colors.amber, Colors.red, Colors.blue],
+                stops: [0, 0.9, 1],
+              ),
               ZwapTextSpan.fromZwapTypography(
                 text: "Mollit incididunt sunt deserunt qui veniam sunt magna.",
                 textType: ZwapTextType.smallBodyRegular,
                 textColor: ZwapColors.success400,
               ),
             ],
+          ),
+          SizedBox(height: 20),
+          ZwapRichText.safeText(
+            textSpans: [
+              ZwapTextSpan.fromZwapTypography(
+                text: "dàaòj gnaòrgaeri gag a ga ",
+                textType: ZwapTextType.bigBodyRegular,
+                textColor: ZwapColors.shades100,
+              ),
+              ZwapGradientTextSpan.fromZwapTypography(
+                text: "mollit",
+                textType: ZwapTextType.bigBodyRegular,
+                colors: [Colors.amber, Colors.red, Colors.blue],
+                stops: [0, 0.9, 1],
+              ),
+              ZwapTextSpan.fromZwapTypography(
+                text: " Mollit incididunt sunt deserunt qui veniam sunt magna.",
+                textType: ZwapTextType.bigBodyRegular,
+                textColor: ZwapColors.shades100,
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          ZwapGradientText(
+            textType: ZwapTextType.bigBodyBold,
+            text: "Text text teasdfasdfaxt",
+            colors: [Colors.amber, Colors.red, Colors.blue],
+            stops: [0, 0.9, 1],
           ),
         ],
       ),

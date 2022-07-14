@@ -570,3 +570,6 @@
 
 ## 0.1.557
 * Added hoverElevation to ZwapButton
+
+## 0.1.558
+* Created ZwapGradientText and ZwapGradientTextSpan

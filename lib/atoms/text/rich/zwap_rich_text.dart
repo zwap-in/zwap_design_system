@@ -9,6 +9,7 @@ import 'package:zwap_utils/zwap_utils.dart';
 import '../../typography/zwapTypography.dart';
 
 import '../base/zwapText.dart';
+import '../base/zwap_gradient_text.dart';
 
 //FEATURE (Marchetti): Move ZwapType and Color in a ZwapTextStyle and standardize all types
 
@@ -36,7 +37,7 @@ class ZwapTextSpan {
   final ZwapLinkTarget linkTarget;
 
   ZwapTextSpan({
-    required this.text, 
+    required this.text,
     this.textStyle,
     this.children = const [],
     this.linkToUri,
@@ -58,11 +59,111 @@ class ZwapTextSpan {
                 : null
             : getTextStyle(textType).copyWith(color: textColor);
 
-  TextSpan _toTextSpan() => TextSpan(
+  InlineSpan _toInlineSpan() => TextSpan(
         text: text,
         style: textStyle,
         recognizer: gestureRecognizer,
-        children: this.children.map((zwapTS) => zwapTS._toTextSpan()).toList(),
+        children: this.children.map((zwapTS) => zwapTS._toInlineSpan()).toList(),
+      );
+}
+
+/// Gradient test spans supports only the onTap
+/// gesture
+class ZwapGradientTextSpan extends ZwapTextSpan {
+  final List<Color> colors;
+  final List<double>? stops;
+  final Alignment? begin;
+  final Alignment? end;
+
+  final LinearGradient? _gradient;
+
+  ZwapGradientTextSpan({
+    required String text,
+    required this.colors,
+    TextStyle? textStyle,
+    List<ZwapTextSpan> children = const [],
+    Uri? linkToUri,
+    TapGestureRecognizer? gestureRecognizer,
+    ZwapLinkTarget linkTarget = ZwapLinkTarget.defaultTarget,
+    this.begin,
+    this.end,
+    this.stops,
+  })  : this._gradient = null,
+        super(
+          text: text,
+          children: children,
+          gestureRecognizer: gestureRecognizer,
+          linkTarget: linkTarget,
+          linkToUri: linkToUri,
+          textStyle: textStyle?.copyWith(color: Colors.white),
+        );
+
+  ZwapGradientTextSpan.fromZwapTypography({
+    required String text,
+    required this.colors,
+    ZwapTextType? textType,
+    Uri? linkToUri,
+    List<ZwapTextSpan> children = const [],
+    TapGestureRecognizer? gestureRecognizer,
+    ZwapLinkTarget linkTarget = ZwapLinkTarget.defaultTarget,
+    this.begin,
+    this.end,
+    this.stops,
+  })  : this._gradient = null,
+        super.fromZwapTypography(
+          text: text,
+          children: children,
+          gestureRecognizer: gestureRecognizer,
+          linkTarget: linkTarget,
+          linkToUri: linkToUri,
+          textColor: Colors.white,
+          textType: textType,
+        );
+
+  ZwapGradientTextSpan.fromGradient({
+    required String text,
+    required LinearGradient gradient,
+    required TextStyle textStyle,
+    List<ZwapTextSpan> children = const [],
+    Uri? linkToUri,
+    TapGestureRecognizer? gestureRecognizer,
+    ZwapLinkTarget linkTarget = ZwapLinkTarget.defaultTarget,
+  })  : this.colors = [],
+        this.begin = null,
+        this.end = null,
+        this.stops = null,
+        this._gradient = gradient,
+        super(
+          text: text,
+          children: children,
+          gestureRecognizer: gestureRecognizer,
+          linkTarget: linkTarget,
+          linkToUri: linkToUri,
+          textStyle: textStyle.copyWith(color: Colors.white),
+        );
+
+  @override
+  InlineSpan _toInlineSpan() => WidgetSpan(
+    alignment: PlaceholderAlignment.bottom,
+        child: GestureDetector(
+          onTap: () {
+            if (gestureRecognizer != null && gestureRecognizer!.onTap != null) gestureRecognizer!.onTap!();
+          },
+          child: _gradient != null
+              ? ZwapGradientText.fromGradient(
+                  gradient: _gradient!,
+                  style: textStyle!,
+                  text: text,
+                )
+              : ZwapGradientText.custom(
+                  style: this.textStyle ?? TextStyle(),
+                  text: text,
+                  colors: colors,
+                  begin: begin,
+                  end: end,
+                  stops: stops,
+                ),
+        ),
       );
 }
 
@@ -129,10 +230,10 @@ class ZwapRichText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late List<TextSpan> children;
+    late List<InlineSpan> children;
 
     if (_isSafeText)
-      children = this.textSpans.map((e) => e._toTextSpan()).toList();
+      children = this.textSpans.map((e) => e._toInlineSpan()).toList();
     else
       children = _getTexts();
 
@@ -140,7 +241,7 @@ class ZwapRichText extends StatelessWidget {
 
     return RichText(
       text: TextSpan(
-        children: List<TextSpan>.generate(children.length, (index) => children[index]),
+        children: List<InlineSpan>.generate(children.length, (index) => children[index]),
         style: style,
       ),
       textAlign: textAlign ?? TextAlign.start,
