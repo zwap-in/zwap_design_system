@@ -219,7 +219,7 @@ class __TabItemWidgetState extends State<_TabItemWidget> {
               child: ZwapText.customStyle(
                 key: ValueKey(_selected),
                 text: widget.name,
-                customTextStyle: _isHovered && _selected ? widget.textStyle : widget.disabledStyle,
+                customTextStyle: _isHovered || _selected ? widget.textStyle : widget.disabledStyle,
               ),
             ),
             SizedBox(height: 9.5),

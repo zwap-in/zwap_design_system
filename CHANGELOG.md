@@ -580,3 +580,6 @@
 
 ## 0.1.560
 * Improved ZwapPrimaryTabBar with decorations and customizations
+
+## 0.1.561
+* Fix to ZwapPrimaryTabBar decorations
