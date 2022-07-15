@@ -583,3 +583,6 @@
 
 ## 0.1.561
 * Fix to ZwapPrimaryTabBar decorations
+
+## 0.1.562
+* Enabled maxHints property of ZwapHintInput

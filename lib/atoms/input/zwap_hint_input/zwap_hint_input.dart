@@ -49,6 +49,12 @@ class ZwapHintInput extends StatefulWidget {
   /// [ZwapColors.success400] is not selected or hovered
   final int? minItems;
 
+  /// Must be grater than 0, will be used to
+  /// limit the displayed suggestions
+  ///
+  /// Default to 4
+  final int maxHints;
+
   const ZwapHintInput({
     required this.buildSelectedItem,
     required this.items,
@@ -61,6 +67,7 @@ class ZwapHintInput extends StatefulWidget {
     this.onItemSelected,
     this.doNotSuggestAlreadySelected = true,
     this.minItems,
+    this.maxHints = 4,
     Key? key,
   }) : super(key: key);
 
@@ -109,7 +116,7 @@ class _ZwapHintInputState extends State<ZwapHintInput> {
         _entry = OverlayEntry(
           builder: (_) => ChangeNotifierProvider.value(
             value: _provider,
-            child: ZwapHintOverlayWidget(),
+            child: ZwapHintOverlayWidget(maxHints: widget.maxHints),
           ),
         ),
       );
