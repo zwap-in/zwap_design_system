@@ -1,2 +1,2 @@
-export 'primary/zwap_primary_tab_bat.dart';
+export 'primary/zwap_primary_tab_bar.dart';
 export 'secondary/zwapSecondaryTabBar.dart';

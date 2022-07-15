@@ -577,3 +577,6 @@
 ## 0.1.559
 * Created ZwapHintInput widget to let user enter tags typing
 * Added completionValue logics to ZwapButton
+
+## 0.1.560
+* Improved ZwapPrimaryTabBar with decorations and customizations
