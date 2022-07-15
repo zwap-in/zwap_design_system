@@ -5,6 +5,7 @@ import 'dart:math';
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 

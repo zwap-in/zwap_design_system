@@ -41,11 +41,12 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                   ),
                 ),
                 ZwapGradientTextSpan.fromGradient(
+                  forcedHeight: 47,
                   text: "del 500%",
                   gradient: LinearGradient(colors: [Color(0xff3E4FF7), Color(0xffDD0783)]),
                   textStyle: getTextStyle(ZwapTextType.bigBodyBold).copyWith(
                     color: ZwapColors.primary900Dark,
-                    fontSize: 40,
+                    fontSize: 48,
                     fontWeight: FontWeight.w800,
                     height: 1.1,
                   ),

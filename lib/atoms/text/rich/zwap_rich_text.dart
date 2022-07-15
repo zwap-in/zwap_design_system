@@ -77,6 +77,8 @@ class ZwapGradientTextSpan extends ZwapTextSpan {
 
   final LinearGradient? _gradient;
 
+  final double? forcedHeight;
+
   ZwapGradientTextSpan({
     required String text,
     required this.colors,
@@ -88,6 +90,7 @@ class ZwapGradientTextSpan extends ZwapTextSpan {
     this.begin,
     this.end,
     this.stops,
+    this.forcedHeight,
   })  : this._gradient = null,
         super(
           text: text,
@@ -109,6 +112,7 @@ class ZwapGradientTextSpan extends ZwapTextSpan {
     this.begin,
     this.end,
     this.stops,
+    this.forcedHeight,
   })  : this._gradient = null,
         super.fromZwapTypography(
           text: text,
@@ -127,6 +131,7 @@ class ZwapGradientTextSpan extends ZwapTextSpan {
     List<ZwapTextSpan> children = const [],
     Uri? linkToUri,
     TapGestureRecognizer? gestureRecognizer,
+    this.forcedHeight,
     ZwapLinkTarget linkTarget = ZwapLinkTarget.defaultTarget,
   })  : this.colors = [],
         this.begin = null,
@@ -144,25 +149,28 @@ class ZwapGradientTextSpan extends ZwapTextSpan {
 
   @override
   InlineSpan _toInlineSpan() => WidgetSpan(
-    alignment: PlaceholderAlignment.bottom,
+        alignment: PlaceholderAlignment.bottom,
         child: GestureDetector(
           onTap: () {
             if (gestureRecognizer != null && gestureRecognizer!.onTap != null) gestureRecognizer!.onTap!();
           },
-          child: _gradient != null
-              ? ZwapGradientText.fromGradient(
-                  gradient: _gradient!,
-                  style: textStyle!,
-                  text: text,
-                )
-              : ZwapGradientText.custom(
-                  style: this.textStyle ?? TextStyle(),
-                  text: text,
-                  colors: colors,
-                  begin: begin,
-                  end: end,
-                  stops: stops,
-                ),
+          child: Container(
+            height: forcedHeight,
+            child: _gradient != null
+                ? ZwapGradientText.fromGradient(
+                    gradient: _gradient!,
+                    style: textStyle!,
+                    text: text,
+                  )
+                : ZwapGradientText.custom(
+                    style: this.textStyle ?? TextStyle(),
+                    text: text,
+                    colors: colors,
+                    begin: begin,
+                    end: end,
+                    stops: stops,
+                  ),
+          ),
         ),
       );
 }

@@ -586,3 +586,6 @@
 
 ## 0.1.562
 * Enabled maxHints property of ZwapHintInput
+
+## 0.1.563
+* Added forceHeight property to ZwapGradientTextSpan
