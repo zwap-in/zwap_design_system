@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:taastrap/taastrap.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 
 bool willTextExceed(String text, int maxLines, double maxWidth, TextStyle style, {TextAlign textAlign = TextAlign.left}) {

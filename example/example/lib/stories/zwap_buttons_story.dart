@@ -15,6 +15,8 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
 
   bool _isSelected = false;
 
+  double _completionValue = 0;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -39,6 +41,16 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                   ZwapSwitch(value: _disabled, onValueChange: (v) => setState(() => _disabled = v)),
                 ],
               ),
+              SizedBox(height: 20),
+              ZwapText(text: 'Completion Value (0...1)', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
+              Slider(
+                value: _completionValue,
+                onChanged: (value) {
+                  setState(() => _completionValue = value);
+                },
+                max: 1,
+                min: 0,
+              ),
             ],
           ),
         ),
@@ -52,6 +64,18 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                ZwapText(text: 'ZwapButton with completion', zwapTextType: ZwapTextType.bigBodySemibold, textColor: ZwapColors.shades100),
+                ZwapButton(
+                  margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                  height: 40,
+                  width: 88,
+                  buttonChild: ZwapButtonChild.text(text: "Label"),
+                  loading: _loading,
+                  disabled: _disabled,
+                  decorations: ZwapButtonDecorations.primaryLight(),
+                  completionValue: _completionValue,
+                ),
+                SizedBox(height: 24),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,

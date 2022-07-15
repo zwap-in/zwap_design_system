@@ -14,5 +14,5 @@ export 'tabBar/tabBar.dart';
 export 'toast/zwapToast.dart';
 export 'yearPicker/yearPicker.dart';
 export 'resumeEditElements/zwapResumeEditElements.dart';
-export 'checkBoxText/zwapCheckBoxText.dart';
+export 'checkBoxText/zwap_checkbox_text.dart';
 export 'dropdown/zwap_dropdown.dart';

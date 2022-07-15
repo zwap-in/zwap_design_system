@@ -23,92 +23,130 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 150,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Center(child: ZwapText(text: "Test one", textColor: _firstColor, zwapTextType: _firstTextType)),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 120),
+            ZwapRichText.safeText(
+              textSpans: [
+                ZwapTextSpan(
+                  text: "Con Zwap espandi\n",
+                  textStyle: getTextStyle(ZwapTextType.bigBodyBold).copyWith(
+                    color: ZwapColors.primary900Dark,
+                    fontSize: 48,
+                    letterSpacing: -1,
+                    fontWeight: FontWeight.w400,
+                    height: 1.10,
+                  ),
                 ),
-                Expanded(
-                  child: Center(child: ZwapText(text: "Test two", textColor: _firstColor, zwapTextType: _firstTextType)),
+                ZwapGradientTextSpan.fromGradient(
+                  text: "del 500%",
+                  gradient: LinearGradient(colors: [Color(0xff3E4FF7), Color(0xffDD0783)]),
+                  textStyle: getTextStyle(ZwapTextType.bigBodyBold).copyWith(
+                    color: ZwapColors.primary900Dark,
+                    fontSize: 40,
+                    fontWeight: FontWeight.w800,
+                    height: 1.1,
+                  ),
+                ),
+                ZwapTextSpan(
+                  text: " la tua rete",
+                  textStyle: getTextStyle(ZwapTextType.bigBodyBold).copyWith(
+                    color: ZwapColors.primary900Dark,
+                    fontSize: 48,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: -0.3,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 150,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Center(child: ZwapText(text: "Test one", textColor: _firstColor, zwapTextType: _firstTextType)),
+                  ),
+                  Expanded(
+                    child: Center(child: ZwapText(text: "Test two", textColor: _firstColor, zwapTextType: _firstTextType)),
+                  ),
+                ],
+              ),
+            ),
+            ZwapExpandableText(
+              text:
+                  "Duis nostrud do sit Lorem ex aliqua ea ea laborum labore anim. Dolor labore amet cillum velit id qui magna culpa ad ad nisi. Occaecat Lorem mollit ut enim et labore cillum ut cillum nulla laboris. Est est consectetur velit incididunt ea quis. Elit anim nulla aliquip exercitation fugiat id et eu. Mollit eu et consectetur aliqua non officia ullamco aute sit incididunt.Aute sint deserunt aliquip pariatur sunt aliqua eu aliqua aliquip exercitation commodo dolor mollit elit. Elit in sint nisi non incididunt. Cupidatat reprehenderit consectetur consequat aliquip duis est. Eiusmod quis aute amet labore sit aliqua nostrud. Incididunt fugiat enim proident qui qui. Exercitation tempor labore do exercitation exercitation eiusmod cillum incididunt ex.",
+              maxClosedLines: 3,
+              textType: ZwapTextType.bigBodyRegular,
+              textColor: ZwapColors.neutral900,
+              translateKey: (key) => {
+                'see_less': 'Vedi meno',
+                'see_more': 'Vedi tutto',
+              }[key]!,
+            ),
+            SizedBox(height: 22),
+            ZwapRichText.safeText(
+              textSpans: [
+                ZwapTextSpan.fromZwapTypography(
+                  text: "Ullamco elit proident duis laboris sint labore aliquip laborum voluptate tempor eu laborum.",
+                  textType: ZwapTextType.bigBodyBold,
+                  textColor: ZwapColors.warning400,
+                  children: [
+                    ZwapTextSpan(text: "  <Proident dolore quis culpa anim laborum.>  "),
+                    ZwapTextSpan.fromZwapTypography(
+                      text: "  <in bb>  ",
+                    ),
+                    ZwapTextSpan.fromZwapTypography(text: "  <in verde>  ", textColor: ZwapColors.success400),
+                    ZwapTextSpan(text: "  <ciao>  ", textStyle: TextStyle(fontWeight: FontWeight.w200, decoration: TextDecoration.lineThrough)),
+                    ZwapTextSpan(text: "...."),
+                  ],
+                ),
+                ZwapGradientTextSpan.fromZwapTypography(
+                  text: "Mollit  veniam sunt magna.",
+                  textType: ZwapTextType.bigBodySemibold,
+                  colors: [Colors.amber, Colors.red, Colors.blue],
+                  stops: [0, 0.9, 1],
+                ),
+                ZwapTextSpan.fromZwapTypography(
+                  text: "Mollit incididunt sunt deserunt qui veniam sunt magna.",
+                  textType: ZwapTextType.smallBodyRegular,
+                  textColor: ZwapColors.success400,
                 ),
               ],
             ),
-          ),
-          ZwapExpandableText(
-            text:
-                "Duis nostrud do sit Lorem ex aliqua ea ea laborum labore anim. Dolor labore amet cillum velit id qui magna culpa ad ad nisi. Occaecat Lorem mollit ut enim et labore cillum ut cillum nulla laboris. Est est consectetur velit incididunt ea quis. Elit anim nulla aliquip exercitation fugiat id et eu. Mollit eu et consectetur aliqua non officia ullamco aute sit incididunt.Aute sint deserunt aliquip pariatur sunt aliqua eu aliqua aliquip exercitation commodo dolor mollit elit. Elit in sint nisi non incididunt. Cupidatat reprehenderit consectetur consequat aliquip duis est. Eiusmod quis aute amet labore sit aliqua nostrud. Incididunt fugiat enim proident qui qui. Exercitation tempor labore do exercitation exercitation eiusmod cillum incididunt ex.",
-            maxClosedLines: 3,
-            textType: ZwapTextType.bigBodyRegular,
-            textColor: ZwapColors.neutral900,
-            translateKey: (key) => {
-              'see_less': 'Vedi meno',
-              'see_more': 'Vedi tutto',
-            }[key]!,
-          ),
-          SizedBox(height: 22),
-          ZwapRichText.safeText(
-            textSpans: [
-              ZwapTextSpan.fromZwapTypography(
-                text: "Ullamco elit proident duis laboris sint labore aliquip laborum voluptate tempor eu laborum.",
-                textType: ZwapTextType.bigBodyBold,
-                textColor: ZwapColors.warning400,
-                children: [
-                  ZwapTextSpan(text: "  <Proident dolore quis culpa anim laborum.>  "),
-                  ZwapTextSpan.fromZwapTypography(
-                    text: "  <in bb>  ",
-                  ),
-                  ZwapTextSpan.fromZwapTypography(text: "  <in verde>  ", textColor: ZwapColors.success400),
-                  ZwapTextSpan(text: "  <ciao>  ", textStyle: TextStyle(fontWeight: FontWeight.w200, decoration: TextDecoration.lineThrough)),
-                  ZwapTextSpan(text: "...."),
-                ],
-              ),
-              ZwapGradientTextSpan.fromZwapTypography(
-                text: "Mollit  veniam sunt magna.",
-                textType: ZwapTextType.bigBodySemibold,
-                colors: [Colors.amber, Colors.red, Colors.blue],
-                stops: [0, 0.9, 1],
-              ),
-              ZwapTextSpan.fromZwapTypography(
-                text: "Mollit incididunt sunt deserunt qui veniam sunt magna.",
-                textType: ZwapTextType.smallBodyRegular,
-                textColor: ZwapColors.success400,
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          ZwapRichText.safeText(
-            textSpans: [
-              ZwapTextSpan.fromZwapTypography(
-                text: "dàaòj gnaòrgaeri gag a ga ",
-                textType: ZwapTextType.bigBodyRegular,
-                textColor: ZwapColors.shades100,
-              ),
-              ZwapGradientTextSpan.fromZwapTypography(
-                text: "mollit",
-                textType: ZwapTextType.bigBodyRegular,
-                colors: [Colors.amber, Colors.red, Colors.blue],
-                stops: [0, 0.9, 1],
-              ),
-              ZwapTextSpan.fromZwapTypography(
-                text: " Mollit incididunt sunt deserunt qui veniam sunt magna.",
-                textType: ZwapTextType.bigBodyRegular,
-                textColor: ZwapColors.shades100,
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          ZwapGradientText(
-            textType: ZwapTextType.bigBodyBold,
-            text: "Text text teasdfasdfaxt",
-            colors: [Colors.amber, Colors.red, Colors.blue],
-            stops: [0, 0.9, 1],
-          ),
-        ],
+            SizedBox(height: 20),
+            ZwapRichText.safeText(
+              textSpans: [
+                ZwapTextSpan.fromZwapTypography(
+                  text: "dàaòj gnaòrgaeri gag a ga ",
+                  textType: ZwapTextType.bigBodyRegular,
+                  textColor: ZwapColors.shades100,
+                ),
+                ZwapGradientTextSpan.fromZwapTypography(
+                  text: "mollit",
+                  textType: ZwapTextType.bigBodyRegular,
+                  colors: [Colors.amber, Colors.red, Colors.blue],
+                  stops: [0, 0.9, 1],
+                ),
+                ZwapTextSpan.fromZwapTypography(
+                  text: " Mollit incididunt sunt deserunt qui veniam sunt magna.",
+                  textType: ZwapTextType.bigBodyRegular,
+                  textColor: ZwapColors.shades100,
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            ZwapGradientText(
+              textType: ZwapTextType.bigBodyBold,
+              text: "Text text teasdfasdfaxt",
+              colors: [Colors.amber, Colors.red, Colors.blue],
+              stops: [0, 0.9, 1],
+            ),
+          ],
+        ),
       ),
     );
   }

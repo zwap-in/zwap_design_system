@@ -176,6 +176,18 @@ class ZwapButton extends StatefulWidget {
   /// under the button
   final double hoverElevation;
 
+  /// This value must be between 0 and 1.
+  ///
+  /// If not equal to 1, the button will use [disabled] state decoration.
+  ///
+  /// If not equal to 0 the button will fill horizontally only the [completationValue]
+  /// percent of the width. Fill color will always be [decorations.backgroundColor]
+  ///
+  /// ! Works even in loading state !
+  ///
+  /// Default to 1 (no changes to "normal" button)
+  final double completionValue;
+
   const ZwapButton({
     required ZwapButtonChild buttonChild,
     this.decorations,
@@ -194,9 +206,11 @@ class ZwapButton extends StatefulWidget {
     this.isSelected = false,
     this.selectedDecorations,
     this.hoverElevation = 0,
+    this.completionValue = 1,
     Key? key,
   })  : this.child = null,
         this.buttonChild = buttonChild,
+        assert(completionValue >= 0 && completionValue <= 1),
         super(key: key);
 
   const ZwapButton.customChild({
@@ -217,9 +231,11 @@ class ZwapButton extends StatefulWidget {
     this.isSelected = false,
     this.selectedDecorations,
     this.hoverElevation = 0,
+    this.completionValue = 1,
     Key? key,
   })  : this.buttonChild = null,
         this.child = child,
+        assert(completionValue >= 0 && completionValue <= 1),
         super(key: key);
 
   @override
@@ -234,13 +250,21 @@ class _ZwapButtonState extends State<ZwapButton> {
   late final Map<Type, Action<Intent>>? _actions;
   late final Map<ShortcutActivator, Intent>? _shortcuts;
 
+  double _completion = 0;
+
   bool _focussed = false;
   bool _hovered = false;
-  bool _disabled = false;
+  bool __disabled = false;
   bool _pressed = false;
   bool _selected = false;
 
   bool _loading = false;
+
+  bool get _disabled => __disabled || _completion != 1;
+
+  /// If true the animation duration of the button will be
+  /// [Duration.zero]
+  bool _jumpAnimation = false;
 
   @override
   void initState() {
@@ -248,8 +272,10 @@ class _ZwapButtonState extends State<ZwapButton> {
     _decorations = widget.decorations ?? ZwapButtonDecorations.primaryLight();
     _selectedDecorations = widget.selectedDecorations ?? ZwapButtonDecorations.primaryLight();
 
+    _completion = widget.completionValue;
+
     _focussed = _focusNode.hasFocus;
-    _disabled = widget.disabled;
+    __disabled = widget.disabled;
     _selected = widget.isSelected;
 
     _loading = widget.loading;
@@ -268,9 +294,14 @@ class _ZwapButtonState extends State<ZwapButton> {
 
   @override
   void didUpdateWidget(ZwapButton oldWidget) {
-    if (widget.disabled != _disabled) setState(() => _disabled = widget.disabled);
+    if (widget.disabled != _disabled) setState(() => __disabled = widget.disabled);
     if (widget.loading != _loading) setState(() => _loading = widget.loading);
     if (widget.isSelected != _selected) setState(() => _selected = widget.isSelected);
+    if (widget.completionValue != _completion) {
+      _jumpAnimation = true;
+      setState(() => _completion = widget.completionValue);
+      Future.delayed(const Duration(milliseconds: 300), () => _jumpAnimation = false);
+    }
 
     super.didUpdateWidget(oldWidget);
   }
@@ -479,7 +510,6 @@ class _ZwapButtonState extends State<ZwapButton> {
                     : SystemMouseCursors.click,
             child: AnimatedContainer(
               duration: _pressed ? Duration.zero : (_decorations.animationDuration ?? const Duration(milliseconds: 200)),
-              padding: _decorations.internalPadding,
               width: widget.width,
               height: widget.height,
               alignment: Alignment.center,
@@ -490,19 +520,64 @@ class _ZwapButtonState extends State<ZwapButton> {
                 borderRadius: _decorations.borderRadius,
                 border: _border,
               ),
-              child: _loading
-                  ? Center(
-                      child: Container(
-                          height: min(24, widget.height ?? 0 - 4),
-                          width: min(24, widget.width ?? 0 - 4),
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(_contentColor ?? ZwapColors.shades0),
-                            strokeWidth: 1.2,
-                          )),
-                    )
-                  : widget.buttonChild == null
-                      ? widget.child!(_currentStatus)
-                      : _buildZwapButtonChild(context),
+              child: Stack(
+                children: [
+                  if (_completion != 1)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Builder(builder: (context) {
+                        final double _width = _completion * (widget.width ?? 0);
+
+                        double _height = widget.height ?? 0;
+
+                        double? _topPadding;
+                        double? _bottomPadding;
+
+                        if (_width < (_decorations.borderRadius?.topLeft.x ?? 0)) {
+                          final double _topEmptySpace = (_decorations.borderRadius?.topLeft.y ?? 0) *
+                              (((_decorations.borderRadius?.topLeft.x ?? 0) - _width) / (_decorations.borderRadius?.topLeft.x ?? 1));
+                          ;
+                          _height -= _topEmptySpace;
+                          _topPadding = _topEmptySpace;
+                        }
+                        if (_width < (_decorations.borderRadius?.bottomLeft.x ?? 0)) {
+                          final double _bottomEmptySpace = (_decorations.borderRadius?.bottomLeft.y ?? 0) *
+                              (((_decorations.borderRadius?.bottomLeft.x ?? 0) - _width) / (_decorations.borderRadius?.bottomLeft.x ?? 1));
+                          _height -= _bottomEmptySpace;
+                          _bottomPadding = _bottomEmptySpace;
+                        }
+
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.decelerate,
+                          height: _height,
+                          width: _width,
+                          margin: EdgeInsets.only(top: _topPadding ?? 0, bottom: _bottomPadding ?? 0),
+                          decoration: BoxDecoration(
+                            color: _decorations.backgroundColor,
+                            borderRadius: _decorations.borderRadius,
+                          ),
+                        );
+                      }),
+                    ),
+                  Padding(
+                    padding: _decorations.internalPadding,
+                    child: _loading
+                        ? Center(
+                            child: Container(
+                                height: min(24, widget.height ?? 0 - 4),
+                                width: min(24, widget.width ?? 0 - 4),
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(_contentColor ?? ZwapColors.shades0),
+                                  strokeWidth: 1.2,
+                                )),
+                          )
+                        : widget.buttonChild == null
+                            ? widget.child!(_currentStatus)
+                            : Center(child: _buildZwapButtonChild(context)),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

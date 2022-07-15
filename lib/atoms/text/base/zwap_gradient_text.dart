@@ -84,9 +84,7 @@ class ZwapGradientText extends StatelessWidget {
       blendMode: BlendMode.modulate,
       child: Text(
         text,
-        style: (_customTextStyle ?? getTextStyle(_textType!).copyWith(color: Colors.white)).copyWith(
-          height: 1.25,
-        ),
+        style: (_customTextStyle ?? getTextStyle(_textType!).copyWith(color: Colors.white)).copyWith(),
         textAlign: textAlign ?? TextAlign.center,
       ),
     );

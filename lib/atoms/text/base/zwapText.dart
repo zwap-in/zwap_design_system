@@ -111,6 +111,15 @@ Size getTextSizeFromCustomStyle(String text, TextStyle textStyle, {double? maxWi
   return textPainter.size;
 }
 
+/// Return the minWidth occupied by text in a single line
+double textWidth(String text, TextStyle style, {TextAlign textAlign = TextAlign.left}) {
+  var span = TextSpan(text: text, style: style);
+  var tp = TextPainter(maxLines: 1, textAlign: textAlign, textDirection: TextDirection.ltr, text: span);
+  tp.layout();
+
+  return tp.width;
+}
+
 /// Component to rendering text in base of style and device type
 class ZwapText extends StatelessWidget implements ResponsiveWidget {
   /// The text to display inside this rendering
@@ -157,7 +166,6 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
         _selectable = false,
         this.textColor = customTextStyle!.color ?? Colors.white,
         super(key: key);
-        
 
   /// Beta
   ZwapText.selectable({
