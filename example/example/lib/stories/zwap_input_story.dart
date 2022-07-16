@@ -31,6 +31,10 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         width: 420,
         child: Column(
           children: [
+            ZwapInput(
+              label: "Input con label dinamica",
+              dynamicLabel: "Label",
+            ),
             ZwapInput(label: "Input semplice"),
             SizedBox(height: 20),
             ZwapInput.collapsed(

@@ -589,3 +589,6 @@
 
 ## 0.1.563
 * Added forceHeight property to ZwapGradientTextSpan
+
+## 0.1.564
+* Added dynamicLabel property to ZwapInput
