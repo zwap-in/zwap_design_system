@@ -95,6 +95,9 @@ class ZwapSelect extends StatefulWidget {
   /// Text to display if there is no selected value
   final String hintText;
 
+  /// The [hintText] text style
+  final TextStyle? hintTextStyle;
+
   /// If [true] user can type and filter items
   final bool canSearch;
 
@@ -152,6 +155,7 @@ class ZwapSelect extends StatefulWidget {
     this.initialPageNumber = 1,
     this.betweenFetchDuration = const Duration(milliseconds: 800),
     this.onEmptyResponseDuration = const Duration(seconds: 10),
+    this.hintTextStyle,
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
         this.valuesByCategory = {},
@@ -174,6 +178,7 @@ class ZwapSelect extends StatefulWidget {
     this.betweenFetchDuration = const Duration(milliseconds: 800),
     this.onEmptyResponseDuration = const Duration(seconds: 10),
     this.initialPageNumber = 1,
+    this.hintTextStyle,
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
         this.values = {
@@ -200,6 +205,7 @@ class ZwapSelect extends StatefulWidget {
     this.label,
     this.fetchMoreData,
     this.initialPageNumber = 1,
+    this.hintTextStyle,
   })  : this.selected = null,
         this._type = _ZwapSelectTypes.multiple,
         this._hasCategories = false,
@@ -222,6 +228,7 @@ class ZwapSelect extends StatefulWidget {
     this.label,
     this.fetchMoreData,
     this.initialPageNumber = 1,
+    this.hintTextStyle,
   })  : this.selected = null,
         this._type = _ZwapSelectTypes.multiple,
         this.values = {
@@ -351,7 +358,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
   }
 
   /// Called when text field is submitted with a physical key (such as: end, enter and tab keys)
-  /// 
+  ///
   /// ! Called even when overlay auto close
   void _continueKeyPressed() {
     _inputFocus.unfocus();
@@ -724,7 +731,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                   child: TextField(
                                     controller: _inputController,
                                     focusNode: _inputFocus,
-                                    decoration: InputDecoration.collapsed(hintText: widget.hintText),
+                                    decoration: InputDecoration.collapsed(hintText: widget.hintText, hintStyle: widget.hintTextStyle),
                                     cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
                                     keyboardType: TextInputType.none,
                                     onSubmitted: (_) => _continueKeyPressed(),

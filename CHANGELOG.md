@@ -595,3 +595,6 @@
 
 ## 0.1.565
 * Added dynamicLabelTextStyle property to ZwapInput
+
+## 0.1.566
+* Added hintTextStyle property to ZwapSelect
