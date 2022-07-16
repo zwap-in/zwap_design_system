@@ -139,6 +139,8 @@ class ZwapSelect extends StatefulWidget {
   final _ZwapSelectTypes _type;
   final bool _hasCategories;
 
+  final double borderRadius;
+
   ///Regular ZwapSelect
   ZwapSelect({
     Key? key,
@@ -156,6 +158,7 @@ class ZwapSelect extends StatefulWidget {
     this.betweenFetchDuration = const Duration(milliseconds: 800),
     this.onEmptyResponseDuration = const Duration(seconds: 10),
     this.hintTextStyle,
+    this.borderRadius = 4,
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
         this.valuesByCategory = {},
@@ -179,6 +182,7 @@ class ZwapSelect extends StatefulWidget {
     this.onEmptyResponseDuration = const Duration(seconds: 10),
     this.initialPageNumber = 1,
     this.hintTextStyle,
+    this.borderRadius = 4,
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
         this.values = {
@@ -206,6 +210,7 @@ class ZwapSelect extends StatefulWidget {
     this.fetchMoreData,
     this.initialPageNumber = 1,
     this.hintTextStyle,
+    this.borderRadius = 4,
   })  : this.selected = null,
         this._type = _ZwapSelectTypes.multiple,
         this._hasCategories = false,
@@ -229,6 +234,7 @@ class ZwapSelect extends StatefulWidget {
     this.fetchMoreData,
     this.initialPageNumber = 1,
     this.hintTextStyle,
+    this.borderRadius = 4,
   })  : this.selected = null,
         this._type = _ZwapSelectTypes.multiple,
         this.values = {
@@ -482,12 +488,12 @@ class _ZwapSelectState extends State<ZwapSelect> {
                           color: ZwapColors.neutral300,
                           borderRadius: openReverse
                               ? BorderRadius.only(
-                                  topLeft: Radius.circular(4),
-                                  topRight: Radius.circular(4),
+                                  topLeft: Radius.circular(widget.borderRadius),
+                                  topRight: Radius.circular(widget.borderRadius),
                                 )
                               : BorderRadius.only(
-                                  bottomLeft: Radius.circular(4),
-                                  bottomRight: Radius.circular(4),
+                                  bottomLeft: Radius.circular(widget.borderRadius),
+                                  bottomRight: Radius.circular(widget.borderRadius),
                                 ),
                         ),
                         child: Container(
@@ -496,12 +502,12 @@ class _ZwapSelectState extends State<ZwapSelect> {
                             color: ZwapColors.shades0,
                             borderRadius: openReverse
                                 ? BorderRadius.only(
-                                    topLeft: Radius.circular(4),
-                                    topRight: Radius.circular(4),
+                                    topLeft: Radius.circular(widget.borderRadius),
+                                    topRight: Radius.circular(widget.borderRadius),
                                   )
                                 : BorderRadius.only(
-                                    bottomLeft: Radius.circular(4),
-                                    bottomRight: Radius.circular(4),
+                                    bottomLeft: Radius.circular(widget.borderRadius),
+                                    bottomRight: Radius.circular(widget.borderRadius),
                                   ),
                           ),
                           margin:
@@ -678,20 +684,20 @@ class _ZwapSelectState extends State<ZwapSelect> {
                       ? BoxDecoration(
                           color: ZwapColors.neutral300,
                           borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(4),
-                            bottomRight: Radius.circular(4),
+                            bottomLeft: Radius.circular(widget.borderRadius),
+                            bottomRight: Radius.circular(widget.borderRadius),
                           ),
                         )
                       : BoxDecoration(
                           color: ZwapColors.neutral300,
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(4),
-                            topRight: Radius.circular(4),
+                            topLeft: Radius.circular(widget.borderRadius),
+                            topRight: Radius.circular(widget.borderRadius),
                           ),
                         )
                   : BoxDecoration(
                       color: this._isHovered ? ZwapColors.primary300 : ZwapColors.neutral300,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(widget.borderRadius),
                     ),
               child: Container(
                 key: _selectKey,
@@ -701,14 +707,14 @@ class _ZwapSelectState extends State<ZwapSelect> {
                   borderRadius: (_selectOverlay?.mounted ?? false)
                       ? openReverse
                           ? BorderRadius.only(
-                              bottomLeft: Radius.circular(4),
-                              bottomRight: Radius.circular(4),
+                              bottomLeft: Radius.circular(widget.borderRadius),
+                              bottomRight: Radius.circular(widget.borderRadius),
                             )
                           : BorderRadius.only(
-                              topLeft: Radius.circular(4),
-                              topRight: Radius.circular(4),
+                              topLeft: Radius.circular(widget.borderRadius),
+                              topRight: Radius.circular(widget.borderRadius),
                             )
-                      : BorderRadius.circular(4),
+                      : BorderRadius.circular(widget.borderRadius),
                 ),
                 margin: _selectOverlay?.mounted ?? false
                     ? openReverse

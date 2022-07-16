@@ -598,3 +598,6 @@
 
 ## 0.1.566
 * Added hintTextStyle property to ZwapSelect
+
+## 0.1.567
+* Added borderRadius property to ZwapSelect
