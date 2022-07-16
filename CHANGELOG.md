@@ -592,3 +592,6 @@
 
 ## 0.1.564
 * Added dynamicLabel property to ZwapInput
+
+## 0.1.565
+* Added dynamicLabelTextStyle property to ZwapInput

@@ -34,6 +34,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
             ZwapInput(
               label: "Input con label dinamica",
               dynamicLabel: "Label",
+              dynamicLabelTextStyle: getTextStyle(ZwapTextType.bigBodyBold),
             ),
             ZwapInput(label: "Input semplice"),
             SizedBox(height: 20),

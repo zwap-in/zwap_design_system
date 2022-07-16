@@ -138,7 +138,13 @@ class ZwapInput extends StatefulWidget {
   /// If provided a "floating" label will be showed:
   /// * inside the input as placeholder if empty
   /// * on the border if is not empty
+  ///
+  /// See [dynamicLabelTextStyle] for style
   final String? dynamicLabel;
+
+  /// Color will be overwritten in base of the current state
+  /// (focussed or not)
+  final TextStyle? dynamicLabelTextStyle;
 
   ZwapInput({
     Key? key,
@@ -181,6 +187,7 @@ class ZwapInput extends StatefulWidget {
     this.disabledTextStyle,
     this.cursorColor,
     this.dynamicLabel,
+    this.dynamicLabelTextStyle,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -226,6 +233,7 @@ class ZwapInput extends StatefulWidget {
     this.disabledTextStyle,
     this.cursorColor,
     this.dynamicLabel,
+    this.dynamicLabelTextStyle,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -313,13 +321,14 @@ class _ZwapInputState extends State<ZwapInput> {
       labelStyle: MaterialStateTextStyle.resolveWith(
         (states) {
           final Map<MaterialState, TextStyle> styles = {
-            MaterialState.focused: getTextStyle(ZwapTextType.smallBodyRegular).copyWith(color: ZwapColors.primary400),
+            MaterialState.focused:
+                (widget.dynamicLabelTextStyle ?? getTextStyle(ZwapTextType.smallBodyRegular)).copyWith(color: ZwapColors.primary400),
           };
           for (var s in states)
             if (styles.keys.contains(s)) {
               return styles[s]!;
             }
-          return getTextStyle(ZwapTextType.smallBodyRegular).copyWith(color: ZwapColors.neutral500);
+          return (widget.dynamicLabelTextStyle ?? getTextStyle(ZwapTextType.smallBodyRegular)).copyWith(color: ZwapColors.neutral500);
         },
       ),
       hintText: widget.placeholder,
