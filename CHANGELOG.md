@@ -601,3 +601,6 @@
 
 ## 0.1.567
 * Added borderRadius property to ZwapSelect
+
+## 0.1.568
+* Added ZwapShadowIcon component
