@@ -595,7 +595,7 @@
 
 ## 0.1.565
 * Added dynamicLabelTextStyle property to ZwapInput
-
+a
 ## 0.1.566
 * Added hintTextStyle property to ZwapSelect
 
@@ -604,3 +604,6 @@
 
 ## 0.1.568
 * Added ZwapShadowIcon component
+
+## 0.1.570
+* Added forcedOffset to ZwapGradientTextSpan
