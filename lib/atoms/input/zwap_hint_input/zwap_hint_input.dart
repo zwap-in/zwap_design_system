@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -55,6 +56,16 @@ class ZwapHintInput extends StatefulWidget {
   /// Default to 4
   final int maxHints;
 
+  /// Called each time the focus state change. The focusNode
+  /// is passed even by parameter.
+  ///
+  /// Useful to make different flows maybe for mobile
+  /// or some strange size screens
+  ///
+  /// If this function return [false] the internal on focus logics
+  ///  will be interrupted
+  final FutureOr<bool?> Function(FocusNode)? onFocusChanged;
+
   const ZwapHintInput({
     required this.buildSelectedItem,
     required this.items,
@@ -68,6 +79,7 @@ class ZwapHintInput extends StatefulWidget {
     this.doNotSuggestAlreadySelected = true,
     this.minItems,
     this.maxHints = 4,
+    this.onFocusChanged,
     Key? key,
   }) : super(key: key);
 
@@ -100,7 +112,9 @@ class _ZwapHintInputState extends State<ZwapHintInput> {
     _provider.focusNode.addListener(_focusListener);
   }
 
-  void _focusListener() {
+  void _focusListener() async {
+    if (widget.onFocusChanged != null && (await widget.onFocusChanged!(_provider.focusNode)) == false) return;
+
     if (_focussed != _provider.focusNode.hasFocus) setState(() => _focussed = _provider.focusNode.hasFocus);
     _checkOverlay();
   }

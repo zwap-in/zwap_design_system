@@ -607,3 +607,6 @@ a
 
 ## 0.1.570
 * Added forcedOffset to ZwapGradientTextSpan
+
+## 0.1.571
+* Added onFocusChanged to ZwapHintButton
