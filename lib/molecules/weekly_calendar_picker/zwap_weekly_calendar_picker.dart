@@ -136,8 +136,9 @@ class _ZwapWeeklyCalendarPickerState extends State<ZwapWeeklyCalendarPicker> {
 
     final bool _isInDisabledList = _filter._disabledItems.where((i) => i.date.pureDate == item.date.pureDate && i.time == item.time).isNotEmpty;
     final bool _isInPast = _filter._disablePast && item.date.isBefore(DateTime.now().endOfDay);
+    final bool _isAfterLastDay = _filter._disableAfter != null && item.date.isAfter(_filter._disableAfter!);
 
-    return _isInDisabledList || _isInPast;
+    return _isInDisabledList || _isInPast || _isAfterLastDay;
   }
 
   /// It retrieves all slots column

@@ -28,7 +28,6 @@ class _NewModalMultiStepWidgetState extends State<NewModalMultiStepWidget> {
 
   @override
   void didUpdateWidget(covariant NewModalMultiStepWidget oldWidget) {
-    print(widget.currentStep != _pageController.page);
     if (widget.currentStep != _pageController.page)
       _pageController.animateToPage(
         widget.currentStep,

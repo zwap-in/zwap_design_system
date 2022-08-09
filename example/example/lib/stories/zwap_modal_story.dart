@@ -147,7 +147,6 @@ class _ModalBodyState extends State<_ModalBody> {
 
     if (c.positions.isNotEmpty && (c.page ?? 0) != step.index) {
       c.animateToPage(step.index, duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
-      print(step.index);
     }
 
     return Container(

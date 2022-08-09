@@ -18,6 +18,9 @@ class ZwapWeeklyCalendarShowFilter {
   /// Days after [_lastDay] are not showed
   final DateTime? _lastDay;
 
+  /// Days after [_disableAfter] are disabled
+  final DateTime? _disableAfter;
+
   /// This items are disabled
   final List<_ZwapWeeklyCalendarPickerItem> _disabledItems;
 
@@ -31,6 +34,7 @@ class ZwapWeeklyCalendarShowFilter {
     required DateTime? lastDay,
     required bool hidePast,
     required List<_ZwapWeeklyCalendarPickerItem> disabledItems,
+    required DateTime? disableAfter,
     Map<_ZwapWeeklyCalendarPickerItem, WCPDateSlotWidgetDecorations>? customSlotsDecorations,
   })  : this._disablePast = disablePast,
         this._showedWeekdays = showedWeekdays,
@@ -38,6 +42,7 @@ class ZwapWeeklyCalendarShowFilter {
         this._firstDay = firstDay,
         this._lastDay = lastDay,
         this._disabledItems = disabledItems,
+        this._disableAfter = disableAfter,
         this._customSlotsDecorations = customSlotsDecorations ?? {};
 
   //? TODO -> customize days in the past
@@ -48,6 +53,7 @@ class ZwapWeeklyCalendarShowFilter {
         this._showedWeekdays = [1, 2, 3, 4, 5, 6, 7],
         this._firstDay = null,
         this._lastDay = null,
+        this._disableAfter = null,
         this._disabledItems = const [],
         this._customSlotsDecorations = {};
 
@@ -58,7 +64,18 @@ class ZwapWeeklyCalendarShowFilter {
         this._showedWeekdays = [1, 2, 3, 4, 5, 6, 7],
         this._firstDay = null,
         this._lastDay = null,
+        this._disableAfter = null,
         this._disabledItems = const [],
+        this._customSlotsDecorations = {};
+
+  ZwapWeeklyCalendarShowFilter.disableAfter(DateTime dateTime)
+      : this._disablePast = true,
+        this._hidePast = false,
+        this._showedWeekdays = [1, 2, 3, 4, 5, 6, 7],
+        this._firstDay = null,
+        this._lastDay = null,
+        this._disabledItems = const [],
+        this._disableAfter = dateTime,
         this._customSlotsDecorations = {};
 
   //? TODO -> customize by week day
@@ -68,6 +85,7 @@ class ZwapWeeklyCalendarShowFilter {
         this._lastDay = null,
         this._showedWeekdays = weekDays,
         this._firstDay = null,
+        this._disableAfter = null,
         this._disabledItems = const [],
         this._customSlotsDecorations = {};
 
@@ -79,6 +97,7 @@ class ZwapWeeklyCalendarShowFilter {
         this._firstDay = date,
         this._lastDay = null,
         this._disabledItems = const [],
+        this._disableAfter = null,
         this._customSlotsDecorations = {};
 
   //? TODO -> customize day before a date
@@ -88,6 +107,7 @@ class ZwapWeeklyCalendarShowFilter {
         this._showedWeekdays = [1, 2, 3, 4, 5, 6, 7],
         this._firstDay = null,
         this._lastDay = date,
+        this._disableAfter = null,
         this._disabledItems = const [],
         this._customSlotsDecorations = {};
 
@@ -99,6 +119,7 @@ class ZwapWeeklyCalendarShowFilter {
         this._firstDay = start,
         this._lastDay = end,
         this._disabledItems = const [],
+        this._disableAfter = null,
         this._customSlotsDecorations = {};
 
   ZwapWeeklyCalendarShowFilter.disableItem(
@@ -111,6 +132,7 @@ class ZwapWeeklyCalendarShowFilter {
         this._firstDay = null,
         this._lastDay = null,
         this._disabledItems = [_ZwapWeeklyCalendarPickerItem(date, _CustomTimeOfDay.fromTimeOfDay(time, hidden: true))],
+        this._disableAfter = null,
         this._customSlotsDecorations = {
           if (customDecorations != null) _ZwapWeeklyCalendarPickerItem(date, _CustomTimeOfDay.fromTimeOfDay(time, hidden: true)): customDecorations,
         };
@@ -125,6 +147,7 @@ class ZwapWeeklyCalendarShowFilter {
         this._showedWeekdays = [1, 2, 3, 4, 5, 6, 7],
         this._firstDay = null,
         this._lastDay = null,
+        this._disableAfter = null,
         this._disabledItems =
             disabledItems.map((e) => _ZwapWeeklyCalendarPickerItem(e.a, _CustomTimeOfDay.fromTimeOfDay(e.b, hidden: true))).toList(),
         this._customSlotsDecorations = customDecorations != null
@@ -147,6 +170,7 @@ class ZwapWeeklyCalendarShowFilter {
         this._hidePast = false,
         this._firstDay = null,
         this._lastDay = null,
+        this._disableAfter = null,
         this._disabledItems = [],
         this._customSlotsDecorations = {
           if (customDecorations != null) _ZwapWeeklyCalendarPickerItem(date, _CustomTimeOfDay.fromTimeOfDay(time, hidden: true)): customDecorations,
@@ -165,6 +189,7 @@ class ZwapWeeklyCalendarShowFilter {
         this._hidePast = false,
         this._lastDay = null,
         this._disabledItems = [],
+        this._disableAfter = null,
         this._customSlotsDecorations = customDecorations != null
             ? {
                 for (TupleType<DateTime, TimeOfDay> t in customizedItems)
@@ -198,6 +223,13 @@ class ZwapWeeklyCalendarShowFilter {
                   : other._lastDay,
       disabledItems: {..._disabledItems, ...other._disabledItems}.toList(),
       customSlotsDecorations: {..._customSlotsDecorations, ...other._customSlotsDecorations},
+      disableAfter: _disableAfter == null && other._disableAfter == null
+          ? null
+          : _disableAfter == null || other._disableAfter == null
+              ? _disableAfter ?? other._disableAfter
+              : _disableAfter!.isBefore(other._disableAfter!)
+                  ? _disableAfter
+                  : other._disableAfter,
     );
   }
 }

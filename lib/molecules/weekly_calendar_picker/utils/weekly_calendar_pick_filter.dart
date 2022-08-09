@@ -196,9 +196,6 @@ class ZwapWeeklyCalendarPickFilter {
           return _ZwapPickFilterResponse(ZwapWeeklyCalendarHandleFilter.allow);
         break;
       case _PickFilterSlotRangeType.list:
-        print(_filterSlotsRange.slots.map((e) => e.a));
-        print(_filterSlotsRange.slots.map((e) => e.b));
-        print(newItem);
         if (!_filterSlotsRange.slots
             .any((s) => s.a.pureDate.isAtSameMomentAs(newItem.date.pureDate) && newItem.time.hour == s.b.hour && newItem.time.minute == s.b.minute)) {
           return _ZwapPickFilterResponse(ZwapWeeklyCalendarHandleFilter.allow);
@@ -343,7 +340,6 @@ class ZwapWeeklyCalendarPickMaxFilter extends ZwapWeeklyCalendarPickFilter {
       case _ZwapWeeklyCalendarPickMaxFilterType.weekly:
         int _weeklyCount = selected.where((s) => s.a.isAfter(newItem.date.firstOfWeek) && s.a.isBefore(newItem.date.endOfWeek)).length;
 
-        print(_weeklyCount);
         _filterCatched = _weeklyCount + 1 > maxCount;
         _error = _ZwapWeeklyCalendarFilterErrors.maxPerWeek;
         break;

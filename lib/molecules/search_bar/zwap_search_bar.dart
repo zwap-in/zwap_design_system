@@ -41,7 +41,6 @@ class _ZwapSearchBarState extends State<ZwapSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    print(_searchBarWidth);
     return Row(
       key: _searchBarKey,
       crossAxisAlignment: CrossAxisAlignment.center,

@@ -610,3 +610,7 @@ a
 
 ## 0.1.571
 * Added onFocusChanged to ZwapHintButton
+
+## 0.1.572
+* Improved BorderRadius decoration in ZwapButton widget
+* Added ZwapWeeklyCalendarShowFilter.disableAfter(...) show filter

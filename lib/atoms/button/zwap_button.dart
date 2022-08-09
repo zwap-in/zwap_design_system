@@ -556,7 +556,16 @@ class _ZwapButtonState extends State<ZwapButton> {
                           margin: EdgeInsets.only(top: _topPadding ?? 0, bottom: _bottomPadding ?? 0),
                           decoration: BoxDecoration(
                             color: _decorations.backgroundColor,
-                            borderRadius: _decorations.borderRadius,
+                            borderRadius: BorderRadius.only(
+                              topLeft: _decorations.borderRadius?.topLeft ?? Radius.circular(0),
+                              bottomLeft: _decorations.borderRadius?.bottomLeft ?? Radius.circular(0),
+                              topRight: _width > (widget.width ?? 0) - (_decorations.borderRadius?.topRight.x ?? 0)
+                                  ? _decorations.borderRadius?.topRight ?? Radius.circular(0)
+                                  : Radius.circular(0),
+                              bottomRight: _width > (widget.width ?? 0) - (_decorations.borderRadius?.bottomRight.x ?? 0)
+                                  ? _decorations.borderRadius?.topRight ?? Radius.circular(0)
+                                  : Radius.circular(0),
+                            ),
                           ),
                         );
                       }),
