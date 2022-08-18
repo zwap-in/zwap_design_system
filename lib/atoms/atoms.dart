@@ -12,7 +12,7 @@ export 'button/zwap_button.dart';
 export 'card/zwapCard.dart';
 export 'checkbox/zwapCheckbox.dart';
 export 'input/zwapInput.dart';
-export 'select/zwapSelect.dart';
+export 'select/zwap_select.dart';
 export 'stars/zwapStar.dart';
 export 'switch/zwap_switch.dart';
 export 'lineItem/zwapLineItem.dart';

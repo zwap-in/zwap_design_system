@@ -23,7 +23,7 @@ class ProfileSocialLink extends StatelessWidget implements ResponsiveWidget {
       child: InkWell(
         onTap: () => Utils.currentState.openExternalUrl(_url),
         child: Icon(
-          socialIcon(getSocialType(socialLink.socialUrl)).icon,
+          parseSocialType(socialLink.socialUrl).icon.icon,
           color: ZwapColors.neutral700,
           size: this.getSize(),
         ),

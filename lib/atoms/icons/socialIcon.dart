@@ -1,10 +1,77 @@
-/// IMPORTING THIRD PARTY PACKAGES
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:zwap_design_system/enums/enums.dart';
+enum SocialType {
+  google,
+  microsoft,
+  twitter,
+  linkedin,
+  instagram,
+  facebook,
+  github,
+  pinterest,
+  reddit,
+  whatsapp,
+  other,
+}
+
+extension SocialTypeExtension on SocialType {
+  FaIcon get icon {
+    switch (this) {
+      case SocialType.google:
+        return FaIcon(FontAwesomeIcons.google);
+      case SocialType.microsoft:
+        return FaIcon(FontAwesomeIcons.microsoft);
+      case SocialType.twitter:
+        return FaIcon(FontAwesomeIcons.twitter);
+      case SocialType.linkedin:
+        return FaIcon(FontAwesomeIcons.linkedin);
+      case SocialType.instagram:
+        return FaIcon(FontAwesomeIcons.instagram);
+      case SocialType.facebook:
+        return FaIcon(FontAwesomeIcons.facebook);
+      case SocialType.github:
+        return FaIcon(FontAwesomeIcons.github);
+      case SocialType.pinterest:
+        return FaIcon(FontAwesomeIcons.pinterest);
+      case SocialType.reddit:
+        return FaIcon(FontAwesomeIcons.reddit);
+      case SocialType.whatsapp:
+        return FaIcon(FontAwesomeIcons.whatsapp);
+      case SocialType.other:
+        return FaIcon(FontAwesomeIcons.externalLinkAlt);
+    }
+  }
+
+  String get title {
+    switch (this) {
+      case SocialType.google:
+        return 'Google';
+      case SocialType.microsoft:
+        return 'Microsoft';
+      case SocialType.twitter:
+        return 'Twitter';
+      case SocialType.linkedin:
+        return 'Linkedin';
+      case SocialType.instagram:
+        return 'Instagram';
+      case SocialType.facebook:
+        return 'Facebook';
+      case SocialType.github:
+        return 'Github';
+      case SocialType.pinterest:
+        return 'Pinterest';
+      case SocialType.reddit:
+        return 'Reddit';
+      case SocialType.whatsapp:
+        return 'Whatsapp';
+      case SocialType.other:
+        return 'Other';
+    }
+  }
+}
 
 /// It retrieves the social type in base of the current host domain
-SocialType getSocialType(String socialTitle) {
+SocialType parseSocialType(String socialTitle) {
   if (socialTitle.contains("twitter")) {
     return SocialType.twitter;
   } else if (socialTitle.contains("linkedin")) {
@@ -26,45 +93,4 @@ SocialType getSocialType(String socialTitle) {
   } else {
     return SocialType.other;
   }
-}
-
-/// It retrieves the iconData in base of the socialType
-FaIcon socialIcon(SocialType socialType) {
-  FaIcon socialIcon;
-  switch (socialType) {
-    case SocialType.twitter:
-      socialIcon = FaIcon(FontAwesomeIcons.twitter);
-      break;
-    case SocialType.linkedin:
-      socialIcon = FaIcon(FontAwesomeIcons.linkedin);
-      break;
-    case SocialType.instagram:
-      socialIcon = FaIcon(FontAwesomeIcons.instagram);
-      break;
-    case SocialType.facebook:
-      socialIcon = FaIcon(FontAwesomeIcons.facebook);
-      break;
-    case SocialType.github:
-      socialIcon = FaIcon(FontAwesomeIcons.github);
-      break;
-    case SocialType.pinterest:
-      socialIcon = FaIcon(FontAwesomeIcons.pinterest);
-      break;
-    case SocialType.reddit:
-      socialIcon = FaIcon(FontAwesomeIcons.reddit);
-      break;
-    case SocialType.other:
-      socialIcon = FaIcon(FontAwesomeIcons.externalLinkAlt);
-      break;
-    case SocialType.google:
-      socialIcon = FaIcon(FontAwesomeIcons.google);
-      break;
-    case SocialType.microsoft:
-      socialIcon = FaIcon(FontAwesomeIcons.microsoft);
-      break;
-    case SocialType.whatsapp:
-      socialIcon = FaIcon(FontAwesomeIcons.whatsapp);
-      break;
-  }
-  return socialIcon;
 }

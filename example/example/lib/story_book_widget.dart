@@ -20,16 +20,17 @@ class StoryBookWidget extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
-              width: 300,
-              decoration: BoxDecoration(color: ZwapColors.neutral200, borderRadius: BorderRadius.circular(20)),
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: stories.map((e) => _getStorySelector(e, () => context.read<StoryProvider>().currentStory = e.story)).toList(),
+            if (!getMultipleConditions(false, false, true, true, true))
+              Container(
+                width: 300,
+                decoration: BoxDecoration(color: ZwapColors.neutral200, borderRadius: BorderRadius.circular(20)),
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: stories.map((e) => _getStorySelector(e, () => context.read<StoryProvider>().currentStory = e.story)).toList(),
+                  ),
                 ),
               ),
-            ),
             Expanded(child: Builder(builder: stories.firstWhere((s) => s.story == _currentStory).builder)),
           ],
         ),

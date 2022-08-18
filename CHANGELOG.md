@@ -614,3 +614,9 @@ a
 ## 0.1.572
 * Improved BorderRadius decoration in ZwapButton widget
 * Added ZwapWeeklyCalendarShowFilter.disableAfter(...) show filter
+
+## 0.1.573
+* Improved SocialType logics
+
+## 0.1.574
+* Refactoring of ZwapSelect, more clean flow (pending some features)

@@ -37,11 +37,11 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ZwapText(text: 'Disabled State', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   ZwapSwitch(value: _disabled, onValueChange: (v) => setState(() => _disabled = v)),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ZwapText(text: 'Completion Value (0...1)', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
               Slider(
                 value: _completionValue,
