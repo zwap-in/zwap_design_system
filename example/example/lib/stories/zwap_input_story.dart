@@ -1,3 +1,5 @@
+import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
@@ -26,6 +28,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   @override
   Widget build(BuildContext context) {
+    final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
+
     return Center(
       child: Container(
         width: 420,
@@ -51,6 +55,16 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               translateKey: (k) => "ciao",
             ),
             SizedBox(height: 40),
+            ZwapInput.collapsed(
+              label: "Nota per Ciccio",
+              placeholder: "",
+              minLines: 5,
+              maxLines: 7,
+              translateKey: (k) => "ciao",
+              showClearAll: true,
+              subtitle: "Shift + Enter for new line",
+            ),
+            SizedBox(height: 20),
             ZwapInput(
               label: "Input Beta",
               controller: TagsTextController(),

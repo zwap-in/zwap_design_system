@@ -146,6 +146,12 @@ class ZwapInput extends StatefulWidget {
   /// (focussed or not)
   final TextStyle? dynamicLabelTextStyle;
 
+  /// Showed under the input, usually used for something
+  /// like "Shift + Enter for new line"
+  ///
+  /// Only for collesped ZwapInput
+  final String? subtitle;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -188,6 +194,7 @@ class ZwapInput extends StatefulWidget {
     this.cursorColor,
     this.dynamicLabel,
     this.dynamicLabelTextStyle,
+    this.subtitle,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -234,6 +241,7 @@ class ZwapInput extends StatefulWidget {
     this.cursorColor,
     this.dynamicLabel,
     this.dynamicLabelTextStyle,
+    this.subtitle,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -421,36 +429,33 @@ class _ZwapInputState extends State<ZwapInput> {
   }
 
   Widget _bottomContent() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          if (_showMinLenghtIndicator)
-            ZwapRichText.safeText(
-              textSpans: [
-                //TODO: traduci
-                ZwapTextSpan.fromZwapTypography(text: "${widget.translateKey!('zwap_input_characters')}: ", textType: ZwapTextType.smallBodyRegular),
-                ZwapTextSpan.fromZwapTypography(text: "$_realTextLenght", textType: ZwapTextType.smallBodyBold),
-                ZwapTextSpan.fromZwapTypography(text: "/${widget.minLenght}", textType: ZwapTextType.smallBodyRegular),
-              ],
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        if (_showMinLenghtIndicator)
+          ZwapRichText.safeText(
+            textSpans: [
+              //TODO: traduci
+              ZwapTextSpan.fromZwapTypography(text: "${widget.translateKey!('zwap_input_characters')}: ", textType: ZwapTextType.smallBodyRegular),
+              ZwapTextSpan.fromZwapTypography(text: "$_realTextLenght", textType: ZwapTextType.smallBodyBold),
+              ZwapTextSpan.fromZwapTypography(text: "/${widget.minLenght}", textType: ZwapTextType.smallBodyRegular),
+            ],
+          ),
+        if (widget.showClearAll)
+          InkWell(
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () => _controller.text = '',
+            child: ZwapText(
+              text: widget.translateKey!('zwap_input_clear_all'),
+              zwapTextType: ZwapTextType.smallBodyRegular,
+              textColor: ZwapColors.primary700,
             ),
-          if (widget.showClearAll)
-            InkWell(
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () => _controller.text = '',
-              child: ZwapText(
-                text: widget.translateKey!('zwap_input_clear_all'),
-                zwapTextType: ZwapTextType.smallBodyRegular,
-                textColor: ZwapColors.primary700,
-              ),
-            ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 
@@ -519,7 +524,18 @@ class _ZwapInputState extends State<ZwapInput> {
               ),
             ),
           ),
-          if (widget.minLenght > 0 || widget.showClearAll) _bottomContent(),
+          if (widget.subtitle != null) ...[
+            SizedBox(height: 3),
+            ZwapText(
+              text: widget.subtitle!,
+              zwapTextType: ZwapTextType.smallBodyRegular,
+              textColor: ZwapColors.neutral400,
+            ),
+          ],
+          if (widget.minLenght > 0 || widget.showClearAll) ...[
+            SizedBox(height: widget.subtitle  == null ? 6 : 3),
+            _bottomContent(),
+          ],
           Container(
             width: double.infinity,
             child: AnimatedSize(

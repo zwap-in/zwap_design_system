@@ -620,3 +620,6 @@ a
 
 ## 0.1.574
 * Refactoring of ZwapSelect, more clean flow (pending some features)
+
+## 0.1.575
+* Added subtitle in ZwapInput
