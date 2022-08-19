@@ -148,6 +148,30 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                   ),
                 ),
               ),
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 30),
+                top: __top + 200,
+                left: min(MediaQuery.of(context).size.width * 0.2, 250),
+                child: Container(
+                  width: 500,
+                  child: ZwapSelect(
+                    canSearch: true,
+                    values: Map.fromEntries(List.generate(
+                        50, (i) => MapEntry<String, String>(i.toString(), '$i-$i•$i ${i % 3 == 0 ? 'djhfasjdhflajsdh fadhfdjfh adjf agh' : ''}'))),
+                    hintText: "Seleziona un elemento",
+                    label: "Zwap Select",
+                    callBackFunction: (_, value) => setState(() => _multipleSelected = [_]),
+                    selected: '1',
+                    initialPageNumber: 2,
+                    betweenFetchDuration: const Duration(seconds: 2),
+                    onEmptyResponseDuration: const Duration(seconds: 10),
+                    translateText: (key) => {
+                      'not_here': 'Non trovi quello che cerchi?',
+                      'add_here': 'Aggiungilo qui',
+                    }[key]!,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

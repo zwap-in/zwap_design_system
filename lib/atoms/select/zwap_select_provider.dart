@@ -181,7 +181,6 @@ class _ZwapSelectProvider extends ChangeNotifier {
         this._mainPageNumber = initialPageNumber ?? 1,
         this._tmpValues = const {},
         this._selectedValues = [] {
-    _inputController = TextEditingController(text: values[_selectedValues.firstOrNull] ?? '')..addListener(_controllerListener);
     _inputFocusNode = FocusNode(onKeyEvent: _inputFocusNodeHandler)..addListener(_inputFocusNodeListener);
     _rawHanlderFocusNode = FocusNode();
     _overlayScrollController = EdgeNotifierScrollController(
@@ -192,6 +191,7 @@ class _ZwapSelectProvider extends ChangeNotifier {
     for (String key in initialSelectedKey ?? []) {
       _selectedValues.add(initialValues.entries.firstWhere((e) => e.key == key));
     }
+    _inputController = TextEditingController(text: values[_selectedValues.firstOrNull?.key] ?? '')..addListener(_controllerListener);
   }
 
   void _inputFocusNodeListener() {

@@ -623,3 +623,6 @@ a
 
 ## 0.1.575
 * Added subtitle in ZwapInput
+
+## 0.1.576
+* Fixed a bug in ZwapSelect
