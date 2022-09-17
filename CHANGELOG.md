@@ -635,4 +635,4 @@ a
 * Added tooltip and showTooltipOnlyOnDisabledState proprierties to ZwapButton
 
 ## 0.1.579
-* Added static getLigthColorFrom()  method to ZwapColors
+* Added static getLigthColorFrom() method to ZwapColors

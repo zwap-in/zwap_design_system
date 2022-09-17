@@ -147,11 +147,11 @@ class ZwapColors {
   /// Return the [200] color for the [800]
   static Color getLigthColorFrom(Color randomColor) {
     Map<Color, Color> randomMapping = {
-      ZwapColors.secondary200: ZwapColors.secondary800,
-      ZwapColors.primary200: ZwapColors.primary800,
-      ZwapColors.success200: ZwapColors.success800,
-      ZwapColors.error200: ZwapColors.error800,
-      ZwapColors.neutral200: ZwapColors.neutral800
+      ZwapColors.secondary800: ZwapColors.secondary200,
+      ZwapColors.primary800: ZwapColors.primary200,
+      ZwapColors.success800: ZwapColors.success200,
+      ZwapColors.error800: ZwapColors.error200,
+      ZwapColors.neutral800: ZwapColors.neutral200
     };
     return randomMapping[randomColor]!;
   }
