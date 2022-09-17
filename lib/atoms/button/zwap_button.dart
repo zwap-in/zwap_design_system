@@ -5,8 +5,6 @@ import 'dart:math';
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
-import 'package:flutter/services.dart';
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 
 import '../constants/zwapConstants.dart';
@@ -189,6 +187,16 @@ class ZwapButton extends StatefulWidget {
   /// Default to 1 (no changes to "normal" button)
   final double completionValue;
 
+  /// If not null a tooltip will be showed on hover
+  ///
+  /// See [showTooltipOnlyOnDisabledState] for customizing where
+  /// show the tooltip
+  final String? tooltip;
+
+  /// If true and [tooltip] is provided, [tooltip] is showed only
+  /// if the button is in the disabled state
+  final bool showTooltipOnlyOnDisabledState;
+
   const ZwapButton({
     required ZwapButtonChild buttonChild,
     this.decorations,
@@ -208,6 +216,8 @@ class ZwapButton extends StatefulWidget {
     this.selectedDecorations,
     this.hoverElevation = 0,
     this.completionValue = 1,
+    this.tooltip,
+    this.showTooltipOnlyOnDisabledState = false,
     Key? key,
   })  : this.child = null,
         this.buttonChild = buttonChild,
@@ -233,6 +243,8 @@ class ZwapButton extends StatefulWidget {
     this.selectedDecorations,
     this.hoverElevation = 0,
     this.completionValue = 1,
+    this.tooltip,
+    this.showTooltipOnlyOnDisabledState = false,
     Key? key,
   })  : this.buttonChild = null,
         this.child = child,
@@ -473,7 +485,7 @@ class _ZwapButtonState extends State<ZwapButton> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
+    final Widget _button = AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       curve: Curves.decelerate,
       margin: (widget.margin ?? EdgeInsets.zero).add(widget.hoverElevation != 0
@@ -592,6 +604,15 @@ class _ZwapButtonState extends State<ZwapButton> {
           ),
         ),
       ),
+    );
+
+    if (widget.tooltip == null) return _button;
+    if (widget.showTooltipOnlyOnDisabledState && !_disabled) return _button;
+
+    return Tooltip(
+      message: widget.tooltip!,
+      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
+      child: _button,
     );
   }
 }

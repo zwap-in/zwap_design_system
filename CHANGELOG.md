@@ -626,3 +626,10 @@ a
 
 ## 0.1.576
 * Fixed a bug in ZwapSelect
+
+## 0.1.577
+* Added responsiveness to ZwapScrollControlsListTile
+
+## 0.1.578
+* Added dividerHeight and roundTabIndicator properties to ZwapPrimaryTabBar
+* Added tooltip and showTooltipOnlyOnDisabledState proprierties to ZwapButton

@@ -74,6 +74,8 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                   disabled: _disabled,
                   decorations: ZwapButtonDecorations.primaryLight(),
                   completionValue: _completionValue,
+                  tooltip: "cioa ciadlkfahsòjdlfkha òjg alskdfaòsoidghaòis hgaòkj sfhglakjsfhgls jkdfhglsjdhfgljsdh flgsjhddslfhasdklfhasd",
+                  showTooltipOnlyOnDisabledState: true,
                 ),
                 SizedBox(height: 24),
                 Row(

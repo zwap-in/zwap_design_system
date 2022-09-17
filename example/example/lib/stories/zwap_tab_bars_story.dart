@@ -17,17 +17,36 @@ class _ZwapTabBarsStoryState extends State<ZwapTabBarsStory> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ZwapPrimaryTabBar(
-        selected: _selected,
-        tabs: _tabs,
-        textType: ZwapTextType.semiboldH3,
-        textColor: ZwapColors.primary900Dark,
-        notSelectedTextType: ZwapTextType.semiboldH3,
-        notSelectedTextColor: ZwapColors.text65,
-        thickness: 1,
-        selectedThickness: 2,
-        tabWidth: 85,
-        onTabChanges: (tab) => setState(() => _selected = tab),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ZwapPrimaryTabBar(
+            selected: _selected,
+            tabs: _tabs,
+            textType: ZwapTextType.semiboldH3,
+            textColor: ZwapColors.primary900Dark,
+            notSelectedTextType: ZwapTextType.semiboldH3,
+            notSelectedTextColor: ZwapColors.text65,
+            thickness: 1,
+            selectedThickness: 2,
+            tabWidth: 85,
+            onTabChanges: (tab) => setState(() => _selected = tab),
+          ),
+          SizedBox(height: 40),
+          ZwapPrimaryTabBar(
+            selected: _selected,
+            tabs: _tabs,
+            textType: ZwapTextType.semiboldH3,
+            textColor: ZwapColors.primary900Dark,
+            notSelectedTextType: ZwapTextType.semiboldH3,
+            notSelectedTextColor: ZwapColors.text65,
+            selectedThickness: 2,
+            tabWidth: 110,
+            thickness: 1,
+            onTabChanges: (tab) => setState(() => _selected = tab),
+            roundTabIndicator: false,
+          ),
+        ],
       ),
     );
   }

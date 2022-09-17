@@ -11,6 +11,8 @@ import '../scroll_arrow/zwap_scroll_arrow.dart';
 // BUG: On small devices overlflor
 
 /// This widget consist in a title, an arrow icon near the title and if [showScrollContols] is true a left/rigth scroll comand icons, arranged horizontally.
+///
+/// When device is small (ie: type1 or type0) button and scroll controllers are showed under the text, insetead of in line
 class ZwapScrollControlsListTile extends StatefulWidget {
   final String title;
 
@@ -84,85 +86,155 @@ class _ZwapScrollControlsListTileState extends State<ZwapScrollControlsListTile>
   }
 
   Widget build(BuildContext context) {
+    final bool _isSmall = getMultipleConditions(false, false, false, true, true);
+
+    final Widget _controls = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (widget.trailing != null) ...[
+          widget.trailing!,
+          SizedBox(width: widget.trailingPadding ?? 25),
+        ],
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          switchInCurve: Curves.decelerate,
+          child: _showControls
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Flexible(
+                      child: ZwapScrollArrow(
+                        direction: ZwapScrollArrowDirection.left,
+                        disabled: !_leftEnabled,
+                        onTap: widget.onLeftScrollControlTap,
+                      ),
+                      flex: 0,
+                      fit: FlexFit.tight,
+                    ),
+                    SizedBox(width: 15),
+                    Flexible(
+                      child: ZwapScrollArrow(
+                        direction: ZwapScrollArrowDirection.right,
+                        disabled: !_rightEnabled,
+                        onTap: widget.onRigthScrollControlTap,
+                      ),
+                      flex: 0,
+                    )
+                  ],
+                )
+              : Container(),
+        ),
+      ],
+    );
+
+    if (_isSmall)
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ZwapText(
+            text: widget.title,
+            textColor: ZwapColors.neutral800,
+            zwapTextType: ZwapTextType.h2,
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _ZwapScrollControlsListTileButtons(
+                onViewAllTap: widget.onViewAllTap,
+                showViewAll: _showViewAll,
+                translateKeyFunction: widget.translateKeyFunction,
+              ),
+              _controls,
+            ],
+          ),
+        ],
+      );
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ConstrainedBox(
-              constraints: getMultipleConditions(false, false, false, true, true)
-                  ? BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 200)
-                  : BoxConstraints(),
-              child: ZwapText(
-                text: widget.title,
-                textColor: ZwapColors.neutral800,
-                zwapTextType: ZwapTextType.h2,
-              ),
+            ZwapText(
+              text: widget.title,
+              textColor: ZwapColors.neutral800,
+              zwapTextType: ZwapTextType.h2,
             ),
             SizedBox(width: 10),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              switchInCurve: Curves.decelerate,
-              child: ZwapButton(
-                height: 30,
-                width: 110,
-                buttonChild: ZwapButtonChild.textWithIcon(
-                  text: widget.translateKeyFunction!('view_all'),
-                  icon: Icons.arrow_forward,
-                  iconSize: 18,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w300,
-                  spaceBetween: 8,
-                  iconPosition: ZwapButtonIconPosition.right,
-                ),
-                decorations: ZwapButtonDecorations.quaternary(internalPadding: EdgeInsets.zero),
-                hide: !_showViewAll,
-                onTap: widget.onViewAllTap,
-              ),
+            _ZwapScrollControlsListTileButtons(
+              onViewAllTap: widget.onViewAllTap,
+              showViewAll: _showViewAll,
+              translateKeyFunction: widget.translateKeyFunction,
             ),
           ],
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (widget.trailing != null) ...[
-              widget.trailing!,
-              SizedBox(width: widget.trailingPadding ?? 25),
-            ],
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              switchInCurve: Curves.decelerate,
-              child: _showControls
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Flexible(
-                          child: ZwapScrollArrow(
-                            direction: ZwapScrollArrowDirection.left,
-                            disabled: !_leftEnabled,
-                            onTap: widget.onLeftScrollControlTap,
-                          ),
-                          flex: 0,
-                          fit: FlexFit.tight,
-                        ),
-                        SizedBox(width: 15),
-                        Flexible(
-                          child: ZwapScrollArrow(
-                            direction: ZwapScrollArrowDirection.right,
-                            disabled: !_rightEnabled,
-                            onTap: widget.onRigthScrollControlTap,
-                          ),
-                          flex: 0,
-                        )
-                      ],
-                    )
-                  : Container(),
-            ),
-          ],
-        )
+        _controls,
       ],
+    );
+  }
+}
+
+class _ZwapScrollControlsListTileButtons extends StatefulWidget {
+  final bool showViewAll;
+
+  final Function()? onViewAllTap;
+  final String Function(String key)? translateKeyFunction;
+
+  const _ZwapScrollControlsListTileButtons({
+    required this.onViewAllTap,
+    required this.showViewAll,
+    required this.translateKeyFunction,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_ZwapScrollControlsListTileButtons> createState() => __ZwapScrollControlsListTileButtonsState();
+}
+
+class __ZwapScrollControlsListTileButtonsState extends State<_ZwapScrollControlsListTileButtons> {
+  late bool _showViewAll;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _showViewAll = widget.showViewAll;
+  }
+
+  @override
+  void didUpdateWidget(covariant _ZwapScrollControlsListTileButtons oldWidget) {
+    if (_showViewAll != widget.showViewAll) setState(() => _showViewAll = widget.showViewAll);
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 200),
+      switchInCurve: Curves.decelerate,
+      child: ZwapButton(
+        height: 30,
+        width: 110,
+        buttonChild: ZwapButtonChild.textWithIcon(
+          text: widget.translateKeyFunction!('view_all'),
+          icon: Icons.arrow_forward,
+          iconSize: 18,
+          fontSize: 15,
+          fontWeight: FontWeight.w300,
+          spaceBetween: 8,
+          iconPosition: ZwapButtonIconPosition.right,
+        ),
+        decorations: ZwapButtonDecorations.quaternary(internalPadding: EdgeInsets.zero),
+        hide: !_showViewAll,
+        onTap: widget.onViewAllTap,
+      ),
     );
   }
 }

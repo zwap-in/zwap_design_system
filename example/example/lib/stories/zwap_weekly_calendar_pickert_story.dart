@@ -36,7 +36,6 @@ class _ZwapWeeklyCalendarPickerStoryState extends State<ZwapWeeklyCalendarPicker
         showFilters: [
           ZwapWeeklyCalendarShowFilter.showWeekDays([1, 2, 3, 4, 5, 6]),
           ZwapWeeklyCalendarShowFilter.disablePast(),
-          ZwapWeeklyCalendarShowFilter.disableAfter(DateTime.now()),
           ZwapWeeklyCalendarShowFilter.customizeItems(
             blockedSlots,
             customDecorations: WCPDateSlotWidgetDecorations.standard().copyWith(
@@ -58,11 +57,10 @@ class _ZwapWeeklyCalendarPickerStoryState extends State<ZwapWeeklyCalendarPicker
                 return null;
               }),
           ZwapWeeklyCalendarPickFilter.notPast(),
-          ZwapWeeklyCalendarPickFilter.notAfter(start: DateTime.now()),
           ZwapWeeklyCalendarPickMaxFilter.all(
             maxCount: 10,
             notifyFilterCatch: () {
-              ZwapToasts.showErrorToast("Masimo 10", context: context, duration: const Duration(milliseconds: 3500));
+              ZwapToasts.showErrorToast("Massimo 10", context: context, duration: const Duration(milliseconds: 3500));
             },
           ),
           ZwapWeeklyCalendarPickMaxFilter.weekly(

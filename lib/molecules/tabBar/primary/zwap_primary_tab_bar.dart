@@ -1,4 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -45,6 +47,13 @@ class ZwapPrimaryTabBar extends StatefulWidget {
   /// Used for tab decorations when tab is not selected
   final Color secondaryColor;
 
+  /// Used as padding for the primary tab line
+  final double dividerHeight;
+
+  /// If true the tab indicator will be rounded, will be a rectangle
+  /// otherwise
+  final bool roundTabIndicator;
+
   ZwapPrimaryTabBar({
     required this.tabs,
     required this.selected,
@@ -60,6 +69,8 @@ class ZwapPrimaryTabBar extends StatefulWidget {
     this.selectedColor = ZwapColors.primary700,
     this.tabWidth = 95,
     this.tabSpace = 0,
+    this.dividerHeight = 20,
+    this.roundTabIndicator = true,
     Key? key,
   })  : this._customStyle = null,
         this._customNotSelectedStyle = null,
@@ -78,6 +89,8 @@ class ZwapPrimaryTabBar extends StatefulWidget {
     this.tabWidth = 95,
     this.tabSpace = 0,
     this.onTabChanges,
+    this.roundTabIndicator = true,
+    this.dividerHeight = 20,
     Key? key,
   })  : this._customStyle = customStyle,
         this._customNotSelectedStyle = notSelectedCustomStyle,
@@ -119,8 +132,8 @@ class _ZwapPrimaryTabBarState extends State<ZwapPrimaryTabBar> {
                         : getTextSizeFromCustomStyle('Any Text', widget._customStyle!))
                     .height),
             child: Divider(
-              height: 20,
-              thickness: 2,
+              height: widget.dividerHeight,
+              thickness: widget.thickness,
               color: widget.secondaryColor,
             ),
           ),
@@ -141,6 +154,7 @@ class _ZwapPrimaryTabBarState extends State<ZwapPrimaryTabBar> {
                     thickness: widget.thickness,
                     space: widget.tabSpace,
                     width: widget.tabWidth,
+                    rounded: widget.roundTabIndicator,
                   ),
                 )
                 .toList(),
@@ -164,6 +178,7 @@ class _TabItemWidget extends StatefulWidget {
   final double width;
 
   final double space;
+  final bool rounded;
 
   const _TabItemWidget({
     required this.name,
@@ -174,6 +189,7 @@ class _TabItemWidget extends StatefulWidget {
     required this.thickness,
     required this.width,
     required this.space,
+    required this.rounded,
     this.onTap,
     Key? key,
   }) : super(key: key);
@@ -222,17 +238,34 @@ class __TabItemWidgetState extends State<_TabItemWidget> {
                 customTextStyle: _isHovered || _selected ? widget.textStyle : widget.disabledStyle,
               ),
             ),
-            SizedBox(height: 9.5),
             AnimatedContainer(
               duration: const Duration(milliseconds: 350),
               curve: Curves.decelerate,
-              height: _selected ? widget.selectedThickness : widget.thickness,
-              width: widget.width,
-              decoration: BoxDecoration(
-                color: _selected ? ZwapColors.primary800 : ZwapColors.neutral300,
-                borderRadius: BorderRadius.circular(5),
+              height: _selected ? max(0, 9.5 - widget.selectedThickness) : 9.5,
+              color: ZwapColors.transparent,
+            ),
+            Container(
+              height: max(widget.selectedThickness, widget.thickness),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 350),
+                  curve: Curves.decelerate,
+                  height: _selected ? widget.selectedThickness : widget.thickness,
+                  width: widget.width,
+                  decoration: BoxDecoration(
+                    color: _selected ? ZwapColors.primary800 : ZwapColors.neutral300,
+                    borderRadius: widget.rounded ? BorderRadius.circular(5) : null,
+                  ),
+                ),
               ),
-            )
+            ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 350),
+              curve: Curves.decelerate,
+              height: _selected ? max(0, widget.selectedThickness - widget.thickness) : 0,
+              color: ZwapColors.transparent,
+            ),
           ],
         ),
       ),
