@@ -144,6 +144,18 @@ class ZwapColors {
     return randomMapping[randomColor]!;
   }
 
+  /// Return the [200] color for the [800]
+  static Color getLigthColorFrom(Color randomColor) {
+    Map<Color, Color> randomMapping = {
+      ZwapColors.secondary200: ZwapColors.secondary800,
+      ZwapColors.primary200: ZwapColors.primary800,
+      ZwapColors.success200: ZwapColors.success800,
+      ZwapColors.error200: ZwapColors.error800,
+      ZwapColors.neutral200: ZwapColors.neutral800
+    };
+    return randomMapping[randomColor]!;
+  }
+
   static const LinearGradient buttonGrad =
       LinearGradient(colors: [Color(0xffF8606B), Color(0xffF32478)], begin: Alignment.topLeft, end: Alignment.bottomRight);
 

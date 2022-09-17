@@ -633,3 +633,6 @@ a
 ## 0.1.578
 * Added dividerHeight and roundTabIndicator properties to ZwapPrimaryTabBar
 * Added tooltip and showTooltipOnlyOnDisabledState proprierties to ZwapButton
+
+## 0.1.579
+* Added static getLigthColorFrom()  method to ZwapColors
