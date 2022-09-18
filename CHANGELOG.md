@@ -636,3 +636,6 @@ a
 
 ## 0.1.579
 * Added static getLigthColorFrom() method to ZwapColors
+
+## 0.1.581
+* Fix to tertiary button decoration background color
