@@ -351,7 +351,7 @@ class ZwapButtonDecorations {
   })  : this.backgroundColor = backgroundColor ?? ZwapColors.neutral100,
         this.focussedColor = focussedColor ?? ZwapColors.primary100,
         this.hoverColor = hoverColor ?? ZwapColors.primary100,
-        this.disabledColor = disabledColor ?? ZwapColors.neutral500,
+        this.disabledColor = disabledColor ?? ZwapColors.neutral50,
         this.borderRadius = borderRadius ?? BorderRadius.circular(ZwapRadius.buttonRadius),
         this.border = border,
         this.disabledBorder = disabledBorder,
