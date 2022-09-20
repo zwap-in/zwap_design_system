@@ -11,6 +11,8 @@ import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
 /// Custom component for a standard input with a predefined Zwap style
 class ZwapInput extends StatefulWidget {
+  final bool _isCollapsed;
+
   /// Text controller for handling the value from external of this component
   final TextEditingController? controller;
 
@@ -56,6 +58,12 @@ class ZwapInput extends StatefulWidget {
   ///The text showed under the input
   final String? helperText;
 
+  /// If provided showed under the input
+  ///
+  /// If both [helperText] and [helperWidget] are provided,
+  /// [helperWidget] will be used
+  final Widget? helperWidget;
+
   ///If [true] helperText will be shown as error, else as regular text
   final bool helperTextIsError;
 
@@ -65,8 +73,6 @@ class ZwapInput extends StatefulWidget {
   final bool readOnly;
 
   final Function()? onTap;
-
-  final bool _isCollapsed;
 
   final String? fixedInitialText;
 
@@ -152,6 +158,12 @@ class ZwapInput extends StatefulWidget {
   /// Only for collesped ZwapInput
   final String? subtitle;
 
+  /// If true the input will have [OutlineInputBorder] as border,
+  /// [UnderlineInputBorder] otherwise.
+  ///
+  /// Default to true
+  final bool useOutlinedDecoration;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -195,6 +207,8 @@ class ZwapInput extends StatefulWidget {
     this.dynamicLabel,
     this.dynamicLabelTextStyle,
     this.subtitle,
+    this.useOutlinedDecoration = true,
+    this.helperWidget,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -242,6 +256,8 @@ class ZwapInput extends StatefulWidget {
     this.dynamicLabel,
     this.dynamicLabelTextStyle,
     this.subtitle,
+    this.useOutlinedDecoration = true,
+    this.helperWidget,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -303,16 +319,21 @@ class _ZwapInputState extends State<ZwapInput> {
       widget.fixedInitialText != null ? max(0, _controller.text.length - widget.fixedInitialText!.length) : _controller.text.length;
 
   Color _getBorderColor(Color defaultColor, {Color? successColor, Color? errorColor}) {
-    if (widget.helperText != null && widget.helperTextIsError) return errorColor ?? ZwapColors.error300;
+    if ((widget.helperText != null || widget.helperWidget != null) && widget.helperTextIsError) return errorColor ?? ZwapColors.error300;
     if (widget.showSuccess) return successColor ?? ZwapColors.success800;
 
     return defaultColor;
   }
 
-  InputBorder _getZwapInputBorder(Color borderColor) => OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
-        borderSide: BorderSide(color: borderColor, width: 1, style: BorderStyle.solid),
-      );
+  InputBorder _getZwapInputBorder(Color borderColor) => widget.useOutlinedDecoration
+      ? OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
+          borderSide: BorderSide(color: borderColor, width: 1, style: BorderStyle.solid),
+        )
+      : UnderlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
+          borderSide: BorderSide(color: borderColor, width: 1.8, style: BorderStyle.solid),
+        );
 
   /// The field decoration for any text field
   InputDecoration _getTextFieldDecoration() {
@@ -533,7 +554,7 @@ class _ZwapInputState extends State<ZwapInput> {
             ),
           ],
           if (widget.minLenght > 0 || widget.showClearAll) ...[
-            SizedBox(height: widget.subtitle  == null ? 6 : 3),
+            SizedBox(height: widget.subtitle == null ? 6 : 3),
             _bottomContent(),
           ],
           Container(
@@ -565,16 +586,17 @@ class _ZwapInputState extends State<ZwapInput> {
           width: double.infinity,
           child: AnimatedSize(
             duration: const Duration(milliseconds: 200),
-            child: widget.helperText != null
-                ? Padding(
-                    padding: EdgeInsets.only(top: 7),
-                    child: ZwapText(
-                      textColor: widget.helperTextIsError ? ZwapColors.error400 : ZwapColors.success400,
-                      zwapTextType: ZwapTextType.bodyRegular,
-                      text: widget.helperText!,
-                    ),
-                  )
-                : Container(),
+            child: widget.helperWidget ??
+                (widget.helperText != null
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 7),
+                        child: ZwapText(
+                          textColor: widget.helperTextIsError ? ZwapColors.error400 : ZwapColors.success400,
+                          zwapTextType: ZwapTextType.bodyRegular,
+                          text: widget.helperText!,
+                        ),
+                      )
+                    : Container()),
           ),
         ),
       ],

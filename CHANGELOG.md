@@ -639,3 +639,6 @@ a
 
 ## 0.1.581
 * Fix to tertiary button decoration background color
+
+## 0.1.583
+* Added useOutlinedDecoration and helperWidget properties to Zwapinput

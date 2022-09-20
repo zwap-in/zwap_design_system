@@ -278,7 +278,7 @@ class ZwapTypography {
   static const TextStyle extraSmallBodyRegular = TextStyle(
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
-    fontSize: 10,
+    fontSize: 11,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
