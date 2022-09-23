@@ -3,11 +3,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/atoms/imageShape/zwapImageShape.dart';
 
-/// Component to rendering an avatar image asset with standard style
+/// Component to rendering an avatar image
+/// asset with standard style
 class ZwapAvatar extends StatelessWidget {
-
   /// The image widget for the avatar pic
   final Image avatarImage;
 
@@ -16,11 +15,11 @@ class ZwapAvatar extends StatelessWidget {
 
   final bool hasCustomShape;
 
-  ZwapAvatar({Key? key,
+  ZwapAvatar({
+    Key? key,
     required this.avatarImage,
     this.size = 38,
-    this.hasCustomShape = true,
-
+    this.hasCustomShape = false,
   }) : super(key: key);
 
   Color get randomColor {
@@ -34,35 +33,28 @@ class ZwapAvatar extends StatelessWidget {
     return random[intRandom.nextInt(4)];
   }
 
-
-  Widget customShape(){
+  Widget customShape() {
     return ClipPath(
       clipper: ZwapAvatarImageClipper(factor: 2),
       child: Container(
         height: this.size,
         width: this.size,
         child: this.avatarImage,
-        decoration: BoxDecoration(
-          color: this.randomColor
-        ),
+        decoration: BoxDecoration(color: this.randomColor),
       ),
     );
   }
 
-  Widget normalShape(){
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: this.size,
-          backgroundColor: Color(0xFFF1F1F1),
-          child: CircleAvatar(
-            radius: this.size,
-            backgroundImage: this.avatarImage.image,
-          ),
+  Widget normalShape() => Container(
+        decoration: BoxDecoration(
+          color: Color(0xFFF1F1F1),
+          borderRadius: BorderRadius.circular(size),
         ),
-      ],
-    );
-  }
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(size),
+          child: this.avatarImage,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {

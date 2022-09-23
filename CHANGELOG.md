@@ -642,3 +642,6 @@ a
 
 ## 0.1.583
 * Added useOutlinedDecoration and helperWidget properties to Zwapinput
+  
+## 0.1.584
+* Some changes to ZwapAvatar

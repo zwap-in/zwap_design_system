@@ -1,4 +1,4 @@
-export 'avatar/zwapAvatar.dart';
+export 'avatar/zwap_avatar.dart';
 export 'blurComponent/zwapBlurComponent.dart';
 export 'weekly_calendar_picker/zwap_weekly_calendar_picker.dart';
 export 'iconDropDown/zwapIconDropDown.dart';

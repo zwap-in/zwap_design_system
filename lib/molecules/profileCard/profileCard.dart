@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
-import 'package:zwap_design_system/molecules/avatar/zwapAvatar.dart';
+import 'package:zwap_design_system/molecules/avatar/zwap_avatar.dart';
 import 'package:zwap_design_system/objects/objects.dart';
 
 import 'profileMinimumInfo/profileMinimumInfo.dart';
