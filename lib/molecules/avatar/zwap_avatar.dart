@@ -46,6 +46,8 @@ class ZwapAvatar extends StatelessWidget {
   }
 
   Widget normalShape() => Container(
+        height: size,
+        width: size,
         decoration: BoxDecoration(
           color: Color(0xFFF1F1F1),
           borderRadius: BorderRadius.circular(size),
