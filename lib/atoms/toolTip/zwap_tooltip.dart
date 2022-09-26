@@ -115,6 +115,12 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
   }
 
   @override
+  void dispose() {
+    _hideOverlay();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MouseRegion(
       key: _key,
