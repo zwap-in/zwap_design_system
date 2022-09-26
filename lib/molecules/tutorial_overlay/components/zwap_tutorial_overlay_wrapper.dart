@@ -1,8 +1,6 @@
-part of zwap_tutorial_overlay_entry;
+part of zwap_tutorial_overlay;
 
 class _ZwapTutorialOverlayWrapper extends StatefulWidget {
-  late final _ZwapTutorialOverlayWrapperState _privateState;
-
   final Widget Function(BuildContext) builder;
   final Duration fadeDuration;
 
@@ -12,10 +10,8 @@ class _ZwapTutorialOverlayWrapper extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  void hide() => _privateState._hide();
-
   @override
-  State<_ZwapTutorialOverlayWrapper> createState() => _privateState = _ZwapTutorialOverlayWrapperState();
+  State<_ZwapTutorialOverlayWrapper> createState() => _ZwapTutorialOverlayWrapperState();
 }
 
 class _ZwapTutorialOverlayWrapperState extends State<_ZwapTutorialOverlayWrapper> {
@@ -26,7 +22,7 @@ class _ZwapTutorialOverlayWrapperState extends State<_ZwapTutorialOverlayWrapper
     _opacity = 1;
   }
 
-  void _hide() => setState(() => _opacity = 0);
+  void hide() => setState(() => _opacity = 0);
 
   @override
   Widget build(BuildContext context) {

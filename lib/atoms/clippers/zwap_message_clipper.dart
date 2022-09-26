@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-enum DecorationDirection { top, right, botttom, left }
+enum DecorationDirection { top, right, bottom, left }
 
 /// Clip as rounded border rectangle with an "arrow" decoration
 class ZwapMessageClipper extends CustomClipper<Path> {
@@ -17,11 +17,21 @@ class ZwapMessageClipper extends CustomClipper<Path> {
     this.direction = DecorationDirection.top,
     this.decorationOffset,
   }) : this.decorationSize =
-            decorationSize ?? ([DecorationDirection.top, DecorationDirection.botttom].contains(direction) ? Size(20, 12) : Size(12, 20));
+            decorationSize ?? ([DecorationDirection.top, DecorationDirection.bottom].contains(direction) ? Size(20, 12) : Size(12, 20));
 
   @override
   Path getClip(Size size) {
-    final _decorationOffset = (size.width - 2 * radius) / 2 + (decorationOffset ?? 0); //TODO: offset
+    late final _decorationOffset;
+    switch (direction) {
+      case DecorationDirection.top:
+      case DecorationDirection.bottom:
+        _decorationOffset = (size.width - 2 * radius - decorationSize.width) / 2 + (decorationOffset ?? 0); //TODO: offset
+        break;
+      case DecorationDirection.right:
+      case DecorationDirection.left:
+        _decorationOffset = (size.height - 2 * radius - decorationSize.height) / 2 + (decorationOffset ?? 0); //TODO: offset
+        break;
+    }
 
     switch (direction) {
       case DecorationDirection.top:
@@ -55,7 +65,7 @@ class ZwapMessageClipper extends CustomClipper<Path> {
           ..lineTo(decorationSize.width, radius + _decorationOffset)
           ..lineTo(decorationSize.width, radius)
           ..arcToPoint(Offset(decorationSize.width + radius, 0), radius: Radius.circular(radius)); */
-      case DecorationDirection.botttom:
+      case DecorationDirection.bottom:
         return Path()
           ..moveTo(radius, 0)
           ..lineTo(size.width - radius, 0)

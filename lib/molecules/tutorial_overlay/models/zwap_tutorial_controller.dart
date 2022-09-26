@@ -71,8 +71,8 @@ class ZwapTutorialController {
   }
 
   /// Return an unique global key and register this step
-  GlobalKey registerTutorialStep(int stepNumber) {
-    final GlobalKey _key = GlobalKey();
+  GlobalKey<_ZwapTutorialOverlayWrapperState> registerTutorialStep(int stepNumber) {
+    final GlobalKey<_ZwapTutorialOverlayWrapperState> _key = GlobalKey();
     _tmpKeys[stepNumber] = _key;
     return _key;
   }

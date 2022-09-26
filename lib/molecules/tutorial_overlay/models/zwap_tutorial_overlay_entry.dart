@@ -1,11 +1,7 @@
-library zwap_tutorial_overlay_entry;
-
-import 'package:flutter/material.dart';
-
-part '../components/zwap_tutorial_overlay_wrapper.dart';
+part of zwap_tutorial_overlay;
 
 class ZwapTutorialOverlayEntry extends OverlayEntry {
-  late final GlobalKey? _wrapperKey;
+  late final GlobalKey<_ZwapTutorialOverlayWrapperState>? _wrapperKey;
 
   final bool fadeOut;
   final Duration fadeOutDuration;
@@ -13,14 +9,14 @@ class ZwapTutorialOverlayEntry extends OverlayEntry {
   @override
   void remove() async {
     if (fadeOut) {
-      (_wrapperKey?.currentWidget as _ZwapTutorialOverlayWrapper?)?.hide();
+      _wrapperKey?.currentState?.hide();
       await Future.delayed(fadeOutDuration);
     }
     super.remove();
   }
 
   ZwapTutorialOverlayEntry({
-    required GlobalKey uniqueKey,
+    required GlobalKey<_ZwapTutorialOverlayWrapperState> uniqueKey,
     this.fadeOut = true,
     this.fadeOutDuration = const Duration(milliseconds: 350),
     required WidgetBuilder builder,

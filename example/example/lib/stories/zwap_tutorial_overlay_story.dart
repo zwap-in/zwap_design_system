@@ -1,6 +1,8 @@
-import 'package:example/stories/zwap_buttons_story.dart';
 import 'package:flutter/material.dart';
+import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/button/zwap_button.dart';
+import 'package:zwap_design_system/atoms/text/text.dart';
+import 'package:zwap_design_system/atoms/toolTip/zwap_tooltip.dart';
 import 'package:zwap_design_system/molecules/tutorial_overlay/zwap_tutorial_overlay.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +11,7 @@ class FakeProvider extends ChangeNotifier {
 }
 
 class ZwapTutorialOverlayStory extends StatefulWidget {
-  ZwapTutorialOverlayStory({Key? key}) : super(key: key);
+  const ZwapTutorialOverlayStory({Key? key}) : super(key: key);
 
   @override
   State<ZwapTutorialOverlayStory> createState() => _ZwapTutorialOverlayStoryState();
@@ -63,18 +65,23 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
           children: [
             Container(
               margin: const EdgeInsets.only(left: 120),
-              child: GestureDetector(
-                onTap: () => _controller.start(),
-                child: ZwapTutorialOverlayFocusWidget(
-                  key: _controller.registerTutorialStep(0),
-                  childBuilder: (context) {
-                    return Container(
-                      width: 200,
-                      height: 100,
-                      color: Colors.green,
-                      child: Center(child: Text("PASSO 1")),
-                    );
-                  },
+              child: Center(
+                child: GestureDetector(
+                  onTap: () => _controller.start(),
+                  child: ZwapTutorialOverlayFocusWidget(
+                    key: _controller.registerTutorialStep(0),
+                    childBuilder: (context) {
+                      return Container(
+                        width: 200,
+                        height: 100,
+                        color: Colors.green,
+                        child: ZwapTooltip(
+                          message: "Cupidatat velit commodo labore\nullamco incididunt anim minim nulla sit\nfugiat ea excepteur quis pariatur.",
+                          child: Center(child: Text("PASSO 1")),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -86,7 +93,15 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
                   width: 200,
                   height: 100,
                   color: Colors.red,
-                  child: Center(child: Text("PASSO 3")),
+                  child: ZwapTooltip(
+                    animationDuration: Duration(milliseconds: 75),
+                    position: TooltipPosition.rigth,
+                    padding: const EdgeInsets.all(12),
+                    decorationTranslation: -15,
+                    message: "Clicca e trascina per\nselezionare più slot\nconsecutivi.",
+                    child: Center(child: Text("PASSO 3")),
+                    style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.shades0),
+                  ),
                 );
               },
             ),

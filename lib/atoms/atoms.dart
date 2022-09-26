@@ -16,7 +16,7 @@ export 'select/zwap_select.dart';
 export 'stars/zwapStar.dart';
 export 'switch/zwap_switch.dart';
 export 'lineItem/zwapLineItem.dart';
-export 'toolTip/zwapToolTip.dart';
+export 'toolTip/zwap_tooltip.dart';
 export 'dropdownSearch/dropdownSearch.dart';
 export 'overlayEntryWidget/zwapOverlayEntryWidget.dart';
 export 'imageShape/zwapImageShape.dart';
