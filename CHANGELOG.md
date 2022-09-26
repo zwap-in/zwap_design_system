@@ -648,3 +648,6 @@ a
 
 ## 0.1.586
 * New ZwapTooltip and some fixes to ZwapTutorialOverlay
+
+## 0.1.588
+* Added showTooltip to ZwapTooltip

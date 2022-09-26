@@ -24,6 +24,8 @@ class ZwapTooltip extends StatefulWidget {
 
   final Duration animationDuration;
 
+  final bool showTooltip;
+
   const ZwapTooltip({
     required this.message,
     required this.child,
@@ -33,6 +35,7 @@ class ZwapTooltip extends StatefulWidget {
     this.position = TooltipPosition.bottom,
     this.transationOffset = Offset.zero,
     this.animationDuration = const Duration(milliseconds: 200),
+    this.showTooltip = true,
     Key? key,
   }) : super(key: key);
 
@@ -45,8 +48,22 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
   final GlobalKey<_ZwapTooltipOverlayState> _overlayKey = GlobalKey();
   OverlayEntry? _entry;
 
+  late bool _showTooltip;
+
+  @override
+  void initState() {
+    super.initState();
+    _showTooltip = widget.showTooltip;
+  }
+
+  @override
+  void didUpdateWidget(covariant ZwapTooltip oldWidget) {
+    if (_showTooltip != widget.showTooltip) setState(() => _showTooltip = widget.showTooltip);
+    super.didUpdateWidget(oldWidget);
+  }
+
   void _showOverlay() {
-    if (_entry != null) return;
+    if (_showTooltip || _entry != null) return;
 
     final Rect? _childRect = _key.globalPaintBounds;
     if (_childRect == null) return;
