@@ -63,7 +63,7 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
   }
 
   void _showOverlay() {
-    if (_showTooltip || _entry != null) return;
+    if (!_showTooltip || _entry != null) return;
 
     final Rect? _childRect = _key.globalPaintBounds;
     if (_childRect == null) return;
