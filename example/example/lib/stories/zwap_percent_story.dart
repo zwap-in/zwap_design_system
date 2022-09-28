@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/molecules/percent_widget/percent_widget.dart';
 import 'package:zwap_design_system/zwap_design_system.dart';
+import 'package:zwap_design_system/atoms/progress_line/zwap_progress_line.dart';
 
 class ZwapPercentStory extends StatefulWidget {
   const ZwapPercentStory({Key? key}) : super(key: key);
@@ -22,6 +23,23 @@ class _ZwapPercentStoryState extends State<ZwapPercentStory> {
             onChanged: (v) => setState(() => _value = v),
             value: _value,
           ),
+          SizedBox(height: 15),
+          ZwapText(text: "Zwap Progress Line", zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.neutral800),
+          SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: LayoutBuilder(
+                builder: (_, size) => ZwapProgressLine(
+                  value: _value,
+                  width: size.maxWidth,
+                  backgroundColor: ZwapColors.neutral200,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 8),
           ZwapText(text: "Simple ZwapPercent", zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.neutral800),
           SizedBox(height: 8),
           Row(

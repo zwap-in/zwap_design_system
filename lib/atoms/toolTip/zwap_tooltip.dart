@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:taastrap/taastrap.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
@@ -11,21 +14,69 @@ enum TooltipPosition {
 }
 
 class ZwapTooltip extends StatefulWidget {
+  /// Message showed inside tooltip overlay
   final String message;
+
+  /// [message] text style
   final TextStyle? style;
 
+  /// Padding applied to overlay content
   final EdgeInsets padding;
 
-  final Widget child;
+  /// The tooltip position relative to the [child] provided
+  ///
+  /// Eg, if [position] in [TooltipPosition.rigth] the tooltip overlay
+  /// will be showed to the rigth of the provided [child]
   final TooltipPosition position;
 
+  /// Use this argument to move the overlay around
+  ///
+  /// This offset will be summed to the relative offset
+  /// of the tooltip overlay
   final Offset transationOffset;
+
+  /// Use this to move the arrow decoration of the tooltip.
+  ///
+  /// Default: 0, ie in the center of the "main" border, where
+  /// the "main" border in:
+  /// * top border if [position] is [TooltipPosition.bottom]
+  /// * bottom border if [position] is [TooltipPosition.top]
+  /// * left border if [position] is [TooltipPosition.rigth]
   final double decorationTranslation;
 
+  /// * left border if [position] is [TooltipPosition.rigth]
   final Duration animationDuration;
 
+  /// You can deactivate the tooltip visualization
+  /// simply setting [showTooltip] to false
+  ///
+  /// Default to true
   final bool showTooltip;
 
+  /// [ZwapTooltip] will wait the mouse to be hovering the
+  /// widget for at least this time before showing tooltip
+  ///
+  /// Default to [Duration.zero]
+  final Duration delay;
+
+  /// [ZwapTooltip] will use this duration as the maximum
+  /// time an overlay can be showed
+  ///
+  /// Ie: the overlay is automatically closed after this
+  /// delay
+  ///
+  /// Default to 5 seconds
+  ///
+  /// Set this to [null] to disable auto close
+  final Duration? disappearAfter;
+
+  final Widget child;
+
+  /// Show a customized tooltip message when user hover
+  /// this widget with mouse
+  ///
+  /// In mobile devices (type 2, 1 and 0) the tooltip is showed
+  /// both on long tap and on mouse hover
   const ZwapTooltip({
     required this.message,
     required this.child,
@@ -36,6 +87,8 @@ class ZwapTooltip extends StatefulWidget {
     this.transationOffset = Offset.zero,
     this.animationDuration = const Duration(milliseconds: 200),
     this.showTooltip = true,
+    this.delay = Duration.zero,
+    this.disappearAfter = const Duration(seconds: 5),
     Key? key,
   }) : super(key: key);
 
@@ -49,6 +102,16 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
   OverlayEntry? _entry;
 
   late bool _showTooltip;
+
+  /// When user enter the hover region this value is set to true.
+  /// If the user exit this area this will be setted to false.
+  ///
+  /// If after the [widget.delay] delay this value is still true
+  /// the overlay is showed
+  bool _shouldShowTooltip = false;
+
+  /// Used to make overlay disappear after [widget.disappearAfter]
+  Timer? _disappearTimer;
 
   @override
   void initState() {
@@ -103,6 +166,10 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
         ),
       ),
     );
+
+    if (widget.disappearAfter != null) {
+      _disappearTimer = Timer(widget.disappearAfter!, () => _hideOverlay());
+    }
   }
 
   double get _widgetWidth {
@@ -124,10 +191,11 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
   }
 
   void _hideOverlay() async {
+    _disappearTimer?.cancel();
     if (_entry == null) return;
 
     await _overlayKey.currentState?.close();
-    _entry!.remove();
+    _entry?.remove();
     _entry = null;
   }
 
@@ -139,12 +207,31 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
+    final bool _isSmall = getMultipleConditions(false, false, true, true, true);
+
+    final Widget _bigScreenWidget = MouseRegion(
       key: _key,
-      onEnter: (isHovered) => _showOverlay(),
-      onExit: (isHovered) => _hideOverlay(),
+      onEnter: (isHovered) async {
+        _shouldShowTooltip = true;
+        await Future.delayed(widget.delay);
+
+        if (_shouldShowTooltip) _showOverlay();
+      },
+      onExit: (isHovered) {
+        _shouldShowTooltip = false;
+        _hideOverlay();
+      },
       child: widget.child,
     );
+
+    if (_isSmall)
+      return GestureDetector(
+        behavior: HitTestBehavior.deferToChild,
+        onLongPress: () => _showOverlay(),
+        child: _bigScreenWidget,
+      );
+
+    return _bigScreenWidget;
   }
 }
 

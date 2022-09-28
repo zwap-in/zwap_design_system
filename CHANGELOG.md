@@ -651,3 +651,7 @@ a
 
 ## 0.1.588
 * Added showTooltip to ZwapTooltip
+
+## 0.1.590
+* Improvements to ZwapTooltip (delay and disappearAfter)
+* New ZwapProgressLine

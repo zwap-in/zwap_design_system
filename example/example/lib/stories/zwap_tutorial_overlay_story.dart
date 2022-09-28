@@ -94,13 +94,15 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
                   height: 100,
                   color: Colors.red,
                   child: ZwapTooltip(
-                    animationDuration: Duration(milliseconds: 75),
+                    animationDuration: Duration(milliseconds: 200),
                     position: TooltipPosition.rigth,
                     padding: const EdgeInsets.all(12),
                     decorationTranslation: -15,
                     message: "Clicca e trascina per\nselezionare più slot\nconsecutivi.",
                     child: Center(child: Text("PASSO 3")),
                     style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.shades0),
+                    delay: const Duration(milliseconds: 150),
+                    disappearAfter: const Duration(seconds: 1),
                   ),
                 );
               },
