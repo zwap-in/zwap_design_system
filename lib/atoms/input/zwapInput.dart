@@ -91,7 +91,7 @@ class ZwapInput extends StatefulWidget {
   final Widget? prefixWidget;
   final Widget? suffixWidget;
 
-  final double? borderRadius;
+  final double borderRadius;
 
   final void Function()? onEditingComplete;
 
@@ -193,7 +193,7 @@ class ZwapInput extends StatefulWidget {
     this.textCapitalization,
     this.suffixWidget,
     this.prefixWidget,
-    this.borderRadius,
+    this.borderRadius = 8,
     this.onEditingComplete,
     this.obscure = false,
     this.autoObscureIfPassword = true,
@@ -242,7 +242,7 @@ class ZwapInput extends StatefulWidget {
     this.textCapitalization,
     this.suffixWidget,
     this.prefixWidget,
-    this.borderRadius,
+    this.borderRadius = 8,
     this.onEditingComplete,
     this.obscure = false,
     this.autoObscureIfPassword = true,
@@ -327,11 +327,11 @@ class _ZwapInputState extends State<ZwapInput> {
 
   InputBorder _getZwapInputBorder(Color borderColor) => widget.useOutlinedDecoration
       ? OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
+          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
           borderSide: BorderSide(color: borderColor, width: 1, style: BorderStyle.solid),
         )
       : UnderlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
+          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
           borderSide: BorderSide(color: borderColor, width: 1.8, style: BorderStyle.solid),
         );
 
@@ -494,96 +494,135 @@ class _ZwapInputState extends State<ZwapInput> {
   @override
   Widget build(BuildContext context) {
     if (widget._isCollapsed)
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      return Stack(
         children: [
-          if (widget.label != null) this._getLabel(),
-          InkWell(
-            onHover: (hover) => setState(() => _isHovered = hover),
-            onTap: () => _focusNode.requestFocus(),
-            focusColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            mouseCursor: SystemMouseCursors.text,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
-              child: Container(
-                key: _containerKey,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius ?? ZwapRadius.buttonRadius)),
-                  border: Border.all(
-                    color: widget.disabled
-                        ? _getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)
-                        : (_focusNode.hasFocus || _isHovered)
-                            ? _getBorderColor(ZwapColors.primary300)
-                            : _getBorderColor(ZwapColors.neutral300),
-                    width: 1,
-                    style: BorderStyle.solid,
-                  ),
-                ),
-                padding: _showMinLenghtIndicator
-                    ? widget.internalPadding.copyWith(
-                        bottom: 0,
-                        right: (widget.borderRadius ?? ZwapRadius.buttonRadius) / 2,
-                        left: (widget.borderRadius ?? ZwapRadius.buttonRadius) / 2,
-                      )
-                    : widget.internalPadding,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: _showMinLenghtIndicator
-                          ? EdgeInsets.only(
-                              left: max(0, widget.internalPadding.left - (widget.borderRadius ?? ZwapRadius.buttonRadius) / 2),
-                              right: max(0, widget.internalPadding.right - (widget.borderRadius ?? ZwapRadius.buttonRadius) / 2),
-                            )
-                          : EdgeInsets.zero,
-                      child: _getInputWidget(
-                        decorations: InputDecoration.collapsed(
-                          hintText: widget.placeholder!,
-                          hintStyle: getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
-                          enabled: !widget.disabled,
-                          hoverColor: ZwapColors.primary300,
-                        ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.label != null) SizedBox(height: 9),
+              InkWell(
+                onHover: (hover) => setState(() => _isHovered = hover),
+                onTap: () => _focusNode.requestFocus(),
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                mouseCursor: SystemMouseCursors.text,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
+                  child: Container(
+                    key: _containerKey,
+                    decoration: BoxDecoration(
+                      color: ZwapColors.shades0,
+                      borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
+                      border: Border.all(
+                        color: widget.disabled
+                            ? _getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)
+                            : (_focusNode.hasFocus || _isHovered)
+                                ? _getBorderColor(ZwapColors.primary300)
+                                : _getBorderColor(ZwapColors.neutral300),
+                        width: 1,
+                        style: BorderStyle.solid,
                       ),
                     ),
-                    if (_showMinLenghtIndicator) ...[
-                      SizedBox(height: widget.internalPadding.bottom),
-                      _minLenghtIndicatorWidget(),
-                    ],
-                  ],
+                    padding: _showMinLenghtIndicator
+                        ? widget.internalPadding.copyWith(
+                            bottom: 0,
+                            right: widget.borderRadius / 2,
+                            left: widget.borderRadius / 2,
+                          )
+                        : widget.internalPadding,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: _showMinLenghtIndicator
+                              ? EdgeInsets.only(
+                                  left: max(0, widget.internalPadding.left - widget.borderRadius / 2),
+                                  right: max(0, widget.internalPadding.right - widget.borderRadius / 2),
+                                )
+                              : EdgeInsets.zero,
+                          child: _getInputWidget(
+                            decorations: InputDecoration.collapsed(
+                              hintText: widget.placeholder!,
+                              hintStyle: getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
+                              enabled: !widget.disabled,
+                              hoverColor: ZwapColors.primary300,
+                            ),
+                          ),
+                        ),
+                        if (_showMinLenghtIndicator) ...[
+                          SizedBox(height: widget.internalPadding.bottom),
+                          _minLenghtIndicatorWidget(),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              if (widget.subtitle != null) ...[
+                SizedBox(height: 3),
+                ZwapText(
+                  text: widget.subtitle!,
+                  zwapTextType: ZwapTextType.smallBodyRegular,
+                  textColor: ZwapColors.neutral400,
+                ),
+              ],
+              if (widget.minLenght > 0 || widget.showClearAll) ...[
+                SizedBox(height: widget.subtitle == null ? 6 : 3),
+                _bottomContent(),
+              ],
+              Container(
+                width: double.infinity,
+                child: AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  child: widget.helperText != null
+                      ? Padding(
+                          padding: EdgeInsets.only(top: 7),
+                          child: ZwapText(
+                            textColor: widget.helperTextIsError ? ZwapColors.error400 : ZwapColors.success400,
+                            zwapTextType: ZwapTextType.bodyRegular,
+                            text: widget.helperText!,
+                          ),
+                        )
+                      : Container(),
+                ),
+              ),
+            ],
+          ),
+          if (widget.label != null)
+            Positioned(
+              left: widget.borderRadius + 2,
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.decelerate,
+                alignment: Alignment.topLeft,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: ZwapColors.shades0,
+                    gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
+                      ZwapColors.whiteTransparent,
+                      ZwapColors.shades0,
+                    ], stops: [
+                      0,
+                      0.47
+                    ]),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: ZwapText.customStyle(
+                    text: widget.label!,
+                    customTextStyle: getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(
+                        color: _isHovered
+                            ? ZwapColors.primary400
+                            : _hasFocus
+                                ? ZwapColors.primary700
+                                : ZwapColors.neutral500,
+                        fontSize: 11,
+                        letterSpacing: 0.1),
+                  ),
                 ),
               ),
             ),
-          ),
-          if (widget.subtitle != null) ...[
-            SizedBox(height: 3),
-            ZwapText(
-              text: widget.subtitle!,
-              zwapTextType: ZwapTextType.smallBodyRegular,
-              textColor: ZwapColors.neutral400,
-            ),
-          ],
-          if (widget.minLenght > 0 || widget.showClearAll) ...[
-            SizedBox(height: widget.subtitle == null ? 6 : 3),
-            _bottomContent(),
-          ],
-          Container(
-            width: double.infinity,
-            child: AnimatedSize(
-              duration: const Duration(milliseconds: 200),
-              child: widget.helperText != null
-                  ? Padding(
-                      padding: EdgeInsets.only(top: 7),
-                      child: ZwapText(
-                        textColor: widget.helperTextIsError ? ZwapColors.error400 : ZwapColors.success400,
-                        zwapTextType: ZwapTextType.bodyRegular,
-                        text: widget.helperText!,
-                      ),
-                    )
-                  : Container(),
-            ),
-          ),
         ],
       );
 

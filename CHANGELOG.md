@@ -659,3 +659,7 @@ a
 ## 0.1.591
 * Added String/int/bool type support for next and previus PageData fromJson constructor
 * Improvements to ZwapSelect
+
+## 0.1.592
+* Disabled ZwapSelect new label when open reverse is true and overlay is open
+* Added dynamic label to ZwapInput.collapsed(...)

@@ -336,7 +336,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
   }
 
   void _toggleOverlay() {
-    if (_selectOverlay?.mounted ?? false) {
+    if (isOverlayMounted) {
       try {
         _selectOverlay!.remove();
       } catch (e) {}
@@ -350,6 +350,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
   }
 
   bool get openReverse => (_selectKey.globalOffset?.dy ?? 0) + 45 + 150 >= MediaQuery.of(context).size.height - 50;
+  bool get isOverlayMounted => _selectOverlay?.mounted ?? false;
 
   OverlayEntry _createOverlay() {
     final double _top = (_selectKey.globalOffset?.dy ?? 0) + 45;
@@ -635,7 +636,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 150),
                         curve: Curves.decelerate,
-                        decoration: (_selectOverlay?.mounted ?? false)
+                        decoration: isOverlayMounted
                             ? openReverse
                                 ? BoxDecoration(
                                     color: ZwapColors.neutral300,
@@ -659,10 +660,10 @@ class _ZwapSelectState extends State<ZwapSelect> {
                           duration: const Duration(milliseconds: 150),
                           curve: Curves.decelerate,
                           key: _selectKey,
-                          height: 45 + ((_selectOverlay?.mounted ?? false) ? 1 : 0),
+                          height: 45 + (isOverlayMounted ? 1 : 0),
                           decoration: BoxDecoration(
                             color: ZwapColors.shades0,
-                            borderRadius: (_selectOverlay?.mounted ?? false)
+                            borderRadius: isOverlayMounted
                                 ? openReverse
                                     ? BorderRadius.only(
                                         bottomLeft: Radius.circular(widget.borderRadius - 1),
@@ -674,15 +675,15 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                       )
                                 : BorderRadius.circular(widget.borderRadius - 1),
                           ),
-                          margin: _selectOverlay?.mounted ?? false
+                          margin: isOverlayMounted
                               ? openReverse
                                   ? const EdgeInsets.only(bottom: 1, left: 1, right: 1)
                                   : const EdgeInsets.only(top: 1, left: 1, right: 1)
                               : const EdgeInsets.all(1),
                           padding: const EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10) +
                               EdgeInsets.only(
-                                bottom: (_selectOverlay?.mounted ?? false) && !openReverse ? 1 : 0,
-                                top: (_selectOverlay?.mounted ?? false) && openReverse ? 1 : 0,
+                                bottom: isOverlayMounted && !openReverse ? 1 : 0,
+                                top: isOverlayMounted && openReverse ? 1 : 0,
                               ),
                           child: Row(
                             children: [
@@ -760,7 +761,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                               ),
                               SizedBox(width: 5),
                               AnimatedRotation(
-                                turns: (_selectOverlay?.mounted ?? false) ? 0 : 0.5,
+                                turns: isOverlayMounted ? 0 : 0.5,
                                 duration: const Duration(milliseconds: 150),
                                 child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(_selectOverlay?.mounted)),
                               ),
@@ -773,7 +774,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                 ],
               ),
             ),
-            if (widget.label != null)
+            if (widget.label != null && (!isOverlayMounted || !openReverse))
               Positioned(
                 left: widget.borderRadius + 2,
                 child: AnimatedSize(
