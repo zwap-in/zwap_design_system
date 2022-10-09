@@ -644,7 +644,7 @@ a
 * Added useOutlinedDecoration and helperWidget properties to Zwapinput
   
 ## 0.1.584
-* Some changes to ZwapAvatars
+* Some changes to ZwapAvataxrs
 
 ## 0.1.586
 * New ZwapTooltip and some fixes to ZwapTutorialOverlay
@@ -655,3 +655,7 @@ a
 ## 0.1.590
 * Improvements to ZwapTooltip (delay and disappearAfter)
 * New ZwapProgressLine
+
+## 0.1.591
+* Added String/int/bool type support for next and previus PageData fromJson constructor
+* Improvements to ZwapSelect

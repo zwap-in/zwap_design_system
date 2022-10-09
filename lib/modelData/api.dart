@@ -26,11 +26,22 @@ class PageData<T> {
       );
 
   factory PageData.fromJson(Map<String, dynamic> json, T callBack(Map<String, dynamic> json)) {
+    String? _next;
+    String? _previous;
+
+    if (json['next'] is String) _next = json['next'];
+    if (json['next'] is int) _next = json['next'] > 0 ? 'not_empty_string' : null;
+    if (json['next'] is bool) _next = json['next'] ? 'not_empty_string' : null;
+
+    if (json['previous'] is String) _next = json['previous'];
+    if (json['previous'] is int) _next = json['previous'] > 0 ? 'not_empty_string' : null;
+    if (json['previous'] is bool) _next = json['previous'] ? 'not_empty_string' : null;
+
     return PageData(
         data: List<T>.generate(json['results'].length, ((element) => callBack(json['results'][element]))),
         count: json['count'] ?? 0,
-        next: json['next'],
-        previous: json['previous']);
+        next: _next,
+        previous: _previous);
   }
 
   @override

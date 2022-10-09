@@ -337,27 +337,38 @@ class _ZwapInputState extends State<ZwapInput> {
 
   /// The field decoration for any text field
   InputDecoration _getTextFieldDecoration() {
-    return new InputDecoration(
-      enabledBorder: _getZwapInputBorder(_getBorderColor(_focusNode.hasFocus ? ZwapColors.primary300 : ZwapColors.neutral300)),
-      focusedBorder: _getZwapInputBorder(_getBorderColor(ZwapColors.primary300)),
-      disabledBorder:
-          _getZwapInputBorder(_getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)),
+    return InputDecoration(
+      enabledBorder: _getZwapInputBorder(
+        _getBorderColor((_focusNode.hasFocus || _isHovered) ? ZwapColors.primary200 : ZwapColors.neutral300),
+      ),
+      focusedBorder: _getZwapInputBorder(
+        _getBorderColor(ZwapColors.primary300),
+      ),
+      disabledBorder: _getZwapInputBorder(
+        _getBorderColor(
+          (_focusNode.hasFocus || _isHovered) ? ZwapColors.primary200 : ZwapColors.neutral200,
+          errorColor: ZwapColors.error50,
+          successColor: ZwapColors.success200,
+        ),
+      ),
       contentPadding: widget.internalPadding,
+      filled: true,
+      fillColor: ZwapColors.shades0,
+      hoverColor: ZwapColors.whiteTransparent,
       prefixText: widget.prefixText,
-      hoverColor: ZwapColors.primary300,
       labelText: widget.dynamicLabel,
       // getTextStyle(ZwapTextType.smallBodyRegular).copyWith(color: ZwapColors.primary700),
       labelStyle: MaterialStateTextStyle.resolveWith(
         (states) {
           final Map<MaterialState, TextStyle> styles = {
             MaterialState.focused:
-                (widget.dynamicLabelTextStyle ?? getTextStyle(ZwapTextType.smallBodyRegular)).copyWith(color: ZwapColors.primary400),
+                (widget.dynamicLabelTextStyle ?? getTextStyle(ZwapTextType.mediumBodyRegular)).copyWith(color: ZwapColors.primary500),
           };
           for (var s in states)
             if (styles.keys.contains(s)) {
               return styles[s]!;
             }
-          return (widget.dynamicLabelTextStyle ?? getTextStyle(ZwapTextType.smallBodyRegular)).copyWith(color: ZwapColors.neutral500);
+          return (widget.dynamicLabelTextStyle ?? getTextStyle(ZwapTextType.mediumBodyRegular)).copyWith(color: ZwapColors.neutral500);
         },
       ),
       hintText: widget.placeholder,
@@ -580,7 +591,16 @@ class _ZwapInputState extends State<ZwapInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.label != null) this._getLabel(),
-        this._getInputWidget(decorations: this._getTextFieldDecoration()),
+        InkWell(
+          onHover: (hover) => setState(() => _isHovered = hover),
+          onTap: () => _focusNode.requestFocus(),
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          mouseCursor: SystemMouseCursors.text,
+          child: this._getInputWidget(decorations: this._getTextFieldDecoration()),
+        ),
         if (widget.minLenght > 0 || widget.showClearAll) _bottomContent(),
         Container(
           width: double.infinity,

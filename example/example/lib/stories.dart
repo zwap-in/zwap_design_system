@@ -1,5 +1,6 @@
 import 'package:example/stories/zwap_buttons_story.dart';
 import 'package:example/stories/zwap_checkbox_story.dart';
+import 'package:example/stories/zwap_form_story.dart';
 import 'package:example/stories/zwap_input_story.dart';
 import 'package:example/stories/zwap_modal_story.dart';
 import 'package:example/stories/zwap_percent_story.dart';
@@ -25,6 +26,7 @@ enum ZwapStories {
   text,
   tabbar,
   search,
+  form,
 }
 
 class ZwapStory {
@@ -99,5 +101,10 @@ List<ZwapStory> stories = [
     name: "Zwap Search Bar",
     builder: (context) => ZwapSearchBarStory(),
     story: ZwapStories.search,
+  ),
+  ZwapStory(
+    name: "Zwap Form",
+    builder: (context) => ZwapFormStory(),
+    story: ZwapStories.form,
   ),
 ];

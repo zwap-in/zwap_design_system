@@ -98,54 +98,53 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                 duration: const Duration(milliseconds: 30),
                 top: __top,
                 left: min(MediaQuery.of(context).size.width * 0.25, 400),
-                child: Container(
-                  width: 300,
-                  child: ZwapSelect(
-                    canSearch: false,
-                    canAddItem: true,
-                    onAddItem: (value) => setState(() => _selected = value),
-                    values: {
-                      ...Map.fromIterable(_values!, key: (i) => i, value: (i) => i),
-                    },
-                    fetchMoreData: (String newQuery, int pageNumber) async {
-                      return Map.fromIterable(await _getNewValues(newQuery, pageNumber), key: (i) => i, value: (i) => i);
-                    },
-                    hintText: "Seleziona un elemento",
-                    label: "Zwap Select",
-                    callBackFunction: (value, _) => setState(() => _selected = value),
-                    selected: _selected,
-                    initialPageNumber: 2,
-                    betweenFetchDuration: const Duration(seconds: 2),
-                    onEmptyResponseDuration: const Duration(seconds: 10),
-                    translateText: (key) => {
-                      'not_here': 'non c\'è?',
-                      'add_here': 'Aggiungilo qui',
-                    }[key]!,
-                  ),
-                ),
-              ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 30),
-                top: __top + 100,
-                left: min(MediaQuery.of(context).size.width * 0.2, 250),
-                child: Container(
-                  width: 500,
-                  child: ZwapSelect.multiple(
-                    canSearch: true,
-                    values: Map.fromEntries(List.generate(
-                        50, (i) => MapEntry<String, String>(i.toString(), '$i-$i•$i ${i % 3 == 0 ? 'djhfasjdhflajsdh fadhfdjfh adjf agh' : ''}'))),
-                    hintText: "Seleziona un elemento",
-                    label: "Zwap Select",
-                    callBackFunction: (_, value) => setState(() => _multipleSelected = value ?? []),
-                    selectedValues: _multipleSelected,
-                    initialPageNumber: 2,
-                    betweenFetchDuration: const Duration(seconds: 2),
-                    onEmptyResponseDuration: const Duration(seconds: 10),
-                    translateText: (key) => {
-                      'not_here': 'Non trovi quello che cerchi?',
-                      'add_here': 'Aggiungilo qui',
-                    }[key]!,
-                  ),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 300,
+                      child: ZwapSelect(
+                        canSearch: false,
+                        canAddItem: true,
+                        onAddItem: (value) => setState(() => _selected = value),
+                        values: {
+                          ...Map.fromIterable(_values!, key: (i) => i, value: (i) => i),
+                        },
+                        fetchMoreData: (String newQuery, int pageNumber) async {
+                          return Map.fromIterable(await _getNewValues(newQuery, pageNumber), key: (i) => i, value: (i) => i);
+                        },
+                        hintText: "Seleziona un elemento",
+                        label: "Zwap Select",
+                        callBackFunction: (value, _) => setState(() => _selected = value),
+                        selected: _selected,
+                        initialPageNumber: 2,
+                        betweenFetchDuration: const Duration(seconds: 2),
+                        onEmptyResponseDuration: const Duration(seconds: 10),
+                        translateText: (key) => {
+                          'not_here': 'non c\'è?',
+                          'add_here': 'Aggiungilo qui',
+                        }[key]!,
+                      ),
+                    ),
+                    Container(
+                      width: 500,
+                      child: ZwapSelect.multiple(
+                        canSearch: true,
+                        values: Map.fromEntries(List.generate(50,
+                            (i) => MapEntry<String, String>(i.toString(), '$i-$i•$i ${i % 3 == 0 ? 'djhfasjdhflajsdh fadhfdjfh adjf agh' : ''}'))),
+                        hintText: "Seleziona un elemento",
+                        label: "Zwap Select",
+                        callBackFunction: (_, value) => setState(() => _multipleSelected = value ?? []),
+                        selectedValues: _multipleSelected,
+                        initialPageNumber: 2,
+                        betweenFetchDuration: const Duration(seconds: 2),
+                        onEmptyResponseDuration: const Duration(seconds: 10),
+                        translateText: (key) => {
+                          'not_here': 'Non trovi quello che cerchi?',
+                          'add_here': 'Aggiungilo qui',
+                        }[key]!,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               AnimatedPositioned(

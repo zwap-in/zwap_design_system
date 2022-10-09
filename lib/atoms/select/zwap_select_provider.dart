@@ -58,6 +58,8 @@ class _ZwapSelectProvider extends ChangeNotifier {
   final Function() toggleOverlayCallback;
   final FutureOr Function() openMobileBottomSheet;
 
+  final Widget Function(BuildContext, String, String, bool)? itemBuilder;
+
   final Function(String key, List<String>? allSelectedValues) changeValueCallback;
 
   final ZwapSelectSearchTypes searchType;
@@ -73,6 +75,10 @@ class _ZwapSelectProvider extends ChangeNotifier {
   final Function(String) translateKey;
   final String? label;
   final String? placeholder;
+
+  /// If true the text of the [_inputController] will not
+  /// be used to show the selected item
+  final bool _hasCustomBuilderForItems;
 
   bool _isOverlayOpen;
 
@@ -163,11 +169,14 @@ class _ZwapSelectProvider extends ChangeNotifier {
     required this.label,
     required this.placeholder,
     required this.translateKey,
+    required bool hasCustomBuilderForItems,
     this.onAddItem,
     int? initialPageNumber,
     List<String>? initialSelectedKey,
+    this.itemBuilder,
   })  : this._isLoading = false,
         this._isOverlayOpen = false,
+        this._hasCustomBuilderForItems = hasCustomBuilderForItems,
         this._values = initialValues,
         this._fetchMoreDataCallback = fetchMoreDataCallback,
         this._betweenFetchDuration = betweenFetchDuration,
@@ -319,6 +328,8 @@ class _ZwapSelectProvider extends ChangeNotifier {
   /// Should be called each time user scoll to the end, the delay are
   /// managed by the provider
   void endReached() async {
+    if (_fetchMoreDataCallback == null) return;
+
     if (_isLoading) return;
     if (_currentValue.isEmpty && DateTime.now().millisecondsSinceEpoch < (_mainDataFetchBlockedUntil ?? -1)) return;
     if (_currentValue.isNotEmpty && DateTime.now().millisecondsSinceEpoch < (_tmpDataFetchBlockedUntil ?? -1)) return;
@@ -388,7 +399,7 @@ class _ZwapSelectProvider extends ChangeNotifier {
         bool _wasOvelrayOpen = _isOverlayOpen;
 
         _isOverlayOpen = false;
-        _inputController.text = values[key] ?? '';
+        if (!_hasCustomBuilderForItems) _inputController.text = values[key] ?? '';
         _isOverlayOpen = _wasOvelrayOpen;
 
         _currentHoveredKey = null;
@@ -417,7 +428,7 @@ class _ZwapSelectProvider extends ChangeNotifier {
     if (!_isSmall) _isOverlayOpen = !_isOverlayOpen;
 
     if (!_isOverlayOpen && selectType == _ZwapSelectTypes.regular) {
-      _inputController.text = values[selectedValues.firstOrNull] ?? selectedValues.firstOrNull ?? '';
+      if (!_hasCustomBuilderForItems) _inputController.text = values[selectedValues.firstOrNull] ?? selectedValues.firstOrNull ?? '';
     }
 
     if (!_isOverlayOpen && _inputFocusNode.hasFocus) _inputFocusNode.unfocus();
