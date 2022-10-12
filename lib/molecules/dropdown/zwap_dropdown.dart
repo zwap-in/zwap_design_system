@@ -369,12 +369,7 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
                                 alignment: Alignment.center,
                                 child: Text(
                                   widget.noResultMessage!,
-                                  style: TextStyle(
-                                    color: ZwapColors.neutral900,
-                                    fontSize: 14,
-                                    fontFamily: 'SFUIText',
-                                    package: 'zwap_design_system',
-                                  ),
+                                  style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.neutral900),
                                 ),
                               ),
                             )
@@ -511,7 +506,7 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
                               controller: _searchController,
                               focusNode: _inputFocusNode,
                               enabled: widget.canSearch,
-                              style: TextStyle(color: ZwapColors.neutral900, fontSize: 14, fontFamily: 'SFUIText', package: 'zwap_design_system'),
+                              style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.neutral900),
                               decoration: InputDecoration.collapsed(hintText: ""),
                               maxLines: 1,
                               cursorColor: ZwapColors.primary700,

@@ -41,14 +41,13 @@ class ZwapStarRating extends StatelessWidget {
             ),
           ),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: getMultipleConditions<double>(10.0, 10.0, 10.0, 0.0, 0.0)),
+          padding: EdgeInsets.symmetric(vertical: getMultipleConditions<double>(10, 10, 10, 0, 0)),
           child: ZwapStars(
-            zwapStarsPosition: ZwapStarsPosition.center,
-            onStarClickCallBack: this.onRatingChanged,
+            onStarClick: this.onRatingChanged,
             starCount: this.starCount,
             starSize: this.starSize ?? 16,
             rating: this.rating,
-            color: this.color,
+            defaultColor: this.color ?? ZwapColors.neutral200,
           ),
         )
       ],

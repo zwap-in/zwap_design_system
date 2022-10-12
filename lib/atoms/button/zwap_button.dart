@@ -516,11 +516,7 @@ class _ZwapButtonState extends State<ZwapButton> {
             },
             actions: _actions,
             shortcuts: _shortcuts,
-            mouseCursor: widget.hide
-                ? SystemMouseCursors.basic
-                : _disabled
-                    ? SystemMouseCursors.forbidden
-                    : SystemMouseCursors.click,
+            mouseCursor: widget.hide ? SystemMouseCursors.basic : SystemMouseCursors.click,
             child: AnimatedContainer(
               duration: _pressed ? Duration.zero : (_decorations.animationDuration ?? const Duration(milliseconds: 200)),
               width: widget.width,

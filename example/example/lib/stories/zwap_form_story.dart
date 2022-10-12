@@ -26,6 +26,8 @@ class ZwapFormStory extends StatefulWidget {
 }
 
 class _ZwapFormStoryState extends State<ZwapFormStory> {
+  double _rating = 0;
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -105,6 +107,14 @@ class _ZwapFormStoryState extends State<ZwapFormStory> {
               minLenght: 50,
               showClearAll: true,
               translateKey: (k) => "ciao",
+            ),
+            SizedBox(height: 12),
+            Center(
+              child: ZwapStars(
+                rating: _rating,
+                starSize: 38,
+                onStarClick: (value) => setState(() => _rating = value),
+              ),
             ),
           ],
         ),

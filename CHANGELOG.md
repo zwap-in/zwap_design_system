@@ -666,3 +666,8 @@ a
 
 ## 0.1.593
 * Now keyCallBackFunction of ZwapInput will be called even on tab key pressed
+
+## 0.1.594
+* Removed denied icon when ZwapButton is disabled
+* Refactoring of ZwapStar widget
+* Fix on fonts of ZwapSelect
