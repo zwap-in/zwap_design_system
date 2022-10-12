@@ -663,3 +663,6 @@ a
 ## 0.1.592
 * Disabled ZwapSelect new label when open reverse is true and overlay is open
 * Added dynamic label to ZwapInput.collapsed(...)
+
+## 0.1.593
+* Now keyCallBackFunction of ZwapInput will be called even on tab key pressed

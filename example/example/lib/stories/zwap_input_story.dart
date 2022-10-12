@@ -40,6 +40,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 label: "Input con label dinamica",
                 dynamicLabel: "Label",
                 dynamicLabelTextStyle: getTextStyle(ZwapTextType.bigBodyBold),
+                keyCallBackFunction: (value) => print('key $value'),
               ),
               ZwapInput(label: "Input semplice"),
               SizedBox(height: 20),

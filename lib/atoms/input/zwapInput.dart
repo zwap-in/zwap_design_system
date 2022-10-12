@@ -288,7 +288,7 @@ class _ZwapInputState extends State<ZwapInput> {
             ? InitialTextController(
                 text: widget.initialValue, fixedInitialString: widget.fixedInitialText!, fixedInitialStringStyle: widget.fixedInitialTextStyle)
             : TextEditingController(text: widget.initialValue));
-    _focusNode = widget.focusNode ?? FocusNode();
+    _focusNode = (widget.focusNode ?? FocusNode())..onKeyEvent = _handleKeyEvent;
 
     _hasFocus = _focusNode.hasFocus;
 
@@ -312,6 +312,15 @@ class _ZwapInputState extends State<ZwapInput> {
     _controller.removeListener(_controllerListener);
     _focusNode.removeListener(_focusListener);
     super.dispose();
+  }
+
+  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
+    if (widget.keyCallBackFunction != null && event.logicalKey == LogicalKeyboardKey.tab) {
+      widget.keyCallBackFunction!(_controller.text);
+      return KeyEventResult.ignored;
+    }
+
+    return KeyEventResult.ignored;
   }
 
   bool get _showMinLenghtIndicator => widget.minLenght > 0 && widget.showMinLenghtIndicator;
