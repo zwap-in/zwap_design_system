@@ -671,3 +671,6 @@ a
 * Removed denied icon when ZwapButton is disabled
 * Refactoring of ZwapStar widget
 * Fix on fonts of ZwapSelect
+
+## 0.1.595
+* Now radius of ZwapYearPicker is customizzable

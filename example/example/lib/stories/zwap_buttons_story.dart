@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/utils/edge_notifier_scroll_controller.dart';
 
+const List<IconData> _icons = [
+  Icons.ac_unit,
+  Icons.safety_divider,
+  Icons.javascript,
+  Icons.abc,
+  Icons.mail_outlined,
+  Icons.label_important_outline_sharp,
+  Icons.dangerous,
+  Icons.kayaking,
+  Icons.label,
+  Icons.mail,
+];
+
 class ZwapButtonsStory extends StatefulWidget {
   const ZwapButtonsStory({Key? key}) : super(key: key);
 
@@ -570,7 +583,59 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                   decorations: ZwapButtonDecorations.selectableButtonDecorations.defaultDecorations(),
                   onTap: () => setState(() => _isSelected = !_isSelected),
                 ),
-                SizedBox(height: 230),
+                SizedBox(height: 40),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  runSpacing: 8,
+                  textDirection: TextDirection.ltr,
+                  children: List.generate(7, (i) => i)
+                      .map(
+                        (e) => ZwapButton(
+                          width: null,
+                          height: 44,
+                          decorations:
+                              ZwapButtonDecorations.selectableButtonDecorations.defaultDecorations(internalPadding: const EdgeInsets.all(12)),
+                          selectedDecorations:
+                              ZwapButtonDecorations.selectableButtonDecorations.selectedDecorations(internalPadding: const EdgeInsets.all(12)),
+                          buttonChild: ZwapButtonChild.textWithIcon(
+                            text: 'Lorem $e',
+                            icon: _icons[e],
+                            spaceBetween: 8,
+                            iconSize: 16,
+                          ),
+                          onTap: () => print(e),
+                        ),
+                      )
+                      .toList(),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(60, (i) => i)
+                        .map(
+                          (e) => ZwapButton(
+                            margin: const EdgeInsets.only(left: 4, top: 5, bottom: 15),
+                            width: null,
+                            height: 44,
+                            decorations:
+                                ZwapButtonDecorations.selectableButtonDecorations.defaultDecorations(internalPadding: const EdgeInsets.all(12)),
+                            selectedDecorations:
+                                ZwapButtonDecorations.selectableButtonDecorations.selectedDecorations(internalPadding: const EdgeInsets.all(12)),
+                            buttonChild: ZwapButtonChild.textWithIcon(
+                              text: 'Lorem $e ${e % 4 == 0 ? 'ljkdsfhaskjdfhjaskljdfjaslkdf' : ''}',
+                              icon: _icons[e % 7],
+                              spaceBetween: 8,
+                              iconSize: 16,
+                            ),
+                            onTap: () => print(e),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
               ],
             ),
           ),

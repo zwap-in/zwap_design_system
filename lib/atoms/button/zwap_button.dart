@@ -425,11 +425,21 @@ class _ZwapButtonState extends State<ZwapButton> {
         selectedDecorations: _selectedDecorations,
       );
 
+  Widget get _loader => Container(
+        height: min(24, widget.height ?? 0 - 4),
+        width: min(24, widget.width ?? 0 - 4),
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(_contentColor ?? ZwapColors.shades0),
+          strokeWidth: 1.2,
+        ),
+      );
+
   Widget _buildZwapButtonChild(BuildContext context) {
     ZwapButtonChild _child = widget.buttonChild!;
 
     if (_child.text != null && (_child.icon != null || _child._customIcon != null))
       return Row(
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -534,62 +544,56 @@ class _ZwapButtonState extends State<ZwapButton> {
                   if (_completion != 1)
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Builder(builder: (context) {
-                        final double _width = _completion * (widget.width ?? 0);
+                      child: Builder(
+                        builder: (context) {
+                          final double _width = _completion * (widget.width ?? 0);
 
-                        double _height = widget.height ?? 0;
+                          double _height = widget.height ?? 0;
 
-                        double? _topPadding;
-                        double? _bottomPadding;
+                          double? _topPadding;
+                          double? _bottomPadding;
 
-                        if (_width < (_decorations.borderRadius?.topLeft.x ?? 0)) {
-                          final double _topEmptySpace = (_decorations.borderRadius?.topLeft.y ?? 0) *
-                              (((_decorations.borderRadius?.topLeft.x ?? 0) - _width) / (_decorations.borderRadius?.topLeft.x ?? 1));
-                          ;
-                          _height -= _topEmptySpace;
-                          _topPadding = _topEmptySpace;
-                        }
-                        if (_width < (_decorations.borderRadius?.bottomLeft.x ?? 0)) {
-                          final double _bottomEmptySpace = (_decorations.borderRadius?.bottomLeft.y ?? 0) *
-                              (((_decorations.borderRadius?.bottomLeft.x ?? 0) - _width) / (_decorations.borderRadius?.bottomLeft.x ?? 1));
-                          _height -= _bottomEmptySpace;
-                          _bottomPadding = _bottomEmptySpace;
-                        }
+                          if (_width < (_decorations.borderRadius?.topLeft.x ?? 0)) {
+                            final double _topEmptySpace = (_decorations.borderRadius?.topLeft.y ?? 0) *
+                                (((_decorations.borderRadius?.topLeft.x ?? 0) - _width) / (_decorations.borderRadius?.topLeft.x ?? 1));
 
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.decelerate,
-                          height: _height,
-                          width: _width,
-                          margin: EdgeInsets.only(top: _topPadding ?? 0, bottom: _bottomPadding ?? 0),
-                          decoration: BoxDecoration(
-                            color: _decorations.backgroundColor,
-                            borderRadius: BorderRadius.only(
-                              topLeft: _decorations.borderRadius?.topLeft ?? Radius.circular(0),
-                              bottomLeft: _decorations.borderRadius?.bottomLeft ?? Radius.circular(0),
-                              topRight: _width > (widget.width ?? 0) - (_decorations.borderRadius?.topRight.x ?? 0)
-                                  ? _decorations.borderRadius?.topRight ?? Radius.circular(0)
-                                  : Radius.circular(0),
-                              bottomRight: _width > (widget.width ?? 0) - (_decorations.borderRadius?.bottomRight.x ?? 0)
-                                  ? _decorations.borderRadius?.topRight ?? Radius.circular(0)
-                                  : Radius.circular(0),
+                            _height -= _topEmptySpace;
+                            _topPadding = _topEmptySpace;
+                          }
+                          if (_width < (_decorations.borderRadius?.bottomLeft.x ?? 0)) {
+                            final double _bottomEmptySpace = (_decorations.borderRadius?.bottomLeft.y ?? 0) *
+                                (((_decorations.borderRadius?.bottomLeft.x ?? 0) - _width) / (_decorations.borderRadius?.bottomLeft.x ?? 1));
+                            _height -= _bottomEmptySpace;
+                            _bottomPadding = _bottomEmptySpace;
+                          }
+
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.decelerate,
+                            height: _height,
+                            width: _width,
+                            margin: EdgeInsets.only(top: _topPadding ?? 0, bottom: _bottomPadding ?? 0),
+                            decoration: BoxDecoration(
+                              color: _decorations.backgroundColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: _decorations.borderRadius?.topLeft ?? Radius.circular(0),
+                                bottomLeft: _decorations.borderRadius?.bottomLeft ?? Radius.circular(0),
+                                topRight: _width > (widget.width ?? 0) - (_decorations.borderRadius?.topRight.x ?? 0)
+                                    ? _decorations.borderRadius?.topRight ?? Radius.circular(0)
+                                    : Radius.circular(0),
+                                bottomRight: _width > (widget.width ?? 0) - (_decorations.borderRadius?.bottomRight.x ?? 0)
+                                    ? _decorations.borderRadius?.topRight ?? Radius.circular(0)
+                                    : Radius.circular(0),
+                              ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        },
+                      ),
                     ),
                   Padding(
                     padding: _decorations.internalPadding,
                     child: _loading
-                        ? Center(
-                            child: Container(
-                                height: min(24, widget.height ?? 0 - 4),
-                                width: min(24, widget.width ?? 0 - 4),
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(_contentColor ?? ZwapColors.shades0),
-                                  strokeWidth: 1.2,
-                                )),
-                          )
+                        ? Center(child: _loader)
                         : widget.buttonChild == null
                             ? widget.child!(_currentStatus)
                             : Center(child: _buildZwapButtonChild(context)),

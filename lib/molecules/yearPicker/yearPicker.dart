@@ -1,4 +1,3 @@
-/// IMPORTING THIRD PARTY PACKAGES
 import 'dart:async';
 import 'dart:math';
 
@@ -7,10 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-/// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
-
 
 int _decadeOfYear(int year) => year - (year % 10);
 
@@ -72,6 +69,8 @@ class ZwapYearPicker extends StatefulWidget {
 
   final String? invalidInputMessage;
 
+  final BorderRadius borderRadius;
+
   ZwapYearPicker({
     Key? key,
     required this.hintText,
@@ -82,6 +81,7 @@ class ZwapYearPicker extends StatefulWidget {
     this.minYear,
     this.selectedYear,
     this.invalidInputMessage,
+    this.borderRadius = const BorderRadius.all(Radius.circular(8)),
   })  : assert((maxYear ?? DateTime.now().year + 30) > (minYear ?? 1900)),
         super(key: key);
 
@@ -269,7 +269,7 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
                 height: 45,
                 decoration: BoxDecoration(
                   border: Border.all(color: this._isHovered ? ZwapColors.primary300 : ZwapColors.neutral300),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: widget.borderRadius,
                 ),
                 padding: const EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10),
                 child: Row(
