@@ -460,7 +460,7 @@
 * Added animateFromLastPercent and maximumFractionalDigits to ZwapPercent and ZwapSimplePercent
 
 ## 0.1.527
-* ZwapSelect multuple (with tags) improved
+* ZwapSelect multiple (with tags) improved
 
 ## 0.1.528
 * ZwapText now have always SFUIText as Font Family
@@ -674,3 +674,6 @@ a
 
 ## 0.1.595
 * Now radius of ZwapYearPicker is customizzable
+
+## 0.1.596
+* Added itemBuider even to ZwapSelect.multiple(...) and updated design

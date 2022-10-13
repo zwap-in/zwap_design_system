@@ -20,6 +20,8 @@ part 'zwap_select_mobile_bottom_sheet.dart';
 
 //TODO: Refactoring of the structure
 
+typedef Widget ItemBuilder(BuildContext context, String key, String value, bool isHeader);
+
 enum _ZwapSelectTypes { regular, multiple }
 
 /// Type of searches supported by ZwapSelect:
@@ -135,7 +137,22 @@ class ZwapSelect extends StatefulWidget {
   /// * "add_here": "Add it here"
   final String Function(String key) translateText;
 
-  final Widget Function(BuildContext context, String key, String value, bool isHeader)? itemBuilder;
+  /// If provided this function will be called:
+  /// 1. for each element when the select overlay is showed
+  /// 2. for the selected element when the overlay is closed
+  ///
+  /// If the select is multiple the 2nd point will be:<br>
+  /// 2. for ach tag when the overlay is closed
+  ///
+  /// ### Function structure
+  /// [itemBuilder] function will provide:
+  /// * context: the current [BuildContext]
+  /// * key and value: key and value of the current item (provided inside [values])
+  /// * isHeader:
+  ///   * is true if the widget is used to render the selected item (when select
+  /// is single) or the widget inside the tag (when select is multiple)
+  ///   * is false if the widget is used inside the ovelay
+  final ItemBuilder? itemBuilder;
 
   final String? dynamicLabel;
 
@@ -186,7 +203,7 @@ class ZwapSelect extends StatefulWidget {
     this.onEmptyResponseDuration = const Duration(seconds: 10),
     this.initialPageNumber = 1,
     this.hintTextStyle,
-    this.borderRadius = 4,
+    this.borderRadius = 8,
     this.searchDelayDuration,
     this.searchType = ZwapSelectSearchTypes.dynamic,
     this.itemBuilder,
@@ -219,14 +236,14 @@ class ZwapSelect extends StatefulWidget {
     this.fetchMoreData,
     this.initialPageNumber = 1,
     this.hintTextStyle,
-    this.borderRadius = 4,
+    this.borderRadius = 8,
     this.searchType = ZwapSelectSearchTypes.dynamic,
     this.searchDelayDuration,
+    this.itemBuilder,
   })  : this.selected = null,
         this._type = _ZwapSelectTypes.multiple,
         this._hasCategories = false,
         this.valuesByCategory = {},
-        this.itemBuilder = null,
         this.dynamicLabel = null,
         assert(values.isNotEmpty),
         super(key: key);
@@ -248,7 +265,7 @@ class ZwapSelect extends StatefulWidget {
     this.fetchMoreData,
     this.initialPageNumber = 1,
     this.hintTextStyle,
-    this.borderRadius = 4,
+    this.borderRadius = 8,
     this.searchType = ZwapSelectSearchTypes.dynamic,
     this.searchDelayDuration,
   })  : this.selected = null,
@@ -680,7 +697,11 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                   ? const EdgeInsets.only(bottom: 1, left: 1, right: 1)
                                   : const EdgeInsets.only(top: 1, left: 1, right: 1)
                               : const EdgeInsets.all(1),
-                          padding: const EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10) +
+                          padding: EdgeInsets.only(
+                                  left: 15,
+                                  right: 5,
+                                  top: 10,
+                                  bottom: (widget.isMultiple && _selectedValues.isNotEmpty && !(_selectOverlay?.mounted ?? false)) ? 5 : 10) +
                               EdgeInsets.only(
                                 bottom: isOverlayMounted && !openReverse ? 1 : 0,
                                 top: isOverlayMounted && openReverse ? 1 : 0,
@@ -743,10 +764,11 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                   .map(
                                                     (k) => Container(
                                                       margin: const EdgeInsets.only(left: 4),
-                                                      child: _ZwapTag(
+                                                      child: _ZwapSelectTag(
                                                         tagValue: _provider.values[k] ?? '',
                                                         tagKey: k,
                                                         onCancel: (k) => _provider.toggleItem(k),
+                                                        itemBuilder: widget.itemBuilder,
                                                       ),
                                                     ),
                                                   )
@@ -823,33 +845,45 @@ class _ZwapSelectState extends State<ZwapSelect> {
   }
 }
 
-class _ZwapTag extends StatelessWidget {
+class _ZwapSelectTag extends StatelessWidget {
   final String tagKey;
   final String tagValue;
   final Function(String tagKey)? onCancel;
+  final ItemBuilder? itemBuilder;
 
-  const _ZwapTag({required this.tagKey, required this.tagValue, this.onCancel, Key? key}) : super(key: key);
+  const _ZwapSelectTag({
+    required this.tagKey,
+    required this.tagValue,
+    this.onCancel,
+    this.itemBuilder,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: ZwapColors.primary700, borderRadius: BorderRadius.circular(4)),
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      decoration: BoxDecoration(
+        color: ZwapColors.neutral100,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
       child: Row(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Flexible(
-            child: ZwapText(
+          if (itemBuilder == null)
+            ZwapText(
               text: tagValue,
-              zwapTextType: ZwapTextType.bodyRegular,
-              textColor: ZwapColors.shades0,
+              zwapTextType: ZwapTextType.mediumBodyRegular,
+              textColor: ZwapColors.primary900Dark,
               textOverflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(width: 7),
+            )
+          else
+            itemBuilder!(context, tagKey, tagValue, true),
+          SizedBox(width: 12),
           GestureDetector(
             onTap: () => onCancel != null ? onCancel!(tagKey) : null,
-            child: Center(child: ZwapIcons.icons('close', iconColor: ZwapColors.shades0, iconSize: 15)),
+            child: Center(child: ZwapIcons.icons('close', iconColor: ZwapColors.text65, iconSize: 14)),
           ),
         ],
       ),
