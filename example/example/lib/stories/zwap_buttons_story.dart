@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:zwap_design_system/atoms/radio/zwap_radio_widget.dart';
 import 'package:zwap_design_system/utils/edge_notifier_scroll_controller.dart';
 
 const List<IconData> _icons = [
@@ -29,6 +30,9 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
   bool _isSelected = false;
 
   double _completionValue = 0;
+
+  /// can be 0 or 1
+  int _selectedRadio = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +68,11 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                 max: 1,
                 min: 0,
               ),
+              const SizedBox(height: 20),
+              ZwapSwitch(
+                value: _selectedRadio == 1,
+                onValueChange: (value) => setState(() => _selectedRadio = value ? 1 : 0),
+              ),
             ],
           ),
         ),
@@ -77,6 +86,15 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ZwapRadioButton(active: _selectedRadio == 0),
+                    SizedBox(width: 24),
+                    ZwapRadioButton(active: _selectedRadio == 1),
+                  ],
+                ),
+                SizedBox(height: 24),
                 ZwapText(text: 'ZwapButton with completion', zwapTextType: ZwapTextType.bigBodySemibold, textColor: ZwapColors.shades100),
                 ZwapButton(
                   margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -608,9 +626,7 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                       )
                       .toList(),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                SizedBox(height: 20),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(

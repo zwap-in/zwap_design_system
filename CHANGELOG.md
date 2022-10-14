@@ -677,3 +677,6 @@ a
 
 ## 0.1.596
 * Added itemBuider even to ZwapSelect.multiple(...) and updated design
+
+## 0.1.597
+* Added ZwapRadioButton widget
