@@ -544,143 +544,143 @@
 ## 0.1.547
 * Added hover state in ZwapPrimarTabBar
 
-## 0.1.548
+## 0.1.548
 * Added resposive ZwapSwitch
 
-## 0.1.549
+## 0.1.549
 * Fixed a problem in ZwapTypography
 
-## 0.1.550
+## 0.1.550
 * Now ZwapTextSpan.fromZwapTypography(...) can apply only the color without replacing style
 
-## 0.1.552
+## 0.1.552
 * Added textStyle and disabledTextStyle fields to ZwapInput
 
-## 0.1.553
+## 0.1.553
 * Added cursorColor field to ZwapInput
 
-## 0.1.554
+## 0.1.554
 * Added NewModalMultiStepBody widget to handle multiple step modals easily
 
-## 0.1.555
+## 0.1.555
 * Added isSelected and selectedDecoration to ZwapButton. New selected logic added
 
-## 0.1.556
+## 0.1.556
 * Fixed a problem with onHover callback of ZwapButton
 
-## 0.1.557
+## 0.1.557
 * Added hoverElevation to ZwapButton
 
-## 0.1.558
+## 0.1.558
 * Created ZwapGradientText and ZwapGradientTextSpan
 
-## 0.1.559
+## 0.1.559
 * Created ZwapHintInput widget to let user enter tags typing
 * Added completionValue logics to ZwapButton
 
-## 0.1.560
+## 0.1.560
 * Improved ZwapPrimaryTabBar with decorations and customizations
 
-## 0.1.561
+## 0.1.561
 * Fix to ZwapPrimaryTabBar decorations
 
-## 0.1.562
+## 0.1.562
 * Enabled maxHints property of ZwapHintInput
 
-## 0.1.563
+## 0.1.563
 * Added forceHeight property to ZwapGradientTextSpan
 
-## 0.1.564
+## 0.1.564
 * Added dynamicLabel property to ZwapInput
 
-## 0.1.565
+## 0.1.565
 * Added dynamicLabelTextStyle property to ZwapInput
 a
-## 0.1.566
+## 0.1.566
 * Added hintTextStyle property to ZwapSelect
 
-## 0.1.567
+## 0.1.567
 * Added borderRadius property to ZwapSelect
 
-## 0.1.568
+## 0.1.568
 * Added ZwapShadowIcon component
 
-## 0.1.570
+## 0.1.570
 * Added forcedOffset to ZwapGradientTextSpan
 
-## 0.1.571
+## 0.1.571
 * Added onFocusChanged to ZwapHintButton
 
-## 0.1.572
+## 0.1.572
 * Improved BorderRadius decoration in ZwapButton widget
 * Added ZwapWeeklyCalendarShowFilter.disableAfter(...) show filter
 
-## 0.1.573
+## 0.1.573
 * Improved SocialType logics
 
-## 0.1.574
+## 0.1.574
 * Refactoring of ZwapSelect, more clean flow (pending some features)
 
-## 0.1.575
+## 0.1.575
 * Added subtitle in ZwapInput
 
-## 0.1.576
+## 0.1.576
 * Fixed a bug in ZwapSelect
 
-## 0.1.577
+## 0.1.577
 * Added responsiveness to ZwapScrollControlsListTile
 
-## 0.1.578
+## 0.1.578
 * Added dividerHeight and roundTabIndicator properties to ZwapPrimaryTabBar
 * Added tooltip and showTooltipOnlyOnDisabledState proprierties to ZwapButton
 
-## 0.1.579
+## 0.1.579
 * Added static getLigthColorFrom() method to ZwapColors
 
-## 0.1.581
+## 0.1.581
 * Fix to tertiary button decoration background color
 
-## 0.1.583
+## 0.1.583
 * Added useOutlinedDecoration and helperWidget properties to Zwapinput
   
-## 0.1.584
+## 0.1.584
 * Some changes to ZwapAvataxrs
 
-## 0.1.586
+## 0.1.586
 * New ZwapTooltip and some fixes to ZwapTutorialOverlay
 
-## 0.1.588
+## 0.1.588
 * Added showTooltip to ZwapTooltip
 
-## 0.1.590
+## 0.1.590
 * Improvements to ZwapTooltip (delay and disappearAfter)
 * New ZwapProgressLine
 
-## 0.1.591
+## 0.1.591
 * Added String/int/bool type support for next and previus PageData fromJson constructor
 * Improvements to ZwapSelect
 
-## 0.1.592
+## 0.1.592
 * Disabled ZwapSelect new label when open reverse is true and overlay is open
 * Added dynamic label to ZwapInput.collapsed(...)
 
-## 0.1.593
+## 0.1.593
 * Now keyCallBackFunction of ZwapInput will be called even on tab key pressed
 
-## 0.1.594
+## 0.1.594
 * Removed denied icon when ZwapButton is disabled
 * Refactoring of ZwapStar widget
 * Fix on fonts of ZwapSelect
 
-## 0.1.595
+## 0.1.595
 * Now radius of ZwapYearPicker is customizzable
 
-## 0.1.596
+## 0.1.596
 * Added itemBuider even to ZwapSelect.multiple(...) and updated design
 
-## 0.1.597
+## 0.1.597
 * Added ZwapRadioButton widget
 
-## 0.1.598
+## 0.1.598
 * Added color and activeColor distinction in ZwapRadioButton
 * Now ZwapInput.collapsed(...) will never show an empty dynamic label
