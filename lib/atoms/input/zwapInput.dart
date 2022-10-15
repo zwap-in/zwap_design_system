@@ -598,7 +598,7 @@ class _ZwapInputState extends State<ZwapInput> {
               ),
             ],
           ),
-          if (widget.label != null)
+          if (widget.label != null && widget.label!.isNotEmpty)
             Positioned(
               left: widget.borderRadius + 2,
               child: AnimatedSize(
@@ -608,26 +608,26 @@ class _ZwapInputState extends State<ZwapInput> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: ZwapColors.shades0,
-                    gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
-                      ZwapColors.whiteTransparent,
-                      ZwapColors.shades0,
-                    ], stops: [
-                      0,
-                      0.47
-                    ]),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [ZwapColors.whiteTransparent, ZwapColors.shades0],
+                      stops: [0, 0.47],
+                    ),
                     borderRadius: BorderRadius.circular(3),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: ZwapText.customStyle(
                     text: widget.label!,
                     customTextStyle: getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(
-                        color: _isHovered
-                            ? ZwapColors.primary400
-                            : _hasFocus
-                                ? ZwapColors.primary700
-                                : ZwapColors.neutral500,
-                        fontSize: 11,
-                        letterSpacing: 0.1),
+                      color: _isHovered
+                          ? ZwapColors.primary400
+                          : _hasFocus
+                              ? ZwapColors.primary700
+                              : ZwapColors.neutral500,
+                      fontSize: 11,
+                      letterSpacing: 0.1,
+                    ),
                   ),
                 ),
               ),

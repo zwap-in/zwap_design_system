@@ -3,9 +3,20 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 
 class ZwapRadioButton extends StatefulWidget {
   final bool active;
+
+  /// The size of the "border" widget, the internal widget size will
+  /// always have 0.5 * [size]
   final double size;
 
+  /// The color of the radio when not active
   final Color color;
+
+  /// The color of the radio when active
+  final Color activeColor;
+
+  /// The animation duration when toggling [active]
+  ///
+  /// Provide [Duration.zero] for remove animation
   final Duration animationDuration;
 
   final Function()? onTap;
@@ -13,7 +24,8 @@ class ZwapRadioButton extends StatefulWidget {
   const ZwapRadioButton({
     required this.active,
     this.size = 16,
-    this.color = ZwapColors.primary700,
+    this.color = ZwapColors.neutral300,
+    this.activeColor = ZwapColors.primary700,
     this.animationDuration = const Duration(milliseconds: 200),
     this.onTap,
     Key? key,
@@ -51,12 +63,14 @@ class _ZwapRadioButtonState extends State<ZwapRadioButton> {
       splashColor: ZwapColors.transparent,
       highlightColor: ZwapColors.transparent,
       onTap: widget.onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: widget.animationDuration,
+        curve: Curves.decelerate,
         width: _size,
         height: _size,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.size),
-          border: Border.all(color: widget.color),
+          border: Border.all(color: _active ? widget.activeColor : widget.color),
           color: ZwapColors.transparent,
         ),
         child: Center(
@@ -67,7 +81,7 @@ class _ZwapRadioButtonState extends State<ZwapRadioButton> {
             height: _contentSize,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(widget.size),
-              color: widget.color,
+              color: widget.activeColor,
             ),
           ),
         ),
