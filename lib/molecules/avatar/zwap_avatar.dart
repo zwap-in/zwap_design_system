@@ -8,11 +8,14 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 /// asset with standard style
 class ZwapAvatar extends StatelessWidget {
   /// The image widget for the avatar pic
-  final Image avatarImage;
+  final Widget avatarImage;
 
   /// Icon size inside this zwap avatar
   final double size;
 
+  /// If true the avatar will have tha "Zwap logo shape"
+  ///
+  /// Default to false
   final bool hasCustomShape;
 
   ZwapAvatar({

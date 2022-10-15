@@ -684,3 +684,6 @@ a
 ## 0.1.598
 * Added color and activeColor distinction in ZwapRadioButton
 * Now ZwapInput.collapsed(...) will never show an empty dynamic label
+
+## 0.1.599
+* Now ZwapAvatar widget child can be any widget and not only [Image]
