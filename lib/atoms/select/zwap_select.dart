@@ -156,6 +156,18 @@ class ZwapSelect extends StatefulWidget {
 
   final String? dynamicLabel;
 
+  /// If true the error stete decorations will be used
+  ///
+  /// If [errorText] is provided, it will be showed, see
+  /// [errorText] for more details
+  ///
+  /// Default to false
+  final bool error;
+
+  /// If provided this string will be showed under the
+  /// select widget when [error] is true
+  final String? errorText;
+
   ///Regular ZwapSelect
   ZwapSelect({
     Key? key,
@@ -179,6 +191,8 @@ class ZwapSelect extends StatefulWidget {
     this.searchDelayDuration,
     this.itemBuilder,
     this.dynamicLabel,
+    this.error = false,
+    this.errorText,
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
         this.valuesByCategory = {},
@@ -208,6 +222,8 @@ class ZwapSelect extends StatefulWidget {
     this.searchType = ZwapSelectSearchTypes.dynamic,
     this.itemBuilder,
     this.dynamicLabel,
+    this.error = false,
+    this.errorText,
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
         this.values = {
@@ -240,6 +256,8 @@ class ZwapSelect extends StatefulWidget {
     this.searchType = ZwapSelectSearchTypes.dynamic,
     this.searchDelayDuration,
     this.itemBuilder,
+    this.error = false,
+    this.errorText,
   })  : this.selected = null,
         this._type = _ZwapSelectTypes.multiple,
         this._hasCategories = false,
@@ -268,6 +286,8 @@ class ZwapSelect extends StatefulWidget {
     this.borderRadius = 8,
     this.searchType = ZwapSelectSearchTypes.dynamic,
     this.searchDelayDuration,
+    this.error = false,
+    this.errorText,
   })  : this.selected = null,
         this._type = _ZwapSelectTypes.multiple,
         this.values = {
@@ -299,9 +319,13 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
   List<String> get categories => widget.valuesByCategory.keys.toList();
 
+  late bool _error;
+
   @override
   void initState() {
     super.initState();
+
+    _error = widget.error;
 
     final List<String> _selectedValues = widget.isMultiple ? widget.selectedValues : [if (widget.selected != null) widget.selected!];
     _provider = _ZwapSelectProvider(
@@ -343,6 +367,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         _provider.selectedChanged(widget.selectedValues);
       });
+    if (widget.error != _error) setState(() => _error = widget.error);
 
     super.didUpdateWidget(oldWidget);
   }
@@ -619,225 +644,252 @@ class _ZwapSelectState extends State<ZwapSelect> {
             _provider._selectedValues.isNotEmpty &&
             (!widget.canSearch || !_provider._inputFocusNode.hasFocus);
 
-        return Stack(
+        return Column(
           children: [
-            GestureDetector(
-              onTap: _provider._isSmall
-                  ? () => _showMobileBottomSheet(context, _provider)
-                  : !widget._hasCategories
-                      ? () => _toggleOverlay()
-                      : null,
-              behavior: _provider._isSmall ? HitTestBehavior.opaque : HitTestBehavior.translucent,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (widget.label != null) SizedBox(height: 9),
-                  Semantics.fromProperties(
-                    properties: SemanticsProperties(
-                      label: widget.label == null ? null : "${widget.label}",
-                      value: widget.isRegular ? _selectedValues.firstOrNull?.toString() : _selectedValues.toString(),
-                    ),
-                    child: InkWell(
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onHover: (bool value) => setState(() => _isHovered = value),
-                      onTap: () {
-                        if (_provider._isSmall)
-                          _showMobileBottomSheetWrap();
-                        else
-                          _provider.toggleOverlay();
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 150),
-                        curve: Curves.decelerate,
-                        decoration: isOverlayMounted
-                            ? openReverse
-                                ? BoxDecoration(
-                                    color: ZwapColors.neutral300,
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(widget.borderRadius),
-                                      bottomRight: Radius.circular(widget.borderRadius),
-                                    ),
-                                  )
-                                : BoxDecoration(
-                                    color: ZwapColors.neutral300,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(widget.borderRadius),
-                                      topRight: Radius.circular(widget.borderRadius),
-                                    ),
-                                  )
-                            : BoxDecoration(
-                                color: this._isHovered ? ZwapColors.primary300 : ZwapColors.neutral300,
-                                borderRadius: BorderRadius.circular(widget.borderRadius),
-                              ),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 150),
-                          curve: Curves.decelerate,
-                          key: _selectKey,
-                          height: 45 + (isOverlayMounted ? 1 : 0),
-                          decoration: BoxDecoration(
-                            color: ZwapColors.shades0,
-                            borderRadius: isOverlayMounted
+            Stack(
+              children: [
+                GestureDetector(
+                  onTap: _provider._isSmall
+                      ? () => _showMobileBottomSheet(context, _provider)
+                      : !widget._hasCategories
+                          ? () => _toggleOverlay()
+                          : null,
+                  behavior: _provider._isSmall ? HitTestBehavior.opaque : HitTestBehavior.translucent,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.label != null) SizedBox(height: 9),
+                      Semantics.fromProperties(
+                        properties: SemanticsProperties(
+                          label: widget.label == null ? null : "${widget.label}",
+                          value: widget.isRegular ? _selectedValues.firstOrNull?.toString() : _selectedValues.toString(),
+                        ),
+                        child: InkWell(
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onHover: (bool value) => setState(() => _isHovered = value),
+                          onTap: () {
+                            if (_provider._isSmall)
+                              _showMobileBottomSheetWrap();
+                            else
+                              _provider.toggleOverlay();
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            curve: Curves.decelerate,
+                            decoration: isOverlayMounted
                                 ? openReverse
-                                    ? BorderRadius.only(
-                                        bottomLeft: Radius.circular(widget.borderRadius - 1),
-                                        bottomRight: Radius.circular(widget.borderRadius - 1),
-                                      )
-                                    : BorderRadius.only(
-                                        topLeft: Radius.circular(widget.borderRadius - 1),
-                                        topRight: Radius.circular(widget.borderRadius - 1),
-                                      )
-                                : BorderRadius.circular(widget.borderRadius - 1),
-                          ),
-                          margin: isOverlayMounted
-                              ? openReverse
-                                  ? const EdgeInsets.only(bottom: 1, left: 1, right: 1)
-                                  : const EdgeInsets.only(top: 1, left: 1, right: 1)
-                              : const EdgeInsets.all(1),
-                          padding: EdgeInsets.only(
-                                  left: 15,
-                                  right: 5,
-                                  top: 10,
-                                  bottom: (widget.isMultiple && _selectedValues.isNotEmpty && !(_selectOverlay?.mounted ?? false)) ? 5 : 10) +
-                              EdgeInsets.only(
-                                bottom: isOverlayMounted && !openReverse ? 1 : 0,
-                                top: isOverlayMounted && openReverse ? 1 : 0,
-                              ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Stack(
-                                  children: [
-                                    //? Header
-                                    Positioned.fill(
-                                      child: AnimatedOpacity(
-                                        duration: const Duration(milliseconds: 200),
-                                        opacity: _showHeader ? 1 : 0,
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: _showHeader
-                                              ? widget.itemBuilder!(
-                                                  context,
-                                                  _selectedValues.first,
-                                                  _provider.values[_selectedValues.first]!,
-                                                  true,
-                                                )
-                                              : Container(),
+                                    ? BoxDecoration(
+                                        color: ZwapColors.neutral300,
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(widget.borderRadius),
+                                          bottomRight: Radius.circular(widget.borderRadius),
                                         ),
-                                      ),
-                                    ),
-                                    Positioned.fill(
-                                      child: AnimatedOpacity(
-                                        duration: const Duration(milliseconds: 200),
-                                        opacity: _showTags || _showHeader ? 0 : 1,
-                                        child: IgnorePointer(
-                                          ignoring: _showTags,
-                                          child: Center(
-                                            child: TextField(
-                                              controller: _provider._inputController,
-                                              focusNode: _provider._inputFocusNode,
-                                              readOnly: !widget.canSearch || _provider._isSmall,
-                                              decoration: InputDecoration.collapsed(hintText: widget.hintText, hintStyle: widget.hintTextStyle),
-                                              cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
-                                              keyboardType: TextInputType.none,
-                                              textInputAction: TextInputAction.go,
-                                              onSubmitted: (_) => _simulateEnter(),
-                                              onTap: _provider._isSmall ? () => _showMobileBottomSheetWrap() : null,
+                                      )
+                                    : BoxDecoration(
+                                        color: ZwapColors.neutral300,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(widget.borderRadius),
+                                          topRight: Radius.circular(widget.borderRadius),
+                                        ),
+                                      )
+                                : BoxDecoration(
+                                    color: _error
+                                        ? ZwapColors.error400
+                                        : this._isHovered
+                                            ? ZwapColors.primary300
+                                            : ZwapColors.neutral300,
+                                    borderRadius: BorderRadius.circular(widget.borderRadius),
+                                  ),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 150),
+                              curve: Curves.decelerate,
+                              key: _selectKey,
+                              height: 45 + (isOverlayMounted ? 1 : 0),
+                              decoration: BoxDecoration(
+                                color: ZwapColors.shades0,
+                                borderRadius: isOverlayMounted
+                                    ? openReverse
+                                        ? BorderRadius.only(
+                                            bottomLeft: Radius.circular(widget.borderRadius - 1),
+                                            bottomRight: Radius.circular(widget.borderRadius - 1),
+                                          )
+                                        : BorderRadius.only(
+                                            topLeft: Radius.circular(widget.borderRadius - 1),
+                                            topRight: Radius.circular(widget.borderRadius - 1),
+                                          )
+                                    : BorderRadius.circular(widget.borderRadius - 1),
+                              ),
+                              margin: isOverlayMounted
+                                  ? openReverse
+                                      ? const EdgeInsets.only(bottom: 1, left: 1, right: 1)
+                                      : const EdgeInsets.only(top: 1, left: 1, right: 1)
+                                  : const EdgeInsets.all(1),
+                              padding: EdgeInsets.only(
+                                      left: 15,
+                                      right: 5,
+                                      top: 10,
+                                      bottom: (widget.isMultiple && _selectedValues.isNotEmpty && !(_selectOverlay?.mounted ?? false)) ? 5 : 10) +
+                                  EdgeInsets.only(
+                                    bottom: isOverlayMounted && !openReverse ? 1 : 0,
+                                    top: isOverlayMounted && openReverse ? 1 : 0,
+                                  ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Stack(
+                                      children: [
+                                        //? Header
+                                        Positioned.fill(
+                                          child: AnimatedOpacity(
+                                            duration: const Duration(milliseconds: 200),
+                                            opacity: _showHeader ? 1 : 0,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: _showHeader
+                                                  ? widget.itemBuilder!(
+                                                      context,
+                                                      _selectedValues.first,
+                                                      _provider.values[_selectedValues.first]!,
+                                                      true,
+                                                    )
+                                                  : Container(),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    Positioned.fill(
-                                      child: AnimatedOpacity(
-                                        duration: const Duration(milliseconds: 200),
-                                        opacity: _showTags ? 1 : 0,
-                                        child: IgnorePointer(
-                                          ignoring: !_showTags,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: _selectedValues
-                                                  .map(
-                                                    (k) => Container(
-                                                      margin: const EdgeInsets.only(left: 4),
-                                                      child: _ZwapSelectTag(
-                                                        tagValue: _provider.values[k] ?? '',
-                                                        tagKey: k,
-                                                        onCancel: (k) => _provider.toggleItem(k),
-                                                        itemBuilder: widget.itemBuilder,
-                                                      ),
-                                                    ),
-                                                  )
-                                                  .toList(),
+                                        Positioned.fill(
+                                          child: AnimatedOpacity(
+                                            duration: const Duration(milliseconds: 200),
+                                            opacity: _showTags || _showHeader ? 0 : 1,
+                                            child: IgnorePointer(
+                                              ignoring: _showTags,
+                                              child: Center(
+                                                child: TextField(
+                                                  controller: _provider._inputController,
+                                                  focusNode: _provider._inputFocusNode,
+                                                  readOnly: !widget.canSearch || _provider._isSmall,
+                                                  decoration: InputDecoration.collapsed(hintText: widget.hintText, hintStyle: widget.hintTextStyle),
+                                                  cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
+                                                  keyboardType: TextInputType.none,
+                                                  textInputAction: TextInputAction.go,
+                                                  onSubmitted: (_) => _simulateEnter(),
+                                                  onTap: _provider._isSmall ? () => _showMobileBottomSheetWrap() : null,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
+                                        Positioned.fill(
+                                          child: AnimatedOpacity(
+                                            duration: const Duration(milliseconds: 200),
+                                            opacity: _showTags ? 1 : 0,
+                                            child: IgnorePointer(
+                                              ignoring: !_showTags,
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal,
+                                                child: Row(
+                                                  children: _selectedValues
+                                                      .map(
+                                                        (k) => Container(
+                                                          margin: const EdgeInsets.only(left: 4),
+                                                          child: _ZwapSelectTag(
+                                                            tagValue: _provider.values[k] ?? '',
+                                                            tagKey: k,
+                                                            onCancel: (k) => _provider.toggleItem(k),
+                                                            itemBuilder: widget.itemBuilder,
+                                                          ),
+                                                        ),
+                                                      )
+                                                      .toList(),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  AnimatedRotation(
+                                    turns: isOverlayMounted ? 0 : 0.5,
+                                    duration: const Duration(milliseconds: 150),
+                                    child:
+                                        Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(_selectOverlay?.mounted)),
+                                  ),
+                                ],
                               ),
-                              SizedBox(width: 5),
-                              AnimatedRotation(
-                                turns: isOverlayMounted ? 0 : 0.5,
-                                duration: const Duration(milliseconds: 150),
-                                child: Icon(Icons.keyboard_arrow_up, color: Color.fromRGBO(50, 50, 50, 1), key: ValueKey(_selectOverlay?.mounted)),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                if (widget.label != null && (!isOverlayMounted || !openReverse))
+                  Positioned(
+                    left: widget.borderRadius + 2,
+                    child: AnimatedSize(
+                      duration: const Duration(milliseconds: 100),
+                      curve: Curves.decelerate,
+                      alignment: Alignment.topLeft,
+                      child: _provider._selectedValues.isNotEmpty
+                          ? Container(
+                              decoration: BoxDecoration(
+                                color: ZwapColors.shades0,
+                                gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
+                                  ZwapColors.whiteTransparent,
+                                  ZwapColors.shades0,
+                                ], stops: [
+                                  0,
+                                  0.47
+                                ]),
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              child: ZwapText.customStyle(
+                                text: widget.label!,
+                                customTextStyle: getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(
+                                    color: _isHovered
+                                        ? ZwapColors.primary400
+                                        : (_selectOverlay?.mounted ?? false)
+                                            ? ZwapColors.primary700
+                                            : ZwapColors.neutral500,
+                                    fontSize: 11,
+                                    letterSpacing: 0.1),
+                              ),
+                            )
+                          : Container(
+                              width: textWidth(
+                                widget.label!,
+                                getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(fontSize: 10, letterSpacing: 0.1),
+                              ),
+                              key: UniqueKey(),
+                            ),
                     ),
                   ),
-                ],
+              ],
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.decelerate,
+                alignment: Alignment.centerLeft,
+                child: _error && widget.errorText != null
+                    ? Container(
+                      margin: const EdgeInsets.only(top: 3),
+                      child: ZwapText(
+                          text: widget.errorText!,
+                          zwapTextType: ZwapTextType.bodyRegular,
+                          textColor: ZwapColors.error400,
+                        ),
+                    )
+                    : Container(key: UniqueKey()),
               ),
             ),
-            if (widget.label != null && (!isOverlayMounted || !openReverse))
-              Positioned(
-                left: widget.borderRadius + 2,
-                child: AnimatedSize(
-                  duration: const Duration(milliseconds: 100),
-                  curve: Curves.decelerate,
-                  alignment: Alignment.topLeft,
-                  child: _provider._selectedValues.isNotEmpty
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: ZwapColors.shades0,
-                            gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
-                              ZwapColors.whiteTransparent,
-                              ZwapColors.shades0,
-                            ], stops: [
-                              0,
-                              0.47
-                            ]),
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: ZwapText.customStyle(
-                            text: widget.label!,
-                            customTextStyle: getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(
-                                color: _isHovered
-                                    ? ZwapColors.primary400
-                                    : (_selectOverlay?.mounted ?? false)
-                                        ? ZwapColors.primary700
-                                        : ZwapColors.neutral500,
-                                fontSize: 11,
-                                letterSpacing: 0.1),
-                          ),
-                        )
-                      : Container(
-                          width: textWidth(
-                            widget.label!,
-                            getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(fontSize: 10, letterSpacing: 0.1),
-                          ),
-                          key: UniqueKey(),
-                        ),
-                ),
-              ),
           ],
         );
       }),

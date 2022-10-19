@@ -300,7 +300,10 @@ class _ZwapInputState extends State<ZwapInput> {
   }
 
   void _focusListener() {
-    if (_hasFocus != _focusNode.hasFocus) setState(() => _hasFocus = _focusNode.hasFocus);
+    print('${widget.label ?? widget.dynamicLabel}: $_hasFocus <-> ${_focusNode.hasFocus}');
+    if (_hasFocus != _focusNode.hasFocus) {
+      setState(() => _hasFocus = _focusNode.hasFocus);
+    }
   }
 
   void _controllerListener() {
@@ -317,7 +320,7 @@ class _ZwapInputState extends State<ZwapInput> {
   KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
     if (widget.keyCallBackFunction != null && event.logicalKey == LogicalKeyboardKey.tab) {
       widget.keyCallBackFunction!(_controller.text);
-      return KeyEventResult.ignored;
+      return KeyEventResult.handled;
     }
 
     return KeyEventResult.ignored;

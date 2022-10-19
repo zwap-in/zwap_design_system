@@ -687,3 +687,6 @@ a
 
 ## 0.1.599
 * Now ZwapAvatar widget child can be any widget and not only [Image]
+
+## 0.1.600
+* Added error state and errorText to ZwapSelect
