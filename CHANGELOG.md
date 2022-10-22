@@ -693,3 +693,6 @@ a
 
 ## 0.1.601
 * Fixed ZwapButtonDecorations bug: hoverGradint was null even if provided
+
+## 0.1.602
+* Improved ZwapHintInput

@@ -177,6 +177,7 @@ class _ZwapHintInputState extends State<ZwapHintInput> {
               border: Border.all(color: _hovered || _focussed ? ZwapColors.primary400 : _defaultBorderColor),
             ),
             child: AnimatedSize(
+              alignment: Alignment.topLeft,
               duration: const Duration(milliseconds: 200),
               child: Padding(
                 padding: const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 4),
