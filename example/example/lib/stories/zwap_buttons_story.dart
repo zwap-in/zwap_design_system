@@ -36,6 +36,18 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
 
   @override
   Widget build(BuildContext context) {
+    final LinearGradient _buttonGradient = LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [ZwapColors.warning200, ZwapColors.warning400, ZwapColors.buttonGrad.colors.first],
+    );
+
+    final LinearGradient _hoverButtonGradient = LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [ZwapColors.warning300, ZwapColors.warning400, ZwapColors.buttonGrad.colors.last],
+    );
+
     return Row(
       children: [
         Padding(
@@ -85,574 +97,607 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
             padding: const EdgeInsets.symmetric(vertical: 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ZwapRadioButton(active: _selectedRadio == 0),
-                    SizedBox(width: 24),
-                    ZwapRadioButton(active: _selectedRadio == 1),
-                  ],
-                ),
-                SizedBox(height: 24),
-                ZwapText(text: 'ZwapButton with completion', zwapTextType: ZwapTextType.bigBodySemibold, textColor: ZwapColors.shades100),
-                ZwapButton(
-                  margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                  height: 40,
-                  width: 88,
-                  buttonChild: ZwapButtonChild.text(text: "Label"),
-                  loading: _loading,
-                  disabled: _disabled,
-                  decorations: ZwapButtonDecorations.primaryLight(),
-                  completionValue: _completionValue,
-                  tooltip: "cioa ciadlkfahsòjdlfkha òjg alskdfaòsoidghaòis hgaòkj sfhglakjsfhgls jkdfhglsjdhfgljsdh flgsjhddslfhasdklfhasd",
-                  showTooltipOnlyOnDisabledState: true,
-                ),
-                SizedBox(height: 24),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: "Text - Primary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              children: true
+                  ? [
+                      SizedBox(height: 24),
+                      ZwapButton(
+                        width: 170,
                         height: 40,
-                        width: 88,
-                        buttonChild: ZwapButtonChild.text(text: "Label"),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.primaryLight(),
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Text - Secondary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 88,
-                        buttonChild: ZwapButtonChild.text(text: "Label"),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.secondaryLight(),
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Text - Tertiary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 88,
-                        buttonChild: ZwapButtonChild.text(text: "Label"),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.tertiary(),
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Text - Quaternary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 45,
-                        width: 88,
-                        buttonChild: ZwapButtonChild.text(text: "Label"),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.quaternary(),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: "Text and Icon - Primary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 44,
-                        buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
-                        decorations: ZwapButtonDecorations.primaryLight(),
-                        loading: _loading,
-                        disabled: _disabled,
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Text and Icon - Secondary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 44,
-                        buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
-                        decorations: ZwapButtonDecorations.secondaryLight(),
-                        loading: _loading,
-                        disabled: _disabled,
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Text and Icon - Tertiary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 44,
-                        buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
-                        decorations: ZwapButtonDecorations.tertiary(),
-                        loading: _loading,
-                        disabled: _disabled,
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Text and Icon - Quaternary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 44,
-                        buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
-                        decorations: ZwapButtonDecorations.quaternary(),
-                        loading: _loading,
-                        disabled: _disabled,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: "Icon - Primary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 44,
-                        buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                        loading: _loading,
-                        disabled: _disabled,
+                        buttonChild: ZwapButtonChild.text(text: "Prova prova"),
                         decorations: ZwapButtonDecorations.primaryLight(
-                          borderRadius: BorderRadius.circular(100),
-                          internalPadding: const EdgeInsets.all(8),
+                          gradient: _buttonGradient,
+                          hoverGradient: _hoverButtonGradient,
+                          pressedGradient: _hoverButtonGradient,
+                          disabledGradient: _buttonGradient,
+                          focussedGradient: _hoverButtonGradient,
+                          pressedBorder: Border.all(color: ZwapColors.warning200),
                         ),
+                        onTap: () => {},
                       ),
-                    ),
-                    Tooltip(
-                      message: "Icon - Secondary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                      SizedBox(height: 24)
+                    ]
+                  : [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ZwapRadioButton(active: _selectedRadio == 0),
+                          SizedBox(width: 24),
+                          ZwapRadioButton(active: _selectedRadio == 1),
+                        ],
+                      ),
+                      SizedBox(height: 24),
+                      ZwapButton(
+                        width: 170,
                         height: 40,
-                        width: 44,
-                        buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.secondaryLight(
-                          borderRadius: BorderRadius.circular(100),
-                          internalPadding: const EdgeInsets.all(8),
+                        buttonChild: ZwapButtonChild.text(text: "Prova prova"),
+                        decorations: ZwapButtonDecorations.primaryLight(
+                          gradient: _buttonGradient,
+                          hoverGradient: _buttonGradient,
+                          pressedGradient: _buttonGradient,
+                          disabledGradient: _buttonGradient,
+                          focussedGradient: _buttonGradient,
                         ),
+                        onTap: () => {},
                       ),
-                    ),
-                    Tooltip(
-                      message: "Icon - Tertiary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 44,
-                        buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.tertiary(
-                          borderRadius: BorderRadius.circular(100),
-                          internalPadding: const EdgeInsets.all(8),
-                        ),
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Icon - Quaternary",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 45,
-                        width: 44,
-                        buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.quaternary(
-                          borderRadius: BorderRadius.circular(100),
-                          internalPadding: const EdgeInsets.all(8),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: "Text - Gradient",
-                      child: ZwapButton(
+                      SizedBox(height: 24),
+                      ZwapText(text: 'ZwapButton with completion', zwapTextType: ZwapTextType.bigBodySemibold, textColor: ZwapColors.shades100),
+                      ZwapButton(
                         margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                         height: 40,
                         width: 88,
                         buttonChild: ZwapButtonChild.text(text: "Label"),
                         loading: _loading,
                         disabled: _disabled,
-                        decorations: ZwapButtonDecorations.gradient(),
+                        decorations: ZwapButtonDecorations.primaryLight(),
+                        completionValue: _completionValue,
+                        tooltip: "cioa ciadlkfahsòjdlfkha òjg alskdfaòsoidghaòis hgaòkj sfhglakjsfhgls jkdfhglsjdhfgljsdh flgsjhddslfhasdklfhasd",
+                        showTooltipOnlyOnDisabledState: true,
                       ),
-                    ),
-                    Tooltip(
-                      message: "Text and Icon - Gradient",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 44,
-                        buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
-                        decorations: ZwapButtonDecorations.gradient(),
-                        loading: _loading,
-                        disabled: _disabled,
+                      SizedBox(height: 24),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: "Text - Primary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 88,
+                              buttonChild: ZwapButtonChild.text(text: "Label"),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.primaryLight(),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text - Secondary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 88,
+                              buttonChild: ZwapButtonChild.text(text: "Label"),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.secondaryLight(),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text - Tertiary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 88,
+                              buttonChild: ZwapButtonChild.text(text: "Label"),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.tertiary(),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text - Quaternary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 45,
+                              width: 88,
+                              buttonChild: ZwapButtonChild.text(text: "Label"),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.quaternary(),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Tooltip(
-                      message: "Icon - Gradient",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 44,
-                        buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.gradient(
-                          borderRadius: BorderRadius.circular(100),
-                          internalPadding: const EdgeInsets.all(8),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: "Text and Icon - Primary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 44,
+                              buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
+                              decorations: ZwapButtonDecorations.primaryLight(),
+                              loading: _loading,
+                              disabled: _disabled,
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text and Icon - Secondary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 44,
+                              buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
+                              decorations: ZwapButtonDecorations.secondaryLight(),
+                              loading: _loading,
+                              disabled: _disabled,
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text and Icon - Tertiary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 44,
+                              buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
+                              decorations: ZwapButtonDecorations.tertiary(),
+                              loading: _loading,
+                              disabled: _disabled,
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text and Icon - Quaternary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 44,
+                              buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
+                              decorations: ZwapButtonDecorations.quaternary(),
+                              loading: _loading,
+                              disabled: _disabled,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: "Icon - Primary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 44,
+                              buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.primaryLight(
+                                borderRadius: BorderRadius.circular(100),
+                                internalPadding: const EdgeInsets.all(8),
+                              ),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Icon - Secondary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 44,
+                              buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.secondaryLight(
+                                borderRadius: BorderRadius.circular(100),
+                                internalPadding: const EdgeInsets.all(8),
+                              ),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Icon - Tertiary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 44,
+                              buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.tertiary(
+                                borderRadius: BorderRadius.circular(100),
+                                internalPadding: const EdgeInsets.all(8),
+                              ),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Icon - Quaternary",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 45,
+                              width: 44,
+                              buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.quaternary(
+                                borderRadius: BorderRadius.circular(100),
+                                internalPadding: const EdgeInsets.all(8),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: "Text - Gradient",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 88,
+                              buttonChild: ZwapButtonChild.text(text: "Label"),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.gradient(),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text and Icon - Gradient",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 44,
+                              buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
+                              decorations: ZwapButtonDecorations.gradient(),
+                              loading: _loading,
+                              disabled: _disabled,
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Icon - Gradient",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 44,
+                              buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.gradient(
+                                borderRadius: BorderRadius.circular(100),
+                                internalPadding: const EdgeInsets.all(8),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: "Text - Primary Dark",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 88,
+                              buttonChild: ZwapButtonChild.text(text: "Label"),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.primaryDark(),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text - Secondary Dark",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 88,
+                              buttonChild: ZwapButtonChild.text(text: "Label"),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.secondaryDark(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: "Text and Icon - Primary Dark",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 44,
+                              buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
+                              decorations: ZwapButtonDecorations.primaryDark(),
+                              loading: _loading,
+                              disabled: _disabled,
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text and Icon - Secondary Dark",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 44,
+                              buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
+                              decorations: ZwapButtonDecorations.secondaryDark(),
+                              loading: _loading,
+                              disabled: _disabled,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: "Icon - Primary Dark",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 44,
+                              buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.primaryDark(
+                                borderRadius: BorderRadius.circular(100),
+                                internalPadding: const EdgeInsets.all(8),
+                              ),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Icon - Secondary Dark",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 44,
+                              buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.secondaryDark(
+                                borderRadius: BorderRadius.circular(100),
+                                internalPadding: const EdgeInsets.all(8),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: "Text - Primary Destructive",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 88,
+                              buttonChild: ZwapButtonChild.text(text: "Label"),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.destructivePrimary(),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text - Secondary Destructive",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 88,
+                              buttonChild: ZwapButtonChild.text(text: "Label"),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.destructiveSecondary(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: "Text and Icon - Primary Destructive",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 44,
+                              buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
+                              decorations: ZwapButtonDecorations.destructivePrimary(),
+                              loading: _loading,
+                              disabled: _disabled,
+                            ),
+                          ),
+                          Tooltip(
+                            message: "Text and Icon - Secondary Destructive",
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 44,
+                              buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
+                              decorations: ZwapButtonDecorations.destructiveSecondary(),
+                              loading: _loading,
+                              disabled: _disabled,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: 'Icon - Primary Destructive',
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 44,
+                              buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.destructivePrimary(
+                                borderRadius: BorderRadius.circular(100),
+                                internalPadding: const EdgeInsets.all(8),
+                              ),
+                            ),
+                          ),
+                          Tooltip(
+                            message: 'Icon - Secondary Destructive',
+                            child: ZwapButton(
+                              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                              height: 40,
+                              width: 44,
+                              buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                              loading: _loading,
+                              disabled: _disabled,
+                              decorations: ZwapButtonDecorations.destructiveSecondary(
+                                borderRadius: BorderRadius.circular(100),
+                                internalPadding: const EdgeInsets.all(8),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: ZwapColors.neutral800.withOpacity(0.7),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Tooltip(
+                              message: 'Icon - Trasparent Roud ~ Video Platform',
+                              child: ZwapButton(
+                                margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                                height: 40,
+                                width: 44,
+                                buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                                loading: _loading,
+                                disabled: _disabled,
+                                decorations: ZwapButtonDecorations.videoPlatformDecorations.transparentRound(),
+                              ),
+                            ),
+                            Tooltip(
+                              message: 'Icon - Destructive Roud ~ Video Platform',
+                              child: ZwapButton(
+                                margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                                height: 40,
+                                width: 44,
+                                buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                                loading: _loading,
+                                disabled: _disabled,
+                                decorations: ZwapButtonDecorations.videoPlatformDecorations.destructiveRound(),
+                              ),
+                            ),
+                            Tooltip(
+                              message: 'Icon - Full Trasparent Roud ~ Video Platform',
+                              child: ZwapButton(
+                                margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                                height: 40,
+                                width: 44,
+                                buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                                loading: _loading,
+                                disabled: _disabled,
+                                decorations: ZwapButtonDecorations.videoPlatformDecorations.fullTranparentRound(),
+                              ),
+                            ),
+                            Tooltip(
+                              message: 'Icon - Filled Round ~ Video Platform',
+                              child: ZwapButton(
+                                margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                                height: 40,
+                                width: 44,
+                                buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
+                                loading: _loading,
+                                disabled: _disabled,
+                                decorations: ZwapButtonDecorations.videoPlatformDecorations.filledRound(),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: "Text - Primary Dark",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 88,
-                        buttonChild: ZwapButtonChild.text(text: "Label"),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.primaryDark(),
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Text - Secondary Dark",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 88,
-                        buttonChild: ZwapButtonChild.text(text: "Label"),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.secondaryDark(),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: "Text and Icon - Primary Dark",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 44,
-                        buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
-                        decorations: ZwapButtonDecorations.primaryDark(),
-                        loading: _loading,
-                        disabled: _disabled,
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Text and Icon - Secondary Dark",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 44,
-                        buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
-                        decorations: ZwapButtonDecorations.secondaryDark(),
-                        loading: _loading,
-                        disabled: _disabled,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: "Icon - Primary Dark",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 44,
-                        buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.primaryDark(
-                          borderRadius: BorderRadius.circular(100),
-                          internalPadding: const EdgeInsets.all(8),
-                        ),
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Icon - Secondary Dark",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 44,
-                        buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.secondaryDark(
-                          borderRadius: BorderRadius.circular(100),
-                          internalPadding: const EdgeInsets.all(8),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: "Text - Primary Destructive",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 88,
-                        buttonChild: ZwapButtonChild.text(text: "Label"),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.destructivePrimary(),
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Text - Secondary Destructive",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 88,
-                        buttonChild: ZwapButtonChild.text(text: "Label"),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.destructiveSecondary(),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: "Text and Icon - Primary Destructive",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 44,
-                        buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
-                        decorations: ZwapButtonDecorations.destructivePrimary(),
-                        loading: _loading,
-                        disabled: _disabled,
-                      ),
-                    ),
-                    Tooltip(
-                      message: "Text and Icon - Secondary Destructive",
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 44,
-                        buttonChild: ZwapButtonChild.textWithIcon(text: "Label", icon: Icons.settings),
-                        decorations: ZwapButtonDecorations.destructiveSecondary(),
-                        loading: _loading,
-                        disabled: _disabled,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: 'Icon - Primary Destructive',
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 44,
-                        buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.destructivePrimary(
-                          borderRadius: BorderRadius.circular(100),
-                          internalPadding: const EdgeInsets.all(8),
-                        ),
-                      ),
-                    ),
-                    Tooltip(
-                      message: 'Icon - Secondary Destructive',
-                      child: ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 40,
-                        width: 44,
-                        buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.destructiveSecondary(
-                          borderRadius: BorderRadius.circular(100),
-                          internalPadding: const EdgeInsets.all(8),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: ZwapColors.neutral800.withOpacity(0.7),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Tooltip(
-                        message: 'Icon - Trasparent Roud ~ Video Platform',
-                        child: ZwapButton(
-                          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                          height: 40,
-                          width: 44,
-                          buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                          loading: _loading,
-                          disabled: _disabled,
-                          decorations: ZwapButtonDecorations.videoPlatformDecorations.transparentRound(),
-                        ),
-                      ),
-                      Tooltip(
-                        message: 'Icon - Destructive Roud ~ Video Platform',
-                        child: ZwapButton(
-                          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                          height: 40,
-                          width: 44,
-                          buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                          loading: _loading,
-                          disabled: _disabled,
-                          decorations: ZwapButtonDecorations.videoPlatformDecorations.destructiveRound(),
-                        ),
-                      ),
-                      Tooltip(
-                        message: 'Icon - Full Trasparent Roud ~ Video Platform',
-                        child: ZwapButton(
-                          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                          height: 40,
-                          width: 44,
-                          buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                          loading: _loading,
-                          disabled: _disabled,
-                          decorations: ZwapButtonDecorations.videoPlatformDecorations.fullTranparentRound(),
-                        ),
-                      ),
-                      Tooltip(
-                        message: 'Icon - Filled Round ~ Video Platform',
-                        child: ZwapButton(
-                          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                          height: 40,
-                          width: 44,
-                          buttonChild: ZwapButtonChild.icon(icon: Icons.settings),
-                          loading: _loading,
-                          disabled: _disabled,
-                          decorations: ZwapButtonDecorations.videoPlatformDecorations.filledRound(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 30),
-                ZwapText(
-                  text: "A strange concept of button",
-                  zwapTextType: ZwapTextType.bigBodySemibold,
-                  textColor: ZwapColors.primary900Dark,
-                ),
-                SizedBox(height: 8),
-                ZwapButton.customChild(
-                  margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                  height: 260,
-                  width: 208,
-                  hoverElevation: 4,
-                  isSelected: _isSelected,
-                  selectedDecorations: ZwapButtonDecorations.selectableButtonDecorations.selectedDecorations(),
-                  child: (state) => Column(
-                    children: [
-                      Icon(Icons.tab, size: 35, color: ZwapColors.primary700),
-                      SizedBox(height: 20),
+                      SizedBox(height: 30),
                       ZwapText(
-                        text: "Press me",
-                        zwapTextType: ZwapTextType.mediumBodyRegular,
+                        text: "A strange concept of button",
+                        zwapTextType: ZwapTextType.bigBodySemibold,
                         textColor: ZwapColors.primary900Dark,
                       ),
-                    ],
-                  ),
-                  loading: _loading,
-                  disabled: _disabled,
-                  decorations: ZwapButtonDecorations.selectableButtonDecorations.defaultDecorations(),
-                  onTap: () => setState(() => _isSelected = !_isSelected),
-                ),
-                SizedBox(height: 40),
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  runSpacing: 8,
-                  textDirection: TextDirection.ltr,
-                  children: List.generate(7, (i) => i)
-                      .map(
-                        (e) => ZwapButton(
-                          width: null,
-                          height: 44,
-                          decorations:
-                              ZwapButtonDecorations.selectableButtonDecorations.defaultDecorations(internalPadding: const EdgeInsets.all(12)),
-                          selectedDecorations:
-                              ZwapButtonDecorations.selectableButtonDecorations.selectedDecorations(internalPadding: const EdgeInsets.all(12)),
-                          buttonChild: ZwapButtonChild.textWithIcon(
-                            text: 'Lorem $e',
-                            icon: _icons[e],
-                            spaceBetween: 8,
-                            iconSize: 16,
-                          ),
-                          onTap: () => print(e),
-                        ),
-                      )
-                      .toList(),
-                ),
-                SizedBox(height: 20),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(60, (i) => i)
-                        .map(
-                          (e) => ZwapButton(
-                            margin: const EdgeInsets.only(left: 4, top: 5, bottom: 15),
-                            width: null,
-                            height: 44,
-                            decorations:
-                                ZwapButtonDecorations.selectableButtonDecorations.defaultDecorations(internalPadding: const EdgeInsets.all(12)),
-                            selectedDecorations:
-                                ZwapButtonDecorations.selectableButtonDecorations.selectedDecorations(internalPadding: const EdgeInsets.all(12)),
-                            buttonChild: ZwapButtonChild.textWithIcon(
-                              text: 'Lorem $e ${e % 4 == 0 ? 'ljkdsfhaskjdfhjaskljdfjaslkdf' : ''}',
-                              icon: _icons[e % 7],
-                              spaceBetween: 8,
-                              iconSize: 16,
+                      SizedBox(height: 8),
+                      ZwapButton.customChild(
+                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        height: 260,
+                        width: 208,
+                        hoverElevation: 4,
+                        isSelected: _isSelected,
+                        selectedDecorations: ZwapButtonDecorations.selectableButtonDecorations.selectedDecorations(),
+                        child: (state) => Column(
+                          children: [
+                            Icon(Icons.tab, size: 35, color: ZwapColors.primary700),
+                            SizedBox(height: 20),
+                            ZwapText(
+                              text: "Press me",
+                              zwapTextType: ZwapTextType.mediumBodyRegular,
+                              textColor: ZwapColors.primary900Dark,
                             ),
-                            onTap: () => print(e),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-              ],
+                          ],
+                        ),
+                        loading: _loading,
+                        disabled: _disabled,
+                        decorations: ZwapButtonDecorations.selectableButtonDecorations.defaultDecorations(),
+                        onTap: () => setState(() => _isSelected = !_isSelected),
+                      ),
+                      SizedBox(height: 40),
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        runSpacing: 8,
+                        textDirection: TextDirection.ltr,
+                        children: List.generate(7, (i) => i)
+                            .map(
+                              (e) => ZwapButton(
+                                width: null,
+                                height: 44,
+                                decorations:
+                                    ZwapButtonDecorations.selectableButtonDecorations.defaultDecorations(internalPadding: const EdgeInsets.all(12)),
+                                selectedDecorations:
+                                    ZwapButtonDecorations.selectableButtonDecorations.selectedDecorations(internalPadding: const EdgeInsets.all(12)),
+                                buttonChild: ZwapButtonChild.textWithIcon(
+                                  text: 'Lorem $e',
+                                  icon: _icons[e],
+                                  spaceBetween: 8,
+                                  iconSize: 16,
+                                ),
+                                onTap: () => print(e),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                      SizedBox(height: 20),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(60, (i) => i)
+                              .map(
+                                (e) => ZwapButton(
+                                  margin: const EdgeInsets.only(left: 4, top: 5, bottom: 15),
+                                  width: null,
+                                  height: 44,
+                                  decorations:
+                                      ZwapButtonDecorations.selectableButtonDecorations.defaultDecorations(internalPadding: const EdgeInsets.all(12)),
+                                  selectedDecorations: ZwapButtonDecorations.selectableButtonDecorations
+                                      .selectedDecorations(internalPadding: const EdgeInsets.all(12)),
+                                  buttonChild: ZwapButtonChild.textWithIcon(
+                                    text: 'Lorem $e ${e % 4 == 0 ? 'ljkdsfhaskjdfhjaskljdfjaslkdf' : ''}',
+                                    icon: _icons[e % 7],
+                                    spaceBetween: 8,
+                                    iconSize: 16,
+                                  ),
+                                  onTap: () => print(e),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ],
             ),
           ),
         ),

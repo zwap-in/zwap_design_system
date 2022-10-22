@@ -690,3 +690,6 @@ a
 
 ## 0.1.600
 * Added error state and errorText to ZwapSelect
+
+## 0.1.601
+* Fixed ZwapButtonDecorations bug: hoverGradint was null even if provided
