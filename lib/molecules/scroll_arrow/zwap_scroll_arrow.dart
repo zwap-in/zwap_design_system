@@ -73,6 +73,7 @@ class _ZwapScrollArrowState extends State<ZwapScrollArrow> {
           borderRadius: BorderRadius.circular(50),
           child: Container(
             width: 30,
+            height: 30,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),

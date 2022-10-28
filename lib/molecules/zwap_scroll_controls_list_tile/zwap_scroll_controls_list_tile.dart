@@ -231,7 +231,10 @@ class __ZwapScrollControlsListTileButtonsState extends State<_ZwapScrollControls
           spaceBetween: 8,
           iconPosition: ZwapButtonIconPosition.right,
         ),
-        decorations: ZwapButtonDecorations.quaternary(internalPadding: EdgeInsets.zero),
+        decorations: ZwapButtonDecorations.quaternary(
+          internalPadding: EdgeInsets.zero,
+          backgroundColor: ZwapColors.whiteTransparent,
+        ),
         hide: !_showViewAll,
         onTap: widget.onViewAllTap,
       ),

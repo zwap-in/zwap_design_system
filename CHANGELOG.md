@@ -696,3 +696,7 @@ a
 
 ## 0.1.602
 * Improved ZwapHintInput
+
+## 0.1.603
+* ZwapScrollArrow now is rounded 
+* ZwapScrollControlsListTile "show all" button now has transparent background

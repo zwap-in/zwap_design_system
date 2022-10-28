@@ -311,7 +311,8 @@ class _LinkedMultyStyleTextState extends State<_LinkedMultyStyleText> {
                       (span) => TextSpan(
                         text: span.text,
                         mouseCursor: span.linkToUri != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
-                        style: span.textStyle,
+                        style: span.textStyle ?? widget.style,
+                        recognizer: span.gestureRecognizer,
                         onEnter: (_) {
                           setState(() {
                             currentUri = span.linkToUri;

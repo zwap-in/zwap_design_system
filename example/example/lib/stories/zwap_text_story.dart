@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/text/base/zwap_gradient_text.dart';
 import 'package:zwap_design_system/molecules/moleculesText/zwap_expandable_text.dart';
@@ -137,6 +138,7 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                   text: " Mollit incididunt sunt deserunt qui veniam sunt magna.",
                   textType: ZwapTextType.bigBodyRegular,
                   textColor: ZwapColors.shades100,
+                  gestureRecognizer: TapGestureRecognizer()..onTap = () => print('ciao'),
                 ),
               ],
             ),
