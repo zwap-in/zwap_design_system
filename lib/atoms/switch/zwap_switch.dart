@@ -203,7 +203,7 @@ class _ZwapSwitchState extends State<ZwapSwitch> {
                 left: _thumbPosition,
                 duration: _grabbed ? Duration.zero : const Duration(milliseconds: 200),
                 child: MouseRegion(
-                  cursor: (_pressed || _grabbed) ? SystemMouseCursors.grabbing : SystemMouseCursors.grab,
+                  cursor: (_pressed || _grabbed) ? SystemMouseCursors.grabbing : SystemMouseCursors.click,
                   onExit: (_) => _thumbUp(),
                   child: GestureDetector(
                     onTap: _onTap,
