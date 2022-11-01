@@ -880,13 +880,13 @@ class _ZwapSelectState extends State<ZwapSelect> {
                 alignment: Alignment.centerLeft,
                 child: _error && widget.errorText != null
                     ? Container(
-                      margin: const EdgeInsets.only(top: 3),
-                      child: ZwapText(
+                        margin: const EdgeInsets.only(top: 3),
+                        child: ZwapText(
                           text: widget.errorText!,
                           zwapTextType: ZwapTextType.bodyRegular,
                           textColor: ZwapColors.error400,
                         ),
-                    )
+                      )
                     : Container(key: UniqueKey()),
               ),
             ),

@@ -709,3 +709,6 @@ a
 
 ## 0.1.606
 * Fix in ZwapSwitch
+
+## 0.1.607
+* Added ZwapDynamicInput and ZwapCheckBoxPicker widgets

@@ -5,6 +5,8 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
 import 'package:zwap_design_system/atoms/text_controller/tags_text_conroller.dart';
 import 'package:zwap_design_system/atoms/input/zwap_hint_input/zwap_hint_input.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_check_box_picker/zwap_check_box_picker.dart';
 
 class ZwapInputStory extends StatefulWidget {
   const ZwapInputStory({Key? key}) : super(key: key);
@@ -36,6 +38,45 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              ZwapDynamicInput(
+                content: Container(
+                  width: 40,
+                  height: 40,
+                  color: ZwapColors.secondary200,
+                ),
+                overlay: Container(
+                  width: 40,
+                  height: 40,
+                  color: ZwapColors.error700,
+                ),
+              ),
+              SizedBox(height: 20),
+              ZwapCheckBoxPicker(
+                initialSelectedItems: [
+                  '21',
+                  '121',
+                ],
+                label: "kdfjaskdlf",
+                hintText: "sàdòlkfj asòdkfjasòdkfjasòdk fja òd",
+                values: {
+                  '25': 'afdasdf',
+                  '42': 'gerger',
+                  '32': 'kmbaresf',
+                  '21': 'sdeg4ergf',
+                  '112': 'sdfasd',
+                  '125': 'afdasdf',
+                  '142': 'gerger',
+                  '132': 'kmbaresf',
+                  '121': 'sdeg4ergf',
+                  '1f12': 'sdfasd',
+                  '1f25': 'afdasdf',
+                  '1f42': 'gerger',
+                  '1f32': 'kmbaresf',
+                  '1f21': 'sdeg4ergf',
+                  '1f12': 'sdfasd',
+                },
+              ),
+              SizedBox(height: 20),
               ZwapInput(
                 label: "Input con label dinamica",
                 dynamicLabel: "Label",
