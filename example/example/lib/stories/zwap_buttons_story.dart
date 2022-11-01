@@ -59,7 +59,10 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                 children: [
                   ZwapText(text: 'Loading State', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   SizedBox(width: 20),
-                  ZwapSwitch(value: _loading, onValueChange: (v) => setState(() => _loading = v)),
+                  ZwapSwitch(
+                    value: _loading,
+                    onChange: (v) => setState(() => _loading = v),
+                  ),
                 ],
               ),
               Row(
@@ -67,7 +70,7 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                 children: [
                   ZwapText(text: 'Disabled State', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
                   const SizedBox(width: 20),
-                  ZwapSwitch(value: _disabled, onValueChange: (v) => setState(() => _disabled = v)),
+                  ZwapSwitch(value: _disabled, onChange: (v) => setState(() => _disabled = v)),
                 ],
               ),
               const SizedBox(height: 20),
@@ -83,7 +86,13 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
               const SizedBox(height: 20),
               ZwapSwitch(
                 value: _selectedRadio == 1,
-                onValueChange: (value) => setState(() => _selectedRadio = value ? 1 : 0),
+                onChange: (value) => setState(() => _selectedRadio = value ? 1 : 0),
+                activeColor: ZwapColors.shades0,
+                activeThumbColor: ZwapColors.shades100,
+                color: ZwapColors.neutral200,
+                gradient: ZwapColors.acquaGradient(),
+                thumbGradient: ZwapColors.violetGradient(),
+                draggingThumbExtent: -6,
               ),
             ],
           ),
@@ -97,7 +106,7 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
             padding: const EdgeInsets.symmetric(vertical: 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: true
+              children: false
                   ? [
                       SizedBox(height: 24),
                       ZwapButton(

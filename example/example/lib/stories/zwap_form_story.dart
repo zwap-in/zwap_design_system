@@ -54,7 +54,7 @@ class _ZwapFormStoryState extends State<ZwapFormStory> {
                     ),
                     ZwapSwitch(
                       value: _errorState,
-                      onValueChange: (value) => setState(() => _errorState = value),
+                      onChange: (value) => setState(() => _errorState = value),
                     ),
                   ],
                 )

@@ -161,4 +161,18 @@ class ZwapColors {
 
   static const LinearGradient buttonGradHover = LinearGradient(
       colors: [Color.fromARGB(255, 243, 76, 87), Color.fromARGB(255, 236, 22, 108)], begin: Alignment.topLeft, end: Alignment.bottomCenter);
+
+  static LinearGradient acquaGradient({Alignment begin = Alignment.topLeft, Alignment end = Alignment.bottomRight}) => LinearGradient(
+        colors: [Color(0xff00C2FF), Color(0xff04D1A5)],
+        begin: begin,
+        end: end,
+      );
+
+  static LinearGradient violetGradient({Alignment begin = Alignment.topLeft, Alignment end = Alignment.bottomRight}) => LinearGradient(
+        colors: [Color(0xff3E4FF7), Color(0xff8D2BBD), Color(0xffDD0783)],
+        begin: begin,
+        end: end,
+      );
+
+  static LinearGradient emptyGradient({Color baseColor = shades0}) => LinearGradient(colors: [baseColor, baseColor]);
 }

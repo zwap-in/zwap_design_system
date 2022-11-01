@@ -700,3 +700,6 @@ a
 ## 0.1.603
 * ZwapScrollArrow now is rounded 
 * ZwapScrollControlsListTile "show all" button now has transparent background
+
+## 0.1.604
+* Refactoring of ZwapSwitch
