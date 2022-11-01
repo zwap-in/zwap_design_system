@@ -703,3 +703,5 @@ a
 
 ## 0.1.604
 * Refactoring of ZwapSwitch
+## 0.1.605
+* Fix in ZwapSwitch

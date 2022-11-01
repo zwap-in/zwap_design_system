@@ -164,6 +164,12 @@ class _ZwapSwitchState extends State<ZwapSwitch> {
   }
 
   @override
+  void didUpdateWidget(covariant ZwapSwitch oldWidget) {
+    if (_value != widget.value) _value = widget.value;
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
