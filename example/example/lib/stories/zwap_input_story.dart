@@ -5,8 +5,12 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
 import 'package:zwap_design_system/atoms/text_controller/tags_text_conroller.dart';
 import 'package:zwap_design_system/atoms/input/zwap_hint_input/zwap_hint_input.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_input/zwap_chips_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_check_box_picker/zwap_check_box_picker.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_floating_picker/zwap_floating_picker.dart';
+
+enum MyEnum { a, b, c, v, d, f, g }
 
 class ZwapInputStory extends StatefulWidget {
   const ZwapInputStory({Key? key}) : super(key: key);
@@ -28,6 +32,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   List<String> _selectedItems = [];
 
+  final List<String> _secondSelected = [];
+
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
@@ -38,6 +44,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: 600),
               ZwapDynamicInput(
                 content: Container(
                   width: 40,
@@ -49,6 +56,100 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   height: 40,
                   color: ZwapColors.error700,
                 ),
+              ),
+              SizedBox(height: 20),
+              ZwapChipsInput<String>(
+                label: "Ciao",
+                placeholder: "Laboris exercitation tempor ",
+                items: [
+                  'afdasdf',
+                  'gerger',
+                  'kmbaresf',
+                  'sdeg4ergf',
+                  'sdfasd',
+                  'afkdasdf',
+                  'gerkger',
+                  'kmbkaresf',
+                  'sdelkjskg4ergf',
+                  'sdflkjskasd',
+                  'afdlkjsasdf',
+                  'gerlkjsger',
+                  'kmblkjsaresf',
+                  'sdelkjsg4ergf',
+                  'sdflkjsasd',
+                  'afklkjsdasdf',
+                  'gerlkjskger',
+                  'kmblkjskaresf',
+                  'sdelkjskg4ergf',
+                  'sdflkjskasd',
+                ],
+                itemBuilder: (context, i, status) => Padding(
+                  padding: status.isHeader ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Icon(([
+                        Icons.abc_sharp,
+                        Icons.access_time_filled_rounded,
+                        Icons.access_time_filled_outlined,
+                        Icons.accessibility,
+                        Icons.accessibility_sharp,
+                        Icons.accessibility_rounded,
+                        Icons.accessibility_outlined,
+                        Icons.accessibility_new,
+                        Icons.accessibility_new_sharp,
+                        Icons.accessibility_new_rounded,
+                        Icons.accessibility_new_outlined,
+                        Icons.accessible,
+                        Icons.accessible_sharp,
+                        Icons.accessible_rounded,
+                        Icons.accessible_outlined,
+                        Icons.accessible_forward,
+                        Icons.accessible_forward_sharp,
+                        Icons.accessible_forward_rounded,
+                        Icons.accessible_forward_outlined,
+                        Icons.account_balance,
+                        Icons.account_balance_sharp,
+                      ]..shuffle())
+                          .first),
+                      const SizedBox(width: 23),
+                      ZwapText(
+                        text: i,
+                        zwapTextType: status.isHovered ? ZwapTextType.mediumBodyMedium : ZwapTextType.mediumBodyRegular,
+                        textColor: (status.isSelected && !status.isHeader) ? ZwapColors.primary700 : ZwapColors.primary900Dark,
+                      ),
+                    ],
+                  ),
+                ),
+                searchItem: (i, search) => i.toLowerCase().contains(search.toLowerCase().trim()),
+                selectedItems: _secondSelected,
+                onItemPicked: (i, _) {
+                  if (_secondSelected.contains(i))
+                    setState(() => _secondSelected.remove(i));
+                  else
+                    setState(() => _secondSelected.add(i));
+                },
+                translateKey: (key) => 'Nessun risultato, prova con qualcosa di diversoalkòd jadslkfj aòlskdjf aòksdj',
+                noResultsWidget: Icon(
+                  Icons.north_east,
+                  color: ZwapColors.error700,
+                ),
+              ),
+              SizedBox(height: 20),
+              ZwapButton(
+                decorations: ZwapButtonDecorations.primaryLight(),
+                buttonChild: ZwapButtonChild.text(text: "Ciao"),
+                onTap: () {
+                  if (!_secondSelected.contains('sdelkjsg4ergf')) {
+                    setState(() => _secondSelected.add('sdelkjsg4ergf'));
+                  }
+                },
+              ),
+              SizedBox(height: 20),
+              ZwapFloatingPicker<MyEnum>(
+                options: MyEnum.values,
+                label: 'Label',
+                placeholder: 'Laboris ipsum tempor consequat sunt',
+                getItemString: (i)=> '$i$i$i',
               ),
               SizedBox(height: 20),
               ZwapCheckBoxPicker(

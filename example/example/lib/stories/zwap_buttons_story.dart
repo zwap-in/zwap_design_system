@@ -100,7 +100,6 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
         Expanded(
           child: SingleChildScrollView(
             controller: EdgeNotifierScrollController(
-              onEndReached: () => print('endReached'),
               delayDuration: const Duration(seconds: 2),
             ),
             padding: const EdgeInsets.symmetric(vertical: 30),
@@ -675,7 +674,6 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                                   spaceBetween: 8,
                                   iconSize: 16,
                                 ),
-                                onTap: () => print(e),
                               ),
                             )
                             .toList(),
@@ -700,7 +698,6 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                                     spaceBetween: 8,
                                     iconSize: 16,
                                   ),
-                                  onTap: () => print(e),
                                 ),
                               )
                               .toList(),

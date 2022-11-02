@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
+extension ZwapDynamicInputKeyExt on GlobalKey<ZwapDynamicInputState> {
+  void toggleOverlay() => currentState?.toggleOverlay();
+}
+
 class ZwapDynamicInput extends StatefulWidget {
   final bool focussed;
 
@@ -11,11 +15,14 @@ class ZwapDynamicInput extends StatefulWidget {
   final Function()? onOpen;
   final Function()? onClose;
 
+  final Color? backgroundColor;
+
   final Function(BuildContext, Widget)? builder;
 
   const ZwapDynamicInput({
     required this.content,
     required this.overlay,
+    this.backgroundColor = ZwapColors.shades0,
     this.builder,
     this.focussed = false,
     this.onOpen,
@@ -24,10 +31,10 @@ class ZwapDynamicInput extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ZwapDynamicInput> createState() => _ZwapDynamicInputState();
+  State<ZwapDynamicInput> createState() => ZwapDynamicInputState();
 }
 
-class _ZwapDynamicInputState extends State<ZwapDynamicInput> {
+class ZwapDynamicInputState extends State<ZwapDynamicInput> {
   final GlobalKey _inputKey = GlobalKey();
   late bool _focussed;
   bool _hovered = false;
@@ -49,18 +56,26 @@ class _ZwapDynamicInputState extends State<ZwapDynamicInput> {
     super.didUpdateWidget(oldWidget);
   }
 
+  void toggleOverlay() {
+    if (_isOverlayOpen)
+      _closeOverlay();
+    else
+      _openOverlay();
+  }
+
   void _openOverlay() {
     if (_entry != null) return;
 
     final Rect? _inputRect = _inputKey.globalPaintBounds;
     if (_inputRect == null) return;
 
-    final bool _openOnTop = MediaQuery.of(context).size.height - (_inputRect.bottomCenter.dy + 8) - 50 < 175;
+    final bool _openOnTop = MediaQuery.of(context).size.height - (_inputRect.bottomCenter.dy + 8) - 50 < 225;
+
     final Widget _child = ZwapOverlayEntryWidget(
       onAutoClose: _closeOverlay,
       child: ZwapOverlayEntryChild(
         top: _openOnTop ? null : _inputRect.bottomLeft.dy + 8,
-        bottom: _openOnTop ? _inputRect.top + 8 : null,
+        bottom: _openOnTop ? (MediaQuery.of(context).size.height - _inputRect.topCenter.dy) + 8 : null,
         left: _inputRect.left,
         child: _ZwapDynamicInputOverlay(
           child: widget.overlay,
@@ -95,14 +110,14 @@ class _ZwapDynamicInputState extends State<ZwapDynamicInput> {
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: GestureDetector(
-        onTap: () => _isOverlayOpen ? _closeOverlay() : _openOverlay(),
+        onTap: toggleOverlay,
         child: AnimatedContainer(
           key: _inputKey,
           duration: const Duration(milliseconds: 200),
           width: double.infinity,
           height: 48,
           decoration: BoxDecoration(
-            color: ZwapColors.shades0,
+            color: widget.backgroundColor,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: _active ? ZwapColors.primary900Dark : ZwapColors.neutral300,
@@ -149,7 +164,7 @@ class _ZwapDynamicInputOverlayState extends State<_ZwapDynamicInputOverlay> with
         setState(() {});
       });
 
-    _transitionTween = Tween(begin: 3.0, end: 0.0).animate(CurvedAnimation(parent: _controller, curve: Curves.decelerate));
+    _transitionTween = Tween(begin: 1.5, end: 0.0).animate(CurvedAnimation(parent: _controller, curve: Curves.decelerate));
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       setState(() => _visible = true);
@@ -165,20 +180,24 @@ class _ZwapDynamicInputOverlayState extends State<_ZwapDynamicInputOverlay> with
         offset: Offset(0, _transitionValue),
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 300),
-          opacity: _visible ? 1 : 0.3,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              width: widget.width,
-              decoration: BoxDecoration(
-                color: ZwapColors.shades0,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(color: Color(0x0D808080), blurRadius: 60, offset: Offset(0, 20)),
-                  BoxShadow(color: Color(0x26808080), blurRadius: 60, offset: Offset(0, 30), spreadRadius: -4),
-                ],
+          opacity: _visible ? 1 : 0.4,
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(color: Color(0x00808080).withOpacity(0.05), blurRadius: 60, offset: Offset(0, 20)),
+                BoxShadow(color: Color(0x00808080).withOpacity(0.15), blurRadius: 60, offset: Offset(0, 30), spreadRadius: -4),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: widget.width,
+                decoration: BoxDecoration(
+                  color: ZwapColors.shades0,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: widget.child,
               ),
-              child: widget.child,
             ),
           ),
         ),

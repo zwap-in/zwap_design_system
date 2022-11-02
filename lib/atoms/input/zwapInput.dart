@@ -300,7 +300,6 @@ class _ZwapInputState extends State<ZwapInput> {
   }
 
   void _focusListener() {
-    print('${widget.label ?? widget.dynamicLabel}: $_hasFocus <-> ${_focusNode.hasFocus}');
     if (_hasFocus != _focusNode.hasFocus) {
       setState(() => _hasFocus = _focusNode.hasFocus);
     }

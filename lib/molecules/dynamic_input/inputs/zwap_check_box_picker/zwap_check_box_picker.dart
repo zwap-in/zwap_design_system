@@ -68,50 +68,50 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                   textColor: ZwapColors.primary900Dark,
                 ),
                 const SizedBox(height: 8),
-                ZwapDynamicInput(
-                  onOpen: () => setState(() => _focussed = true),
-                  onClose: () => setState(() => _focussed = false),
-                  focussed: _focussed,
-                  builder: (context, child) => ChangeNotifierProvider.value(value: _provider, child: child),
-                  content: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            key: ValueKey(_selectedKeys.isEmpty),
-                            child: _selectedKeys.isEmpty
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                                    child: ZwapText(
-                                      text: widget.hintText ?? '',
-                                      zwapTextType: ZwapTextType.mediumBodyRegular,
-                                      textColor: ZwapColors.neutral500,
-                                    ),
-                                  )
-                                : _ChipsWidget(),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      AnimatedRotation(
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.decelerate,
-                        turns: _focussed ? -0.25 : 0.25,
-                        child: Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          size: 16,
-                          color: ZwapColors.text65,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                    ],
-                  ),
-                  overlay: _OverlayContentWidget(),
-                ),
               ],
+              ZwapDynamicInput(
+                onOpen: () => setState(() => _focussed = true),
+                onClose: () => setState(() => _focussed = false),
+                focussed: _focussed,
+                builder: (context, child) => ChangeNotifierProvider.value(value: _provider, child: child),
+                content: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          key: ValueKey(_selectedKeys.isEmpty),
+                          child: _selectedKeys.isEmpty
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  child: ZwapText(
+                                    text: widget.hintText ?? '',
+                                    zwapTextType: ZwapTextType.mediumBodyRegular,
+                                    textColor: ZwapColors.neutral500,
+                                  ),
+                                )
+                              : _ChipsWidget(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    AnimatedRotation(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.decelerate,
+                      turns: _focussed ? -0.25 : 0.25,
+                      child: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 16,
+                        color: ZwapColors.text65,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                ),
+                overlay: _OverlayContentWidget(),
+              ),
             ],
           );
         },

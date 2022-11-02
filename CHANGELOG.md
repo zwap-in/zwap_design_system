@@ -712,3 +712,9 @@ a
 
 ## 0.1.607
 * Added ZwapDynamicInput and ZwapCheckBoxPicker widgets
+
+## 0.1.608
+* Fixed shadow in ZwapDynamicInput overlay
+
+## 0.1.609
+* Added ZwapChipsInput and ZwapFloatingPicker widgets
