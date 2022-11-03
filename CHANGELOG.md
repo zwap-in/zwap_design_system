@@ -718,3 +718,6 @@ a
 
 ## 0.1.609
 * Added ZwapChipsInput and ZwapFloatingPicker widgets
+
+## 0.1.610
+* Fixed a problem in ZwapChipsInput

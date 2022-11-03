@@ -41,7 +41,7 @@ class ZwapChipsInputProvider<T> extends ChangeNotifier {
   bool isItemSelected(T item) => _selectedHashcodes.contains(item.hashCode);
 
   void updateSelected(List<int> selected) {
-    _selectedHashcodes = selected;
+    _selectedHashcodes = List.from(selected);
     notifyListeners();
   }
 }

@@ -107,10 +107,13 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
 
   @override
   void didUpdateWidget(covariant ZwapChipsInput<T> oldWidget) {
-    if (!listEquals(widget.selectedItems, _provider.selectedItems))
-      WidgetsBinding.instance?.addPostFrameCallback((_) => _provider.updateSelected(
-            widget.selectedItems.map((i) => i.hashCode).toList(),
-          ));
+    print(widget.selectedItems.length != _provider.selectedItems.length);
+    print(!listEquals(widget.selectedItems, _provider.selectedItems));
+
+    if (widget.selectedItems.length != _provider.selectedItems.length || !listEquals(widget.selectedItems, _provider.selectedItems))
+      WidgetsBinding.instance?.addPostFrameCallback(
+        (_) => _provider.updateSelected(widget.selectedItems.map((i) => i.hashCode).toList()),
+      );
 
     super.didUpdateWidget(oldWidget);
   }
@@ -131,54 +134,62 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
         ],
         ZwapDynamicInput(
           key: _inputKey,
-          content: ChangeNotifierProvider.value(
+          content: ChangeNotifierProvider<ZwapChipsInputProvider<T>>.value(
             value: _provider,
-            child: LayoutBuilder(
-              builder: (context, bounds) => Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    width: bounds.maxWidth - 54,
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 75),
-                      child: (_focussed || _provider.selectedItems.isEmpty)
-                          ? Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child: TextField(
-                                controller: _searchController,
-                                focusNode: _searchNode,
-                                decoration: InputDecoration(border: InputBorder.none, hintText: widget.placeholder),
-                                cursorColor: ZwapColors.primary900Dark,
-                                onTap: _inputKey.toggleOverlay,
-                                onChanged: (value) => context.read<ZwapChipsInputProvider<T>>().search = value,
-                                style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
-                              ),
-                            )
-                          : _ChipsWidget<T>(placeholder: widget.placeholder),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Container(
-                    width: 24,
-                    child: Center(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 125),
-                        child: _searchNode.hasFocus
-                            ? Container(width: 17, key: UniqueKey())
-                            : Container(
-                                width: 20,
-                                height: 20,
-                                child: Transform.rotate(
-                                  angle: pi / 2,
-                                  child: Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: ZwapColors.text65),
-                                ),
-                              ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                ],
-              ),
+            child: Builder(
+              builder: (context) {
+                final bool _isSelectedItemsEmpty = context.select<ZwapChipsInputProvider<T>, bool>((pro) => pro.selectedItems.isEmpty);
+                
+                return LayoutBuilder(
+                  builder: (_, bounds) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Container(
+                          width: bounds.maxWidth - 54,
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 75),
+                            child: (_focussed || _isSelectedItemsEmpty)
+                                ? Padding(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: TextField(
+                                      controller: _searchController,
+                                      focusNode: _searchNode,
+                                      decoration: InputDecoration(border: InputBorder.none, hintText: widget.placeholder),
+                                      cursorColor: ZwapColors.primary900Dark,
+                                      onTap: _inputKey.toggleOverlay,
+                                      onChanged: (value) => context.read<ZwapChipsInputProvider<T>>().search = value,
+                                      style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+                                    ),
+                                  )
+                                : _ChipsWidget<T>(placeholder: widget.placeholder),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Container(
+                          width: 24,
+                          child: Center(
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 125),
+                              child: _searchNode.hasFocus
+                                  ? Container(width: 17, key: UniqueKey())
+                                  : Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: Transform.rotate(
+                                        angle: pi / 2,
+                                        child: Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: ZwapColors.text65),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                      ],
+                    );
+                  },
+                );
+              },
             ),
           ),
           overlay: _ZwapPickInputOverlay<T>(
