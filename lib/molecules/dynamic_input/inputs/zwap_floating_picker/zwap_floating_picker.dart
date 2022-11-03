@@ -225,8 +225,8 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: ZwapText(
           text: _getCopy(widget.item),
-          zwapTextType: ZwapTextType.mediumBodyRegular,
-          textColor: ZwapColors.neutral500,
+          zwapTextType: ZwapTextType.bigBodyRegular,
+          textColor: ZwapColors.primary900Dark,
         ),
       ),
     );

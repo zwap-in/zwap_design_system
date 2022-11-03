@@ -721,3 +721,6 @@ a
 
 ## 0.1.610
 * Fixed a problem in ZwapChipsInput
+
+## 0.1.611
+* Fixed a problem in style in ZwapFloatingInput
