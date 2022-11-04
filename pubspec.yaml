@@ -1,6 +1,6 @@
 name: zwap_design_system
 description: This is a package to build a standard design system kit for any zwap projects
-version: 0.1.612
+version: 0.1.613
 homepage: https://github.com/zwap-in/zwap_design_system
 
 environment:

@@ -727,3 +727,6 @@ a
 
 ## 0.1.612
 * Added ZwapSimplePicker widget
+
+## 0.1.613
+* Fix in ZwapSimplePicker widget

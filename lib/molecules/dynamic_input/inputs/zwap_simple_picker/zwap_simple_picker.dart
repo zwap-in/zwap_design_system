@@ -191,20 +191,23 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
   @override
   Widget build(BuildContext context) {
     final SimplePickerGetCopy<T> _getCopy = context.read<_ZwapSimplePickerProvider<T>>().getCopy;
-    final bool _isSelected = context.select<_ZwapSimplePickerProvider<T>, bool>((pro) => pro.getIsSelected(widget.item));
+    final SimplePickerGetIsSelected<T> _getIsSelected =
+        context.select<_ZwapSimplePickerProvider<T>, SimplePickerGetIsSelected<T>>((pro) => pro.getIsSelected);
+
+    final bool _selected = _getIsSelected(widget.item);
 
     return InkWell(
       focusColor: ZwapColors.transparent,
       hoverColor: ZwapColors.transparent,
       splashColor: ZwapColors.transparent,
       highlightColor: ZwapColors.transparent,
-      onTap: _isSelected ? null : () => context.read<_ZwapSimplePickerProvider<T>>().onItemTap(widget.item),
+      onTap: _selected ? null : () => context.read<_ZwapSimplePickerProvider<T>>().onItemTap(widget.item),
       onHover: (isHovered) => setState(() => _hovered = isHovered),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         color: _hovered
             ? ZwapColors.neutral50
-            : _isSelected
+            : _selected
                 ? ZwapColors.primary50
                 : ZwapColors.shades0,
         width: double.infinity,
@@ -215,7 +218,7 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
           child: ZwapText(
             text: _getCopy(widget.item),
             zwapTextType: ZwapTextType.bigBodyRegular,
-            textColor: _isSelected ? ZwapColors.text65 : ZwapColors.primary900Dark,
+            textColor: _selected ? ZwapColors.text65 : ZwapColors.primary900Dark,
           ),
         ),
       ),
