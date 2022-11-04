@@ -17,7 +17,7 @@ class ZwapDynamicInput extends StatefulWidget {
 
   final Color? backgroundColor;
 
-  final Function(BuildContext, Widget)? builder;
+  final Widget Function(BuildContext, Widget)? builder;
 
   const ZwapDynamicInput({
     required this.content,

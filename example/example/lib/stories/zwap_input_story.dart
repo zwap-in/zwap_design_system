@@ -6,6 +6,7 @@ import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
 import 'package:zwap_design_system/atoms/text_controller/tags_text_conroller.dart';
 import 'package:zwap_design_system/atoms/input/zwap_hint_input/zwap_hint_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_input/zwap_chips_input.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_simple_picker/zwap_simple_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_check_box_picker/zwap_check_box_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_floating_picker/zwap_floating_picker.dart';
@@ -33,6 +34,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
   List<String> _selectedItems = [];
 
   final List<String> _secondSelected = [];
+  final List<String> _thirdSelected = [];
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,38 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   height: 40,
                   color: ZwapColors.error700,
                 ),
+              ),
+              SizedBox(height: 20),
+              ZwapSimplePicker<String>(
+                items: [
+                  'afdasdf',
+                  'gerger',
+                  'kmbaresf',
+                  'sdeg4ergf',
+                  'sdfasd',
+                  'afkdasdf',
+                  'gerkger',
+                  'kmbkaresf',
+                  'sdelkjskg4ergf',
+                  'sdflkjskasd',
+                  'afdlkjsasdf',
+                  'gerlkjsger',
+                  'kmblkjsaresf',
+                  'sdelkjsg4ergf',
+                  'sdflkjsasd',
+                  'afklkjsdasdf',
+                  'gerlkjskger',
+                  'kmblkjskaresf',
+                  'sdelkjskg4ergf',
+                  'sdflkjskasd',
+                ],
+                getCopyOfItem: (i) => i,
+                getIsSelected: (i) => _thirdSelected.contains(i),
+                isItemIncludedIsSearch: (i, s) => i.toLowerCase().contains(s.toLowerCase().trim()),
+                label: "dòlfasdf",
+                placeholder: "Ex incididunt occaecat ",
+                translateKey: (_) => 'Nessun risultato',
+                onItemPicked: (i) => _thirdSelected.contains(i) ? setState(() => _thirdSelected.remove(i)) : setState(() => _thirdSelected.add(i)),
               ),
               SizedBox(height: 20),
               ZwapChipsInput<String>(
@@ -149,7 +183,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 options: MyEnum.values,
                 label: 'Label',
                 placeholder: 'Laboris ipsum tempor consequat sunt',
-                getItemString: (i)=> '$i$i$i',
+                getItemString: (i) => '$i$i$i',
               ),
               SizedBox(height: 20),
               ZwapCheckBoxPicker(

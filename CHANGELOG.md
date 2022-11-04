@@ -724,3 +724,6 @@ a
 
 ## 0.1.611
 * Fixed a problem in style in ZwapFloatingInput
+
+## 0.1.612
+* Added ZwapSimplePicker widget
