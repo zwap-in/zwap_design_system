@@ -80,8 +80,23 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
       items: widget.items,
       searchItem: widget.isItemIncludedIsSearch,
       getIsSelected: widget.getIsSelected,
-      onItemTap: widget.onItemPicked,
+      onItemTap: (item) {
+        if (widget.onItemPicked != null) widget.onItemPicked!(item);
+        _inputKey.closeIfOpen();
+      },
     );
+
+    _searchController.addListener(_controllerListener);
+  }
+
+  void _controllerListener() {
+    if (!_focussed) _inputKey.openOfClose();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _searchController.removeListener(_controllerListener);
   }
 
   @override

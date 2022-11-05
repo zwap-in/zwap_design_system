@@ -4,6 +4,8 @@ import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
 extension ZwapDynamicInputKeyExt on GlobalKey<ZwapDynamicInputState> {
   void toggleOverlay() => currentState?.toggleOverlay();
+  void openOfClose() => currentState?.openIfClose();
+  void closeIfOpen() => currentState?.closeIfOpen();
 }
 
 class ZwapDynamicInput extends StatefulWidget {
@@ -61,6 +63,14 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
       _closeOverlay();
     else
       _openOverlay();
+  }
+
+  void closeIfOpen() {
+    if (_isOverlayOpen) _closeOverlay();
+  }
+
+  void openIfClose() {
+    if (!_isOverlayOpen) _openOverlay();
   }
 
   void _openOverlay() {
