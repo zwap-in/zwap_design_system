@@ -105,6 +105,7 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
       onItemTap: (item) {
         if (widget.onItemPicked != null) widget.onItemPicked!(item);
         _inputKey.closeIfOpen();
+        _searchController.clear();
       },
     );
 
