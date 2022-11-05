@@ -11,12 +11,16 @@ part 'zwap_simple_picker_provider.dart';
 typedef SimplePickerGetCopy<T> = String Function(T item);
 typedef SimplePickerGetIsSelected<T> = bool Function(T item);
 typedef SimplePickerSearchItem<T> = bool Function(T item, String searchValue);
+typedef SimplePickerItemBuilder<T> = Widget Function(BuildContext context, T item);
 
 class ZwapSimplePicker<T> extends StatefulWidget {
   final List<T> items;
 
   /// Used to get the text to print for a single item
-  final SimplePickerGetCopy<T> getCopyOfItem;
+  final SimplePickerGetCopy<T>? getCopyOfItem;
+
+  /// Used to build any item inside the overlay
+  final SimplePickerItemBuilder<T>? itemBuilder;
 
   /// Selected items will be **disabled** (ie:
   /// lighter color and not clickable)
@@ -44,7 +48,7 @@ class ZwapSimplePicker<T> extends StatefulWidget {
   final String Function(String)? translateKey;
 
   const ZwapSimplePicker({
-    required this.getCopyOfItem,
+    required SimplePickerGetCopy<T> getCopyOfItem,
     required this.isItemIncludedIsSearch,
     required this.getIsSelected,
     required this.items,
@@ -54,7 +58,24 @@ class ZwapSimplePicker<T> extends StatefulWidget {
     this.noResultsWidget,
     this.translateKey,
     Key? key,
-  }) : super(key: key);
+  })  : this.getCopyOfItem = getCopyOfItem,
+        this.itemBuilder = null,
+        super(key: key);
+
+  const ZwapSimplePicker.builder({
+    required SimplePickerItemBuilder<T> itemBuilder,
+    required this.isItemIncludedIsSearch,
+    required this.getIsSelected,
+    required this.items,
+    this.onItemPicked,
+    this.label,
+    this.placeholder,
+    this.noResultsWidget,
+    this.translateKey,
+    Key? key,
+  })  : this.getCopyOfItem = null,
+        this.itemBuilder = itemBuilder,
+        super(key: key);
 
   @override
   State<ZwapSimplePicker<T>> createState() => _ZwapSimplePickerState<T>();
@@ -78,6 +99,7 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
     _provider = _ZwapSimplePickerProvider<T>(
       getCopy: widget.getCopyOfItem,
       items: widget.items,
+      itemBuilder: widget.itemBuilder,
       searchItem: widget.isItemIncludedIsSearch,
       getIsSelected: widget.getIsSelected,
       onItemTap: (item) {
@@ -205,7 +227,9 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final SimplePickerGetCopy<T> _getCopy = context.read<_ZwapSimplePickerProvider<T>>().getCopy;
+    final SimplePickerGetCopy<T>? _getCopy = context.read<_ZwapSimplePickerProvider<T>>().getCopy;
+    final SimplePickerItemBuilder<T>? _itemBuilder = context.read<_ZwapSimplePickerProvider<T>>().itemBuilder;
+
     final SimplePickerGetIsSelected<T> _getIsSelected =
         context.select<_ZwapSimplePickerProvider<T>, SimplePickerGetIsSelected<T>>((pro) => pro.getIsSelected);
 
@@ -228,14 +252,14 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
         width: double.infinity,
         constraints: BoxConstraints(minHeight: 44),
         alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: ZwapText(
-            text: _getCopy(widget.item),
-            zwapTextType: ZwapTextType.bigBodyRegular,
-            textColor: _selected ? ZwapColors.text65 : ZwapColors.primary900Dark,
-          ),
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: _itemBuilder != null
+            ? _itemBuilder(context, widget.item)
+            : ZwapText(
+                text: _getCopy!(widget.item),
+                zwapTextType: ZwapTextType.bigBodyRegular,
+                textColor: _selected ? ZwapColors.text65 : ZwapColors.primary900Dark,
+              ),
       ),
     );
   }

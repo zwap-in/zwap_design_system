@@ -3,7 +3,8 @@ part of zwap.dynamic_inputs.simple_picker;
 class _ZwapSimplePickerProvider<T> extends ChangeNotifier {
   final List<T> items;
 
-  final SimplePickerGetCopy<T> getCopy;
+  final SimplePickerGetCopy<T>? getCopy;
+  final SimplePickerItemBuilder<T>? itemBuilder;
   final SimplePickerGetIsSelected<T> getIsSelected;
   final SimplePickerSearchItem<T> searchItem;
 
@@ -23,10 +24,12 @@ class _ZwapSimplePickerProvider<T> extends ChangeNotifier {
   _ZwapSimplePickerProvider({
     required this.items,
     required this.getCopy,
+    required this.itemBuilder,
     required this.searchItem,
     required this.getIsSelected,
     void Function(T item)? onItemTap,
   })  : this._onItemTap = onItemTap,
+        assert(getCopy != null || itemBuilder != null),
         super();
 
   void onItemTap(T item) {

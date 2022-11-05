@@ -733,3 +733,6 @@ a
 
 ## 0.1.614
 * Improved UX on ZwapSimplePicker widget
+
+## 0.1.615
+* Added .builder(...) constructor for ZwapSimplePicker widget
