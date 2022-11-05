@@ -113,7 +113,7 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
   }
 
   void _controllerListener() {
-    if (!_focussed) _inputKey.openOfClose();
+    if (!_focussed && _searchController.text.length > 1) _inputKey.openOfClose();
   }
 
   @override

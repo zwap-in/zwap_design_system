@@ -739,3 +739,6 @@ a
 
 ## 0.1.616
 * Improved UX on ZwapSimplePicker widget
+
+## 0.1.617
+* Fix in ZwapSimplePicker widget
