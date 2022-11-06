@@ -33,12 +33,15 @@ class ZwapExpandableText extends StatefulWidget {
   /// * see_more
   final String Function(String) translateKey;
 
+  final TextAlign textAlign;
+
   ZwapExpandableText({
     required this.text,
     required this.translateKey,
     required this.maxClosedLines,
     required this.textColor,
     required this.textType,
+    this.textAlign = TextAlign.center,
     Key? key,
   })  : this.customStyle = null,
         super(key: key);
@@ -48,6 +51,7 @@ class ZwapExpandableText extends StatefulWidget {
     required this.translateKey,
     required this.maxClosedLines,
     required this.customStyle,
+    this.textAlign = TextAlign.center,
     Key? key,
   })  : this.textColor = null,
         this.textType = null,
@@ -86,14 +90,14 @@ class _ExpandableTextState extends State<ZwapExpandableText> {
                           zwapTextType: widget.textType!,
                           textColor: widget.textColor!,
                           textOverflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.justify,
+                          textAlign: widget.textAlign,
                           maxLines: 100,
                         )
                       : ZwapText.customStyle(
                           text: widget.text,
                           customTextStyle: widget.customStyle!,
                           textOverflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.justify,
+                          textAlign: widget.textAlign,
                           maxLines: 100,
                         )
                   : widget.customStyle == null
@@ -102,14 +106,14 @@ class _ExpandableTextState extends State<ZwapExpandableText> {
                           zwapTextType: widget.textType!,
                           textColor: widget.textColor!,
                           textOverflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.justify,
+                          textAlign: widget.textAlign,
                           maxLines: widget.maxClosedLines,
                         )
                       : ZwapText.customStyle(
                           text: widget.text,
                           customTextStyle: widget.customStyle!,
                           textOverflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.justify,
+                          textAlign: widget.textAlign,
                           maxLines: widget.maxClosedLines,
                         ),
               if (!_showAllText && _willTextExceed)

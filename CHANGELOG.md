@@ -742,3 +742,6 @@ a
 
 ## 0.1.617
 * Fix in ZwapSimplePicker widget
+
+## 0.1.618
+* Added textAlign property on ZwapExpandableText
