@@ -7,7 +7,7 @@ class ZwapChipsInputProvider<T> extends ChangeNotifier {
   final ChipsInputItemSearch<T> searchCallback;
 
   /// [isSelected] is true if item has been selected
-  final Function(T, bool isSelected)? onItemPicked;
+  final void Function(T, bool isSelected)? onItemPicked;
 
   List<int> _selectedHashcodes;
   List<T> get selectedItems => values.where((i) => _selectedHashcodes.contains(i.hashCode)).toList();

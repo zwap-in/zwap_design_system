@@ -98,6 +98,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               SizedBox(height: 20),
               ZwapChipsInput<String>(
+                itemHeigth: 22,
                 label: "Ciao",
                 placeholder: "Laboris exercitation tempor ",
                 items: [
@@ -150,7 +151,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                         Icons.account_balance_sharp,
                       ]..shuffle())
                           .first),
-                      const SizedBox(width: 23),
+                      const SizedBox(width: 12),
                       ZwapText(
                         text: i,
                         zwapTextType: status.isHovered ? ZwapTextType.mediumBodyMedium : ZwapTextType.mediumBodyRegular,

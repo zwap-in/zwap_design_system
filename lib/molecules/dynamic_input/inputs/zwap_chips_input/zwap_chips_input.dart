@@ -3,11 +3,9 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/atoms/input/zwapInput.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_input/zwap_chips_input_provider.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 
 class PickItemStatus {
   final bool isSelected;
@@ -35,6 +33,9 @@ class ZwapChipsInput<T> extends StatefulWidget {
   ///
   /// ! **Important**: isHovered will be always false if isHeader is true
   final ChipsInputItemBuilder<T> itemBuilder;
+
+  /// If not provided the text input may not be aligned
+  final double? itemHeigth;
 
   /// Called to detect if an item should be hidden after
   /// user typed
@@ -70,6 +71,7 @@ class ZwapChipsInput<T> extends StatefulWidget {
     this.placeholder,
     this.noResultsWidget,
     this.translateKey,
+    this.itemHeigth,
     Key? key,
   })  : assert(
           noResultsWidget != null || translateKey != null,
@@ -99,7 +101,10 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
     _provider = ZwapChipsInputProvider<T>(
       builderCallback: widget.itemBuilder,
       searchCallback: widget.searchItem,
-      onItemPicked: widget.onItemPicked,
+      onItemPicked: (item, selected) {
+        if (widget.onItemPicked != null) widget.onItemPicked!(item, selected);
+        _inputKey.updateOverlayPosition();
+      },
       values: widget.items,
       initialSelectedItems: widget.selectedItems.map((i) => i.hashCode).toList(),
     );
@@ -107,9 +112,6 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
 
   @override
   void didUpdateWidget(covariant ZwapChipsInput<T> oldWidget) {
-    print(widget.selectedItems.length != _provider.selectedItems.length);
-    print(!listEquals(widget.selectedItems, _provider.selectedItems));
-
     if (widget.selectedItems.length != _provider.selectedItems.length || !listEquals(widget.selectedItems, _provider.selectedItems))
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) => _provider.updateSelected(widget.selectedItems.map((i) => i.hashCode).toList()),
@@ -132,62 +134,79 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
           ),
           const SizedBox(height: 8),
         ],
-        ZwapDynamicInput(
+        ZwapDynamicInput.customSizeContent(
           key: _inputKey,
           content: ChangeNotifierProvider<ZwapChipsInputProvider<T>>.value(
             value: _provider,
             child: Builder(
               builder: (context) {
-                final bool _isSelectedItemsEmpty = context.select<ZwapChipsInputProvider<T>, bool>((pro) => pro.selectedItems.isEmpty);
-                
-                return LayoutBuilder(
-                  builder: (_, bounds) {
-                    return Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                          width: bounds.maxWidth - 54,
-                          child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 75),
-                            child: (_focussed || _isSelectedItemsEmpty)
-                                ? Padding(
-                                    padding: const EdgeInsets.only(left: 12),
+                final List<T> _selectedKeys = context.select<ZwapChipsInputProvider<T>, List<T>>((pro) => pro.selectedItems);
+
+                return AnimatedSize(
+                  duration: _selectedKeys.isEmpty ? const Duration(milliseconds: 200) : Duration.zero,
+                  child: LayoutBuilder(
+                    builder: (_, bounds) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Container(
+                            width: bounds.maxWidth - 54,
+                            padding: EdgeInsets.only(
+                              left: 12,
+                              top: _selectedKeys.isEmpty ? 0 : 12,
+                              bottom: _selectedKeys.isEmpty ? 0 : 12,
+                            ),
+                            child: Wrap(
+                              runSpacing: 8,
+                              spacing: 8,
+                              children: [
+                                ..._selectedKeys.map((k) => _SingleChipWidget<T>(item: k)).toList(),
+                                _InputWrapper<T>(
+                                  controller: _searchController,
+                                  placeHolder: widget.placeholder ?? '',
+                                  child: SizedBox(
+                                    height: _selectedKeys.isEmpty ? null : widget.itemHeigth,
                                     child: TextField(
                                       controller: _searchController,
                                       focusNode: _searchNode,
-                                      decoration: InputDecoration(border: InputBorder.none, hintText: widget.placeholder),
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: _selectedKeys.isEmpty ? widget.placeholder : null,
+                                      ),
                                       cursorColor: ZwapColors.primary900Dark,
                                       onTap: _inputKey.toggleOverlay,
                                       onChanged: (value) => context.read<ZwapChipsInputProvider<T>>().search = value,
                                       style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
                                     ),
-                                  )
-                                : _ChipsWidget<T>(placeholder: widget.placeholder),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Container(
-                          width: 24,
-                          child: Center(
-                            child: AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 125),
-                              child: _searchNode.hasFocus
-                                  ? Container(width: 17, key: UniqueKey())
-                                  : Container(
-                                      width: 20,
-                                      height: 20,
-                                      child: Transform.rotate(
-                                        angle: pi / 2,
-                                        child: Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: ZwapColors.text65),
-                                      ),
-                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 6),
-                      ],
-                    );
-                  },
+                          const SizedBox(width: 12),
+                          Container(
+                            width: 24,
+                            child: Center(
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 125),
+                                child: _searchNode.hasFocus
+                                    ? Container(width: 17, key: UniqueKey())
+                                    : Container(
+                                        width: 20,
+                                        height: 20,
+                                        child: Transform.rotate(
+                                          angle: pi / 2,
+                                          child: Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: ZwapColors.text65),
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                        ],
+                      );
+                    },
+                  ),
                 );
               },
             ),
@@ -298,34 +317,6 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
   }
 }
 
-class _ChipsWidget<T> extends StatelessWidget {
-  final String? placeholder;
-
-  const _ChipsWidget({this.placeholder, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final List<T> _selectedKeys = context.select<ZwapChipsInputProvider<T>, List<T>>((pro) => pro.selectedItems);
-
-    return Container(
-      width: double.infinity,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: _selectedKeys
-              .mapIndexed((i, k) => Padding(
-                    padding: i == 0 ? EdgeInsets.zero : const EdgeInsets.only(left: 8),
-                    child: _SingleChipWidget<T>(item: k),
-                  ))
-              .toList(),
-        ),
-      ),
-    );
-  }
-}
-
 class _SingleChipWidget<T> extends StatelessWidget {
   final T item;
 
@@ -355,6 +346,59 @@ class _SingleChipWidget<T> extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class _InputWrapper<T> extends StatefulWidget {
+  final Widget child;
+  final String placeHolder;
+  final TextEditingController controller;
+
+  const _InputWrapper({
+    required this.child,
+    required this.controller,
+    required this.placeHolder,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_InputWrapper<T>> createState() => _InputWrapperState<T>();
+}
+
+class _InputWrapperState<T> extends State<_InputWrapper<T>> {
+  final TextStyle _style = getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark);
+
+  double get _textWidth {
+    final bool _isInputEmpty = context.read<ZwapChipsInputProvider<T>>().selectedItems.isEmpty;
+
+    final double _minWidth = _isInputEmpty ? textWidth(widget.placeHolder, _style) : 0;
+    final double _width = textWidth(widget.controller.text, _style);
+    return max(_minWidth, _width) + 40;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_controllerListener);
+  }
+
+  void _controllerListener() {
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_controllerListener);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 3),
+      width: _textWidth,
+      child: widget.child,
     );
   }
 }
