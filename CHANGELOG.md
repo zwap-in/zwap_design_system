@@ -754,3 +754,6 @@ a
 
 ## 0.1.621
 * Fixed bug in ZwapCalendarInput widget
+
+## 0.1.622
+* Fixed bug in ZwapCalendarInput widget

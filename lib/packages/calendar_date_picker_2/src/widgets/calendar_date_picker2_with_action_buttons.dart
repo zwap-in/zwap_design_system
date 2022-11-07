@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:zwap_design_system/packages/calendar_date_picker_2/calendar_date_picker2.dart';
 
-import '../../calendar_date_picker2.dart';
 
 
 class CalendarDatePicker2WithActionButtons extends StatefulWidget {

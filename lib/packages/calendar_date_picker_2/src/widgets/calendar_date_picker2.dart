@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 
 import 'package:zwap_utils/zwap_utils.dart';
 
-import '../models/calendar_date_picker2_config.dart';
+import 'package:zwap_design_system/packages/calendar_date_picker_2/calendar_date_picker2.dart';
 
 const Duration _monthScrollDuration = Duration(milliseconds: 200);
 
