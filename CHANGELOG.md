@@ -754,3 +754,6 @@ a
 
 ## 0.1.621 - 622 - 623
 * Fixed bug in ZwapCalendarInput widget
+
+## 0.1.624
+* Edited ZwapDynamicInputs and ZwapCalendarInput fade in animation

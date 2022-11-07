@@ -171,13 +171,18 @@ class _ZwapDynamicInputOverlayState extends State<_ZwapDynamicInputOverlay> with
     return Material(
       color: ZwapColors.transparent,
       child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 300),
-        opacity: _visible ? 1 : 0.4,
-        child: Container(
+        duration: const Duration(milliseconds: 175),
+        curve: Curves.fastOutSlowIn,
+        opacity: _visible ? 1 : 0.05,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.decelerate,
           decoration: BoxDecoration(
             boxShadow: [
-              BoxShadow(color: Color(0x00808080).withOpacity(0.05), blurRadius: 60, offset: Offset(0, 20)),
-              BoxShadow(color: Color(0x00808080).withOpacity(0.15), blurRadius: 60, offset: Offset(0, 30), spreadRadius: -4),
+              if (_visible) ...[
+                BoxShadow(color: Color(0x00808080).withOpacity(0.05), blurRadius: 60, offset: Offset(0, 20)),
+                BoxShadow(color: Color(0x00808080).withOpacity(0.15), blurRadius: 60, offset: Offset(0, 30), spreadRadius: -4),
+              ],
             ],
           ),
           child: ClipRRect(
