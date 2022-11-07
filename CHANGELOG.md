@@ -748,3 +748,6 @@ a
 
 ## 0.1.619
 * Added ZwapCalendarInput widget 
+
+## 0.1.620
+* Fixed onDateSelected callback in ZwapCalendarInput widget 

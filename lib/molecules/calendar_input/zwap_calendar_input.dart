@@ -85,7 +85,10 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
   void initState() {
     super.initState();
     _date = widget.selectedDate.pureDate;
-    _calendarProvider = _ZwapCalendarInputProvider(initialDate: _date);
+    _calendarProvider = _ZwapCalendarInputProvider(
+      onDatePicked: widget.onDateSelected,
+      initialDate: _date,
+    );
   }
 
   @override
