@@ -169,8 +169,11 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   else
                     setState(() => _secondSelected.add(i));
                 },
-                translateKey: (key) =>
-                    {'no_results_found': 'Nessun risultato, prova con qualcosa di diverso', 'max_elements': 'Tool selezionati'}[key]!,
+                translateKey: (key) => {
+                  'no_results_found': 'Nessun risultato, prova con qualcosa di diverso',
+                  'max_elements': 'Tool selezionati',
+                  'continue_typing_for_more_results': 'Continua a scrivere per visualizzare altri tool',
+                }[key]!,
                 noResultsWidget: Icon(
                   Icons.north_east,
                   color: ZwapColors.error700,

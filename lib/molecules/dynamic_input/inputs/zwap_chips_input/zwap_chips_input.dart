@@ -57,6 +57,7 @@ class ZwapChipsInput<T> extends StatefulWidget {
   /// Used to translate keys:
   /// * no_results_found
   /// * max_elements
+  /// * continue_typing_for_more_results
   final String Function(String)? translateKey;
 
   /// Items must be the same objects from items list
@@ -257,7 +258,7 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                 },
                 onClose: () {
                   setState(() => _focussed = false);
-                  _searchController.clear();
+                  _provider.search = '';
                   _searchNode.unfocus();
                 },
                 builder: (context, child) => ChangeNotifierProvider<ZwapChipsInputProvider<T>>.value(
@@ -298,6 +299,8 @@ class _ZwapPickInputOverlay<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<T> _items = context.select<ZwapChipsInputProvider<T>, List<T>>((pro) => pro.activeItems);
+    final bool _isShowingLessItem =
+        context.select<ZwapChipsInputProvider<T>, bool>((pro) => pro.showLessItems && pro.search.length <= pro.showLessItemsUntil);
 
     if (_items.isEmpty) {
       if (noResultsWidget != null) return noResultsWidget!;
@@ -317,7 +320,21 @@ class _ZwapPickInputOverlay<T> extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: _items.map((i) => _SingleItemWidget<T>(item: i)).toList(),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ..._items.map((i) => _SingleItemWidget<T>(item: i)).toList(),
+            if (_isShowingLessItem) ...[
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ZwapText(
+                  text: translateKey!('continue_typing_for_more_results'),
+                  zwapTextType: ZwapTextType.mediumBodyRegular,
+                  textColor: ZwapColors.primary900Dark,
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );

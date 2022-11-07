@@ -766,3 +766,6 @@ a
 
 ## 0.1.627
 * Improvements to ZwapChipsInput widget
+
+## 0.1.628
+* Improvements to ZwapChipsInput widget

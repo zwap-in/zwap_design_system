@@ -20,6 +20,8 @@ class ZwapChipsInputProvider<T> extends ChangeNotifier {
 
   String _search = '';
 
+  String get search => _search;
+  
   set search(String value) => _search != value ? {_search = value, notifyListeners()} : null;
 
   List<T> get activeItems {
