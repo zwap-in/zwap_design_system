@@ -259,6 +259,7 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                 onClose: () {
                   setState(() => _focussed = false);
                   _provider.search = '';
+                  _searchController.clear();
                   _searchNode.unfocus();
                 },
                 builder: (context, child) => ChangeNotifierProvider<ZwapChipsInputProvider<T>>.value(
