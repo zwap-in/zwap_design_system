@@ -759,4 +759,7 @@ a
 * Edited ZwapDynamicInputs and ZwapCalendarInput fade in animation
 
 ## 0.1.625
-* Changed some logics in ZwapChipsInput
+* Changed some logics in ZwapChipsInput widget
+
+## 0.1.626
+* Improvements to ZwapChipsInput widget

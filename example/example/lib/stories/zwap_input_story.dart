@@ -101,6 +101,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 itemHeigth: 22,
                 label: "Ciao",
                 placeholder: "Laboris exercitation tempor ",
+                maxSelectedItems: 10,
                 items: [
                   'afdasdf',
                   'gerger',
@@ -168,7 +169,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   else
                     setState(() => _secondSelected.add(i));
                 },
-                translateKey: (key) => 'Nessun risultato, prova con qualcosa di diversoalkòd jadslkfj aòlskdjf aòksdj',
+                translateKey: (key) =>
+                    {'no_results_found': 'Nessun risultato, prova con qualcosa di diverso', 'max_elements': 'Tool selezionati'}[key]!,
                 noResultsWidget: Icon(
                   Icons.north_east,
                   color: ZwapColors.error700,

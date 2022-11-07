@@ -77,7 +77,7 @@ class _ExpandableTextState extends State<ZwapExpandableText> {
             widget.maxClosedLines,
             size.maxWidth,
             widget.customStyle ?? getTextStyle(widget.textType!),
-            textAlign: TextAlign.justify,
+            textAlign: widget.textAlign,
           );
 
           return Column(

@@ -479,7 +479,6 @@ class _ZwapInputState extends State<ZwapInput> {
         if (_showMinLenghtIndicator)
           ZwapRichText.safeText(
             textSpans: [
-              //TODO: traduci
               ZwapTextSpan.fromZwapTypography(text: "${widget.translateKey!('zwap_input_characters')}: ", textType: ZwapTextType.smallBodyRegular),
               ZwapTextSpan.fromZwapTypography(text: "$_realTextLenght", textType: ZwapTextType.smallBodyBold),
               ZwapTextSpan.fromZwapTypography(text: "/${widget.minLenght}", textType: ZwapTextType.smallBodyRegular),

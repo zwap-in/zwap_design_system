@@ -56,10 +56,31 @@ class ZwapChipsInput<T> extends StatefulWidget {
   ///
   /// Used to translate keys:
   /// * no_results_found
+  /// * max_elements
   final String Function(String)? translateKey;
 
   /// Items must be the same objects from items list
   final List<T> selectedItems;
+
+  /// If true the showed items will not be all available
+  /// items until the searched text length is less than
+  /// [showLessItemUntilLength]
+  final bool showLessItem;
+
+  /// Number of characters needed before start showing all items
+  final int showLessItemUntilLength;
+
+  /// Items showed while search text length is less than
+  /// [showLessItemUntilLength]
+  final List<T>? lessItems;
+
+  /// Must be positive (0 included)
+  ///
+  /// If 0 there will be no maximum, otherwise the provided int
+  /// will be the max selected items count and a text is showed under the picker
+  ///
+  /// Default to 0
+  final int maxSelectedItems;
 
   const ZwapChipsInput({
     required this.items,
@@ -72,10 +93,22 @@ class ZwapChipsInput<T> extends StatefulWidget {
     this.noResultsWidget,
     this.translateKey,
     this.itemHeigth,
+    this.showLessItem = false,
+    this.showLessItemUntilLength = 1,
+    this.lessItems,
+    this.maxSelectedItems = 0,
     Key? key,
   })  : assert(
           noResultsWidget != null || translateKey != null,
           "One of [noResultsWidget] and [translateKey] must be not null to provide an empty results message to final user",
+        ),
+        assert(
+          !showLessItem || lessItems != null,
+          "You must provide a list of items to show when search text length is less than [showLessItemUntilLength] if [showLessItem] is true",
+        ),
+        assert(
+          maxSelectedItems >= 0,
+          "[maxSelectedItems] must be a positive integer",
         ),
         super(key: key);
 
@@ -107,6 +140,10 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
       },
       values: widget.items,
       initialSelectedItems: widget.selectedItems.map((i) => i.hashCode).toList(),
+      lessItems: widget.lessItems,
+      showLessItems: widget.showLessItem,
+      showLessItemsUntil: widget.showLessItemUntilLength,
+      maxItems: widget.maxSelectedItems,
     );
   }
 
@@ -122,27 +159,27 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (widget.label != null) ...[
-          ZwapText(
-            text: widget.label!,
-            zwapTextType: ZwapTextType.bigBodySemibold,
-            textColor: ZwapColors.primary900Dark,
-          ),
-          const SizedBox(height: 8),
-        ],
-        ZwapDynamicInput.customSizeContent(
-          key: _inputKey,
-          content: ChangeNotifierProvider<ZwapChipsInputProvider<T>>.value(
-            value: _provider,
-            child: Builder(
-              builder: (context) {
-                final List<T> _selectedKeys = context.select<ZwapChipsInputProvider<T>, List<T>>((pro) => pro.selectedItems);
+    return ChangeNotifierProvider<ZwapChipsInputProvider<T>>.value(
+      value: _provider,
+      child: Builder(
+        builder: (context) {
+          final List<T> _selectedKeys = context.select<ZwapChipsInputProvider<T>, List<T>>((pro) => pro.selectedItems);
 
-                return AnimatedSize(
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.label != null) ...[
+                ZwapText(
+                  text: widget.label!,
+                  zwapTextType: ZwapTextType.bigBodySemibold,
+                  textColor: ZwapColors.primary900Dark,
+                ),
+                const SizedBox(height: 8),
+              ],
+              ZwapDynamicInput.customSizeContent(
+                key: _inputKey,
+                content: AnimatedSize(
                   duration: _selectedKeys.isEmpty ? const Duration(milliseconds: 200) : Duration.zero,
                   child: LayoutBuilder(
                     builder: (_, bounds) {
@@ -207,30 +244,42 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                       );
                     },
                   ),
-                );
-              },
-            ),
-          ),
-          overlay: _ZwapPickInputOverlay<T>(
-            translateKey: widget.translateKey,
-            noResultsWidget: widget.noResultsWidget,
-          ),
-          focussed: _focussed,
-          onOpen: () {
-            setState(() => _focussed = true);
-            _searchNode.requestFocus();
-          },
-          onClose: () {
-            setState(() => _focussed = false);
-            _searchController.clear();
-            _searchNode.unfocus();
-          },
-          builder: (context, child) => ChangeNotifierProvider<ZwapChipsInputProvider<T>>.value(
-            value: _provider,
-            child: child,
-          ),
-        ),
-      ],
+                ),
+                overlay: _ZwapPickInputOverlay<T>(
+                  translateKey: widget.translateKey,
+                  noResultsWidget: widget.noResultsWidget,
+                ),
+                focussed: _focussed,
+                onOpen: () {
+                  setState(() => _focussed = true);
+                  _searchNode.requestFocus();
+                },
+                onClose: () {
+                  setState(() => _focussed = false);
+                  _searchController.clear();
+                  _searchNode.unfocus();
+                },
+                builder: (context, child) => ChangeNotifierProvider<ZwapChipsInputProvider<T>>.value(
+                  value: _provider,
+                  child: child,
+                ),
+              ),
+              if (widget.maxSelectedItems != 0) ...[
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ZwapRichText.safeText(
+                    textSpans: [
+                      ZwapTextSpan.fromZwapTypography(text: "${widget.translateKey!('max_elements')}: ", textType: ZwapTextType.smallBodyRegular),
+                      ZwapTextSpan.fromZwapTypography(text: "${_selectedKeys.length}", textType: ZwapTextType.smallBodyBold),
+                      ZwapTextSpan.fromZwapTypography(text: "/${widget.maxSelectedItems}", textType: ZwapTextType.smallBodyRegular),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          );
+        },
+      ),
     );
   }
 }

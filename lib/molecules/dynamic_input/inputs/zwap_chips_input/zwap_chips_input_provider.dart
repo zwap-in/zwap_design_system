@@ -3,8 +3,14 @@ import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_inp
 
 class ZwapChipsInputProvider<T> extends ChangeNotifier {
   final List<T> values;
+  final List<T>? lessItems;
+  final bool showLessItems;
+  final int showLessItemsUntil;
+
   final ChipsInputItemBuilder<T> builderCallback;
   final ChipsInputItemSearch<T> searchCallback;
+
+  final int maxItems;
 
   /// [isSelected] is true if item has been selected
   final void Function(T, bool isSelected)? onItemPicked;
@@ -16,13 +22,21 @@ class ZwapChipsInputProvider<T> extends ChangeNotifier {
 
   set search(String value) => _search != value ? {_search = value, notifyListeners()} : null;
 
-  List<T> get activeItems => _search.isEmpty ? values : values.where((i) => searchCallback(i, _search)).toList();
+  List<T> get activeItems {
+    if (showLessItems && _search.length <= showLessItemsUntil) return lessItems!;
+
+    return _search.isEmpty ? values : values.where((i) => searchCallback(i, _search)).toList();
+  }
 
   ZwapChipsInputProvider({
     required this.builderCallback,
     required this.searchCallback,
     required this.onItemPicked,
+    required this.maxItems,
     required this.values,
+    required this.showLessItems,
+    required this.lessItems,
+    required this.showLessItemsUntil,
     List<int> initialSelectedItems = const [],
   })  : this._selectedHashcodes = initialSelectedItems,
         super();
@@ -33,6 +47,8 @@ class ZwapChipsInputProvider<T> extends ChangeNotifier {
     if (_selectedHashcodes.contains(_hashCode)) {
       _selectedHashcodes.remove(item.hashCode);
     } else {
+      if (_selectedHashcodes.length >= maxItems) return;
+
       _selectedHashcodes.add(item.hashCode);
     }
     if (onItemPicked != null) onItemPicked!(item, _selectedHashcodes.contains(_hashCode));
