@@ -155,30 +155,14 @@ class _ZwapDynamicInputOverlay extends StatefulWidget {
 }
 
 class _ZwapDynamicInputOverlayState extends State<_ZwapDynamicInputOverlay> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _transitionTween;
-
-  double get _transitionValue => _transitionTween.value;
-
   bool _visible = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      lowerBound: 0,
-      upperBound: 1,
-      duration: const Duration(milliseconds: 300),
-    )..addListener(() {
-        setState(() {});
-      });
-
-    _transitionTween = Tween(begin: 1.5, end: 0.0).animate(CurvedAnimation(parent: _controller, curve: Curves.decelerate));
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       setState(() => _visible = true);
-      _controller.forward();
     });
   }
 
@@ -186,28 +170,25 @@ class _ZwapDynamicInputOverlayState extends State<_ZwapDynamicInputOverlay> with
   Widget build(BuildContext context) {
     return Material(
       color: ZwapColors.transparent,
-      child: Transform.translate(
-        offset: Offset(0, _transitionValue),
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 300),
-          opacity: _visible ? 1 : 0.4,
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(color: Color(0x00808080).withOpacity(0.05), blurRadius: 60, offset: Offset(0, 20)),
-                BoxShadow(color: Color(0x00808080).withOpacity(0.15), blurRadius: 60, offset: Offset(0, 30), spreadRadius: -4),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                width: widget.width,
-                decoration: BoxDecoration(
-                  color: ZwapColors.shades0,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: widget.child,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 300),
+        opacity: _visible ? 1 : 0.4,
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(color: Color(0x00808080).withOpacity(0.05), blurRadius: 60, offset: Offset(0, 20)),
+              BoxShadow(color: Color(0x00808080).withOpacity(0.15), blurRadius: 60, offset: Offset(0, 30), spreadRadius: -4),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              width: widget.width,
+              decoration: BoxDecoration(
+                color: ZwapColors.shades0,
+                borderRadius: BorderRadius.circular(12),
               ),
+              child: widget.child,
             ),
           ),
         ),

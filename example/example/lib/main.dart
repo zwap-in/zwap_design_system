@@ -9,6 +9,7 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_utils/zwap_utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,6 +31,14 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
               title: 'Zwap ~ Storybook',
               theme: ThemeData(primaryColor: ZwapColors.primary700),
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: [
+                Locale('it', 'IT'),
+              ],
               home: Builder(
                 builder: (context) {
                   final bool _loading = context.select<StoryProvider, bool>((pro) => pro.loading);

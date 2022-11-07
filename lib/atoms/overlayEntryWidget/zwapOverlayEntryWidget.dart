@@ -36,6 +36,10 @@ class ZwapOverlayEntryChild extends StatelessWidget {
 }
 
 class ZwapOverlayEntryWidget extends StatelessWidget {
+  /// If true widget will close automatically
+  /// on clicking outside child
+  ///
+  /// Default to true
   final bool autoClose;
   final ZwapOverlayEntryChild child;
 
@@ -43,7 +47,13 @@ class ZwapOverlayEntryWidget extends StatelessWidget {
 
   final Function()? onAutoClose;
 
-  const ZwapOverlayEntryWidget({Key? key, this.autoClose = true, required this.child, required this.entity, this.onAutoClose}) : super(key: key);
+  const ZwapOverlayEntryWidget({
+    Key? key,
+    this.autoClose = true,
+    required this.child,
+    required this.entity,
+    this.onAutoClose,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,7 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
 import 'package:zwap_design_system/atoms/text_controller/tags_text_conroller.dart';
 import 'package:zwap_design_system/atoms/input/zwap_hint_input/zwap_hint_input.dart';
+import 'package:zwap_design_system/molecules/calendar_input/zwap_calendar_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_input/zwap_chips_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_simple_picker/zwap_simple_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
@@ -46,7 +47,11 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 600),
+              ZwapCalendarInput(
+                selectedDate: DateTime(2022, 11, 12),
+                onlyFutureDates: true,
+              ),
+              SizedBox(height: 20),
               ZwapDynamicInput(
                 content: Container(
                   width: 40,

@@ -745,3 +745,6 @@ a
 
 ## 0.1.618
 * Added textAlign property on ZwapExpandableText
+
+## 0.1.619
+* Added ZwapCalendarInput widget 
