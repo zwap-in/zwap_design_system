@@ -201,6 +201,7 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                                 _InputWrapper<T>(
                                   controller: _searchController,
                                   placeHolder: widget.placeholder ?? '',
+                                  dynamicInputKey: _inputKey,
                                   child: SizedBox(
                                     height: _selectedKeys.isEmpty ? null : widget.itemHeigth,
                                     child: TextField(
@@ -403,11 +404,13 @@ class _InputWrapper<T> extends StatefulWidget {
   final Widget child;
   final String placeHolder;
   final TextEditingController controller;
+  final GlobalKey<ZwapDynamicInputState> dynamicInputKey;
 
   const _InputWrapper({
     required this.child,
     required this.controller,
     required this.placeHolder,
+    required this.dynamicInputKey,
     Key? key,
   }) : super(key: key);
 
@@ -434,6 +437,7 @@ class _InputWrapperState<T> extends State<_InputWrapper<T>> {
 
   void _controllerListener() {
     setState(() {});
+    widget.dynamicInputKey.updateOverlayPosition();
   }
 
   @override
