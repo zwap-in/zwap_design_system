@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
-import '../../packages/calendar_date_picker_2/calendar_date_picker2.dart' as calendar;
+import 'package:zwap_design_system/packages/calendar_date_picker_2/calendar_date_picker2.dart' as calendar;
 
 part 'zwap_calendar_input_provider.dart';
 

@@ -751,3 +751,6 @@ a
 
 ## 0.1.620
 * Fixed onDateSelected callback in ZwapCalendarInput widget 
+
+## 0.1.621
+* Fixed bug in ZwapCalendarInput widget
