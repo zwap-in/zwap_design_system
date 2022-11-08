@@ -772,3 +772,6 @@ a
 
 ## 0.1.629
 * Fixed bug in ZwapChipsInput widget
+
+## 0.1.630
+* Added disabled property in ZwapSimplePicker

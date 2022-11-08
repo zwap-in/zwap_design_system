@@ -2,6 +2,7 @@ part of zwap.calendar_input;
 
 class _ZwapCalendarInputProvider extends ChangeNotifier {
   DateTime? _selectedDate;
+  final String Function(String)? translateText;
 
   final void Function(DateTime?)? onDatePicked;
 
@@ -15,7 +16,10 @@ class _ZwapCalendarInputProvider extends ChangeNotifier {
           if (onDatePicked != null) onDatePicked!(value);
         }();
 
-  _ZwapCalendarInputProvider({required this.onDatePicked, DateTime? initialDate})
-      : this._selectedDate = initialDate,
+  _ZwapCalendarInputProvider({
+    required this.translateText,
+    required this.onDatePicked,
+    DateTime? initialDate,
+  })  : this._selectedDate = initialDate,
         super();
 }

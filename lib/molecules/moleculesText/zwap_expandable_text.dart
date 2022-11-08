@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 
 bool willTextExceed(String text, int maxLines, double maxWidth, TextStyle style, {TextAlign textAlign = TextAlign.left}) {
@@ -119,7 +119,7 @@ class _ExpandableTextState extends State<ZwapExpandableText> {
               if (!_showAllText && _willTextExceed)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: GestureDetector(
+                  child: InkWell(
                     onTap: () => setState(() {
                       _showAllText = true;
                     }),
@@ -133,7 +133,7 @@ class _ExpandableTextState extends State<ZwapExpandableText> {
               else if (_showAllText && _willTextExceed)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: GestureDetector(
+                  child: InkWell(
                     onTap: () => setState(() {
                       _showAllText = false;
                     }),

@@ -52,6 +52,12 @@ class ZwapCalendarInput extends StatefulWidget {
   /// Default to false
   final bool onlyFutureDates;
 
+  /// Used to translate those keys:
+  /// * done_cta
+  ///
+  /// If not provided default copy will be used
+  final String Function(String)? translateText;
+
   /// Date are compared only with day, month and year. So DateTime(2022, 10, 4, 23, 53)
   /// is the same date of DateTime(2022, 10, 4, 8, 12, 33)
   const ZwapCalendarInput({
@@ -62,6 +68,7 @@ class ZwapCalendarInput extends StatefulWidget {
     this.placeholder,
     this.width,
     this.onlyFutureDates = false,
+    this.translateText,
     Key? key,
   }) : super(key: key);
 
@@ -87,6 +94,7 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
     _date = widget.selectedDate.pureDate;
     _calendarProvider = _ZwapCalendarInputProvider(
       onDatePicked: widget.onDateSelected,
+      translateText: widget.translateText,
       initialDate: _date,
     );
   }
@@ -123,6 +131,7 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
               left: _inputRect.left,
               child: _CalendarPickerOverlay(
                 onlyFutureDates: widget.onlyFutureDates,
+                onDonePressed: () => _closeCalendar(),
               ),
             ),
           ),
@@ -203,8 +212,13 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
 
 class _CalendarPickerOverlay extends StatefulWidget {
   final bool onlyFutureDates;
+  final Function() onDonePressed;
 
-  const _CalendarPickerOverlay({required this.onlyFutureDates, Key? key}) : super(key: key);
+  const _CalendarPickerOverlay({
+    required this.onDonePressed,
+    required this.onlyFutureDates,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<_CalendarPickerOverlay> createState() => _CalendarPickerOverlayState();
@@ -222,9 +236,23 @@ class _CalendarPickerOverlayState extends State<_CalendarPickerOverlay> {
     });
   }
 
+  String get _defaultCopy {
+    final String languageCode = Localizations.localeOf(context).languageCode;
+
+    switch (languageCode.toLowerCase()) {
+      case 'it':
+        return 'Fine';
+      default:
+        return 'Done';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final DateTime? _selectedDate = context.select<_ZwapCalendarInputProvider, DateTime?>((pro) => pro.selectedDate);
+    final String Function(String)? _translateText = context.select<_ZwapCalendarInputProvider, String Function(String)?>((pro) => pro.translateText);
+
+    final String _doneCTA = _translateText == null ? _defaultCopy : _translateText('done_cta');
 
     return Material(
       color: ZwapColors.transparent,
@@ -252,11 +280,24 @@ class _CalendarPickerOverlayState extends State<_CalendarPickerOverlay> {
                 color: ZwapColors.shades0,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: calendar.CalendarDatePicker2(
-                config: calendar.CalendarDatePicker2Config(selectedDayHighlightColor: ZwapColors.primary700),
-                initialValue: [_selectedDate],
-                selectableDayPredicate: widget.onlyFutureDates ? (date) => date.isAfter(DateTime.now().subtract(const Duration(days: 1))) : null,
-                onValueChanged: (date) => context.read<_ZwapCalendarInputProvider>().selectedDate = date.firstOrNull,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  calendar.CalendarDatePicker2(
+                    config: calendar.CalendarDatePicker2Config(selectedDayHighlightColor: ZwapColors.primary700),
+                    initialValue: [_selectedDate],
+                    selectableDayPredicate: widget.onlyFutureDates ? (date) => date.isAfter(DateTime.now().subtract(const Duration(days: 1))) : null,
+                    onValueChanged: (date) => context.read<_ZwapCalendarInputProvider>().selectedDate = date.firstOrNull,
+                  ),
+                  ZwapButton(
+                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    width: double.infinity,
+                    height: 44,
+                    decorations: ZwapButtonDecorations.primaryLight(),
+                    buttonChild: ZwapButtonChild.text(text: _doneCTA, fontSize: 15, fontWeight: FontWeight.w500),
+                    onTap: widget.onDonePressed,
+                  ),
+                ],
               ),
             ),
           ),

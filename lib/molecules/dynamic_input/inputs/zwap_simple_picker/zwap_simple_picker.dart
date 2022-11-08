@@ -20,6 +20,12 @@ class ZwapSimplePicker<T> extends StatefulWidget {
   final SimplePickerGetCopy<T>? getCopyOfItem;
 
   /// Used to build any item inside the overlay
+  ///
+  /// Is assumed that in the same way [disabled] is setted
+  /// only from outside the widget, itemBuilder callback can
+  /// interact with the "external disabled" var too.
+  /// So there is no argument who sad if item is disabled in the
+  /// [itemBuilder] callback
   final SimplePickerItemBuilder<T>? itemBuilder;
 
   /// Selected items will be **disabled** (ie:
@@ -47,11 +53,15 @@ class ZwapSimplePicker<T> extends StatefulWidget {
   /// * no_results_found
   final String Function(String)? translateKey;
 
+  /// If disabled is true no item can be picked
+  final bool disabled;
+
   const ZwapSimplePicker({
     required SimplePickerGetCopy<T> getCopyOfItem,
     required this.isItemIncludedIsSearch,
     required this.getIsSelected,
     required this.items,
+    this.disabled = false,
     this.onItemPicked,
     this.label,
     this.placeholder,
@@ -67,6 +77,7 @@ class ZwapSimplePicker<T> extends StatefulWidget {
     required this.isItemIncludedIsSearch,
     required this.getIsSelected,
     required this.items,
+    this.disabled = false,
     this.onItemPicked,
     this.label,
     this.placeholder,
@@ -102,18 +113,27 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
       itemBuilder: widget.itemBuilder,
       searchItem: widget.isItemIncludedIsSearch,
       getIsSelected: widget.getIsSelected,
-      onItemTap: (item) {
-        if (widget.onItemPicked != null) widget.onItemPicked!(item);
-        _inputKey.closeIfOpen();
-        _searchController.clear();
-      },
+      disabled: widget.disabled,
+      onItemTap: _onItemTap,
     );
 
     _searchController.addListener(_controllerListener);
   }
 
+  void _onItemTap(T item) {
+    if (widget.onItemPicked != null) widget.onItemPicked!(item);
+    _inputKey.closeIfOpen();
+    _searchController.clear();
+  }
+
   void _controllerListener() {
-    if (!_focussed && _searchController.text.length > 1) _inputKey.openOfClose();
+    if (!_focussed && _searchController.text.length > 1) _inputKey.openIfClose();
+  }
+
+  @override
+  void didUpdateWidget(covariant ZwapSimplePicker<T> oldWidget) {
+    _provider.disabled = widget.disabled;
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -228,6 +248,7 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final bool _disabled = context.select<_ZwapSimplePickerProvider<T>, bool>((pro) => pro.disabled);
     final SimplePickerGetCopy<T>? _getCopy = context.read<_ZwapSimplePickerProvider<T>>().getCopy;
     final SimplePickerItemBuilder<T>? _itemBuilder = context.read<_ZwapSimplePickerProvider<T>>().itemBuilder;
 
@@ -236,20 +257,33 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
 
     final bool _selected = _getIsSelected(widget.item);
 
+    Color _getColor() {
+      if (_disabled && _selected) return ZwapColors.primary50;
+      if (_disabled) return ZwapColors.shades0;
+      if (_hovered) return ZwapColors.neutral50;
+      if (_selected) return ZwapColors.primary50;
+
+      return ZwapColors.shades0;
+    }
+
+    Color _textColor() {
+      if (_disabled && _selected) return ZwapColors.neutral700;
+      if (_disabled) return ZwapColors.neutral500;
+      if (_selected) return ZwapColors.text65;
+
+      return ZwapColors.primary900Dark;
+    }
+
     return InkWell(
       focusColor: ZwapColors.transparent,
       hoverColor: ZwapColors.transparent,
       splashColor: ZwapColors.transparent,
       highlightColor: ZwapColors.transparent,
-      onTap: _selected ? null : () => context.read<_ZwapSimplePickerProvider<T>>().onItemTap(widget.item),
+      onTap: (_selected || _disabled) ? null : () => context.read<_ZwapSimplePickerProvider<T>>().onItemTap(widget.item),
       onHover: (isHovered) => setState(() => _hovered = isHovered),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        color: _hovered
-            ? ZwapColors.neutral50
-            : _selected
-                ? ZwapColors.primary50
-                : ZwapColors.shades0,
+        color: _getColor(),
         width: double.infinity,
         constraints: BoxConstraints(minHeight: 44),
         alignment: Alignment.centerLeft,
@@ -259,7 +293,7 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
             : ZwapText(
                 text: _getCopy!(widget.item),
                 zwapTextType: ZwapTextType.bigBodyRegular,
-                textColor: _selected ? ZwapColors.text65 : ZwapColors.primary900Dark,
+                textColor: _textColor(),
               ),
       ),
     );

@@ -10,10 +10,14 @@ class _ZwapSimplePickerProvider<T> extends ChangeNotifier {
 
   final void Function(T item)? _onItemTap;
 
+  bool _disabled;
+
   String _searchValue = '';
 
+  bool get disabled => _disabled;
   List<T> get _filteredItems => _searchValue.length < 2 ? items : items.where((i) => searchItem(i, _searchValue)).toList();
 
+  set disabled(bool value) => value != _disabled ? {_disabled = value, notifyListeners()} : null;
   set search(String value) => _searchValue != value
       ? {
           _searchValue = value,
@@ -27,8 +31,10 @@ class _ZwapSimplePickerProvider<T> extends ChangeNotifier {
     required this.itemBuilder,
     required this.searchItem,
     required this.getIsSelected,
+    required bool disabled,
     void Function(T item)? onItemTap,
   })  : this._onItemTap = onItemTap,
+        this._disabled = disabled,
         assert(getCopy != null || itemBuilder != null),
         super();
 

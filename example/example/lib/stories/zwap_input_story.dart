@@ -37,6 +37,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
   final List<String> _secondSelected = [];
   final List<String> _thirdSelected = [];
 
+  bool _disableSimplePicker = false;
+
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
@@ -47,6 +49,11 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              ZwapSwitch(
+                value: _disableSimplePicker,
+                onChange: (value) => setState(() => _disableSimplePicker = value),
+              ),
+              SizedBox(height: 20),
               ZwapCalendarInput(
                 selectedDate: DateTime(2022, 11, 12),
                 onlyFutureDates: true,
@@ -66,6 +73,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               SizedBox(height: 20),
               ZwapSimplePicker<String>(
+                disabled: _disableSimplePicker,
                 items: [
                   'afdasdf',
                   'gerger',
@@ -91,7 +99,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 getCopyOfItem: (i) => i,
                 getIsSelected: (i) => _thirdSelected.contains(i),
                 isItemIncludedIsSearch: (i, s) => i.toLowerCase().contains(s.toLowerCase().trim()),
-                label: "dòlfasdf",
+                label: "Simple picker",
                 placeholder: "Ex incididunt occaecat ",
                 translateKey: (_) => 'Nessun risultato',
                 onItemPicked: (i) => _thirdSelected.contains(i) ? setState(() => _thirdSelected.remove(i)) : setState(() => _thirdSelected.add(i)),
