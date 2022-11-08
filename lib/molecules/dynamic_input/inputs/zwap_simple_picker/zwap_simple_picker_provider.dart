@@ -2,6 +2,9 @@ part of zwap.dynamic_inputs.simple_picker;
 
 class _ZwapSimplePickerProvider<T> extends ChangeNotifier {
   final List<T> items;
+  final List<T>? lessItems;
+  final bool showLessItems;
+  final int showLessItemsUntil;
 
   final SimplePickerGetCopy<T>? getCopy;
   final SimplePickerItemBuilder<T>? itemBuilder;
@@ -15,7 +18,11 @@ class _ZwapSimplePickerProvider<T> extends ChangeNotifier {
   String _searchValue = '';
 
   bool get disabled => _disabled;
-  List<T> get _filteredItems => _searchValue.length < 2 ? items : items.where((i) => searchItem(i, _searchValue)).toList();
+  List<T> get _filteredItems {
+    if (showLessItems && _searchValue.length <= showLessItemsUntil) return lessItems!;
+
+    return _searchValue.length < 2 ? items : items.where((i) => searchItem(i, _searchValue)).toList();
+  }
 
   set disabled(bool value) => value != _disabled ? {_disabled = value, notifyListeners()} : null;
   set search(String value) => _searchValue != value
@@ -33,6 +40,9 @@ class _ZwapSimplePickerProvider<T> extends ChangeNotifier {
     required this.getIsSelected,
     required bool disabled,
     void Function(T item)? onItemTap,
+    required this.showLessItems,
+    required this.lessItems,
+    required this.showLessItemsUntil,
   })  : this._onItemTap = onItemTap,
         this._disabled = disabled,
         assert(getCopy != null || itemBuilder != null),

@@ -35,7 +35,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
   List<String> _selectedItems = [];
 
   final List<String> _secondSelected = [];
-  final List<String> _thirdSelected = [];
+  final List<int> _thirdSelected = [];
 
   bool _disableSimplePicker = false;
 
@@ -72,37 +72,19 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 ),
               ),
               SizedBox(height: 20),
-              ZwapSimplePicker<String>(
+              ZwapSimplePicker<int>(
                 disabled: _disableSimplePicker,
-                items: [
-                  'afdasdf',
-                  'gerger',
-                  'kmbaresf',
-                  'sdeg4ergf',
-                  'sdfasd',
-                  'afkdasdf',
-                  'gerkger',
-                  'kmbkaresf',
-                  'sdelkjskg4ergf',
-                  'sdflkjskasd',
-                  'afdlkjsasdf',
-                  'gerlkjsger',
-                  'kmblkjsaresf',
-                  'sdelkjsg4ergf',
-                  'sdflkjsasd',
-                  'afklkjsdasdf',
-                  'gerlkjskger',
-                  'kmblkjskaresf',
-                  'sdelkjskg4ergf',
-                  'sdflkjskasd',
-                ],
-                getCopyOfItem: (i) => i,
+                items: List.generate(1000, (i) => i),
+                getCopyOfItem: (i) => '$i~$i•$i',
                 getIsSelected: (i) => _thirdSelected.contains(i),
-                isItemIncludedIsSearch: (i, s) => i.toLowerCase().contains(s.toLowerCase().trim()),
-                label: "Simple picker",
+                isItemIncludedIsSearch: (i, s) => i % s.length == 0,
+                label: "Simple picker (int)",
                 placeholder: "Ex incididunt occaecat ",
                 translateKey: (_) => 'Nessun risultato',
                 onItemPicked: (i) => _thirdSelected.contains(i) ? setState(() => _thirdSelected.remove(i)) : setState(() => _thirdSelected.add(i)),
+                showLessItem: true,
+                showLessItemUntilLength: 3,
+                lessItems: List.generate(40, (i) => i * 2),
               ),
               SizedBox(height: 20),
               ZwapChipsInput<String>(

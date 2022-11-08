@@ -1,11 +1,14 @@
+library zwap.dynamic_inputs.chips_input;
+
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_input/zwap_chips_input_provider.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 import 'package:provider/provider.dart';
+
+part 'zwap_chips_input_provider.dart';
 
 class PickItemStatus {
   final bool isSelected;
@@ -119,7 +122,7 @@ class ZwapChipsInput<T> extends StatefulWidget {
 
 class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
   final GlobalKey<ZwapDynamicInputState> _inputKey = GlobalKey();
-  late final ZwapChipsInputProvider<T> _provider;
+  late final _ZwapChipsInputProvider<T> _provider;
 
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchNode = FocusNode();
@@ -132,7 +135,7 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
 
     _searchNode.addListener(() => setState(() {}));
 
-    _provider = ZwapChipsInputProvider<T>(
+    _provider = _ZwapChipsInputProvider<T>(
       builderCallback: widget.itemBuilder,
       searchCallback: widget.searchItem,
       onItemPicked: (item, selected) {
@@ -160,11 +163,11 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ZwapChipsInputProvider<T>>.value(
+    return ChangeNotifierProvider<_ZwapChipsInputProvider<T>>.value(
       value: _provider,
       child: Builder(
         builder: (context) {
-          final List<T> _selectedKeys = context.select<ZwapChipsInputProvider<T>, List<T>>((pro) => pro.selectedItems);
+          final List<T> _selectedKeys = context.select<_ZwapChipsInputProvider<T>, List<T>>((pro) => pro.selectedItems);
 
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -214,7 +217,7 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                                       ),
                                       cursorColor: ZwapColors.primary900Dark,
                                       onTap: _inputKey.toggleOverlay,
-                                      onChanged: (value) => context.read<ZwapChipsInputProvider<T>>().search = value,
+                                      onChanged: (value) => context.read<_ZwapChipsInputProvider<T>>().search = value,
                                       style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
                                     ),
                                   ),
@@ -262,7 +265,7 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                   _searchController.clear();
                   _searchNode.unfocus();
                 },
-                builder: (context, child) => ChangeNotifierProvider<ZwapChipsInputProvider<T>>.value(
+                builder: (context, child) => ChangeNotifierProvider<_ZwapChipsInputProvider<T>>.value(
                   value: _provider,
                   child: child,
                 ),
@@ -299,9 +302,9 @@ class _ZwapPickInputOverlay<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<T> _items = context.select<ZwapChipsInputProvider<T>, List<T>>((pro) => pro.activeItems);
+    final List<T> _items = context.select<_ZwapChipsInputProvider<T>, List<T>>((pro) => pro.activeItems);
     final bool _isShowingLessItem =
-        context.select<ZwapChipsInputProvider<T>, bool>((pro) => pro.showLessItems && pro.search.length <= pro.showLessItemsUntil);
+        context.select<_ZwapChipsInputProvider<T>, bool>((pro) => pro.showLessItems && pro.search.length <= pro.showLessItemsUntil);
 
     if (_items.isEmpty) {
       if (noResultsWidget != null) return noResultsWidget!;
@@ -359,15 +362,15 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final ChipsInputItemBuilder<T> _builder = context.read<ZwapChipsInputProvider<T>>().builderCallback;
-    final bool _isSelected = context.select<ZwapChipsInputProvider<T>, bool>((pro) => pro.isItemSelected(widget.item));
+    final ChipsInputItemBuilder<T> _builder = context.read<_ZwapChipsInputProvider<T>>().builderCallback;
+    final bool _isSelected = context.select<_ZwapChipsInputProvider<T>, bool>((pro) => pro.isItemSelected(widget.item));
 
     return InkWell(
       focusColor: ZwapColors.transparent,
       hoverColor: ZwapColors.transparent,
       splashColor: ZwapColors.transparent,
       highlightColor: ZwapColors.transparent,
-      onTap: () => context.read<ZwapChipsInputProvider<T>>().toggleItem(widget.item),
+      onTap: () => context.read<_ZwapChipsInputProvider<T>>().toggleItem(widget.item),
       onHover: (isHovered) => setState(() => _hovered = isHovered),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -392,7 +395,7 @@ class _SingleChipWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChipsInputItemBuilder<T> _builder = context.read<ZwapChipsInputProvider<T>>().builderCallback;
+    final ChipsInputItemBuilder<T> _builder = context.read<_ZwapChipsInputProvider<T>>().builderCallback;
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
@@ -409,7 +412,7 @@ class _SingleChipWidget<T> extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           InkWell(
-            onTap: () => context.read<ZwapChipsInputProvider<T>>().toggleItem(item),
+            onTap: () => context.read<_ZwapChipsInputProvider<T>>().toggleItem(item),
             child: Container(width: 20, height: 20, child: Icon(Icons.close_rounded, size: 16, color: ZwapColors.text65)),
           )
         ],
@@ -440,7 +443,7 @@ class _InputWrapperState<T> extends State<_InputWrapper<T>> {
   final TextStyle _style = getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark);
 
   double get _textWidth {
-    final bool _isInputEmpty = context.read<ZwapChipsInputProvider<T>>().selectedItems.isEmpty;
+    final bool _isInputEmpty = context.read<_ZwapChipsInputProvider<T>>().selectedItems.isEmpty;
 
     final double _minWidth = _isInputEmpty ? textWidth(widget.placeHolder, _style) : 0;
     final double _width = textWidth(widget.controller.text, _style);

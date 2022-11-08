@@ -56,6 +56,18 @@ class ZwapSimplePicker<T> extends StatefulWidget {
   /// If disabled is true no item can be picked
   final bool disabled;
 
+  /// If true the showed items will not be all available
+  /// items until the searched text length is less than
+  /// [showLessItemUntilLength]
+  final bool showLessItem;
+
+  /// Number of characters needed before start showing all items
+  final int showLessItemUntilLength;
+
+  /// Items showed while search text length is less than
+  /// [showLessItemUntilLength]
+  final List<T>? lessItems;
+
   const ZwapSimplePicker({
     required SimplePickerGetCopy<T> getCopyOfItem,
     required this.isItemIncludedIsSearch,
@@ -67,9 +79,16 @@ class ZwapSimplePicker<T> extends StatefulWidget {
     this.placeholder,
     this.noResultsWidget,
     this.translateKey,
+    this.showLessItem = false,
+    this.showLessItemUntilLength = 1,
+    this.lessItems,
     Key? key,
   })  : this.getCopyOfItem = getCopyOfItem,
         this.itemBuilder = null,
+        assert(
+          !showLessItem || lessItems != null,
+          "You must provide a list of items to show when search text length is less than [showLessItemUntilLength] if [showLessItem] is true",
+        ),
         super(key: key);
 
   const ZwapSimplePicker.builder({
@@ -83,9 +102,16 @@ class ZwapSimplePicker<T> extends StatefulWidget {
     this.placeholder,
     this.noResultsWidget,
     this.translateKey,
+    this.showLessItem = false,
+    this.showLessItemUntilLength = 1,
+    this.lessItems,
     Key? key,
   })  : this.getCopyOfItem = null,
         this.itemBuilder = itemBuilder,
+        assert(
+          !showLessItem || lessItems != null,
+          "You must provide a list of items to show when search text length is less than [showLessItemUntilLength] if [showLessItem] is true",
+        ),
         super(key: key);
 
   @override
@@ -115,6 +141,9 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
       getIsSelected: widget.getIsSelected,
       disabled: widget.disabled,
       onItemTap: _onItemTap,
+      showLessItems: widget.showLessItem,
+      showLessItemsUntil: widget.showLessItemUntilLength,
+      lessItems: widget.lessItems,
     );
 
     _searchController.addListener(_controllerListener);
@@ -124,6 +153,7 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
     if (widget.onItemPicked != null) widget.onItemPicked!(item);
     _inputKey.closeIfOpen();
     _searchController.clear();
+    _provider.search = '';
   }
 
   void _controllerListener() {

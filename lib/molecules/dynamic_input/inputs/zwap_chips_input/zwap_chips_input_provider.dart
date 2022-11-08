@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_input/zwap_chips_input.dart';
+part of zwap.dynamic_inputs.chips_input;
 
-class ZwapChipsInputProvider<T> extends ChangeNotifier {
+class _ZwapChipsInputProvider<T> extends ChangeNotifier {
   final List<T> values;
   final List<T>? lessItems;
   final bool showLessItems;
@@ -21,7 +20,7 @@ class ZwapChipsInputProvider<T> extends ChangeNotifier {
   String _search = '';
 
   String get search => _search;
-  
+
   set search(String value) => _search != value ? {_search = value, notifyListeners()} : null;
 
   List<T> get activeItems {
@@ -30,7 +29,7 @@ class ZwapChipsInputProvider<T> extends ChangeNotifier {
     return _search.isEmpty ? values : values.where((i) => searchCallback(i, _search)).toList();
   }
 
-  ZwapChipsInputProvider({
+  _ZwapChipsInputProvider({
     required this.builderCallback,
     required this.searchCallback,
     required this.onItemPicked,

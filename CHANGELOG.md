@@ -775,3 +775,6 @@ a
 
 ## 0.1.630
 * Added disabled property in ZwapSimplePicker
+
+## 0.1.631
+* Added showLessItem logics in ZwapSimplePicker too
