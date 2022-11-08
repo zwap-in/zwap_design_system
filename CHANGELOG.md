@@ -778,3 +778,6 @@ a
 
 ## 0.1.631
 * Added showLessItem logics in ZwapSimplePicker too
+
+## 0.1.632
+* Fixed bug in ZwapInput widget about [keyCallBackFunction] method

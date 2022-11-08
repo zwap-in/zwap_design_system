@@ -90,6 +90,7 @@ class _ZwapFormStoryState extends State<ZwapFormStory> {
                           Flexible(
                               child: ZwapInput(
                             dynamicLabel: "Name",
+                            focusNode: _nameNode,
                             keyCallBackFunction: (_) {
                               _surnameNode.requestFocus();
                               _surnameNode.hasFocus;
@@ -99,8 +100,8 @@ class _ZwapFormStoryState extends State<ZwapFormStory> {
                           SizedBox(width: 12),
                           Flexible(
                               child: ZwapInput(
-                            dynamicLabel: "Surname",
                             focusNode: _surnameNode,
+                            dynamicLabel: "Surname",
                             helperText: _errorState ? 'Ipsum in consequat' : null,
                           )),
                         ],
