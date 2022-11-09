@@ -136,6 +136,12 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                         callBackFunction: (_, value) => setState(() => _multipleSelected = value ?? []),
                         selectedValues: _multipleSelected,
                         initialPageNumber: 2,
+                        canAddItem: true,
+                        onAddItem: (item) => print(item),
+                        fetchMoreData: (search, _) async {
+                          await Future.delayed(const Duration(milliseconds: 800));
+                          return search.isEmpty ? {} : {search: search};
+                        },
                         betweenFetchDuration: const Duration(seconds: 2),
                         onEmptyResponseDuration: const Duration(seconds: 10),
                         translateText: (key) => {
@@ -168,6 +174,11 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                       'not_here': 'Non trovi quello che cerchi?',
                       'add_here': 'Aggiungilo qui',
                     }[key]!,
+                    onAddItem: (item) => print(item),
+                    fetchMoreData: (search, _) async {
+                      await Future.delayed(const Duration(milliseconds: 800));
+                      return search.isEmpty ? {} : {search: search};
+                    },
                   ),
                 ),
               ),

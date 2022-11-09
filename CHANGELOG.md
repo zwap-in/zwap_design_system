@@ -787,3 +787,6 @@ a
 
 ## 0.1.634
 * Improved copy for min lenght in ZwapInput
+
+## 0.1.635
+* Improved UX in ZwapSelect widget

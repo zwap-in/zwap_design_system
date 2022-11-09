@@ -308,16 +308,17 @@ class _ZwapSelectProvider extends ChangeNotifier {
       notifyListeners();
     }
 
+    _isLoading = true;
+    notifyListeners();
+
     if (_notifyForDynamicSearch) _searchTimer = Timer(const Duration(milliseconds: 800), _searchCallback);
   }
 
   /// Perform a search, reset the tmp data and the tmp page number
   Future<void> _searchCallback() async {
-    if (_isLoading) return;
     if (_currentValue.isEmpty || searchType == ZwapSelectSearchTypes.locale) return;
 
     _tmpValues = {};
-    _isLoading = true;
     notifyListeners();
 
     _tmpValues = await _fetchMoreDataCallback!(_currentValue, _tmpPageNumber = 1);
