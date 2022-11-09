@@ -471,36 +471,6 @@ class _ZwapInputState extends State<ZwapInput> {
     );
   }
 
-  Widget _bottomContent() {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        if (_showMinLenghtIndicator)
-          ZwapRichText.safeText(
-            textSpans: [
-              ZwapTextSpan.fromZwapTypography(text: "${widget.translateKey!('zwap_input_characters')}: ", textType: ZwapTextType.smallBodyRegular),
-              ZwapTextSpan.fromZwapTypography(text: "$_realTextLenght", textType: ZwapTextType.smallBodyBold),
-              ZwapTextSpan.fromZwapTypography(text: "/${widget.minLenght}", textType: ZwapTextType.smallBodyRegular),
-            ],
-          ),
-        if (widget.showClearAll)
-          InkWell(
-            focusColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onTap: () => _controller.text = '',
-            child: ZwapText(
-              text: widget.translateKey!('zwap_input_clear_all'),
-              zwapTextType: ZwapTextType.smallBodyRegular,
-              textColor: ZwapColors.primary700,
-            ),
-          ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (widget._isCollapsed)
@@ -579,7 +549,14 @@ class _ZwapInputState extends State<ZwapInput> {
               ],
               if (widget.minLenght > 0 || widget.showClearAll) ...[
                 SizedBox(height: widget.subtitle == null ? 6 : 3),
-                _bottomContent(),
+                _BottomContentWidget(
+                  currentTextLenght: _realTextLenght,
+                  minLength: widget.minLenght,
+                  onClearAll: () => _controller.text = '',
+                  showClearAll: widget.showClearAll,
+                  showMinLenghtIndicator: widget.showMinLenghtIndicator,
+                  translateKey: widget.translateKey!,
+                ),
               ],
               Container(
                 width: double.infinity,
@@ -650,7 +627,15 @@ class _ZwapInputState extends State<ZwapInput> {
           mouseCursor: SystemMouseCursors.text,
           child: this._getInputWidget(decorations: this._getTextFieldDecoration()),
         ),
-        if (widget.minLenght > 0 || widget.showClearAll) _bottomContent(),
+        if (widget.minLenght > 0 || widget.showClearAll)
+          _BottomContentWidget(
+            currentTextLenght: _realTextLenght,
+            minLength: widget.minLenght,
+            onClearAll: () => _controller.text = '',
+            showClearAll: widget.showClearAll,
+            showMinLenghtIndicator: widget.showMinLenghtIndicator,
+            translateKey: widget.translateKey!,
+          ),
         Container(
           width: double.infinity,
           child: AnimatedSize(
@@ -668,6 +653,89 @@ class _ZwapInputState extends State<ZwapInput> {
                     : Container()),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class _BottomContentWidget extends StatefulWidget {
+  final bool showMinLenghtIndicator;
+  final int minLength;
+  final bool showClearAll;
+
+  final int currentTextLenght;
+
+  final String Function(String) translateKey;
+  final Function() onClearAll;
+
+  const _BottomContentWidget({
+    required this.showClearAll,
+    required this.minLength,
+    required this.onClearAll,
+    required this.showMinLenghtIndicator,
+    required this.translateKey,
+    required this.currentTextLenght,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_BottomContentWidget> createState() => _BottomContentWidgetState();
+}
+
+class _BottomContentWidgetState extends State<_BottomContentWidget> {
+  late int _leftChars;
+
+  @override
+  void initState() {
+    super.initState();
+    _leftChars = max(0, widget.minLength - widget.currentTextLenght);
+  }
+
+  @override
+  void didUpdateWidget(covariant _BottomContentWidget oldWidget) {
+    setState(() => _leftChars = max(0, widget.minLength - widget.currentTextLenght));
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        if (widget.showMinLenghtIndicator)
+          Expanded(
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.decelerate,
+              opacity: _leftChars > 0 ? 1 : 0,
+              child: ZwapRichText.safeText(
+                textSpans: [
+                  ZwapTextSpan.fromZwapTypography(
+                    text: "${widget.translateKey('zwap_input_write_at_least')} ",
+                    textType: ZwapTextType.smallBodyRegular,
+                  ),
+                  ZwapTextSpan.fromZwapTypography(text: "$_leftChars", textType: ZwapTextType.smallBodyBold),
+                  ZwapTextSpan.fromZwapTypography(
+                    text: " ${widget.translateKey('zwap_input_characters')}",
+                    textType: ZwapTextType.smallBodyRegular,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        if (widget.showClearAll)
+          InkWell(
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: widget.onClearAll,
+            child: ZwapText(
+              text: widget.translateKey('zwap_input_clear_all'),
+              zwapTextType: ZwapTextType.smallBodyRegular,
+              textColor: ZwapColors.primary700,
+            ),
+          ),
       ],
     );
   }

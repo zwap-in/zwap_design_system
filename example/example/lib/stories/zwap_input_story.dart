@@ -255,10 +255,15 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 fixedInitialTextStyle: ZwapTypography.mediumBodyMedium.copyWith(color: ZwapColors.neutral600),
                 minLines: 4,
                 maxLines: 8,
-                minLenght: 50,
+                minLenght: 4,
                 borderRadius: 4,
                 showClearAll: true,
-                translateKey: (k) => "ciao",
+                translateKey: (k) =>
+                    {
+                      'zwap_input_write_at_least': 'Scrivi almeno altri',
+                      'zwap_input_characters': 'caratteri',
+                    }[k] ??
+                    "ciao",
               ),
               SizedBox(height: 20),
               ZwapInput.collapsed(
