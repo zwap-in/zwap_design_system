@@ -781,3 +781,6 @@ a
 
 ## 0.1.632
 * Fixed bug in ZwapInput widget about [keyCallBackFunction] method
+
+## 0.1.633
+* Fixed bug in ZwapInput widget about [keyCallBackFunction] method

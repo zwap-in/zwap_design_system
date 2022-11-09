@@ -318,7 +318,7 @@ class _ZwapInputState extends State<ZwapInput> {
 
   KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
     if (widget.keyCallBackFunction != null && event.logicalKey == LogicalKeyboardKey.tab) {
-      Future.delayed(const Duration(milliseconds: 80), () => widget.keyCallBackFunction!(_controller.text));
+      Future.delayed(const Duration(milliseconds: 125), () => widget.keyCallBackFunction!(_controller.text));
       return KeyEventResult.handled;
     }
 
