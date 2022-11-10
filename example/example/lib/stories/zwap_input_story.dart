@@ -11,6 +11,7 @@ import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_simple_pi
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_check_box_picker/zwap_check_box_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_floating_picker/zwap_floating_picker.dart';
+import 'package:zwap_design_system/molecules/molecules.dart';
 
 enum MyEnum { a, b, c, v, d, f, g }
 
@@ -39,6 +40,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   bool _disableSimplePicker = false;
 
+  final int _year = 2020;
+
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
@@ -52,6 +55,12 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ZwapSwitch(
                 value: _disableSimplePicker,
                 onChange: (value) => setState(() => _disableSimplePicker = value),
+              ),
+              SizedBox(height: 20),
+              ZwapYearPicker(
+                selectedYear: _year,
+                
+                hintText: '',
               ),
               SizedBox(height: 20),
               ZwapCalendarInput(

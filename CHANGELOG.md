@@ -790,3 +790,6 @@ a
 
 ## 0.1.635
 * Improved UX in ZwapSelect widget
+
+## 0.1.636
+* Fix a problem with loading in ZwapSelect widget

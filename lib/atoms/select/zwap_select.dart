@@ -479,12 +479,13 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                         ? [
                                             Container(
                                               height: 2,
+                                              padding: EdgeInsets.symmetric(horizontal: widget.borderRadius / 3),
                                               child: _isLoading
                                                   ? LinearProgressIndicator(
                                                       valueColor: AlwaysStoppedAnimation(ZwapColors.primary800),
                                                       minHeight: 2,
                                                     )
-                                                  : Container(),
+                                                  : null,
                                             )
                                           ]
                                         : ([
@@ -574,12 +575,14 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                 ),
                                         ),
                                         Container(
+                                          padding: EdgeInsets.symmetric(horizontal: widget.borderRadius / 3),
+                                          height: 2,
                                           child: _isLoading
                                               ? LinearProgressIndicator(
                                                   valueColor: AlwaysStoppedAnimation(ZwapColors.primary800),
                                                   minHeight: 2,
                                                 )
-                                              : SizedBox(height: 13),
+                                              : null,
                                         )
                                       ],
                               ),
