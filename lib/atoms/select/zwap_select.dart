@@ -626,11 +626,12 @@ class _ZwapSelectState extends State<ZwapSelect> {
     _provider._inputFocusNodeHandler(
       _provider._inputFocusNode,
       KeyDownEvent(
-          physicalKey: PhysicalKeyboardKey.enter,
-          logicalKey: LogicalKeyboardKey.enter,
-          timeStamp: Duration(
-            milliseconds: DateTime.now().millisecondsSinceEpoch,
-          )),
+        physicalKey: PhysicalKeyboardKey.enter,
+        logicalKey: LogicalKeyboardKey.enter,
+        timeStamp: Duration(
+          milliseconds: DateTime.now().millisecondsSinceEpoch,
+        ),
+      ),
     );
   }
 

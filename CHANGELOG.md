@@ -793,3 +793,6 @@ a
 
 ## 0.1.636
 * Fix a problem with loading in ZwapSelect widget
+
+## 0.1.637
+* Fix a problem in ZwapSelect widget while adding new item

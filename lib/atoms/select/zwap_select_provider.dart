@@ -379,6 +379,7 @@ class _ZwapSelectProvider extends ChangeNotifier {
 
   void toggleItem(String? key, {bool callWidgetCallback = true}) {
     if (key == null) return;
+    bool _justAdded = false;
 
     MapEntry? _selectedItem = _selectedValues.firstWhereOrNull((e) => e.key == key);
 
@@ -387,6 +388,7 @@ class _ZwapSelectProvider extends ChangeNotifier {
     } else {
       MapEntry<String, String>? _entry = values.entries.firstWhereOrNull((e) => e.key == key);
       if (_entry == null && onAddItem != null) {
+        _justAdded = true;
         onAddItem!(key);
       }
 
@@ -410,7 +412,7 @@ class _ZwapSelectProvider extends ChangeNotifier {
     }
 
     notifyListeners();
-    if (callWidgetCallback) changeValueCallback(key, selectedValues);
+    if (callWidgetCallback && !_justAdded) changeValueCallback(key, selectedValues);
   }
 
   /// If called, all selected values will be replaced with those values

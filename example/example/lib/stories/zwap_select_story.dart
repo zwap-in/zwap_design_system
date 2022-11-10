@@ -104,9 +104,12 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                     Container(
                       width: 300,
                       child: ZwapSelect(
-                        canSearch: false,
+                        canSearch: true,
                         canAddItem: true,
-                        onAddItem: (value) => setState(() => _selected = value),
+                        onAddItem: (value) {
+                          print(value);
+                          setState(() => _selected = value);
+                        },
                         values: {
                           ...Map.fromIterable(_values!, key: (i) => i, value: (i) => i),
                         },
@@ -115,7 +118,10 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                         },
                         hintText: "Seleziona un elemento",
                         label: "Zwap Select",
-                        callBackFunction: (value, _) => setState(() => _selected = value),
+                        callBackFunction: (value, _) {
+                          print(value);
+                          setState(() => _selected = value);
+                        },
                         selected: _selected,
                         initialPageNumber: 2,
                         betweenFetchDuration: const Duration(seconds: 2),
