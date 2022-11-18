@@ -82,6 +82,8 @@ TextStyle getTextStyle(ZwapTextType typeText) {
       return ZwapTypography.mediumBodyRegular;
     case ZwapTextType.mediumBodyMedium:
       return ZwapTypography.mediumBodyMedium;
+    case ZwapTextType.mediumBodySemibold:
+      return ZwapTypography.mediumBodySemibold;
     case ZwapTextType.mediumBodyBold:
       return ZwapTypography.mediumBodyBold;
     case ZwapTextType.bigBodyRegular:

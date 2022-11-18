@@ -796,3 +796,6 @@ a
 
 ## 0.1.637
 * Fix a problem in ZwapSelect widget while adding new item
+
+## 0.1.638
+* Added medium body semibold text

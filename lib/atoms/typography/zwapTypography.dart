@@ -37,6 +37,7 @@ enum ZwapTextType {
   smallBodyBold,
   mediumBodyRegular,
   mediumBodyMedium,
+  mediumBodySemibold,
   mediumBodyBold,
   bigBodyRegular,
   bigBodySemibold,
@@ -331,6 +332,16 @@ class ZwapTypography {
 
   static const TextStyle mediumBodyMedium = TextStyle(
     fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    fontSize: 14,
+    height: 1.43,
+    color: ZwapColors.shades100,
+    fontFamily: 'SFUIText',
+    package: 'zwap_design_system',
+  );
+
+  static const TextStyle mediumBodySemibold = TextStyle(
+    fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
     fontSize: 14,
     height: 1.43,

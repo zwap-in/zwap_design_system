@@ -111,6 +111,7 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                           setState(() => _selected = value);
                         },
                         values: {
+                          if (_selected != null && !_values!.any((e) => e == _selected)) _selected!: _selected!,
                           ...Map.fromIterable(_values!, key: (i) => i, value: (i) => i),
                         },
                         fetchMoreData: (String newQuery, int pageNumber) async {
@@ -130,6 +131,7 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                           'not_here': 'non c\'è?',
                           'add_here': 'Aggiungilo qui',
                         }[key]!,
+                        searchType: ZwapSelectSearchTypes.dynamic,
                       ),
                     ),
                     Container(
