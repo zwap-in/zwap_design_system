@@ -164,6 +164,12 @@ class ZwapInput extends StatefulWidget {
   /// Default to true
   final bool useOutlinedDecoration;
 
+  /// If true and [showSuccess] is true a checkbox icon will
+  /// be used as suffix icon
+  ///
+  /// Default to true
+  final bool showCheckboxOnSuccessState;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -209,6 +215,7 @@ class ZwapInput extends StatefulWidget {
     this.subtitle,
     this.useOutlinedDecoration = true,
     this.helperWidget,
+    this.showCheckboxOnSuccessState = true,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -258,6 +265,7 @@ class ZwapInput extends StatefulWidget {
     this.subtitle,
     this.useOutlinedDecoration = true,
     this.helperWidget,
+    this.showCheckboxOnSuccessState = true,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -391,7 +399,7 @@ class _ZwapInputState extends State<ZwapInput> {
               size: 24,
             )
           : widget.prefixWidget,
-      suffixIcon: widget.showSuccess || widget.suffixIcon != null
+      suffixIcon: (widget.showSuccess && widget.showCheckboxOnSuccessState) || widget.suffixIcon != null
           ? Icon(
               widget.showSuccess ? Icons.check : widget.suffixIcon,
               color: widget.showSuccess ? ZwapColors.success800 : ZwapColors.neutral700,

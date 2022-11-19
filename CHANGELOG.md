@@ -799,3 +799,6 @@ a
 
 ## 0.1.638
 * Added medium body semibold text
+
+## 0.1.639
+* Added showCheckboxOnSuccessState property to ZwapInput widget

@@ -56,10 +56,13 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 value: _disableSimplePicker,
                 onChange: (value) => setState(() => _disableSimplePicker = value),
               ),
+              ZwapInput(
+                showCheckboxOnSuccessState: false,
+                showSuccess: true,
+              ),
               SizedBox(height: 20),
               ZwapYearPicker(
                 selectedYear: _year,
-                
                 hintText: '',
               ),
               SizedBox(height: 20),
