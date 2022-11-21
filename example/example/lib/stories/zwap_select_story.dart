@@ -107,7 +107,6 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                         canSearch: true,
                         canAddItem: true,
                         onAddItem: (value) {
-                          print(value);
                           setState(() => _selected = value);
                         },
                         values: {

@@ -802,3 +802,6 @@ a
 
 ## 0.1.639
 * Added showCheckboxOnSuccessState property to ZwapInput widget
+
+## 0.1.640
+* Added ChipdTapBar widget

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 import 'package:zwap_design_system/atoms/typography/zwapTypography.dart';
+import 'package:zwap_design_system/molecules/tabBar/chips_tab_bar/chips_tab_bar.dart';
 import 'package:zwap_design_system/molecules/tabBar/tabBar.dart';
+
+enum Ciao { a, b, c }
 
 class ZwapTabBarsStory extends StatefulWidget {
   const ZwapTabBarsStory({Key? key}) : super(key: key);
@@ -13,6 +16,7 @@ class ZwapTabBarsStory extends StatefulWidget {
 class _ZwapTabBarsStoryState extends State<ZwapTabBarsStory> {
   final List<String> _tabs = ['one', 'two', 'three', 'four'];
   String _selected = 'one';
+  Ciao? _selectedChip;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +49,15 @@ class _ZwapTabBarsStoryState extends State<ZwapTabBarsStory> {
             thickness: 1,
             onTabChanges: (tab) => setState(() => _selected = tab),
             roundTabIndicator: false,
+          ),
+          SizedBox(height: 40),
+          ChipsTabBar<Ciao>(
+            items: Ciao.values,
+            translateItem: (i) => '${i.name}${i.name}${i.name}${i.name}${i.name}${i.name}${i.name}${i.name}',
+            onTabSelected: (i) {
+              setState(() => _selectedChip = i);
+            },
+            selectedTab: _selectedChip,
           ),
         ],
       ),
