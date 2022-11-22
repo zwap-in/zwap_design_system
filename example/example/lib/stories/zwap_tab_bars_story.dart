@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 import 'package:zwap_design_system/atoms/typography/zwapTypography.dart';
 import 'package:zwap_design_system/molecules/tabBar/chips_tab_bar/chips_tab_bar.dart';
@@ -58,6 +59,16 @@ class _ZwapTabBarsStoryState extends State<ZwapTabBarsStory> {
               setState(() => _selectedChip = i);
             },
             selectedTab: _selectedChip,
+          ),
+          SizedBox(height: 40),
+          ChipsTabBar<Ciao>(
+            items: Ciao.values,
+            translateItem: (i) => '${i.name}${i.name}${i.name}${i.name}${i.name}${i.name}${i.name}${i.name}',
+            onTabSelected: (i) {
+              setState(() => _selectedChip = i);
+            },
+            selectedTab: _selectedChip,
+            selectedTabTextStyle: getTextStyle(ZwapTextType.smallBodyBold),
           ),
         ],
       ),

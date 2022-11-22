@@ -7,6 +7,9 @@ class ChipsTabBar<T> extends StatefulWidget {
   final List<T> items;
   final String Function(T item) translateItem;
 
+  final TextStyle? tabTextStyle;
+  final TextStyle? selectedTabTextStyle;
+
   final T? selectedTab;
   final void Function(T item)? onTabSelected;
 
@@ -17,6 +20,8 @@ class ChipsTabBar<T> extends StatefulWidget {
     required this.translateItem,
     this.selectedTab,
     this.onTabSelected,
+    this.tabTextStyle,
+    this.selectedTabTextStyle,
     this.internalPadding = const EdgeInsets.all(10),
     Key? key,
   }) : super(key: key);
@@ -55,6 +60,8 @@ class _ChipsTabBarState<T> extends State<ChipsTabBar<T>> {
                     text: widget.translateItem(t),
                     onTap: () => widget.onTabSelected != null ? widget.onTabSelected!(t) : null,
                     selected: _selectedTab == t,
+                    tabTextStyle: widget.tabTextStyle,
+                    selectedTabTextStyle: widget.selectedTabTextStyle,
                   ),
                 ))
             .toList(),
@@ -67,12 +74,17 @@ class _SingleTabWidget<T> extends StatefulWidget {
   final String text;
   final bool selected;
 
+  final TextStyle? tabTextStyle;
+  final TextStyle? selectedTabTextStyle;
+
   final Function() onTap;
 
   const _SingleTabWidget({
     required this.text,
     required this.selected,
     required this.onTap,
+    this.tabTextStyle,
+    this.selectedTabTextStyle,
     Key? key,
   }) : super(key: key);
 
@@ -115,10 +127,11 @@ class _SingleTabWidgetState<T> extends State<_SingleTabWidget<T>> {
                   : ZwapColors.whiteTransparent,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: ZwapText(
+        child: ZwapText.customStyle(
           text: widget.text,
-          zwapTextType: ZwapTextType.bigBodySemibold,
-          textColor: ZwapColors.primary900Dark,
+          customTextStyle: _selected
+              ? widget.selectedTabTextStyle ?? getTextStyle(ZwapTextType.bigBodySemibold).copyWith(color: ZwapColors.primary900Dark)
+              : widget.tabTextStyle ?? getTextStyle(ZwapTextType.bigBodyRegular).copyWith(color: ZwapColors.primary900Dark),
         ),
       ),
     );

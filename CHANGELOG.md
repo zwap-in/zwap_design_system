@@ -805,3 +805,6 @@ a
 
 ## 0.1.640
 * Added ChipdTapBar widget
+
+## 0.1.641
+* Added tabTextStyle and selectedTabTextStyle properties to ChipdTapBar widget
