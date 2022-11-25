@@ -9,12 +9,18 @@ import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.da
 import 'package:collection/collection.dart';
 part 'zwap_check_box_picker_provider.dart';
 
+typedef ZwapCheckBoxPickerItemBuilder = Widget Function(BuildContext context, String key, String value);
+
 class ZwapCheckBoxPicker extends StatefulWidget {
   final String? label;
   final String? hintText;
 
   final List<String> initialSelectedItems;
   final Map<String, String> values;
+
+  /// If provided used to build elements in the header and
+  /// inside the overlay
+  final ZwapCheckBoxPickerItemBuilder? itemBuilder;
 
   /// Called avery time an item is toggled
   ///
@@ -28,6 +34,7 @@ class ZwapCheckBoxPicker extends StatefulWidget {
     this.label,
     this.hintText,
     this.onToggleItem,
+    this.itemBuilder,
     Key? key,
   }) : super(key: key);
 
@@ -92,7 +99,7 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                                     textColor: ZwapColors.neutral500,
                                   ),
                                 )
-                              : _ChipsWidget(),
+                              : _ChipsWidget(builder: widget.itemBuilder),
                         ),
                       ),
                     ),
@@ -100,7 +107,7 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                     AnimatedRotation(
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.decelerate,
-                      turns: _focussed ? -0.25 : 0.25,
+                      turns: _focussed ? 0.25 : 0.75,
                       child: Icon(
                         Icons.arrow_back_ios_new_rounded,
                         size: 16,
@@ -110,7 +117,7 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                     const SizedBox(width: 12),
                   ],
                 ),
-                overlay: _OverlayContentWidget(),
+                overlay: _OverlayContentWidget(builder: widget.itemBuilder),
               ),
             ],
           );
@@ -121,11 +128,13 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
 }
 
 class _ChipsWidget extends StatelessWidget {
-  const _ChipsWidget({Key? key}) : super(key: key);
+  final ZwapCheckBoxPickerItemBuilder? builder;
+  const _ChipsWidget({required this.builder, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final List<String> _selectedKeys = context.select<_ZwapCheckBoxPickerProvider, List<String>>((state) => state.selectedKeys);
+    final Map<String, String> _values = context.select<_ZwapCheckBoxPickerProvider, Map<String, String>>((state) => state.values);
     return Container(
       width: double.infinity,
       child: SingleChildScrollView(
@@ -136,7 +145,7 @@ class _ChipsWidget extends StatelessWidget {
           children: _selectedKeys
               .mapIndexed((i, k) => Padding(
                     padding: i == 0 ? EdgeInsets.zero : const EdgeInsets.only(left: 8),
-                    child: _SingleChilpWidget(keyValue: k),
+                    child: _SingleChilpWidget(builder: builder, keyValue: k),
                   ))
               .toList(),
         ),
@@ -147,8 +156,13 @@ class _ChipsWidget extends StatelessWidget {
 
 class _SingleChilpWidget extends StatelessWidget {
   final String keyValue;
+  final ZwapCheckBoxPickerItemBuilder? builder;
 
-  const _SingleChilpWidget({required this.keyValue, Key? key}) : super(key: key);
+  const _SingleChilpWidget({
+    required this.builder,
+    required this.keyValue,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -162,11 +176,14 @@ class _SingleChilpWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          ZwapText(
-            text: _text,
-            zwapTextType: ZwapTextType.mediumBodyRegular,
-            textColor: ZwapColors.primary900Dark,
-          ),
+          if (builder != null)
+            builder!(context, keyValue, _text)
+          else
+            ZwapText(
+              text: _text,
+              zwapTextType: ZwapTextType.mediumBodyRegular,
+              textColor: ZwapColors.primary900Dark,
+            ),
           const SizedBox(width: 12),
           InkWell(
             onTap: () => context.read<_ZwapCheckBoxPickerProvider>().toggleItem(keyValue),
@@ -179,7 +196,12 @@ class _SingleChilpWidget extends StatelessWidget {
 }
 
 class _OverlayContentWidget extends StatelessWidget {
-  const _OverlayContentWidget({Key? key}) : super(key: key);
+  final ZwapCheckBoxPickerItemBuilder? builder;
+
+  const _OverlayContentWidget({
+    required this.builder,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +213,7 @@ class _OverlayContentWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: _values.entries.map((entry) => _CheckBoxListTileWidget(keyValue: entry.key)).toList(),
+          children: _values.entries.map((entry) => _CheckBoxListTileWidget(builder: builder, keyValue: entry.key)).toList(),
         ),
       ),
     );
@@ -200,8 +222,13 @@ class _OverlayContentWidget extends StatelessWidget {
 
 class _CheckBoxListTileWidget extends StatefulWidget {
   final String keyValue;
+  final ZwapCheckBoxPickerItemBuilder? builder;
 
-  const _CheckBoxListTileWidget({required this.keyValue, Key? key}) : super(key: key);
+  const _CheckBoxListTileWidget({
+    required this.builder,
+    required this.keyValue,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<_CheckBoxListTileWidget> createState() => _CheckBoxListTileWidgetState();
@@ -235,11 +262,13 @@ class _CheckBoxListTileWidgetState extends State<_CheckBoxListTileWidget> {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: ZwapText(
-                text: _text,
-                zwapTextType: ZwapTextType.bigBodyRegular,
-                textColor: ZwapColors.primary900Dark,
-              ),
+              child: widget.builder == null
+                  ? ZwapText(
+                      text: _text,
+                      zwapTextType: ZwapTextType.bigBodyRegular,
+                      textColor: ZwapColors.primary900Dark,
+                    )
+                  : widget.builder!(context, widget.keyValue, _text),
             ),
           ],
         ),

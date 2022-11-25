@@ -86,7 +86,7 @@ class _ZwapFloatingPickerState<T> extends State<ZwapFloatingPicker<T>> {
                   AnimatedRotation(
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.decelerate,
-                    turns: _focussed ? -0.25 : 0.25,
+                    turns: _focussed ? 0.25 : 0.75,
                     child: Icon(
                       Icons.arrow_back_ios_new_rounded,
                       size: 16,

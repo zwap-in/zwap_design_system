@@ -201,27 +201,47 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               SizedBox(height: 20),
               ZwapCheckBoxPicker(
                 initialSelectedItems: [
-                  '21',
-                  '121',
+                  'it',
+                  'uk',
                 ],
                 label: "kdfjaskdlf",
+                itemBuilder: (_, key, value) {
+                  String flag =
+                      key.toUpperCase().replaceAllMapped(RegExp(r'[A-Z]'), (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397));
+
+                  return Transform.translate(
+                    offset: Offset(0, -2),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ZwapText(
+                          text: flag,
+                          zwapTextType: ZwapTextType.mediumBodyRegular,
+                          textColor: ZwapColors.primary900Dark,
+                        ),
+                        SizedBox(width: 8),
+                        ZwapText(
+                          text: value,
+                          zwapTextType: ZwapTextType.mediumBodyRegular,
+                          textColor: ZwapColors.primary900Dark,
+                        ),
+                      ],
+                    ),
+                  );
+                },
                 hintText: "sàdòlkfj asòdkfjasòdkfjasòdk fja òd",
                 values: {
-                  '25': 'afdasdf',
-                  '42': 'gerger',
-                  '32': 'kmbaresf',
-                  '21': 'sdeg4ergf',
-                  '112': 'sdfasd',
-                  '125': 'afdasdf',
-                  '142': 'gerger',
-                  '132': 'kmbaresf',
-                  '121': 'sdeg4ergf',
-                  '1f12': 'sdfasd',
-                  '1f25': 'afdasdf',
-                  '1f42': 'gerger',
-                  '1f32': 'kmbaresf',
-                  '1f21': 'sdeg4ergf',
-                  '1f12': 'sdfasd',
+                  'it': 'afdasdf',
+                  'dk': 'gerger',
+                  'bg': 'kmbaresf',
+                  'uk': 'sdeg4ergf',
+                  'pl': 'sdfasd',
+                  'cn': 'afdasdf',
+                  'cz': 'gerger',
+                  'dk': 'kmbaresf',
+                  'jp': 'sdeg4ergf',
+                  'gr': 'sdfasd',
+                  'ua': 'afdasdf',
                 },
               ),
               SizedBox(height: 20),

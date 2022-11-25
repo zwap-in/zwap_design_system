@@ -237,14 +237,14 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                                         width: 20,
                                         height: 20,
                                         child: Transform.rotate(
-                                          angle: pi / 2,
+                                          angle: 3 * pi / 2,
                                           child: Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: ZwapColors.text65),
                                         ),
                                       ),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 12),
                         ],
                       );
                     },

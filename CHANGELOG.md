@@ -808,3 +808,7 @@ a
 
 ## 0.1.641
 * Added tabTextStyle and selectedTabTextStyle properties to ChipdTapBar widget
+
+## 0.1.642
+* Added itemBuilder property to ZwapCheckBoxWidget
+* Fixed chevron inside dynamic inputs direction
