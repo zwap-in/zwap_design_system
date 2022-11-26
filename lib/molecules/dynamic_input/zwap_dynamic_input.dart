@@ -25,6 +25,10 @@ class ZwapDynamicInput extends StatefulWidget {
 
   final bool _lockHeight;
 
+  /// This color is used for the border on the active
+  /// and hovered state
+  final Color? activeColor;
+
   const ZwapDynamicInput({
     required this.content,
     required this.overlay,
@@ -33,6 +37,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.focussed = false,
     this.onOpen,
     this.onClose,
+    this.activeColor,
     Key? key,
   })  : this._lockHeight = true,
         super(key: key);
@@ -46,6 +51,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.builder,
     this.focussed = false,
     this.onOpen,
+    this.activeColor,
     this.onClose,
     Key? key,
   })  : this._lockHeight = false,
@@ -183,7 +189,7 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
             color: widget.backgroundColor,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: _active ? ZwapColors.primary900Dark : ZwapColors.neutral300,
+              color: _active ? (widget.activeColor ?? ZwapColors.primary900Dark) : ZwapColors.neutral300,
             ),
           ),
           child: widget.content,

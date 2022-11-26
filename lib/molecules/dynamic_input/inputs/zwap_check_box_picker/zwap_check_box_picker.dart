@@ -28,6 +28,9 @@ class ZwapCheckBoxPicker extends StatefulWidget {
   /// if is true the item is selected
   final Function(String, bool)? onToggleItem;
 
+  /// This color will be used in the hovered and the selected statee
+  final Color? activeColor;
+
   const ZwapCheckBoxPicker({
     required this.values,
     this.initialSelectedItems = const [],
@@ -35,6 +38,7 @@ class ZwapCheckBoxPicker extends StatefulWidget {
     this.hintText,
     this.onToggleItem,
     this.itemBuilder,
+    this.activeColor,
     Key? key,
   }) : super(key: key);
 
@@ -77,6 +81,7 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                 const SizedBox(height: 8),
               ],
               ZwapDynamicInput(
+                activeColor: widget.activeColor,
                 onOpen: () => setState(() => _focussed = true),
                 onClose: () => setState(() => _focussed = false),
                 focussed: _focussed,

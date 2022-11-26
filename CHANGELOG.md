@@ -812,3 +812,6 @@ a
 ## 0.1.642
 * Added itemBuilder property to ZwapCheckBoxWidget
 * Fixed chevron inside dynamic inputs direction
+
+## 0.1.643
+* Added activeColor property to ZwapCheckBoxWidget
