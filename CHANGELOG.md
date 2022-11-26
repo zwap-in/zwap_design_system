@@ -817,4 +817,7 @@ a
 * Added activeColor property to ZwapCheckBoxWidget
 
 ## 0.1.644
-* Added error stato to ZwapCheckBoxWidget
+* Added error state to ZwapCheckBoxWidget
+
+## 0.1.645
+* Added dynamic label to ZwapCheckBoxPicker

@@ -35,6 +35,8 @@ class ZwapCheckBoxPicker extends StatefulWidget {
 
   final String? errorText;
 
+  final String? dynamicLabel;
+
   const ZwapCheckBoxPicker({
     required this.values,
     this.initialSelectedItems = const [],
@@ -45,6 +47,7 @@ class ZwapCheckBoxPicker extends StatefulWidget {
     this.activeColor,
     this.error = false,
     this.errorText,
+    this.dynamicLabel,
     Key? key,
   }) : super(key: key);
 
@@ -96,6 +99,7 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                 const SizedBox(height: 8),
               ],
               ZwapDynamicInput(
+                dynamicLabel: _provider.selectedKeys.isEmpty ? null : widget.dynamicLabel,
                 activeColor: _error ? ZwapColors.error400 : widget.activeColor,
                 defaultColor: _error ? ZwapColors.error400 : null,
                 onOpen: () => setState(() => _focussed = true),

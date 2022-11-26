@@ -33,6 +33,9 @@ class ZwapDynamicInput extends StatefulWidget {
   /// or hovered state
   final Color? defaultColor;
 
+  /// If provided, showed on the border
+  final String? dynamicLabel;
+
   const ZwapDynamicInput({
     required this.content,
     required this.overlay,
@@ -43,6 +46,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.onClose,
     this.activeColor,
     this.defaultColor,
+    this.dynamicLabel,
     Key? key,
   })  : this._lockHeight = true,
         super(key: key);
@@ -59,6 +63,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.activeColor,
     this.defaultColor,
     this.onClose,
+    this.dynamicLabel,
     Key? key,
   })  : this._lockHeight = false,
         super(key: key);
@@ -80,6 +85,8 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
 
   OverlayEntry? _entry;
 
+  String? _dynamicLabel;
+
   bool get _active => _focussed || _hovered;
   bool get _isOverlayOpen => _entry?.mounted ?? false;
 
@@ -87,11 +94,13 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
   void initState() {
     super.initState();
     _focussed = widget.focussed;
+    _dynamicLabel = widget.dynamicLabel;
   }
 
   @override
   void didUpdateWidget(covariant ZwapDynamicInput oldWidget) {
     if (_focussed != widget.focussed) setState(() => _focussed = widget.focussed);
+    if (_dynamicLabel != widget.dynamicLabel) setState(() => _dynamicLabel = widget.dynamicLabel);
     super.didUpdateWidget(oldWidget);
   }
 
@@ -186,19 +195,56 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
       onExit: (_) => setState(() => _hovered = false),
       child: GestureDetector(
         onTap: toggleOverlay,
-        child: AnimatedContainer(
-          key: _inputKey,
-          duration: const Duration(milliseconds: 200),
-          width: double.infinity,
-          height: widget._lockHeight ? 48 : null,
-          decoration: BoxDecoration(
-            color: widget.backgroundColor,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: _active ? (widget.activeColor ?? ZwapColors.primary900Dark) : (widget.defaultColor ?? ZwapColors.neutral300),
+        child: Stack(
+          children: [
+            AnimatedContainer(
+              key: _inputKey,
+              duration: const Duration(milliseconds: 200),
+              width: double.infinity,
+              height: widget._lockHeight ? (_dynamicLabel != null && _dynamicLabel!.isNotEmpty ? 52 : 48) : null,
+              decoration: BoxDecoration(
+                color: widget.backgroundColor,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: _active ? (widget.activeColor ?? ZwapColors.primary900Dark) : (widget.defaultColor ?? ZwapColors.neutral300),
+                ),
+              ),
+              child: widget.content,
             ),
-          ),
-          child: widget.content,
+            if (_dynamicLabel != null && _dynamicLabel!.isNotEmpty)
+              Positioned(
+                left: 10,
+                child: Transform.translate(
+                  offset: Offset(0, -8),
+                  child: AnimatedSize(
+                    duration: const Duration(milliseconds: 100),
+                    curve: Curves.decelerate,
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: ZwapColors.shades0,
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [ZwapColors.whiteTransparent, ZwapColors.shades0],
+                          stops: [0, 0.47],
+                        ),
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: ZwapText.customStyle(
+                        text: _dynamicLabel!,
+                        customTextStyle: getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(
+                          color: _active ? widget.activeColor ?? ZwapColors.primary900Dark : (widget.defaultColor ?? ZwapColors.neutral500),
+                          fontSize: 11,
+                          letterSpacing: 0.1,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

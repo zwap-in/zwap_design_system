@@ -234,6 +234,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   );
                 },
                 hintText: "sàdòlkfj asòdkfjasòdkfjasòdk fja òd",
+                dynamicLabel: "Labelll",
                 values: {
                   'it': 'afdasdf',
                   'dk': 'gerger',
