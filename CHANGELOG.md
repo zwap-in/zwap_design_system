@@ -815,3 +815,6 @@ a
 
 ## 0.1.643
 * Added activeColor property to ZwapCheckBoxWidget
+
+## 0.1.644
+* Added error stato to ZwapCheckBoxWidget

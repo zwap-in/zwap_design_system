@@ -33,6 +33,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
     "7": "policeman",
   };
 
+  bool get _error => _disableSimplePicker;
+
   List<String> _selectedItems = [];
 
   final List<String> _secondSelected = [];
@@ -200,6 +202,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               SizedBox(height: 20),
               ZwapCheckBoxPicker(
+                error: _error,
+                errorText: "Magna minim pariatur dolore ",
                 initialSelectedItems: [
                   'it',
                   'uk',

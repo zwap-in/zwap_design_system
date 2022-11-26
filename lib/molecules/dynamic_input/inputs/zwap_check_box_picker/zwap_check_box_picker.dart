@@ -1,7 +1,5 @@
 library zwap.check_box_picker;
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
@@ -31,6 +29,12 @@ class ZwapCheckBoxPicker extends StatefulWidget {
   /// This color will be used in the hovered and the selected statee
   final Color? activeColor;
 
+  /// If true the active color will be red and, is not null,
+  /// [errorText] is showed under the input
+  final bool error;
+
+  final String? errorText;
+
   const ZwapCheckBoxPicker({
     required this.values,
     this.initialSelectedItems = const [],
@@ -39,6 +43,8 @@ class ZwapCheckBoxPicker extends StatefulWidget {
     this.onToggleItem,
     this.itemBuilder,
     this.activeColor,
+    this.error = false,
+    this.errorText,
     Key? key,
   }) : super(key: key);
 
@@ -48,16 +54,25 @@ class ZwapCheckBoxPicker extends StatefulWidget {
 
 class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
   late final _ZwapCheckBoxPickerProvider _provider;
+
+  late bool _error;
   bool _focussed = false;
 
   @override
   void initState() {
     super.initState();
+    _error = widget.error;
     _provider = _ZwapCheckBoxPickerProvider(
       values: widget.values,
       initialSelectedKeys: widget.initialSelectedItems,
       onToggleItem: widget.onToggleItem,
     );
+  }
+
+  @override
+  void didUpdateWidget(covariant ZwapCheckBoxPicker oldWidget) {
+    if (_error != widget.error) setState(() => _error = widget.error);
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -81,7 +96,8 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                 const SizedBox(height: 8),
               ],
               ZwapDynamicInput(
-                activeColor: widget.activeColor,
+                activeColor: _error ? ZwapColors.error400 : widget.activeColor,
+                defaultColor: _error ? ZwapColors.error400 : null,
                 onOpen: () => setState(() => _focussed = true),
                 onClose: () => setState(() => _focussed = false),
                 focussed: _focussed,
@@ -123,6 +139,24 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                   ],
                 ),
                 overlay: _OverlayContentWidget(builder: widget.itemBuilder),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.decelerate,
+                  alignment: Alignment.centerLeft,
+                  child: _error && widget.errorText != null
+                      ? Container(
+                          margin: const EdgeInsets.only(top: 3),
+                          child: ZwapText(
+                            text: widget.errorText!,
+                            zwapTextType: ZwapTextType.bodyRegular,
+                            textColor: ZwapColors.error400,
+                          ),
+                        )
+                      : Container(key: UniqueKey()),
+                ),
               ),
             ],
           );
