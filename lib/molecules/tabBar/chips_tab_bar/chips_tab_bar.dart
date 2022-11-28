@@ -3,12 +3,26 @@ import 'package:collection/collection.dart';
 
 import '../../../atoms/atoms.dart';
 
+enum ChipTabBarDecorationPosition { left, right }
+
+typedef ChipTabBarDecoratorBuilder<T> = Widget? Function(BuildContext context, T item);
+
 class ChipsTabBar<T> extends StatefulWidget {
   final List<T> items;
   final String Function(T item) translateItem;
 
   final TextStyle? tabTextStyle;
   final TextStyle? selectedTabTextStyle;
+
+  /// If provided and the returned widget is not null, the returned
+  /// widget is used as decorator for the [item]
+  final ChipTabBarDecoratorBuilder? decorationBuilder;
+
+  /// The position of the decoration provided by [decorationBuilder]
+  /// inside tab.
+  ///
+  ///  Default to [ChipTabBarDecorationPosition.right]
+  final ChipTabBarDecorationPosition decorationPosition;
 
   final T? selectedTab;
   final void Function(T item)? onTabSelected;
@@ -22,6 +36,8 @@ class ChipsTabBar<T> extends StatefulWidget {
     this.onTabSelected,
     this.tabTextStyle,
     this.selectedTabTextStyle,
+    this.decorationBuilder,
+    this.decorationPosition = ChipTabBarDecorationPosition.right,
     this.internalPadding = const EdgeInsets.all(10),
     Key? key,
   }) : super(key: key);
@@ -57,11 +73,14 @@ class _ChipsTabBarState<T> extends State<ChipsTabBar<T>> {
             .mapIndexed((i, t) => Padding(
                   padding: i == 0 ? EdgeInsets.zero : const EdgeInsets.only(left: 4),
                   child: _SingleTabWidget<T>(
-                    text: widget.translateItem(t),
+                    item: t,
+                    tranlateItem: widget.translateItem,
                     onTap: () => widget.onTabSelected != null ? widget.onTabSelected!(t) : null,
                     selected: _selectedTab == t,
                     tabTextStyle: widget.tabTextStyle,
                     selectedTabTextStyle: widget.selectedTabTextStyle,
+                    decorationBuilder: widget.decorationBuilder,
+                    decorationPosition: widget.decorationPosition,
                   ),
                 ))
             .toList(),
@@ -71,19 +90,27 @@ class _ChipsTabBarState<T> extends State<ChipsTabBar<T>> {
 }
 
 class _SingleTabWidget<T> extends StatefulWidget {
-  final String text;
+  final T item;
+  final String Function(T item) tranlateItem;
   final bool selected;
 
   final TextStyle? tabTextStyle;
   final TextStyle? selectedTabTextStyle;
 
+  final ChipTabBarDecoratorBuilder? decorationBuilder;
+
+  final ChipTabBarDecorationPosition decorationPosition;
+
   final Function() onTap;
 
   const _SingleTabWidget({
-    required this.text,
+    required this.tranlateItem,
+    required this.item,
     required this.selected,
     required this.onTap,
     this.tabTextStyle,
+    required this.decorationBuilder,
+    required this.decorationPosition,
     this.selectedTabTextStyle,
     Key? key,
   }) : super(key: key);
@@ -95,6 +122,8 @@ class _SingleTabWidget<T> extends StatefulWidget {
 class _SingleTabWidgetState<T> extends State<_SingleTabWidget<T>> {
   bool _hovered = false;
   late bool _selected;
+
+  T get _item => widget.item;
 
   @override
   void initState() {
@@ -110,6 +139,13 @@ class _SingleTabWidgetState<T> extends State<_SingleTabWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
+    late final Widget? _decoration;
+
+    if (widget.decorationBuilder != null)
+      _decoration = widget.decorationBuilder!(context, widget.item);
+    else
+      _decoration = null;
+
     return InkWell(
       focusColor: ZwapColors.transparent,
       hoverColor: ZwapColors.transparent,
@@ -127,11 +163,18 @@ class _SingleTabWidgetState<T> extends State<_SingleTabWidget<T>> {
                   : ZwapColors.whiteTransparent,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: ZwapText.customStyle(
-          text: widget.text,
-          customTextStyle: _selected
-              ? widget.selectedTabTextStyle ?? getTextStyle(ZwapTextType.bigBodySemibold).copyWith(color: ZwapColors.primary900Dark)
-              : widget.tabTextStyle ?? getTextStyle(ZwapTextType.bigBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (_decoration != null && widget.decorationPosition == ChipTabBarDecorationPosition.left) _decoration,
+            ZwapText.customStyle(
+              text: widget.tranlateItem(_item),
+              customTextStyle: _selected
+                  ? widget.selectedTabTextStyle ?? getTextStyle(ZwapTextType.bigBodySemibold).copyWith(color: ZwapColors.primary900Dark)
+                  : widget.tabTextStyle ?? getTextStyle(ZwapTextType.bigBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+            ),
+            if (_decoration != null && widget.decorationPosition == ChipTabBarDecorationPosition.right) _decoration,
+          ],
         ),
       ),
     );

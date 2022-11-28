@@ -821,3 +821,6 @@ a
 
 ## 0.1.645
 * Added dynamic label to ZwapCheckBoxPicker
+
+## 0.1.646
+* Added decorationBuilder and decorationPosition properties to ZwapCheckBoxWidget
