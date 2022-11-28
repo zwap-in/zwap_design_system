@@ -824,3 +824,6 @@ a
 
 ## 0.1.646
 * Added decorationBuilder and decorationPosition properties to ZwapCheckBoxWidget
+
+## 0.1.647
+* Corrected problem in ZwapButtonDecorations
