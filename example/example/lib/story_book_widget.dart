@@ -1,5 +1,5 @@
-import 'package:example/main.dart';
-import 'package:example/stories.dart';
+import './main.dart';
+import './stories.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:taastrap/taastrap.dart';

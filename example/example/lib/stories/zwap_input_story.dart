@@ -204,6 +204,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ZwapCheckBoxPicker(
                 error: _error,
                 errorText: "Magna minim pariatur dolore ",
+                showClearButton: true,
                 initialSelectedItems: [
                   'it',
                   'uk',

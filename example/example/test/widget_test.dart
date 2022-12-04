@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:example/main.dart';
+import '../lib/main.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:taastrap/mediaQueries/components/generic/generic.dart';
 import 'package:zwap_design_system/atoms/colors/zwapColors.dart';

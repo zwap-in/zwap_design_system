@@ -1,16 +1,16 @@
-import 'package:example/stories/zwap_buttons_story.dart';
-import 'package:example/stories/zwap_checkbox_story.dart';
-import 'package:example/stories/zwap_form_story.dart';
-import 'package:example/stories/zwap_input_story.dart';
-import 'package:example/stories/zwap_modal_story.dart';
-import 'package:example/stories/zwap_percent_story.dart';
-import 'package:example/stories/zwap_scroll_items_story.dart';
-import 'package:example/stories/zwap_search_bar_story.dart';
-import 'package:example/stories/zwap_select_story.dart';
-import 'package:example/stories/zwap_tab_bars_story.dart';
-import 'package:example/stories/zwap_text_story.dart';
-import 'package:example/stories/zwap_tutorial_overlay_story.dart';
-import 'package:example/stories/zwap_weekly_calendar_pickert_story.dart';
+import './stories/zwap_buttons_story.dart';
+import './stories/zwap_checkbox_story.dart';
+import './stories/zwap_form_story.dart';
+import './stories/zwap_input_story.dart';
+import './stories/zwap_modal_story.dart';
+import './stories/zwap_percent_story.dart';
+import './stories/zwap_scroll_items_story.dart';
+import './stories/zwap_search_bar_story.dart';
+import './stories/zwap_select_story.dart';
+import './stories/zwap_tab_bars_story.dart';
+import './stories/zwap_text_story.dart';
+import './stories/zwap_tutorial_overlay_story.dart';
+import './stories/zwap_weekly_calendar_pickert_story.dart';
 import 'package:flutter/material.dart';
 
 enum ZwapStories {
