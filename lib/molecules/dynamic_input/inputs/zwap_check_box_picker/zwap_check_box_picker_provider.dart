@@ -5,10 +5,12 @@ class _ZwapCheckBoxPickerProvider extends ChangeNotifier {
   List<String> selectedKeys;
 
   final Function(String, bool)? onToggleItem;
+  final Function()? onClearAll;
 
   _ZwapCheckBoxPickerProvider({
     required this.onToggleItem,
     required this.values,
+    required this.onClearAll,
     List<String>? initialSelectedKeys,
   })  : this.selectedKeys = initialSelectedKeys ?? [],
         super();
@@ -21,6 +23,13 @@ class _ZwapCheckBoxPickerProvider extends ChangeNotifier {
 
     if (onToggleItem != null) onToggleItem!(item, selectedKeys.contains(item));
 
+    notifyListeners();
+  }
+
+  void clear() {
+    if (onClearAll != null) onClearAll!();
+    
+    selectedKeys = [];
     notifyListeners();
   }
 }

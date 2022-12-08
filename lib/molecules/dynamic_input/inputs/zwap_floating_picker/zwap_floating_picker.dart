@@ -16,6 +16,8 @@ class ZwapFloatingPicker<T> extends StatefulWidget {
 
   final String Function(T) getItemString;
 
+  final bool showClearButton;
+
   const ZwapFloatingPicker({
     required this.options,
     required this.getItemString,
@@ -23,6 +25,7 @@ class ZwapFloatingPicker<T> extends StatefulWidget {
     this.onSelected,
     this.label,
     this.placeholder,
+    this.showClearButton = false,
     Key? key,
   }) : super(key: key);
 
@@ -68,44 +71,52 @@ class _ZwapFloatingPickerState<T> extends State<ZwapFloatingPicker<T>> {
           ),
           const SizedBox(height: 8),
         ],
-        ZwapDynamicInput(
-          key: _inputKey,
-          content: ChangeNotifierProvider<ZwapFloatingPickerProvider<T>>.value(
-            value: _provider,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _ContentWidget<T>(
-                      placeholder: widget.placeholder ?? '',
-                      focussed: _focussed,
-                    ),
+        ChangeNotifierProvider<ZwapFloatingPickerProvider<T>>.value(
+          value: _provider,
+          child: Builder(
+            builder: (context) {
+              final bool _itemIsSelected = context.select<ZwapFloatingPickerProvider<T>, bool>((pro) => pro.selectedValue != null);
+
+              return ZwapDynamicInput(
+                showDeleteIcon: widget.showClearButton && _itemIsSelected,
+                onDelete: () => context.read<ZwapFloatingPickerProvider<T>>().selectedValue = null,
+                key: _inputKey,
+                content: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _ContentWidget<T>(
+                          placeholder: widget.placeholder ?? '',
+                          focussed: _focussed,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      AnimatedRotation(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.decelerate,
+                        turns: _focussed ? 0.25 : 0.75,
+                        child: Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 16,
+                          color: ZwapColors.text65,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  AnimatedRotation(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.decelerate,
-                    turns: _focussed ? 0.25 : 0.75,
-                    child: Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      size: 16,
-                      color: ZwapColors.text65,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                ],
-              ),
-            ),
+                ),
+                overlay: _OverlayWidget<T>(),
+                onOpen: () => setState(() => _focussed = true),
+                onClose: () => setState(() => _focussed = false),
+                builder: (_, child) => ChangeNotifierProvider<ZwapFloatingPickerProvider<T>>.value(
+                  value: _provider,
+                  child: child,
+                ),
+                focussed: _focussed,
+              );
+            },
           ),
-          overlay: _OverlayWidget<T>(),
-          onOpen: () => setState(() => _focussed = true),
-          onClose: () => setState(() => _focussed = false),
-          builder: (_, child) => ChangeNotifierProvider<ZwapFloatingPickerProvider<T>>.value(
-            value: _provider,
-            child: child,
-          ),
-          focussed: _focussed,
         ),
       ],
     );

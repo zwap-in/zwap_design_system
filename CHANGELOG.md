@@ -827,3 +827,9 @@ a
 
 ## 0.1.647
 * Corrected problem in ZwapButtonDecorations
+
+## 0.1.648
+* Added clear button on ZwapFloatingPicket and ZwapCheckBoxPicker
+
+## 0.1.649
+* Added ZwapRangeSlider widget

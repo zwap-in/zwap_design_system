@@ -12,6 +12,7 @@ import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.da
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_check_box_picker/zwap_check_box_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_floating_picker/zwap_floating_picker.dart';
 import 'package:zwap_design_system/molecules/molecules.dart';
+import 'package:zwap_design_system/molecules/rangeSlider/zwap_range_slider.dart';
 
 enum MyEnum { a, b, c, v, d, f, g }
 
@@ -44,6 +45,9 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   final int _year = 2020;
 
+  double min = 0;
+  double max = 5;
+
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
@@ -54,10 +58,28 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: 20),
+              Container(
+                child: ZwapRangeSlider(
+                  minValue: 5,
+                  maxValue: 300,
+                  onChange: (min, max) => setState(() {
+                    this.min = min.floorToDouble();
+                    this.max = max.floorToDouble();
+                  }),
+                ),
+                width: 200,
+              ),
+              SizedBox(height: 5),
+              Text('$min -- $max'),
+              SizedBox(height: 20),
+              SizedBox(height: 20),
+              SizedBox(height: 20),
               ZwapSwitch(
                 value: _disableSimplePicker,
                 onChange: (value) => setState(() => _disableSimplePicker = value),
               ),
+              SizedBox(height: 20),
               ZwapInput(
                 showCheckboxOnSuccessState: false,
                 showSuccess: true,

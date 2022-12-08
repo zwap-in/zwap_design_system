@@ -125,6 +125,7 @@ class ZwapIcons {
     "details": "assets/images/icons/Details.svg",
     "open_eye": "assets/images/icons/open_eye.svg",
     "closed_eye": "assets/images/icons/closed_eye.svg",
+    "trash": "assets/images/icons/trash.svg",
   };
 
   /// The mapping data for each icons

@@ -36,6 +36,10 @@ class ZwapDynamicInput extends StatefulWidget {
   /// If provided, showed on the border
   final String? dynamicLabel;
 
+  final bool showDeleteIcon;
+
+  final void Function()? onDelete;
+
   const ZwapDynamicInput({
     required this.content,
     required this.overlay,
@@ -47,6 +51,8 @@ class ZwapDynamicInput extends StatefulWidget {
     this.activeColor,
     this.defaultColor,
     this.dynamicLabel,
+    this.showDeleteIcon = false,
+    this.onDelete,
     Key? key,
   })  : this._lockHeight = true,
         super(key: key);
@@ -64,6 +70,8 @@ class ZwapDynamicInput extends StatefulWidget {
     this.defaultColor,
     this.onClose,
     this.dynamicLabel,
+    this.showDeleteIcon = false,
+    this.onDelete,
     Key? key,
   })  : this._lockHeight = false,
         super(key: key);
@@ -83,6 +91,8 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
   double? _overlayBottomOffset;
   double? _overlayLeftOffset;
 
+  late bool _showDeleteIcon;
+
   OverlayEntry? _entry;
 
   String? _dynamicLabel;
@@ -95,12 +105,14 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
     super.initState();
     _focussed = widget.focussed;
     _dynamicLabel = widget.dynamicLabel;
+    _showDeleteIcon = widget.showDeleteIcon;
   }
 
   @override
   void didUpdateWidget(covariant ZwapDynamicInput oldWidget) {
     if (_focussed != widget.focussed) setState(() => _focussed = widget.focussed);
     if (_dynamicLabel != widget.dynamicLabel) setState(() => _dynamicLabel = widget.dynamicLabel);
+    if (_showDeleteIcon != widget.showDeleteIcon) setState(() => _showDeleteIcon = widget.showDeleteIcon);
     super.didUpdateWidget(oldWidget);
   }
 
@@ -197,19 +209,50 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
         onTap: toggleOverlay,
         child: Stack(
           children: [
-            AnimatedContainer(
-              key: _inputKey,
-              duration: const Duration(milliseconds: 200),
-              width: double.infinity,
-              height: widget._lockHeight ? (_dynamicLabel != null && _dynamicLabel!.isNotEmpty ? 52 : 48) : null,
-              decoration: BoxDecoration(
-                color: widget.backgroundColor,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: _active ? (widget.activeColor ?? ZwapColors.primary900Dark) : (widget.defaultColor ?? ZwapColors.neutral300),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: AnimatedContainer(
+                    key: _inputKey,
+                    duration: const Duration(milliseconds: 200),
+                    width: double.infinity,
+                    height: widget._lockHeight ? (_dynamicLabel != null && _dynamicLabel!.isNotEmpty ? 52 : 48) : null,
+                    decoration: BoxDecoration(
+                      color: widget.backgroundColor,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: _active ? (widget.activeColor ?? ZwapColors.primary900Dark) : (widget.defaultColor ?? ZwapColors.neutral300),
+                      ),
+                    ),
+                    child: widget.content,
+                  ),
                 ),
-              ),
-              child: widget.content,
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  child: _showDeleteIcon
+                      ? ZwapButton(
+                          width: 32,
+                          height: 32,
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          decorations: ZwapButtonDecorations.quaternary(
+                            internalPadding: EdgeInsets.zero,
+                            contentColor: ZwapColors.primary900Dark,
+                            backgroundColor: ZwapColors.whiteTransparent,
+                          ),
+                          buttonChild: ZwapButtonChild.customIcon(
+                            icon: (state) => ZwapIcons.icons(
+                              'trash',
+                              iconSize: 20,
+                              iconColor: state.decorations!.contentColor,
+                            ),
+                          ),
+                          onTap: widget.onDelete,
+                        )
+                      : Container(),
+                ),
+              ],
             ),
             if (_dynamicLabel != null && _dynamicLabel!.isNotEmpty)
               Positioned(
