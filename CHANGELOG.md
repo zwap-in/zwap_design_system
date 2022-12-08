@@ -833,3 +833,6 @@ a
 
 ## 0.1.649
 * Added ZwapRangeSlider widget
+
+## 0.1.650
+* Fix on internal padding of ZwapFloatingPicker and forced placeholder to fit in 1 line

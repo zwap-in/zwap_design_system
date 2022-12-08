@@ -102,7 +102,6 @@ class _ZwapFloatingPickerState<T> extends State<ZwapFloatingPicker<T>> {
                           color: ZwapColors.text65,
                         ),
                       ),
-                      const SizedBox(width: 12),
                     ],
                   ),
                 ),
@@ -162,6 +161,8 @@ class _ContentWidgetState<T> extends State<_ContentWidget<T>> {
                 text: widget.placeholder,
                 zwapTextType: ZwapTextType.mediumBodyRegular,
                 textColor: ZwapColors.neutral500,
+                maxLines: 1,
+                textOverflow: TextOverflow.ellipsis,
               )
             : ZwapText(
                 text: _getCopy(_selectedItem),
