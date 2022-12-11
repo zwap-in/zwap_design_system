@@ -7,6 +7,7 @@ import 'package:zwap_design_system/atoms/text_controller/tags_text_conroller.dar
 import 'package:zwap_design_system/atoms/input/zwap_hint_input/zwap_hint_input.dart';
 import 'package:zwap_design_system/molecules/calendar_input/zwap_calendar_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_input/zwap_chips_input.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_search_picker/zwap_search_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_simple_picker/zwap_simple_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_check_box_picker/zwap_check_box_picker.dart';
@@ -48,6 +49,19 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
   double min = 0;
   double max = 5;
 
+  final List<String> values = [
+    'asdkfjaskdlfjaskdlf',
+    'asdkfjaskdlfjaskdlf',
+    'asdfsasdkfjdlf',
+    'sdfasdkfjdlf',
+    'asdkfsdfasjdlf',
+    'asdkfjdlsfsdaf',
+    'asdkdsfafjdlf',
+    'asdaskffsjdlf',
+    'asdassdkfjdlf',
+    'asdaskfjdfdddlf',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
@@ -72,6 +86,29 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               SizedBox(height: 5),
               Text('$min -- $max'),
+              SizedBox(height: 20),
+              ZwapSearchPicker<String>(
+                performSearch: (search, page) async {
+                  await Future.delayed(const Duration(milliseconds: 2000));
+
+                  if (search.isEmpty && page == 2)
+                    return [
+                      'lkjfrtyuhjnmkh',
+                      'lkhgrtyuhjnmkh',
+                      'ljhgftyuhjnmkh',
+                      'lkjhgfryuhjnmkh',
+                      'kjhgfrtuhjnmkh',
+                      'lkjhgfrtymkh',
+                    ];
+
+                  return search.isEmpty ? values : values.where((e) => e.contains(search)).toList();
+                },
+                getItemCopy: (s) => s,
+                initialValues: values,
+                translateKey: (_) => 'Nessun risultato',
+                placeholder: "Ciao ciao ciao ciao",
+                onItemSelected: (s) => print(s),
+              ),
               SizedBox(height: 20),
               SizedBox(height: 20),
               SizedBox(height: 20),

@@ -130,6 +130,8 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                                     text: widget.hintText ?? '',
                                     zwapTextType: ZwapTextType.mediumBodyRegular,
                                     textColor: ZwapColors.neutral500,
+                                    maxLines: 1,
+                                    textOverflow: TextOverflow.ellipsis,
                                   ),
                                 )
                               : _ChipsWidget(builder: widget.itemBuilder),
