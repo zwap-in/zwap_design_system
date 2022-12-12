@@ -2,16 +2,16 @@ import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:zwap_design_system/atoms/input/zwap_hint_input/zwap_hint_input.dart';
 import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
 import 'package:zwap_design_system/atoms/text_controller/tags_text_conroller.dart';
-import 'package:zwap_design_system/atoms/input/zwap_hint_input/zwap_hint_input.dart';
 import 'package:zwap_design_system/molecules/calendar_input/zwap_calendar_input.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_check_box_picker/zwap_check_box_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_input/zwap_chips_input.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_floating_picker/zwap_floating_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_search_picker/zwap_search_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_simple_picker/zwap_simple_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
-import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_check_box_picker/zwap_check_box_picker.dart';
-import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_floating_picker/zwap_floating_picker.dart';
 import 'package:zwap_design_system/molecules/molecules.dart';
 import 'package:zwap_design_system/molecules/rangeSlider/zwap_range_slider.dart';
 
@@ -46,8 +46,10 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   final int _year = 2020;
 
-  double min = 0;
-  double max = 5;
+  double min = 5;
+  double max = 300;
+
+  List<String> _selectedLanguages = [];
 
   final List<String> values = [
     'asdkfjaskdlfjaskdlf',
@@ -62,6 +64,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
     'asdaskfjdfdddlf',
   ];
 
+  String? _selectedSearchItem;
+
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
@@ -72,14 +76,83 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              ZwapButton(
+                buttonChild: ZwapButtonChild.text(text: "resetta"),
+                decorations: ZwapButtonDecorations.primaryLight(),
+                onTap: () => setState(() {
+                  min = 105;
+                  max = 205;
+                  _selectedLanguages = [];
+                  _selectedSearchItem = null;
+                }),
+              ),
+              SizedBox(height: 20),
+              SizedBox(height: 20),
+              SizedBox(height: 20),
+              ZwapCheckBoxPicker(
+                error: _error,
+                errorText: "Magna minim pariatur dolore ",
+                showClearButton: true,
+                selectedItems: _selectedLanguages,
+                onClearAll: () => _selectedLanguages = [],
+                onToggleItem: (item, selected) {
+                  if (selected)
+                    setState(() => _selectedLanguages..add(item));
+                  else
+                    setState(() => _selectedLanguages..remove(item));
+                },
+                label: "CheckBoxPicker",
+                itemBuilder: (_, key, value) {
+                  String flag =
+                      key.toUpperCase().replaceAllMapped(RegExp(r'[A-Z]'), (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397));
+
+                  return Transform.translate(
+                    offset: Offset(0, -2),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ZwapText(
+                          text: flag,
+                          zwapTextType: ZwapTextType.mediumBodyRegular,
+                          textColor: ZwapColors.primary900Dark,
+                        ),
+                        SizedBox(width: 8),
+                        ZwapText(
+                          text: value,
+                          zwapTextType: ZwapTextType.mediumBodyRegular,
+                          textColor: ZwapColors.primary900Dark,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                hintText: "sàdòlkfj asòdkfjasòdkfjasòdk fja òd",
+                dynamicLabel: "Labelll",
+                values: {
+                  'it': 'afdasdf',
+                  'dk': 'gerger',
+                  'bg': 'kmbaresf',
+                  'uk': 'sdeg4ergf',
+                  'pl': 'sdfasd',
+                  'cn': 'afdasdf',
+                  'cz': 'gerger',
+                  'dk': 'kmbaresf',
+                  'jp': 'sdeg4ergf',
+                  'gr': 'sdfasd',
+                  'ua': 'afdasdf',
+                },
+              ),
+              SizedBox(height: 20),
+              SizedBox(height: 20),
               SizedBox(height: 20),
               Container(
                 child: ZwapRangeSlider(
+                  value: ZwapRangeValues(min, max),
                   minValue: 5,
                   maxValue: 300,
-                  onChange: (min, max) => setState(() {
-                    this.min = min.floorToDouble();
-                    this.max = max.floorToDouble();
+                  onChange: (value) => setState(() {
+                    min = value.min.floorToDouble();
+                    max = value.max.floorToDouble();
                   }),
                 ),
                 width: 200,
@@ -87,7 +160,14 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               SizedBox(height: 5),
               Text('$min -- $max'),
               SizedBox(height: 20),
+              ZwapText(
+                text: "ZwapSearchPicker",
+                zwapTextType: ZwapTextType.bigBodySemibold,
+                textColor: ZwapColors.primary900Dark,
+              ),
+              const SizedBox(height: 8),
               ZwapSearchPicker<String>(
+                selectedItem: _selectedSearchItem,
                 performSearch: (search, page) async {
                   await Future.delayed(const Duration(milliseconds: 2000));
 
@@ -107,7 +187,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 initialValues: values,
                 translateKey: (_) => 'Nessun risultato',
                 placeholder: "Ciao ciao ciao ciao",
-                onItemSelected: (s) => print(s),
+                onItemSelected: (s) => _selectedSearchItem = s,
+                
               ),
               SizedBox(height: 20),
               SizedBox(height: 20),
@@ -260,55 +341,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 getItemString: (i) => '$i$i$i',
               ),
               SizedBox(height: 20),
-              ZwapCheckBoxPicker(
-                error: _error,
-                errorText: "Magna minim pariatur dolore ",
-                showClearButton: true,
-                initialSelectedItems: [
-                  'it',
-                  'uk',
-                ],
-                label: "kdfjaskdlf",
-                itemBuilder: (_, key, value) {
-                  String flag =
-                      key.toUpperCase().replaceAllMapped(RegExp(r'[A-Z]'), (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397));
-
-                  return Transform.translate(
-                    offset: Offset(0, -2),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ZwapText(
-                          text: flag,
-                          zwapTextType: ZwapTextType.mediumBodyRegular,
-                          textColor: ZwapColors.primary900Dark,
-                        ),
-                        SizedBox(width: 8),
-                        ZwapText(
-                          text: value,
-                          zwapTextType: ZwapTextType.mediumBodyRegular,
-                          textColor: ZwapColors.primary900Dark,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                hintText: "sàdòlkfj asòdkfjasòdkfjasòdk fja òd",
-                dynamicLabel: "Labelll",
-                values: {
-                  'it': 'afdasdf',
-                  'dk': 'gerger',
-                  'bg': 'kmbaresf',
-                  'uk': 'sdeg4ergf',
-                  'pl': 'sdfasd',
-                  'cn': 'afdasdf',
-                  'cz': 'gerger',
-                  'dk': 'kmbaresf',
-                  'jp': 'sdeg4ergf',
-                  'gr': 'sdfasd',
-                  'ua': 'afdasdf',
-                },
-              ),
               SizedBox(height: 20),
               ZwapInput(
                 label: "Input con label dinamica",

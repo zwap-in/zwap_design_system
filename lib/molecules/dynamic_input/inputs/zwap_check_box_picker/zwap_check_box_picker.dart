@@ -1,5 +1,6 @@
 library zwap.check_box_picker;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
@@ -13,7 +14,8 @@ class ZwapCheckBoxPicker extends StatefulWidget {
   final String? label;
   final String? hintText;
 
-  final List<String> initialSelectedItems;
+  /// List of keys in [values] that are selected
+  final List<String> selectedItems;
   final Map<String, String> values;
 
   /// If provided used to build elements in the header and
@@ -42,7 +44,7 @@ class ZwapCheckBoxPicker extends StatefulWidget {
 
   const ZwapCheckBoxPicker({
     required this.values,
-    this.initialSelectedItems = const [],
+    this.selectedItems = const [],
     this.label,
     this.hintText,
     this.onToggleItem,
@@ -72,7 +74,7 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
     _error = widget.error;
     _provider = _ZwapCheckBoxPickerProvider(
       values: widget.values,
-      initialSelectedKeys: widget.initialSelectedItems,
+      initialSelectedKeys: widget.selectedItems,
       onToggleItem: widget.onToggleItem,
       onClearAll: widget.onClearAll,
     );
@@ -81,6 +83,11 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
   @override
   void didUpdateWidget(covariant ZwapCheckBoxPicker oldWidget) {
     if (_error != widget.error) setState(() => _error = widget.error);
+    if (!listEquals(_provider.selectedKeys, widget.selectedItems)) {
+      _provider.selectedKeys = widget.selectedItems;
+      setState(() {});
+    }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -187,7 +194,7 @@ class _ChipsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> _selectedKeys = context.select<_ZwapCheckBoxPickerProvider, List<String>>((state) => state.selectedKeys);
-    final Map<String, String> _values = context.select<_ZwapCheckBoxPickerProvider, Map<String, String>>((state) => state.values);
+
     return Container(
       width: double.infinity,
       child: SingleChildScrollView(

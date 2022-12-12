@@ -838,5 +838,8 @@ a
 * Fix on internal padding of ZwapFloatingPicker and forced placeholder to fit in 1 line
 
 ## 0.1.651
-* Forced placeholder to fit in 1 line in ZwapCheckBoxPicker Widget
 * Added ZwapSearchPicker Widget
+* Forced placeholder to fit in 1 line in ZwapCheckBoxPicker Widget
+
+## 0.1.652
+* Added responsive value on ZwapCheckBoxPicker, ZwapSearchPicker and ZwapRangeSlider widgets

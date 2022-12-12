@@ -1,7 +1,11 @@
+library zwap.range_slider;
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
+
+part 'zwap_range_values.dart';
 
 /// FEATURE: appearing labels on press thumb
 /// FEATURE: decorations
@@ -9,15 +13,24 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 enum _ZwapRangeDraggingThumb { start, end }
 
 class ZwapRangeSlider extends StatefulWidget {
-  final int minValue;
-  final int maxValue;
+  /// The current value of this range slider, if not
+  /// provided the inital value will be created using
+  /// [minValue] and [maxValue]
+  final ZwapRangeValues? value;
+
+  /// The smallest value possible
+  final double minValue;
+
+  /// The bigger value possible
+  final double maxValue;
 
   /// The size of the thumbs, default to 16
   final double thumbSize;
 
-  final Function(double min, double max)? onChange;
+  final Function(ZwapRangeValues)? onChange;
 
   const ZwapRangeSlider({
+    this.value,
     this.minValue = 0,
     this.maxValue = 5,
     this.thumbSize = 16,
@@ -30,6 +43,11 @@ class ZwapRangeSlider extends StatefulWidget {
 }
 
 class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
+  Duration _animationDuration = Duration.zero;
+
+  /// Current widget max width
+  double? _maxWidth;
+
   /// This values is used to show only one of the two thumbs
   /// when their are in the same position.
   ///
@@ -47,137 +65,179 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
   /// Used to know what thumb has being dragged right now
   _ZwapRangeDraggingThumb? _draggedThumb;
 
+  double get _thumbSize => widget.thumbSize;
+  bool get _isDragging => _draggedThumb != null;
+
   @override
-  void initState() {
-    super.initState();
+  void didUpdateWidget(covariant ZwapRangeSlider oldWidget) {
+    if (!_isDragging && widget.value != null && widget.value != _currentValue) {
+      _animationDuration = const Duration(milliseconds: 200);
+      _currentValue = widget.value!;
+
+      WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() => _animationDuration = Duration.zero));
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
-  double get _thumbSize => widget.thumbSize;
+  ZwapRangeValues get _currentValue {
+    if (_maxWidth == null) return ZwapRangeValues(widget.minValue, widget.maxValue);
 
-  void _notifiyChange(double maxWidth) {
-    if (widget.onChange == null) return;
-
-    maxWidth -= _thumbSize;
+    final double maxWidth = _maxWidth! - _thumbSize;
 
     final double _min = (widget.maxValue - widget.minValue) * (_startThumbOffset / maxWidth);
     final double _max = (widget.maxValue - widget.minValue) * (1 - (_endThumbOffset / maxWidth));
 
-    widget.onChange!(widget.minValue + _min, widget.minValue + _max);
+    return ZwapRangeValues(_min, _max) + widget.minValue;
+  }
+
+  set _currentValue(ZwapRangeValues value) {
+    if (_maxWidth == null) {
+      _startThumbOffset = 0;
+      _endThumbOffset = 0;
+      return;
+    }
+
+    final double _dValue = widget.maxValue - widget.minValue;
+
+    _startThumbOffset = _maxWidth! * ((value.min - widget.minValue) / _dValue);
+    _endThumbOffset = _maxWidth! * (1 - (value.max - widget.minValue) / _dValue);
+
+    //? Correct values here
+
+    _startThumbOffset -= (_startThumbOffset / _maxWidth!) * _thumbSize;
+    _endThumbOffset -= (_endThumbOffset / _maxWidth!) * _thumbSize;
+
+    setState(() {});
+  }
+
+  void _notifiyChange(double maxWidth) {
+    if (widget.onChange == null) return;
+    widget.onChange!(_currentValue);
   }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, size) {
+        _maxWidth = size.maxWidth;
         final bool _isAtSamePosition = (_startThumbOffset + _thumbSize / 2) == size.maxWidth - _endThumbOffset - _thumbSize / 2;
 
-        return Container(
-          height: _thumbSize,
-          width: double.infinity,
-          child: Stack(
-            children: [
-              //? Placeholder line
-              Positioned(
-                top: (_thumbSize / 2) - 1,
-                left: 1,
-                right: 1,
-                child: Container(
-                  height: 4,
-                  decoration: BoxDecoration(color: ZwapColors.neutral200, borderRadius: BorderRadius.circular(2)),
-                ),
-              ),
-              //? Range line
-              Positioned(
-                top: (_thumbSize / 2) - 1,
-                left: _startThumbOffset + 1,
-                right: _endThumbOffset + 1,
-                child: Container(
-                  width: double.infinity,
-                  height: 4,
-                  decoration: BoxDecoration(color: ZwapColors.primary700, borderRadius: BorderRadius.circular(2)),
-                ),
-              ),
-              //? Start thumb widget
-              if (!_isAtSamePosition || _showStartIfEquals)
+        return MouseRegion(
+          cursor: _isDragging ? SystemMouseCursors.grabbing : SystemMouseCursors.basic,
+          child: Container(
+            height: _thumbSize,
+            width: double.infinity,
+            child: Stack(
+              children: [
+                //? Placeholder line
                 Positioned(
-                  left: _startThumbOffset,
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.grab,
-                    child: GestureDetector(
-                      onHorizontalDragStart: (_) {
-                        if (_draggedThumb == null) _draggedThumb = _ZwapRangeDraggingThumb.start;
-                      },
-                      onHorizontalDragUpdate: (details) {
-                        if (_draggedThumb != _ZwapRangeDraggingThumb.start) return;
+                  top: (_thumbSize / 2) - 1,
+                  left: 1,
+                  right: 1,
+                  child: Container(
+                    height: 4,
+                    decoration: BoxDecoration(color: ZwapColors.neutral200, borderRadius: BorderRadius.circular(2)),
+                  ),
+                ),
+                //? Range line
+                AnimatedPositioned(
+                  duration: _animationDuration,
+                  curve: Curves.decelerate,
+                  top: (_thumbSize / 2) - 1,
+                  left: _startThumbOffset + 1,
+                  right: _endThumbOffset + 1,
+                  child: Container(
+                    width: double.infinity,
+                    height: 4,
+                    decoration: BoxDecoration(color: ZwapColors.primary700, borderRadius: BorderRadius.circular(2)),
+                  ),
+                ),
+                //? Start thumb widget
+                if (!_isAtSamePosition || _showStartIfEquals)
+                  AnimatedPositioned(
+                    duration: _animationDuration,
+                    curve: Curves.decelerate,
+                    left: _startThumbOffset,
+                    child: MouseRegion(
+                      cursor: _isDragging ? SystemMouseCursors.grabbing : SystemMouseCursors.grab,
+                      child: GestureDetector(
+                        onHorizontalDragStart: (_) {
+                          if (_draggedThumb == null) _draggedThumb = _ZwapRangeDraggingThumb.start;
+                        },
+                        onHorizontalDragUpdate: (details) {
+                          if (_draggedThumb != _ZwapRangeDraggingThumb.start) return;
 
-                        double _newOffset = _startThumbOffset + details.delta.dx;
-                        _newOffset = max(0, min(_newOffset, size.maxWidth - _endThumbOffset - _thumbSize));
+                          double _newOffset = _startThumbOffset + details.delta.dx;
+                          _newOffset = max(0, min(_newOffset, size.maxWidth - _endThumbOffset - _thumbSize));
 
-                        setState(() => _startThumbOffset = _newOffset);
-                        _notifiyChange(size.maxWidth);
-                      },
-                      onHorizontalDragEnd: (_) {
-                        _draggedThumb = null;
-                        if (!_isAtSamePosition) return;
+                          setState(() => _startThumbOffset = _newOffset);
+                          _notifiyChange(size.maxWidth);
+                        },
+                        onHorizontalDragEnd: (_) {
+                          setState(() => _draggedThumb = null);
+                          if (!_isAtSamePosition) return;
 
-                        setState(() => _showStartIfEquals = !_showStartIfEquals);
-                      },
-                      child: Container(
-                        height: 16,
-                        width: 16,
-                        decoration: BoxDecoration(
-                          color: ZwapColors.shades0,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
-                            BoxShadow(offset: Offset(0, 3), color: Color(0xff091E42).withOpacity(0.2), blurRadius: 5),
-                          ],
+                          setState(() => _showStartIfEquals = !_showStartIfEquals);
+                        },
+                        child: Container(
+                          height: 16,
+                          width: 16,
+                          decoration: BoxDecoration(
+                            color: ZwapColors.shades0,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
+                              BoxShadow(offset: Offset(0, 3), color: Color(0xff091E42).withOpacity(0.2), blurRadius: 5),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              //? End thumb widget
-              if (!_isAtSamePosition || !_showStartIfEquals)
-                Positioned(
-                  right: _endThumbOffset,
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.grab,
-                    child: GestureDetector(
-                      onHorizontalDragStart: (_) {
-                        if (_draggedThumb == null) _draggedThumb = _ZwapRangeDraggingThumb.end;
-                      },
-                      onHorizontalDragUpdate: (details) {
-                        if (_draggedThumb != _ZwapRangeDraggingThumb.end) return;
+                //? End thumb widget
+                if (!_isAtSamePosition || !_showStartIfEquals)
+                  AnimatedPositioned(
+                    duration: _animationDuration,
+                    curve: Curves.decelerate,
+                    right: _endThumbOffset,
+                    child: MouseRegion(
+                      cursor: _isDragging ? SystemMouseCursors.grabbing : SystemMouseCursors.grab,
+                      child: GestureDetector(
+                        onHorizontalDragStart: (_) {
+                          if (_draggedThumb == null) _draggedThumb = _ZwapRangeDraggingThumb.end;
+                        },
+                        onHorizontalDragUpdate: (details) {
+                          if (_draggedThumb != _ZwapRangeDraggingThumb.end) return;
 
-                        double _newOffset = _endThumbOffset + -details.delta.dx;
-                        _newOffset = max(0, min(_newOffset, size.maxWidth - _startThumbOffset - _thumbSize));
+                          double _newOffset = _endThumbOffset + -details.delta.dx;
+                          _newOffset = max(0, min(_newOffset, size.maxWidth - _startThumbOffset - _thumbSize));
 
-                        setState(() => _endThumbOffset = _newOffset);
-                        _notifiyChange(size.maxWidth);
-                      },
-                      onHorizontalDragEnd: (_) {
-                        _draggedThumb = null;
-                        if (!_isAtSamePosition) return;
+                          setState(() => _endThumbOffset = _newOffset);
+                          _notifiyChange(size.maxWidth);
+                        },
+                        onHorizontalDragEnd: (_) {
+                          setState(() => _draggedThumb = null);
+                          if (!_isAtSamePosition) return;
 
-                        setState(() => _showStartIfEquals = !_showStartIfEquals);
-                      },
-                      child: Container(
-                        height: 16,
-                        width: 16,
-                        decoration: BoxDecoration(
-                          color: ZwapColors.shades0,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
-                            BoxShadow(offset: Offset(0, 3), color: Color(0xff091E42).withOpacity(0.2), blurRadius: 5),
-                          ],
+                          setState(() => _showStartIfEquals = !_showStartIfEquals);
+                        },
+                        child: Container(
+                          height: 16,
+                          width: 16,
+                          decoration: BoxDecoration(
+                            color: ZwapColors.shades0,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
+                              BoxShadow(offset: Offset(0, 3), color: Color(0xff091E42).withOpacity(0.2), blurRadius: 5),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                )
-            ],
+                  )
+              ],
+            ),
           ),
         );
       },

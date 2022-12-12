@@ -16,7 +16,7 @@ typedef ItemSelectedCallback<T> = void Function(T? item);
 typedef GetCopyOfItemCallback<T> = String Function(T item);
 
 class ZwapSearchPicker<T> extends StatefulWidget {
-  final T? initialSelectedItem;
+  final T? selectedItem;
   final List<T> initialValues;
 
   final PerformSearchCallback<T> performSearch;
@@ -37,7 +37,7 @@ class ZwapSearchPicker<T> extends StatefulWidget {
   const ZwapSearchPicker({
     required this.performSearch,
     required this.getItemCopy,
-    this.initialSelectedItem,
+    this.selectedItem,
     this.onItemSelected,
     this.initialValues = const [],
     this.placeholder,
@@ -67,7 +67,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
       widget.initialValues,
       widget.performSearch,
       widget.onItemSelected,
-      widget.initialSelectedItem,
+      widget.selectedItem,
       widget.getItemCopy,
     );
 
@@ -88,6 +88,17 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
   }
 
   @override
+  void didUpdateWidget(covariant ZwapSearchPicker<T> oldWidget) {
+    if (widget.selectedItem != _provider.selectedItem) {
+      _provider._selectedItem = widget.selectedItem;
+      _inputController.text = widget.selectedItem == null ? '' : widget.getItemCopy(widget.selectedItem!);
+      setState(() {});
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<_ZwapSearchInputProvider<T>>.value(
       value: _provider,
@@ -101,19 +112,38 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
               value: _provider,
               child: child,
             ),
-            content: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12).copyWith(bottom: 12),
-              child: TextField(
-                controller: _inputController,
-                focusNode: _inputNode,
-                style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: widget.placeholder ?? '',
+            content: Row(
+              children: [
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: TextField(
+                      controller: _inputController,
+                      focusNode: _inputNode,
+                      style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: widget.placeholder ?? '',
+                      ),
+                      cursorColor: ZwapColors.primary900Dark,
+                      onChanged: (value) => context.read<_ZwapSearchInputProvider<T>>().search = value,
+                    ),
+                  ),
                 ),
-                cursorColor: ZwapColors.primary900Dark,
-                onChanged: (value) => context.read<_ZwapSearchInputProvider<T>>().search = value,
-              ),
+                const SizedBox(width: 12),
+                AnimatedRotation(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.decelerate,
+                  turns: _hasFocus ? 0.25 : 0.75,
+                  child: Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 16,
+                    color: ZwapColors.text65,
+                  ),
+                ),
+                const SizedBox(width: 12),
+              ],
             ),
             overlay: _ZwapSearchInputOverlay<T>(
               noResultsWidget: widget.noResultsWidget,
