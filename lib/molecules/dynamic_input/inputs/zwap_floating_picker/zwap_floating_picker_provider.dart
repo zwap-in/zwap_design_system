@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
+part of zwap.dynamic_inputs.floating_picker;
 
 class ZwapFloatingPickerProvider<T> extends ChangeNotifier {
   final GlobalKey<ZwapDynamicInputState> inputKey;

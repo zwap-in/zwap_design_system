@@ -843,3 +843,6 @@ a
 
 ## 0.1.652
 * Added responsive value on ZwapCheckBoxPicker, ZwapSearchPicker and ZwapRangeSlider widgets
+
+## 0.1.653
+* Fixed a problem in ZwapFloatingPicker

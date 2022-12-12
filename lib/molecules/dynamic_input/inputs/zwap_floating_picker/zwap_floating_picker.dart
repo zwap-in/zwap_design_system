@@ -1,9 +1,12 @@
+library zwap.dynamic_inputs.floating_picker;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_floating_picker/zwap_floating_picker_provider.dart';
-import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 
 import '../../../../atoms/atoms.dart';
+import '../../zwap_dynamic_input.dart';
+
+part 'zwap_floating_picker_provider.dart';
 
 class ZwapFloatingPicker<T> extends StatefulWidget {
   final List<T> options;
@@ -53,7 +56,10 @@ class _ZwapFloatingPickerState<T> extends State<ZwapFloatingPicker<T>> {
 
   @override
   void didUpdateWidget(covariant ZwapFloatingPicker<T> oldWidget) {
-    if (widget.selectedOption != _provider.selectedValue) _provider.selectedValue = widget.selectedOption;
+    if (widget.selectedOption != _provider.selectedValue) {
+      _provider._selectedValue = widget.selectedOption;
+      setState(() {});
+    }
     super.didUpdateWidget(oldWidget);
   }
 
