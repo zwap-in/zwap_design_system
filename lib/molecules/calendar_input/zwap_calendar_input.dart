@@ -231,7 +231,7 @@ class _CalendarPickerOverlayState extends State<_CalendarPickerOverlay> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() => _visible = true);
     });
   }

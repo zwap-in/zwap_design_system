@@ -179,7 +179,7 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
   void _updateOverlayPosition() {
     if (_entry == null) return;
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(milliseconds: 32));
 
       final Rect? _inputRect = _inputKey.globalPaintBounds;
@@ -315,7 +315,7 @@ class _ZwapDynamicInputOverlayState extends State<_ZwapDynamicInputOverlay> with
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() => _visible = true);
     });
   }

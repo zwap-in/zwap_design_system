@@ -265,7 +265,7 @@ class __InputSpanState extends State<_InputSpan> {
   Widget build(BuildContext context) {
     final String _currentSearchValue = context.select<ZwapHintProvider, String>((pro) => pro.currentSearchValue);
     if (_currentSearchValue != widget.controller.text)
-      WidgetsBinding.instance?.addPostFrameCallback((_) => widget.controller.text = _currentSearchValue);
+      WidgetsBinding.instance.addPostFrameCallback((_) => widget.controller.text = _currentSearchValue);
 
     return AnimatedContainer(
       key: _inputKey,

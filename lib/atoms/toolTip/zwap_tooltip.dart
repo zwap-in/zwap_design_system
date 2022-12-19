@@ -270,7 +270,7 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() => _opacity = 1));
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _opacity = 1));
   }
 
   @override

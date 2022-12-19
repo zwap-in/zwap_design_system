@@ -846,3 +846,6 @@ a
 
 ## 0.1.653
 * Fixed a problem in ZwapFloatingPicker
+
+## 0.1.654
+* Fixed a bug in ZwapChipsInput

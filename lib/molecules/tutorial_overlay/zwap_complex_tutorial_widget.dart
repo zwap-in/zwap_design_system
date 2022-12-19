@@ -83,7 +83,7 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
       upperBound: 1,
     )..forward();
 
-    if (widget.width == null) WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {}));
+    if (widget.width == null) WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

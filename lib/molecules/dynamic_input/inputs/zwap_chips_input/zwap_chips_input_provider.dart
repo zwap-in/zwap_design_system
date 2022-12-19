@@ -48,7 +48,7 @@ class _ZwapChipsInputProvider<T> extends ChangeNotifier {
     if (_selectedHashcodes.contains(_hashCode)) {
       _selectedHashcodes.remove(item.hashCode);
     } else {
-      if (_selectedHashcodes.length >= maxItems) return;
+      if (maxItems != 0 && _selectedHashcodes.length >= maxItems) return;
 
       _selectedHashcodes.add(item.hashCode);
     }

@@ -74,7 +74,7 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
       _animationDuration = const Duration(milliseconds: 200);
       _currentValue = widget.value!;
 
-      WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() => _animationDuration = Duration.zero));
+      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _animationDuration = Duration.zero));
     }
     super.didUpdateWidget(oldWidget);
   }
