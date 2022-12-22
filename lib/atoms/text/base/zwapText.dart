@@ -72,12 +72,22 @@ TextStyle getTextStyle(ZwapTextType typeText) {
       return ZwapTypography.semiboldH3;
     case ZwapTextType.heavyH3:
       return ZwapTypography.heavyH3;
+    case ZwapTextType.smallBodyLight:
+      return ZwapTypography.smallBodyLight;
     case ZwapTextType.smallBodyRegular:
       return ZwapTypography.smallBodyRegular;
     case ZwapTextType.smallBodyMedium:
       return ZwapTypography.smallBodyMedium;
+    case ZwapTextType.smallBodySemibold:
+      return ZwapTypography.smallBodySemibold;
     case ZwapTextType.smallBodyBold:
       return ZwapTypography.smallBodyBold;
+    case ZwapTextType.smallBodyExtraBold:
+      return ZwapTypography.smallBodyExtraBold;
+    case ZwapTextType.smallBodyBlack:
+      return ZwapTypography.smallBodyBlack;
+    case ZwapTextType.mediumBodyLight:
+      return ZwapTypography.mediumBodyLight;
     case ZwapTextType.mediumBodyRegular:
       return ZwapTypography.mediumBodyRegular;
     case ZwapTextType.mediumBodyMedium:
@@ -86,12 +96,24 @@ TextStyle getTextStyle(ZwapTextType typeText) {
       return ZwapTypography.mediumBodySemibold;
     case ZwapTextType.mediumBodyBold:
       return ZwapTypography.mediumBodyBold;
+    case ZwapTextType.mediumBodyExtraBold:
+      return ZwapTypography.mediumBodyExtraBold;
+    case ZwapTextType.mediumBodyBlack:
+      return ZwapTypography.mediumBodyBlack;
+    case ZwapTextType.bigBodyLight:
+      return ZwapTypography.bigBodyLight;
     case ZwapTextType.bigBodyRegular:
       return ZwapTypography.bigBodyRegular;
+    case ZwapTextType.bigBodyMedium:
+      return ZwapTypography.bigBodyMedium;
     case ZwapTextType.bigBodySemibold:
       return ZwapTypography.bigBodySemibold;
     case ZwapTextType.bigBodyBold:
       return ZwapTypography.bigBodyBold;
+    case ZwapTextType.bigBodyExtraBold:
+      return ZwapTypography.bigBodyExtraBold;
+    case ZwapTextType.bigBodyBlack:
+      return ZwapTypography.bigBodyBlack;
     case ZwapTextType.textButton:
       return ZwapTypography.textButton;
     case ZwapTextType.extraSmallBodyRegular:

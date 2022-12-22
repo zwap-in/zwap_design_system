@@ -849,3 +849,6 @@ a
 
 ## 0.1.654
 * Fixed a bug in ZwapChipsInput
+
+## 0.1.655
+* Improvements to ZwapTextType: added new default textstyles and copyWith(...) shortcut
