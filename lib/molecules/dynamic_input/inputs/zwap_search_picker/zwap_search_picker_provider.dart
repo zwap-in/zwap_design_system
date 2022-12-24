@@ -72,6 +72,7 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
 
     final List<T> _results = await _performSearchCallback(_search, _page = 1);
     _data = _results;
+    _hasMoreResults = true;
     _loading = false;
 
     notifyListeners();
