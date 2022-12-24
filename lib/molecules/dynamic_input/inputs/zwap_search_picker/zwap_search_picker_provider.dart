@@ -6,6 +6,7 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
 
   late List<T> _emptySearchData;
   int _emptySearchLastPage = 1;
+  bool _emptySearchHasMoreResults = true;
 
   GetCopyOfItemCallback<T> getCopyOfItemCallback;
   PerformSearchCallback<T> _performSearchCallback;
@@ -18,6 +19,7 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
   String _search = '';
   bool __loading = false;
   bool __loadingMoreData = false;
+  bool _hasMoreResults = true;
 
   _ZwapSearchInputProvider(
     this._data,
@@ -61,6 +63,7 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
     if (_search.isEmpty) {
       _data = _emptySearchData;
       _page = _emptySearchLastPage;
+      _hasMoreResults = _emptySearchHasMoreResults;
       notifyListeners();
       return;
     }
@@ -75,18 +78,19 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
   }
 
   void endReached() async {
-    print('called');
-    if (__loadingMoreData) return;
+    if (__loadingMoreData || !_hasMoreResults) return;
 
     _loadingMoreData = true;
     final String _referringSearch = _search;
 
     final List<T> _results = await _performSearchCallback(_referringSearch, ++_page);
     _data = [..._data, ..._results];
+    _hasMoreResults = _results.isNotEmpty;
 
     if (_referringSearch.isEmpty) {
       _emptySearchData = _data;
       _emptySearchLastPage = _page;
+      _emptySearchHasMoreResults = _hasMoreResults;
     }
     _loadingMoreData = false;
   }

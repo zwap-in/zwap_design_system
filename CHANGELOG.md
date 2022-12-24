@@ -858,3 +858,6 @@ a
 
 ## 0.1.657
 * Fix in ZwapSearchPicker
+
+## 0.1.658
+* Fix in ZwapSearchPicker
