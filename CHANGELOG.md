@@ -852,3 +852,6 @@ a
 
 ## 0.1.655
 * Improvements to ZwapTextType: added new default textstyles and copyWith(...) shortcut
+
+## 0.1.656
+* Improvements to ZwapSearchPicker: added delay on end reached callback

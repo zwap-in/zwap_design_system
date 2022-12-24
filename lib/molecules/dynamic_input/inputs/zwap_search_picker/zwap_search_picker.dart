@@ -212,6 +212,7 @@ class _ZwapSearchInputOverlay<T> extends StatelessWidget {
         constraints: BoxConstraints(maxHeight: 240),
         child: SingleChildScrollView(
           controller: EdgeNotifierScrollController(
+            delayDuration: const Duration(milliseconds: 800),
             onEndReached: () => context.read<_ZwapSearchInputProvider<T>>().endReached(),
           ),
           padding: const EdgeInsets.only(top: 10),
