@@ -169,7 +169,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ZwapSearchPicker<String>(
                 selectedItem: _selectedSearchItem,
                 performSearch: (search, page) async {
-                  await Future.delayed(const Duration(milliseconds: 2000));
 
                   if (search.isEmpty && page == 2)
                     return [

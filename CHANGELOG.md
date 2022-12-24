@@ -855,3 +855,6 @@ a
 
 ## 0.1.656
 * Improvements to ZwapSearchPicker: added delay on end reached callback
+
+## 0.1.657
+* Fix in ZwapSearchPicker

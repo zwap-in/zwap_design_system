@@ -75,6 +75,7 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
   }
 
   void endReached() async {
+    print('called');
     if (__loadingMoreData) return;
 
     _loadingMoreData = true;

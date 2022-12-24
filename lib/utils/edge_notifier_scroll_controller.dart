@@ -8,7 +8,7 @@ class EdgeNotifierScrollController extends ScrollController {
   final Function()? onEndReached;
   final Function()? onStartReached;
 
-  /// If provided EndNotifierScrollControler will wait until this duration is passed before call the callback again
+  /// If provided EndNotifierScrollController will wait until this duration is passed before call the callback again
   final Duration? delayDuration;
 
   EdgeNotifierScrollController({
@@ -23,11 +23,11 @@ class EdgeNotifierScrollController extends ScrollController {
           initialScrollOffset: initialScrollOffset,
           keepScrollOffset: keepScrollOffset,
         ) {
-    super.addListener(_notifyOnEndReaced);
+    super.addListener(_notifyOnEndReached);
   }
 
   /// If scroll controller is at end calls [onEndReached]
-  void _notifyOnEndReaced() {
+  void _notifyOnEndReached() {
     if (!(hasClients && _canNotify)) return;
 
     if (position.atEdge) {

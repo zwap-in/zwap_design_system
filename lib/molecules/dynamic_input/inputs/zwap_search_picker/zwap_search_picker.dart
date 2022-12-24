@@ -170,7 +170,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
   }
 }
 
-class _ZwapSearchInputOverlay<T> extends StatelessWidget {
+class _ZwapSearchInputOverlay<T> extends StatefulWidget {
   final Function(String)? translateKey;
   final Widget? noResultsWidget;
 
@@ -179,6 +179,22 @@ class _ZwapSearchInputOverlay<T> extends StatelessWidget {
     this.noResultsWidget,
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<_ZwapSearchInputOverlay<T>> createState() => _ZwapSearchInputOverlayState<T>();
+}
+
+class _ZwapSearchInputOverlayState<T> extends State<_ZwapSearchInputOverlay<T>> {
+  late final ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = EdgeNotifierScrollController(
+      delayDuration: const Duration(milliseconds: 800),
+      onEndReached: () => context.read<_ZwapSearchInputProvider<T>>().endReached(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -197,11 +213,11 @@ class _ZwapSearchInputOverlay<T> extends StatelessWidget {
         );
 
       if (_items.isEmpty) {
-        if (noResultsWidget != null) return noResultsWidget!;
+        if (widget.noResultsWidget != null) return widget.noResultsWidget!;
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
           child: ZwapText(
-            text: translateKey!('no_results_found'),
+            text: widget.translateKey!('no_results_found'),
             zwapTextType: ZwapTextType.mediumBodyRegular,
             textColor: ZwapColors.primary900Dark,
           ),
@@ -211,10 +227,7 @@ class _ZwapSearchInputOverlay<T> extends StatelessWidget {
       return ConstrainedBox(
         constraints: BoxConstraints(maxHeight: 240),
         child: SingleChildScrollView(
-          controller: EdgeNotifierScrollController(
-            delayDuration: const Duration(milliseconds: 800),
-            onEndReached: () => context.read<_ZwapSearchInputProvider<T>>().endReached(),
-          ),
+          controller: _controller,
           padding: const EdgeInsets.only(top: 10),
           child: Column(
             mainAxisSize: MainAxisSize.min,
