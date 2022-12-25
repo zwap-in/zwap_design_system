@@ -864,3 +864,6 @@ a
 
 ## 0.1.659
 * Fix in ZwapSearchPicker
+
+## 0.1.660
+* Added ZwapCheckOption widget

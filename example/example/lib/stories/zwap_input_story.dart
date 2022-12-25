@@ -3,6 +3,7 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/input/zwap_hint_input/zwap_hint_input.dart';
+import 'package:zwap_design_system/atoms/check_option/zwap_check_option.dart';
 import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
 import 'package:zwap_design_system/atoms/text_controller/tags_text_conroller.dart';
 import 'package:zwap_design_system/molecules/calendar_input/zwap_calendar_input.dart';
@@ -66,6 +67,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   String? _selectedSearchItem;
 
+  bool _isFirstCheckOptionSelected = true;
+
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
@@ -76,6 +79,42 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              ZwapText(
+                text: 'ZwapCheckOptions',
+                zwapTextType: ZwapTextType.mediumBodyRegular,
+                textColor: ZwapColors.primary900Dark,
+              ),
+              SizedBox(height: 5),
+              ZwapCheckOption(
+                selected: _isFirstCheckOptionSelected,
+                onTap: () => setState(() => _isFirstCheckOptionSelected = true),
+                builder: (_, __) => Container(
+                  margin: const EdgeInsets.all(15),
+                  width: 200,
+                  height: 30,
+                  child: ZwapText(
+                    text: 'Option 1',
+                    zwapTextType: ZwapTextType.mediumBodyRegular,
+                    textColor: ZwapColors.primary900Dark,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              ZwapCheckOption(
+                selected: !_isFirstCheckOptionSelected,
+                onTap: () => setState(() => _isFirstCheckOptionSelected = false),
+                builder: (_, __) => Container(
+                  width: 200,
+                  margin: const EdgeInsets.all(15),
+                  height: 60,
+                  child: ZwapText(
+                    text: 'Option 2',
+                    zwapTextType: ZwapTextType.mediumBodyRegular,
+                    textColor: ZwapColors.primary900Dark,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
               ZwapButton(
                 buttonChild: ZwapButtonChild.text(text: "resetta"),
                 decorations: ZwapButtonDecorations.primaryLight(),
@@ -169,7 +208,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ZwapSearchPicker<String>(
                 selectedItem: _selectedSearchItem,
                 performSearch: (search, page) async {
-
                   if (search.isEmpty && page == 2)
                     return [
                       'lkjfrtyuhjnmkh',
@@ -187,7 +225,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 translateKey: (_) => 'Nessun risultato',
                 placeholder: "Ciao ciao ciao ciao",
                 onItemSelected: (s) => _selectedSearchItem = s,
-                
               ),
               SizedBox(height: 20),
               SizedBox(height: 20),
