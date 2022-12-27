@@ -867,3 +867,6 @@ a
 
 ## 0.1.660
 * Added ZwapCheckOption widget
+
+## 0.1.661
+* Refactoring of ZwapToasts class

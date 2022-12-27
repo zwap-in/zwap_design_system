@@ -23,30 +23,27 @@ class MyApp extends StatelessWidget {
       builder: (context, size) {
         Generic deviceType = Generic(maxWith: size.maxWidth.toInt());
         Utils.registerType<Generic>(deviceType);
-        return OKToast(
-          child: ChangeNotifierProvider<StoryProvider>(
-            create: (_) => StoryProvider(),
-            child: MaterialApp(
-              title: 'Zwap ~ Storybook',
-              theme: ThemeData(primaryColor: ZwapColors.primary700),
-              localizationsDelegates: [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: [
-                Locale('it', 'IT'),
-              ],
-              home: Builder(
-                builder: (context) {
-                  final bool _loading = context.select<StoryProvider, bool>((pro) => pro.loading);
-                  if (_loading)
-                    return const Center(
-                        child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(ZwapColors.primary700), strokeWidth: 1.8));
+        return ChangeNotifierProvider<StoryProvider>(
+          create: (_) => StoryProvider(),
+          child: MaterialApp(
+            title: 'Zwap ~ Storybook',
+            theme: ThemeData(primaryColor: ZwapColors.primary700),
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              Locale('it', 'IT'),
+            ],
+            home: Builder(
+              builder: (context) {
+                final bool _loading = context.select<StoryProvider, bool>((pro) => pro.loading);
+                if (_loading)
+                  return const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(ZwapColors.primary700), strokeWidth: 1.8));
 
-                  return const StoryBookWidget();
-                },
-              ),
+                return OKToast(child: const StoryBookWidget());
+              },
             ),
           ),
         );
