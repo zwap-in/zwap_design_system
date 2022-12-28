@@ -109,7 +109,7 @@ class ZwapToasts {
     String message, {
     required BuildContext context,
     Duration? duration,
-    bool showDismiss = true,
+    bool showDismiss = false,
     Function()? onDismiss,
   }) {
     if (_instance._lastToast != null) {
@@ -141,7 +141,7 @@ class ZwapToasts {
     String message, {
     required BuildContext context,
     Duration? duration,
-    bool showDismiss = true,
+    bool showDismiss = false,
     Function()? onDismiss,
   }) =>
       _showToast(
@@ -175,7 +175,7 @@ class ZwapToasts {
     String message, {
     required BuildContext context,
     Duration? duration,
-    bool showDismiss = true,
+    bool showDismiss = false,
     Function()? onDismiss,
   }) =>
       _showToast(
@@ -192,7 +192,7 @@ class ZwapToasts {
     String message, {
     required BuildContext context,
     Duration? duration,
-    bool showDismiss = true,
+    bool showDismiss = false,
     Function()? onDismiss,
   }) =>
       _showToast(

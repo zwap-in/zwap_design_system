@@ -870,3 +870,6 @@ a
 
 ## 0.1.661
 * Refactoring of ZwapToasts class
+
+## 0.1.662
+* Changed default value of [showDismiss] inside ZwapToasts to false
