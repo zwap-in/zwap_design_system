@@ -15,7 +15,7 @@ enum TooltipPosition {
 
 class ZwapTooltip extends StatefulWidget {
   /// Message showed inside tooltip overlay
-  final String message;
+  final String? message;
 
   /// [message] text style
   final TextStyle? style;
@@ -72,6 +72,18 @@ class ZwapTooltip extends StatefulWidget {
 
   final Widget child;
 
+  /// If provided the returned widget is placed inside tooltip
+  /// instead of the [message] string
+  ///
+  /// Obviously, [style] will have no effect
+  final Widget Function(BuildContext)? builder;
+
+  /// If true no edges will have the decoration, so [decorationTranslation]
+  /// and [position] will have no effect
+  ///
+  /// Default to false
+  final bool simple;
+
   /// Show a customized tooltip message when user hover
   /// this widget with mouse
   ///
@@ -89,8 +101,32 @@ class ZwapTooltip extends StatefulWidget {
     this.showTooltip = true,
     this.delay = Duration.zero,
     this.disappearAfter = const Duration(seconds: 5),
+    this.simple = false,
     Key? key,
-  }) : super(key: key);
+  })  : this.builder = null,
+        super(key: key);
+
+  /// Show a customized tooltip message when user hover
+  /// this widget with mouse
+  ///
+  /// In mobile devices (type 2, 1 and 0) the tooltip is showed
+  /// both on long tap and on mouse hover
+  const ZwapTooltip.builder({
+    required this.builder,
+    required this.child,
+    this.decorationTranslation = 0,
+    this.style,
+    this.padding = const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+    this.position = TooltipPosition.bottom,
+    this.transationOffset = Offset.zero,
+    this.animationDuration = const Duration(milliseconds: 200),
+    this.showTooltip = true,
+    this.delay = Duration.zero,
+    this.disappearAfter = const Duration(seconds: 5),
+    this.simple = false,
+    Key? key,
+  })  : this.message = null,
+        super(key: key);
 
   @override
   State<ZwapTooltip> createState() => _ZwapTooltipState();
@@ -162,6 +198,8 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
             message: widget.message,
             padding: widget.padding,
             decorationOffset: widget.decorationTranslation,
+            builder: widget.builder,
+            simple: widget.simple,
           ),
         ),
       ),
@@ -236,7 +274,9 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
 }
 
 class _ZwapTooltipOverlay extends StatefulWidget {
-  final String message;
+  final String? message;
+  final Widget Function(BuildContext)? builder;
+
   final TextStyle style;
 
   final DecorationDirection direction;
@@ -245,15 +285,20 @@ class _ZwapTooltipOverlay extends StatefulWidget {
   final Duration animationDuration;
   final double decorationOffset;
 
+  final bool simple;
+
   const _ZwapTooltipOverlay({
     required this.message,
+    required this.builder,
     required this.style,
     required this.direction,
     required this.padding,
     required this.animationDuration,
     required this.decorationOffset,
+    required this.simple,
     Key? key,
-  }) : super(key: key);
+  })  : assert(message != null || builder != null, "A message or a builder callback must be provided"),
+        super(key: key);
 
   @override
   State<_ZwapTooltipOverlay> createState() => _ZwapTooltipOverlayState();
@@ -277,40 +322,56 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
   Widget build(BuildContext context) {
     late final EdgeInsets _extraPadding;
 
-    switch (widget.direction) {
-      case DecorationDirection.top:
-        _extraPadding = EdgeInsets.only(top: 12);
-        break;
-      case DecorationDirection.right:
-        _extraPadding = EdgeInsets.only(right: 12);
-        break;
-      case DecorationDirection.bottom:
-        _extraPadding = EdgeInsets.only(bottom: 12);
-        break;
-      case DecorationDirection.left:
-        _extraPadding = EdgeInsets.only(left: 12);
-        break;
-    }
+    if (widget.simple)
+      _extraPadding = EdgeInsets.zero;
+    else
+      switch (widget.direction) {
+        case DecorationDirection.top:
+          _extraPadding = EdgeInsets.only(top: 12);
+          break;
+        case DecorationDirection.right:
+          _extraPadding = EdgeInsets.only(right: 12);
+          break;
+        case DecorationDirection.bottom:
+          _extraPadding = EdgeInsets.only(bottom: 12);
+          break;
+        case DecorationDirection.left:
+          _extraPadding = EdgeInsets.only(left: 12);
+          break;
+      }
 
-    return Material(
-      color: ZwapColors.transparent,
-      child: AnimatedOpacity(
-        opacity: _opacity,
-        duration: widget.animationDuration,
-        child: ClipPath(
-          clipper: ZwapMessageClipper(
-            direction: widget.direction,
-            decorationOffset: widget.decorationOffset,
-          ),
-          child: Container(
-            color: ZwapColors.shades100.withOpacity(.7),
-            padding: widget.padding + _extraPadding,
-            child: ZwapText.customStyle(
-              text: widget.message,
+    final Widget content = Container(
+      color: ZwapColors.shades100.withOpacity(.7),
+      padding: widget.padding + _extraPadding,
+      child: widget.message == null
+          ? widget.builder!(context)
+          : ZwapText.customStyle(
+              text: widget.message!,
               customTextStyle: widget.style,
             ),
+    );
+
+    Widget _wrapContent(Widget child) => Material(
+          color: ZwapColors.transparent,
+          child: AnimatedOpacity(
+            opacity: _opacity,
+            duration: widget.animationDuration,
+            child: child,
           ),
+        );
+
+    if (widget.simple)
+      return _wrapContent(
+        ClipRRect(borderRadius: BorderRadius.circular(14), child: content),
+      );
+
+    return _wrapContent(
+      ClipPath(
+        clipper: ZwapMessageClipper(
+          direction: widget.direction,
+          decorationOffset: widget.decorationOffset,
         ),
+        child: content,
       ),
     );
   }

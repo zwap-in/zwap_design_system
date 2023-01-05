@@ -241,7 +241,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               SizedBox(height: 20),
               ZwapYearPicker(
                 selectedYear: _year,
-                hintText: '',
+                hintText: 'Seleziona l\'anno di nascita',
               ),
               SizedBox(height: 20),
               ZwapCalendarInput(

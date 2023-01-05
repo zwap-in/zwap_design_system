@@ -873,3 +873,7 @@ a
 
 ## 0.1.662
 * Changed default value of [showDismiss] inside ZwapToasts to false
+
+## 0.1.663
+* Improvements to ZwapTooltip widget
+* Improvements to ZwapYearPicker widget

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:taastrap/taastrap.dart';
 
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
@@ -120,8 +121,10 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
       return KeyEventResult.ignored;
     });
 
-    _inputController.addListener(_controllerListener);
-    _inputFocus.addListener(_focusNodeListener);
+    if (getMultipleConditions(true, true, true, false, false)) {
+      _inputController.addListener(_controllerListener);
+      _inputFocus.addListener(_focusNodeListener);
+    }
 
     final int _tmpYear = (widget.minYear ?? 1900) + ((widget.maxYear ?? (DateTime.now().year + 30) - (widget.minYear ?? 1900)) ~/ 2);
 
@@ -208,6 +211,8 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
 
   OverlayEntry _createOverlay() {
     return OverlayEntry(builder: (context) {
+      final double _extraBottomPadding = 50 + (widget.label != null ? 25 : 0);
+      final double _height = 275;
       final Rect? _inputSize = _yearInputKey.globalPaintBounds;
       final _width = min(285, MediaQuery.of(context).size.width * 0.8);
 
@@ -215,7 +220,14 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
       double _dy = (_yearInputKey.globalOffset?.dy ?? 0);
 
       if ((_inputSize?.width ?? 0) > _width) _dx += (_inputSize!.width - _width) / 2;
-      if (_dy + 265 + 70 > MediaQuery.of(context).size.height) _dy = max(MediaQuery.of(context).size.height - 320, 0);
+
+      print(MediaQuery.of(context).size.height - _dy - _height);
+
+      if (_dy + _extraBottomPadding + _height > MediaQuery.of(context).size.height - 20) {
+        _dy = max(_dy - _height, 20);
+      } else {
+        _dy += _extraBottomPadding;
+      }
 
       return ZwapOverlayEntryWidget(
         entity: _pickerOverlay,
@@ -275,17 +287,23 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
-                        controller: _inputController,
-                        focusNode: _inputFocus,
-                        decoration: InputDecoration.collapsed(hintText: widget.hintText),
-                        cursorColor: ZwapColors.shades100,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        onTap: () {
-                          if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
+                      child: GestureDetector(
+                        onTap: getMultipleConditions(false, false, false, true, true) ? _toggleOverlay : null,
+                        child: AbsorbPointer(
+                          absorbing: getMultipleConditions(false, false, false, true, true),
+                          child: TextField(
+                            controller: _inputController,
+                            focusNode: getMultipleConditions(false, false, false, true, true) ? null : _inputFocus,
+                            decoration: InputDecoration.collapsed(hintText: widget.hintText),
+                            cursorColor: ZwapColors.shades100,
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            onTap: () {
+                              if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
 
-                          if (_inputFocus.hasFocus && !_isOverlayOpened) _toggleOverlay();
-                        },
+                              if (_inputFocus.hasFocus && !_isOverlayOpened) _toggleOverlay();
+                            },
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(width: 5),

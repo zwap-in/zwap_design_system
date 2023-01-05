@@ -1,4 +1,5 @@
 import 'package:example/stories/zwap_toast_story.dart';
+import 'package:example/stories/zwap_tooltip_story.dart';
 
 import './stories/zwap_buttons_story.dart';
 import './stories/zwap_checkbox_story.dart';
@@ -26,10 +27,11 @@ enum ZwapStories {
   modals,
   scrollItems,
   text,
-  tabbar,
+  tabBar,
   search,
   form,
   toast,
+  tooltip,
 }
 
 class ZwapStory {
@@ -98,7 +100,7 @@ List<ZwapStory> stories = [
   ZwapStory(
     name: "Zwap Tab Bars",
     builder: (context) => ZwapTabBarsStory(),
-    story: ZwapStories.tabbar,
+    story: ZwapStories.tabBar,
   ),
   ZwapStory(
     name: "Zwap Search Bar",
@@ -114,5 +116,10 @@ List<ZwapStory> stories = [
     name: "Zwap Toasts",
     builder: (context) => ZwapToastStory(),
     story: ZwapStories.toast,
+  ),
+  ZwapStory(
+    name: "Zwap Tooltip",
+    builder: (context) => ZwapTooltipStory(),
+    story: ZwapStories.tooltip,
   ),
 ];
