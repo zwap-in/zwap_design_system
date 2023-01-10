@@ -206,6 +206,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   onChange: (value) => setState(() {
                     _value = value;
                   }),
+                  disabled: true,
                 ),
                 width: 200,
               ),

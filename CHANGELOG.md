@@ -879,4 +879,7 @@ a
 * Improvements to ZwapYearPicker widget
 
 ## 0.1.664
-* New ZwapSliver widget added
+* New ZwapSlider widget added
+
+## 0.1.665
+* Added disabled state on ZwapSlider widget

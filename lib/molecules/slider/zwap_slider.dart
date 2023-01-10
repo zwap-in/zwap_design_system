@@ -27,12 +27,18 @@ class ZwapSlider extends StatefulWidget {
 
   final Function(double)? onChange;
 
+  /// If true the thumb will be locked
+  ///
+  /// Default to false
+  final bool disabled;
+
   const ZwapSlider({
     this.value,
     this.minValue = 0,
     this.maxValue = 1,
     this.thumbSize = 16,
     this.onChange,
+    this.disabled = false,
     Key? key,
   }) : super(key: key);
 
@@ -41,6 +47,8 @@ class ZwapSlider extends StatefulWidget {
 }
 
 class _ZwapSliderState extends State<ZwapSlider> {
+  late bool _disabled;
+
   Duration _animationDuration = Duration.zero;
 
   bool _isDragging = false;
@@ -54,7 +62,14 @@ class _ZwapSliderState extends State<ZwapSlider> {
   double get _thumbSize => widget.thumbSize;
 
   @override
+  void initState() {
+    super.initState();
+    _disabled = widget.disabled;
+  }
+
+  @override
   void didUpdateWidget(covariant ZwapSlider oldWidget) {
+    if (widget.disabled != _disabled) setState(() => _disabled = widget.disabled);
     if (!_isDragging && widget.value != null && widget.value != _currentValue) {
       _animationDuration = const Duration(milliseconds: 200);
       _currentValue = widget.value!;
@@ -125,7 +140,8 @@ class _ZwapSliderState extends State<ZwapSlider> {
                   child: Container(
                     width: double.infinity,
                     height: 4,
-                    decoration: BoxDecoration(color: ZwapColors.primary700, borderRadius: BorderRadius.circular(2)),
+                    decoration:
+                        BoxDecoration(color: _disabled ? ZwapColors.neutral500 : ZwapColors.primary700, borderRadius: BorderRadius.circular(2)),
                   ),
                 ),
                 //? Start thumb widget
@@ -136,24 +152,30 @@ class _ZwapSliderState extends State<ZwapSlider> {
                   child: MouseRegion(
                     cursor: _isDragging ? SystemMouseCursors.grabbing : SystemMouseCursors.grab,
                     child: GestureDetector(
-                      onHorizontalDragStart: (_) {
-                        setState(() => _isDragging = true);
-                      },
-                      onHorizontalDragUpdate: (details) {
-                        double _newOffset = _thumbOffset + details.delta.dx;
-                        _newOffset = max(0, min(_newOffset, size.maxWidth - _thumbSize));
+                      onHorizontalDragStart: _disabled
+                          ? null
+                          : (_) {
+                              setState(() => _isDragging = true);
+                            },
+                      onHorizontalDragUpdate: _disabled
+                          ? null
+                          : (details) {
+                              double _newOffset = _thumbOffset + details.delta.dx;
+                              _newOffset = max(0, min(_newOffset, size.maxWidth - _thumbSize));
 
-                        setState(() => _thumbOffset = _newOffset);
-                        _notifyChange(size.maxWidth);
-                      },
-                      onHorizontalDragEnd: (_) {
-                        setState(() => _isDragging = false);
-                      },
+                              setState(() => _thumbOffset = _newOffset);
+                              _notifyChange(size.maxWidth);
+                            },
+                      onHorizontalDragEnd: _disabled
+                          ? null
+                          : (_) {
+                              setState(() => _isDragging = false);
+                            },
                       child: Container(
                         height: 16,
                         width: 16,
                         decoration: BoxDecoration(
-                          color: ZwapColors.shades0,
+                          color: _disabled ? ZwapColors.neutral50 : ZwapColors.shades0,
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: [
                             BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
