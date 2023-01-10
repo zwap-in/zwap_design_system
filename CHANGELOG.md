@@ -877,3 +877,6 @@ a
 ## 0.1.663
 * Improvements to ZwapTooltip widget
 * Improvements to ZwapYearPicker widget
+
+## 0.1.664
+* New ZwapSliver widget added

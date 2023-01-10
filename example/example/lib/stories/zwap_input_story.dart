@@ -15,6 +15,7 @@ import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_simple_pi
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 import 'package:zwap_design_system/molecules/molecules.dart';
 import 'package:zwap_design_system/molecules/rangeSlider/zwap_range_slider.dart';
+import 'package:zwap_design_system/molecules/slider/zwap_slider.dart';
 
 enum MyEnum { a, b, c, v, d, f, g }
 
@@ -68,6 +69,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
   String? _selectedSearchItem;
 
   bool _isFirstCheckOptionSelected = true;
+
+  double _value = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -196,8 +199,20 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 ),
                 width: 200,
               ),
+              SizedBox(height: 15),
+              Container(
+                child: ZwapSlider(
+                  value: _value,
+                  onChange: (value) => setState(() {
+                    _value = value;
+                  }),
+                ),
+                width: 200,
+              ),
               SizedBox(height: 5),
               Text('$min -- $max'),
+              SizedBox(height: 15),
+              Text('$_value'),
               SizedBox(height: 20),
               ZwapText(
                 text: "ZwapSearchPicker",
