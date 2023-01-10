@@ -883,3 +883,6 @@ a
 
 ## 0.1.665
 * Added disabled state on ZwapSlider widget
+
+## 0.1.666
+* Fixed a bug in ZwapSlider widget

@@ -70,7 +70,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   bool _isFirstCheckOptionSelected = true;
 
-  double _value = 0;
+  double _value = 0.7;
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +206,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   onChange: (value) => setState(() {
                     _value = value;
                   }),
-                  disabled: true,
                 ),
                 width: 200,
               ),

@@ -61,10 +61,21 @@ class _ZwapSliderState extends State<ZwapSlider> {
 
   double get _thumbSize => widget.thumbSize;
 
+  bool _positionHasBeenInitialized = false;
+
   @override
   void initState() {
     super.initState();
     _disabled = widget.disabled;
+  }
+
+  _initializePosition() {
+    if (_positionHasBeenInitialized) return;
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => setState(() => _thumbOffset = ((widget.value ?? 0) / (widget.maxValue - widget.minValue)) * (_maxWidth! - _thumbSize)),
+    );
+    _positionHasBeenInitialized = true;
   }
 
   @override
@@ -112,6 +123,7 @@ class _ZwapSliderState extends State<ZwapSlider> {
     return LayoutBuilder(
       builder: (context, size) {
         _maxWidth = size.maxWidth;
+        _initializePosition();
 
         return MouseRegion(
           cursor: _isDragging ? SystemMouseCursors.grabbing : SystemMouseCursors.basic,
