@@ -889,3 +889,6 @@ a
 
 ## 0.1.667
 * Added ZwapInlineSelect widget
+
+## 0.1.668
+* Fixed a bug in ZwapInlineSelect widget

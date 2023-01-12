@@ -27,7 +27,6 @@ class ZwapInlineSelect<T> extends StatefulWidget {
 }
 
 class _ZwapInlineSelectState<T> extends State<ZwapInlineSelect<T>> {
-  bool _isGrabbing = false;
   T? __selectedItem;
 
   double _offset = 0;
@@ -35,7 +34,6 @@ class _ZwapInlineSelectState<T> extends State<ZwapInlineSelect<T>> {
 
   GlobalKey _selectKey = GlobalKey();
   List<GlobalKey> _keys = [];
-
   bool _initialized = false;
 
   set _selectedItem(T? item) {
@@ -91,6 +89,7 @@ class _ZwapInlineSelectState<T> extends State<ZwapInlineSelect<T>> {
   double _clearPosition(double pos) => min(max(0, pos), _selectKey.globalPaintBounds?.width ?? 100);
 
   void _initializeOffset() {
+    if (!mounted) return;
     if (!_keys.every((k) => k.globalPaintBounds != null)) {
       Future.delayed(const Duration(milliseconds: 200), () => setState(() {}));
       return;
@@ -114,6 +113,7 @@ class _ZwapInlineSelectState<T> extends State<ZwapInlineSelect<T>> {
   }
 
   void _updatePositionsBySelected() {
+    if (!mounted) return;
     if (__selectedItem == null) {
       setState(() => _offset = -1);
       return;
@@ -131,6 +131,7 @@ class _ZwapInlineSelectState<T> extends State<ZwapInlineSelect<T>> {
   }
 
   void _updatePositions() {
+    if (!mounted) return;
     if (__selectedItem == null) {
       setState(() => _offset = -1);
       return;
@@ -145,6 +146,8 @@ class _ZwapInlineSelectState<T> extends State<ZwapInlineSelect<T>> {
         },
       );
     }
+
+    if (widget.onSelected != null) widget.onSelected!(widget.items[_indexFromPosition]);
   }
 
   @override
@@ -178,32 +181,25 @@ class _ZwapInlineSelectState<T> extends State<ZwapInlineSelect<T>> {
         ),
         Padding(
           padding: const EdgeInsets.all(4),
-          child: InkWell(
-            mouseCursor: _isGrabbing ? SystemMouseCursors.grabbing : SystemMouseCursors.grab,
-            child: GestureDetector(
-              onHorizontalDragStart: (_) {
-                _isGrabbing = true;
-                setState(() {});
-              },
-              onHorizontalDragUpdate: (details) {
-                setState(() => _offset += details.delta.dx);
-              },
-              onHorizontalDragEnd: (_) {
-                _isGrabbing = false;
-                setState(() {});
-                _updatePositions();
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: widget.items
-                    .mapIndexed(
-                      (i, e) => InkWell(
-                        onTap: () => _selectedItem = e,
-                        child: widget.builder(context, e, _keys[i]),
-                      ),
-                    )
-                    .toList(),
-              ),
+          child: GestureDetector(
+            onHorizontalDragStart: (_) {},
+            onHorizontalDragUpdate: (details) {
+              if (!mounted) return;
+              setState(() => _offset += details.delta.dx);
+            },
+            onHorizontalDragEnd: (_) {
+              _updatePositions();
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: widget.items
+                  .mapIndexed(
+                    (i, e) => InkWell(
+                      onTap: () => _selectedItem = e,
+                      child: widget.builder(context, e, _keys[i]),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
         ),

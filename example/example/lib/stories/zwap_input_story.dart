@@ -51,6 +51,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   double min = 5;
   double max = 300;
+int _valueInline = 1;
 
   List<String> _selectedLanguages = [];
 
@@ -92,7 +93,11 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               Container(
                 height: 56,
                 child: ZwapInlineSelect<int>(
-                  selectedItem: 1,
+                  selectedItem: _valueInline,
+                  onSelected: (i) {
+                    print(i);
+                    setState(() => _valueInline = i);
+                  },
                   items: [1, 2, 3],
                   builder: (_, i, k) => Container(
                     key: k,
