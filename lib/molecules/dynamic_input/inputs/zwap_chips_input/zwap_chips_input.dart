@@ -154,8 +154,9 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
   @override
   void didUpdateWidget(covariant ZwapChipsInput<T> oldWidget) {
     if (widget.selectedItems.length != _provider.selectedItems.length || !listEquals(widget.selectedItems, _provider.selectedItems))
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) => _provider.updateSelected(widget.selectedItems.map((i) => i.hashCode).toList()),
+      Future.delayed(
+        const Duration(milliseconds: 50),
+        () => _provider.updateSelected(widget.selectedItems.map((i) => i.hashCode).toList()),
       );
 
     super.didUpdateWidget(oldWidget);

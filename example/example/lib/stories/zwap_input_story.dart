@@ -16,6 +16,7 @@ import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.da
 import 'package:zwap_design_system/molecules/molecules.dart';
 import 'package:zwap_design_system/molecules/rangeSlider/zwap_range_slider.dart';
 import 'package:zwap_design_system/molecules/slider/zwap_slider.dart';
+import 'package:zwap_design_system/molecules/zwap_inline_select/zwap_inline_select.dart';
 
 enum MyEnum { a, b, c, v, d, f, g }
 
@@ -82,6 +83,42 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              ZwapText(
+                text: 'Inline select',
+                zwapTextType: ZwapTextType.mediumBodyRegular,
+                textColor: ZwapColors.primary900Dark,
+              ),
+              SizedBox(height: 5),
+              Container(
+                height: 56,
+                child: ZwapInlineSelect<int>(
+                  selectedItem: 1,
+                  items: [1, 2, 3],
+                  builder: (_, i, k) => Container(
+                    key: k,
+                    width: i == 1 ? 148 : 130,
+                    height: 48,
+                    child: Center(
+                      child: ZwapRichText.safeText(
+                        textSpans: [
+                          ZwapTextSpan.fromZwapTypography(
+                            text: i == 1 ? '⚡️' : '🛸',
+                            textType: ZwapTextType.mediumBodyRegular,
+                            textColor: ZwapColors.primary900Dark,
+                          ),
+                          ZwapTextSpan(
+                            text: i == 1 ? ' Sintetico' : ' Esteso',
+                            textStyle: ZwapTextType.bigBodySemibold.copyWith(
+                              fontSize: 17,
+                              color: ZwapColors.primary900Dark,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               ZwapText(
                 text: 'ZwapCheckOptions',
                 zwapTextType: ZwapTextType.mediumBodyRegular,
