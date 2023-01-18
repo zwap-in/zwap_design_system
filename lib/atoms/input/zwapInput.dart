@@ -33,6 +33,9 @@ class ZwapInput extends StatefulWidget {
   /// The placeholder for this input
   final String? placeholder;
 
+  /// The placeholder text style
+  final TextStyle? placeholderStyle;
+
   /// It handles the changes inside this input text field
   final Function(String newValue)? onChanged;
 
@@ -216,6 +219,7 @@ class ZwapInput extends StatefulWidget {
     this.useOutlinedDecoration = true,
     this.helperWidget,
     this.showCheckboxOnSuccessState = true,
+    this.placeholderStyle,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -266,6 +270,7 @@ class ZwapInput extends StatefulWidget {
     this.useOutlinedDecoration = true,
     this.helperWidget,
     this.showCheckboxOnSuccessState = true,
+    this.placeholderStyle,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -391,7 +396,7 @@ class _ZwapInputState extends State<ZwapInput> {
         },
       ),
       hintText: widget.placeholder,
-      hintStyle: getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
+      hintStyle: widget.placeholderStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
       prefixIcon: widget.prefixIcon != null
           ? Icon(
               widget.prefixIcon,
@@ -532,7 +537,7 @@ class _ZwapInputState extends State<ZwapInput> {
                           child: _getInputWidget(
                             decorations: InputDecoration.collapsed(
                               hintText: widget.placeholder!,
-                              hintStyle: getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
+                              hintStyle: widget.placeholderStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
                               enabled: !widget.disabled,
                               hoverColor: ZwapColors.primary300,
                             ),

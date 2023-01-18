@@ -17,6 +17,7 @@ import 'package:zwap_design_system/molecules/molecules.dart';
 import 'package:zwap_design_system/molecules/rangeSlider/zwap_range_slider.dart';
 import 'package:zwap_design_system/molecules/slider/zwap_slider.dart';
 import 'package:zwap_design_system/molecules/zwap_inline_select/zwap_inline_select.dart';
+import 'package:zwap_design_system/molecules/zwap_rich_input/zwap_rich_input.dart';
 
 enum MyEnum { a, b, c, v, d, f, g }
 
@@ -51,7 +52,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   double min = 5;
   double max = 300;
-int _valueInline = 1;
+  int _valueInline = 1;
 
   List<String> _selectedLanguages = [];
 
@@ -70,6 +71,8 @@ int _valueInline = 1;
 
   String? _selectedSearchItem;
 
+  String _richValue = '';
+
   bool _isFirstCheckOptionSelected = true;
 
   double _value = 0.7;
@@ -84,6 +87,17 @@ int _valueInline = 1;
         child: SingleChildScrollView(
           child: Column(
             children: [
+              ZwapText(
+                text: 'Rich input',
+                zwapTextType: ZwapTextType.mediumBodyRegular,
+                textColor: ZwapColors.primary900Dark,
+              ),
+              SizedBox(height: 5),
+              ZwapRichInput(
+                initialValue: RichInputValue.fromHtml(_richValue, ZwapTextType.mediumBodyRegular.copyWith()),
+                onValueChange: (value) => setState(() => _richValue = value.htmlText),
+              ),
+              SizedBox(height: 25),
               ZwapText(
                 text: 'Inline select',
                 zwapTextType: ZwapTextType.mediumBodyRegular,
@@ -294,6 +308,8 @@ int _valueInline = 1;
               ZwapInput(
                 showCheckboxOnSuccessState: false,
                 showSuccess: true,
+                placeholder: 'sàlkafjsdfkljasd',
+                placeholderStyle: ZwapTextType.bigBodyExtraBold.copyWith(color: ZwapColors.error500),
               ),
               SizedBox(height: 20),
               ZwapYearPicker(
@@ -445,9 +461,11 @@ int _valueInline = 1;
               SizedBox(height: 20),
               ZwapInput(
                 label: "Input underlined",
+                placeholder: 'DFKLASJDKLFJASDKFJ',
+                placeholderStyle: getTextStyle(ZwapTextType.buttonText).copyWith(fontWeight: FontWeight.w800, color: ZwapColors.warning700),
                 useOutlinedDecoration: false,
-                fixedInitialText: "zwap.in/  ",
-                fixedInitialTextStyle: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.text65),
+                //fixedInitialText: "zwap.in/  ",
+                //fixedInitialTextStyle: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.text65),
                 textStyle: getTextStyle(ZwapTextType.buttonText).copyWith(color: ZwapColors.primary900Dark),
                 helperTextIsError: true,
                 helperWidget: Padding(

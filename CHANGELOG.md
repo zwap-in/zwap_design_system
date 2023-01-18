@@ -892,3 +892,6 @@ a
 
 ## 0.1.668
 * Fixed a bug in ZwapInlineSelect widget
+
+## 0.1.669
+* Added placeholder style property to ZwapInput widget

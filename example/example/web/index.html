@@ -36,6 +36,27 @@
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
+       <script>
+        // This prevents default browser actions on key combinations.
+        // See https://stackoverflow.com/a/67039463/6509751.
+        window.addEventListener('keydown', function(e) {
+          if (event.target == document.body) {
+            // Prevents going back to the previous tab.
+            if (event.key == 'Backspace') {
+              event.preventDefault();
+            }
+          }
+        
+          if (event.metaKey || event.ctrlKey) {
+            switch (event.key) {
+              case '+': // Prevent zooming in.
+              case '-': // Prevent zooming out.
+                event.preventDefault();
+                break;
+            }
+          }
+        });
+      </script>
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
