@@ -895,3 +895,6 @@ a
 
 ## 0.1.669
 * Added placeholder style property to ZwapInput widget
+
+## 0.1.670
+* Added error state in ZwapChipsInput widget

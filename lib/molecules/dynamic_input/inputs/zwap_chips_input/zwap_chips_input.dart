@@ -28,6 +28,11 @@ typedef ChipsInputItemSearch<T> = bool Function(T item, String search);
 class ZwapChipsInput<T> extends StatefulWidget {
   final List<T> items;
 
+  /// If not null the widget will assume a error state and
+  /// the provided [errorMessage] will be showed in the same place
+  /// og the max length string
+  final String? errorMessage;
+
   /// Called for build the items inside the picker overlay
   ///
   /// Inside the provided [PickItemStatus] you can find info
@@ -101,6 +106,7 @@ class ZwapChipsInput<T> extends StatefulWidget {
     this.showLessItemUntilLength = 1,
     this.lessItems,
     this.maxSelectedItems = 0,
+    this.errorMessage,
     Key? key,
   })  : assert(
           noResultsWidget != null || translateKey != null,
@@ -124,15 +130,16 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
   final GlobalKey<ZwapDynamicInputState> _inputKey = GlobalKey();
   late final _ZwapChipsInputProvider<T> _provider;
 
-  final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchNode = FocusNode();
 
   bool _focussed = false;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
 
+    _errorMessage = widget.errorMessage;
     _searchNode.addListener(() => setState(() {}));
 
     _provider = _ZwapChipsInputProvider<T>(
@@ -153,6 +160,7 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
 
   @override
   void didUpdateWidget(covariant ZwapChipsInput<T> oldWidget) {
+    if (widget.errorMessage != _errorMessage) setState(() => _errorMessage = widget.errorMessage);
     if (widget.selectedItems.length != _provider.selectedItems.length || !listEquals(widget.selectedItems, _provider.selectedItems))
       Future.delayed(
         const Duration(milliseconds: 50),
@@ -184,6 +192,8 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
               ],
               ZwapDynamicInput.customSizeContent(
                 key: _inputKey,
+                defaultColor: _errorMessage != null ? ZwapColors.error400 : null,
+                activeColor: _errorMessage != null ? ZwapColors.error700 : null,
                 content: AnimatedSize(
                   duration: _selectedKeys.isEmpty ? const Duration(milliseconds: 200) : Duration.zero,
                   child: LayoutBuilder(
@@ -204,13 +214,13 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                               children: [
                                 ..._selectedKeys.map((k) => _SingleChipWidget<T>(item: k)).toList(),
                                 _InputWrapper<T>(
-                                  controller: _searchController,
+                                  controller: context.read<_ZwapChipsInputProvider<T>>().controller,
                                   placeHolder: widget.placeholder ?? '',
                                   dynamicInputKey: _inputKey,
                                   child: SizedBox(
                                     height: _selectedKeys.isEmpty ? null : widget.itemHeigth,
                                     child: TextField(
-                                      controller: _searchController,
+                                      controller: context.read<_ZwapChipsInputProvider<T>>().controller,
                                       focusNode: _searchNode,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
@@ -263,7 +273,7 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                 onClose: () {
                   setState(() => _focussed = false);
                   _provider.search = '';
-                  _searchController.clear();
+                  context.read<_ZwapChipsInputProvider<T>>().controller.clear();
                   _searchNode.unfocus();
                 },
                 builder: (context, child) => ChangeNotifierProvider<_ZwapChipsInputProvider<T>>.value(
@@ -271,16 +281,23 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                   child: child,
                 ),
               ),
-              if (widget.maxSelectedItems != 0) ...[
+              if (_errorMessage != null || widget.maxSelectedItems != 0) ...[
                 Align(
                   alignment: Alignment.centerRight,
-                  child: ZwapRichText.safeText(
-                    textSpans: [
-                      ZwapTextSpan.fromZwapTypography(text: "${widget.translateKey!('max_elements')}: ", textType: ZwapTextType.smallBodyRegular),
-                      ZwapTextSpan.fromZwapTypography(text: "${_selectedKeys.length}", textType: ZwapTextType.smallBodyBold),
-                      ZwapTextSpan.fromZwapTypography(text: "/${widget.maxSelectedItems}", textType: ZwapTextType.smallBodyRegular),
-                    ],
-                  ),
+                  child: _errorMessage != null
+                      ? ZwapText(
+                          text: _errorMessage!,
+                          zwapTextType: ZwapTextType.mediumBodyRegular,
+                          textColor: ZwapColors.error400,
+                        )
+                      : ZwapRichText.safeText(
+                          textSpans: [
+                            ZwapTextSpan.fromZwapTypography(
+                                text: "${widget.translateKey!('max_elements')}: ", textType: ZwapTextType.smallBodyRegular),
+                            ZwapTextSpan.fromZwapTypography(text: "${_selectedKeys.length}", textType: ZwapTextType.smallBodyBold),
+                            ZwapTextSpan.fromZwapTypography(text: "/${widget.maxSelectedItems}", textType: ZwapTextType.smallBodyRegular),
+                          ],
+                        ),
                 ),
               ],
             ],

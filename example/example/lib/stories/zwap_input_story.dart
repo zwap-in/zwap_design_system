@@ -351,6 +351,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               SizedBox(height: 20),
               ZwapChipsInput<String>(
+                errorMessage: _error ? 'djfò aksdjf òas' : null,
                 itemHeigth: 22,
                 label: "Ciao",
                 placeholder: "Laboris exercitation tempor ",

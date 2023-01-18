@@ -1,6 +1,8 @@
 part of zwap.dynamic_inputs.chips_input;
 
 class _ZwapChipsInputProvider<T> extends ChangeNotifier {
+  final TextEditingController controller = TextEditingController();
+
   final List<T> values;
   final List<T>? lessItems;
   final bool showLessItems;
@@ -52,7 +54,10 @@ class _ZwapChipsInputProvider<T> extends ChangeNotifier {
 
       _selectedHashcodes.add(item.hashCode);
     }
-    if (onItemPicked != null) onItemPicked!(item, _selectedHashcodes.contains(_hashCode));
+    if (onItemPicked != null) {
+      controller.clear();
+      onItemPicked!(item, _selectedHashcodes.contains(_hashCode));
+    }
   }
 
   bool isItemSelected(T item) => _selectedHashcodes.contains(item.hashCode);
