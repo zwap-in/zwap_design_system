@@ -898,3 +898,6 @@ a
 
 ## 0.1.670
 * Added error state in ZwapChipsInput widget
+
+## 0.1.671
+* Added showMaxSelectedItemsString to ZwapChipsInput widget

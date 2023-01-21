@@ -353,6 +353,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ZwapChipsInput<String>(
                 errorMessage: _error ? 'djfò aksdjf òas' : null,
                 itemHeigth: 22,
+                showMaxSelectedItemsString: false,
                 label: "Ciao",
                 placeholder: "Laboris exercitation tempor ",
                 maxSelectedItems: 10,

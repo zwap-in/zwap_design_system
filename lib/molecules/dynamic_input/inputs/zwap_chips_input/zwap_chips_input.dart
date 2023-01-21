@@ -86,10 +86,15 @@ class ZwapChipsInput<T> extends StatefulWidget {
   /// Must be positive (0 included)
   ///
   /// If 0 there will be no maximum, otherwise the provided int
-  /// will be the max selected items count and a text is showed under the picker
+  /// will be the max selected items count and a text will be showed
+  /// under the picker if [showMaxSelectedItemsString] is true
   ///
   /// Default to 0
   final int maxSelectedItems;
+
+  /// If true and [maxSelectedItems] is greater than 0 then
+  /// a string is showed under the input
+  final bool showMaxSelectedItemsString;
 
   const ZwapChipsInput({
     required this.items,
@@ -107,6 +112,7 @@ class ZwapChipsInput<T> extends StatefulWidget {
     this.lessItems,
     this.maxSelectedItems = 0,
     this.errorMessage,
+    this.showMaxSelectedItemsString = true,
     Key? key,
   })  : assert(
           noResultsWidget != null || translateKey != null,
@@ -281,7 +287,7 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
                   child: child,
                 ),
               ),
-              if (_errorMessage != null || widget.maxSelectedItems != 0) ...[
+              if (_errorMessage != null || (widget.maxSelectedItems != 0 && widget.showMaxSelectedItemsString)) ...[
                 Align(
                   alignment: Alignment.centerRight,
                   child: _errorMessage != null
