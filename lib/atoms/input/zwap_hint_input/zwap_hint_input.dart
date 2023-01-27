@@ -145,8 +145,8 @@ class _ZwapHintInputState extends State<ZwapHintInput> {
 
   @override
   void didUpdateWidget(covariant ZwapHintInput oldWidget) {
-    if (!mapEquals(_provider.items, widget.items)) setState(() => _provider.items = Map.from(widget.items));
-    if (!listEquals(_provider.selectedItems, widget.selectedItems)) setState(() => _provider.selectedItems = List.from(widget.selectedItems));
+    if (!mapEquals(_provider.items, widget.items)) _provider.items = Map.from(widget.items);
+    if (!listEquals(_provider.selectedItems, widget.selectedItems)) _provider.selectedItems = List.from(widget.selectedItems);
 
     super.didUpdateWidget(oldWidget);
   }
@@ -252,7 +252,7 @@ class __InputSpanState extends State<_InputSpan> {
   void _controllerListener() {
     setState(() => _width = max(30, _textWidth));
     WidgetsBinding.instance
-        ?.addPostFrameCallback((_) => context.read<ZwapHintProvider>().currentSearchFieldRect = _inputKey.globalPaintBounds ?? Rect.zero);
+        .addPostFrameCallback((_) => context.read<ZwapHintProvider>().currentSearchFieldRect = _inputKey.globalPaintBounds ?? Rect.zero);
   }
 
   @override

@@ -901,3 +901,6 @@ a
 
 ## 0.1.671
 * Added showMaxSelectedItemsString to ZwapChipsInput widget
+
+## 0.1.672
+* Fixed problem in ZwapHintInput widget

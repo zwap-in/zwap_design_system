@@ -569,6 +569,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   ),
                 ),
               ),
+              SizedBox(height: 420),
             ],
           ),
         ),
