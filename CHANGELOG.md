@@ -904,3 +904,6 @@ a
 
 ## 0.1.672
 * Fixed problem in ZwapHintInput widget
+
+## 0.1.673
+* Fixed problem in ZwapHintInput widget

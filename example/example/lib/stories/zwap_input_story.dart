@@ -541,7 +541,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               SizedBox(height: 20),
               ZwapHintInput(
                 placeholder: "Digita qui...",
-                onItemSelected: (k) => setState(() => _selectedItems.contains(k) ? null : _selectedItems.add(k)),
+                onItemSelected: (k) => setState(() => _selectedItems.contains(k) ? null : _selectedItems = (List.from(_selectedItems)..add(k))),
                 minItems: 3,
                 items: _items,
                 selectedItems: _selectedItems,

@@ -145,10 +145,30 @@ class _ZwapHintInputState extends State<ZwapHintInput> {
 
   @override
   void didUpdateWidget(covariant ZwapHintInput oldWidget) {
-    if (!mapEquals(_provider.items, widget.items)) _provider.items = Map.from(widget.items);
-    if (!listEquals(_provider.selectedItems, widget.selectedItems)) _provider.selectedItems = List.from(widget.selectedItems);
+    if (!mapEquals(_provider.items, widget.items))
+      Future.delayed(const Duration(milliseconds: 50), () {
+        if (!mounted) return;
+        _provider.items = Map.from(widget.items);
+      });
+      
+    if (_didSelectedItemsChange())
+      Future.delayed(const Duration(milliseconds: 50), () {
+        if (!mounted) return;
+        _provider.selectedItems = List.from(widget.selectedItems);
+      });
 
     super.didUpdateWidget(oldWidget);
+  }
+
+  bool _didSelectedItemsChange() {
+    final List<String> newItems = widget.selectedItems;
+    if (widget.selectedItems.hashCode == _provider.selectedItems.hashCode) return false;
+    if ({...newItems}.length != {..._provider.selectedItems}.length) return true;
+
+    for (int i = 0; i < newItems.length; i++) {
+      if (!_provider.selectedItems.contains(newItems[i])) return true;
+    }
+    return false;
   }
 
   @override
