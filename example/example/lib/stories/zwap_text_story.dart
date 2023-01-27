@@ -81,7 +81,7 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
             ),
             ZwapExpandableText(
               text:
-                  "Duis nostrud do sit Lorem ex aliqua ea ea laborum labore anim. Dolor labore amet cillum velit id qui magna culpa ad ad nisi. Occaecat Lorem mollit ut enim et labore cillum ut cillum nulla laboris. Est est consectetur velit incididunt ea quis. Elit anim nulla aliquip exercitation fugiat id et eu. Mollit eu et consectetur aliqua non officia ullamco aute sit incididunt.Aute sint deserunt aliquip pariatur sunt aliqua eu aliqua aliquip exercitation commodo dolor mollit elit. Elit in sint nisi non incididunt. Cupidatat reprehenderit consectetur consequat aliquip duis est. Eiusmod quis aute amet labore sit aliqua nostrud. Incididunt fugiat enim proident qui qui. Exercitation tempor labore do exercitation exercitation eiusmod cillum incididunt ex.",
+                  "Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt.",
               maxClosedLines: 3,
               textType: ZwapTextType.bigBodyRegular,
               textColor: ZwapColors.neutral900,
@@ -89,9 +89,11 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                 'see_less': 'Vedi meno',
                 'see_more': 'Vedi tutto',
               }[key]!,
+              textAlign: TextAlign.left,
             ),
             SizedBox(height: 22),
             ZwapRichText.safeText(
+              maxLines: 3,
               textSpans: [
                 ZwapTextSpan.fromZwapTypography(
                   text: "Ullamco elit proident duis laboris sint labore aliquip laborum voluptate tempor eu laborum.",

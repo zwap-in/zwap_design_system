@@ -185,6 +185,8 @@ class ZwapGradientTextSpan extends ZwapTextSpan {
 ///
 /// If no style is provided to this widget or to a text spans tree, DefaultTextStyle will be used
 class ZwapRichText extends StatelessWidget {
+  final TextAlign? textAlign;
+
   final bool _isSafeText;
 
   /// Each text with a custom type and custom color and optionally a recognizer
@@ -192,9 +194,12 @@ class ZwapRichText extends StatelessWidget {
 
   final List<ZwapTextSpan> textSpans;
 
-  final TextAlign? textAlign;
-
   final TextStyle? style;
+
+  final int? maxLines;
+
+  /// Default to [TextOverflow.ellipsis]
+  final TextOverflow textOverflow;
 
   @Deprecated("Use the ZwapRichText.safeText(...) instead. This will be removed in the future.")
   ZwapRichText({
@@ -202,6 +207,8 @@ class ZwapRichText extends StatelessWidget {
     required this.texts,
     this.style,
     this.textAlign,
+    this.maxLines,
+    this.textOverflow = TextOverflow.ellipsis,
   })  : this.textSpans = [],
         this._isSafeText = false,
         super(key: key);
@@ -214,6 +221,8 @@ class ZwapRichText extends StatelessWidget {
     required this.textSpans,
     this.style,
     this.textAlign,
+    this.maxLines,
+    this.textOverflow = TextOverflow.ellipsis,
   })  : this.texts = {},
         this._isSafeText = true,
         super(key: key);
@@ -224,6 +233,8 @@ class ZwapRichText extends StatelessWidget {
     required ZwapTextType textType,
     Color? textColor,
     this.textAlign,
+    this.maxLines,
+    this.textOverflow = TextOverflow.ellipsis,
   })  : this.texts = {},
         this.style = getTextStyle(textType).copyWith(color: textColor),
         this._isSafeText = true,
@@ -259,6 +270,8 @@ class ZwapRichText extends StatelessWidget {
         style: style,
       ),
       textAlign: textAlign ?? TextAlign.start,
+      maxLines: maxLines,
+      overflow: textOverflow,
     );
   }
 }

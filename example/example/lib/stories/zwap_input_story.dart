@@ -536,7 +536,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 controller: TagsTextController(),
               ),
               SizedBox(height: 20),
-              ZwapInputWithTags(),
+              //ZwapInputWithTags(),
               SizedBox(height: 20),
               SizedBox(height: 20),
               ZwapHintInput(

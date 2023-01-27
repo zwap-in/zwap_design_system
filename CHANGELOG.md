@@ -906,4 +906,6 @@ a
 * Fixed problem in ZwapHintInput widget
 
 ## 0.1.673
-* Fixed problem in ZwapHintInput widget
+
+## 0.1.674
+* Added maxLines and textOverflow property to ZwapRichText
