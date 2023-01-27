@@ -1,6 +1,7 @@
 library zwap.dynamic_inputs.search_picker;
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +67,10 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
     _provider = _ZwapSearchInputProvider<T>(
       widget.initialValues,
       widget.performSearch,
-      widget.onItemSelected,
+      (item) {
+        if (widget.onItemSelected != null) widget.onItemSelected!(item);
+        if (item != null) _inputController.text = widget.getItemCopy(item);
+      },
       widget.selectedItem,
       widget.getItemCopy,
     );
@@ -83,7 +87,6 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
 
     if (!_hasFocus) {
       _inputController.text = _provider.selectedItem == null ? '' : widget.getItemCopy(_provider.selectedItem!);
-      _provider.inputKey.closeIfOpen();
     }
   }
 
@@ -160,6 +163,8 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
               _inputNode.requestFocus();
             },
             onClose: () {
+              _provider.clearSearch();
+
               if (!_inputNode.hasFocus) return;
               _inputNode.unfocus();
             },
@@ -202,57 +207,49 @@ class _ZwapSearchInputOverlayState<T> extends State<_ZwapSearchInputOverlay<T>> 
     final bool _isLoading = context.select<_ZwapSearchInputProvider<T>, bool>((pro) => pro.loading);
     final bool _isLoadingMoreData = context.select<_ZwapSearchInputProvider<T>, bool>((pro) => pro.loadingMoreData);
 
-    Widget _getChild() {
-      if (_isLoading)
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: LinearProgressIndicator(
-            minHeight: 1.5,
-            valueColor: AlwaysStoppedAnimation(ZwapColors.primary700),
-          ),
-        );
+    if (_isLoading)
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: LinearProgressIndicator(
+          minHeight: 1.5,
+          valueColor: AlwaysStoppedAnimation(ZwapColors.primary700),
+        ),
+      );
 
-      if (_items.isEmpty) {
-        if (widget.noResultsWidget != null) return widget.noResultsWidget!;
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-          child: ZwapText(
-            text: widget.translateKey!('no_results_found'),
-            zwapTextType: ZwapTextType.mediumBodyRegular,
-            textColor: ZwapColors.primary900Dark,
-          ),
-        );
-      }
-
-      return ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: 240),
-        child: SingleChildScrollView(
-          controller: _controller,
-          padding: const EdgeInsets.only(top: 10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ..._items.map((i) => _SingleItemWidget<T>(item: i)).toList(),
-              if (_isLoadingMoreData)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-                  child: LinearProgressIndicator(
-                    minHeight: 1.5,
-                    valueColor: AlwaysStoppedAnimation(ZwapColors.primary700),
-                  ),
-                )
-              else
-                const SizedBox(height: 10),
-            ],
-          ),
+    if (_items.isEmpty) {
+      if (widget.noResultsWidget != null) return widget.noResultsWidget!;
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+        child: ZwapText(
+          text: widget.translateKey!('no_results_found'),
+          zwapTextType: ZwapTextType.mediumBodyRegular,
+          textColor: ZwapColors.primary900Dark,
         ),
       );
     }
 
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.fastOutSlowIn,
-      child: _getChild(),
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: 240),
+      child: SingleChildScrollView(
+        controller: _controller,
+        padding: const EdgeInsets.only(top: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ..._items.map((i) => Flexible(child: _SingleItemWidget<T>(item: i))),
+            if (_isLoadingMoreData)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                child: LinearProgressIndicator(
+                  minHeight: 1.5,
+                  valueColor: AlwaysStoppedAnimation(ZwapColors.primary700),
+                ),
+              )
+            else
+              const SizedBox(height: 10),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -295,11 +292,9 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
     }
 
     return InkWell(
-      focusColor: ZwapColors.transparent,
-      hoverColor: ZwapColors.transparent,
-      splashColor: ZwapColors.transparent,
-      highlightColor: ZwapColors.transparent,
-      onTap: (_selected /* || _disabled */) ? null : () => context.read<_ZwapSearchInputProvider<T>>().pickItem(widget.item),
+      onTap: () {
+        context.read<_ZwapSearchInputProvider<T>>().pickItem(widget.item);
+      },
       onHover: (isHovered) => setState(() => _hovered = isHovered),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -308,10 +303,16 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
         constraints: BoxConstraints(minHeight: 44),
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ZwapText(
-          text: _getCopy(widget.item),
-          zwapTextType: ZwapTextType.bigBodyRegular,
-          textColor: _textColor(),
+        child: Row(
+          children: [
+            Expanded(
+              child: ZwapText(
+                text: _getCopy(widget.item),
+                zwapTextType: ZwapTextType.bigBodyRegular,
+                textColor: _textColor(),
+              ),
+            ),
+          ],
         ),
       ),
     );

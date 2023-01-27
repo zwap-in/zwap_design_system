@@ -101,7 +101,16 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
     _inputKey.closeIfOpen();
 
     if (_onItemSelected != null) _onItemSelected!(item);
+    
 
+    notifyListeners();
+  }
+
+  void clearSearch() {
+    _search = '';
+    _data = _emptySearchData;
+    _page = _emptySearchLastPage;
+    _hasMoreResults = _emptySearchHasMoreResults;
     notifyListeners();
   }
 }

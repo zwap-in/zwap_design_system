@@ -913,3 +913,6 @@ a
 
 ## 0.1.675
 * Updated a package version
+
+## 0.1.676
+* Fixed a bug in ZwapSearchPicker widget

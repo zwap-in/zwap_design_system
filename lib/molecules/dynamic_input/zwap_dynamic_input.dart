@@ -168,8 +168,6 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
   }
 
   void _closeOverlay() {
-    if (_entry == null) return;
-
     _entry?.remove();
     _entry = null;
 

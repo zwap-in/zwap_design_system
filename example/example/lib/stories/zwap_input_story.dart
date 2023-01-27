@@ -295,7 +295,10 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 initialValues: values,
                 translateKey: (_) => 'Nessun risultato',
                 placeholder: "Ciao ciao ciao ciao",
-                onItemSelected: (s) => _selectedSearchItem = s,
+                onItemSelected: (s) {
+                  print(s);
+                  _selectedSearchItem = s;
+                },
               ),
               SizedBox(height: 20),
               SizedBox(height: 20),

@@ -221,8 +221,6 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
 
       if ((_inputSize?.width ?? 0) > _width) _dx += (_inputSize!.width - _width) / 2;
 
-      print(MediaQuery.of(context).size.height - _dy - _height);
-
       if (_dy + _extraBottomPadding + _height > MediaQuery.of(context).size.height - 20) {
         _dy = max(_dy - _height, 20);
       } else {
