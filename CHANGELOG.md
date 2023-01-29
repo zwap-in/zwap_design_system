@@ -916,3 +916,6 @@ a
 
 ## 0.1.676
 * Fixed a bug in ZwapSearchPicker widget
+
+## 0.1.677
+* Improved ZwapTutorialOverlay

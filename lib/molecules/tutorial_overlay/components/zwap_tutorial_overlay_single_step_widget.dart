@@ -25,6 +25,8 @@ class _StepWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (step._isCustomChild && !step._isCustomContent) return step._customChild!(context);
+
     return ClipPath(
       clipper: ZwapMessageClipper(),
       child: Container(

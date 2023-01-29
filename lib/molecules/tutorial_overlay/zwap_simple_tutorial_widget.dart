@@ -27,6 +27,11 @@ class ZwapSimpleTutorialWidget extends StatefulWidget {
   /// If true clicking outside the overlay will make it close
   final bool dismissible;
 
+  /// If true the background will be blurred
+  ///
+  /// Default to true
+  final bool blur;
+
   const ZwapSimpleTutorialWidget({
     Key? key,
     required this.focusWidgetKey,
@@ -40,6 +45,7 @@ class ZwapSimpleTutorialWidget extends StatefulWidget {
     this.dismissible = false,
     this.overlayOffset = Offset.zero,
     this.cta,
+    this.blur = true,
   }) : super(key: key);
 
   @override
@@ -83,10 +89,12 @@ class _ZwapSimpleTutorialWidgetState extends State<ZwapSimpleTutorialWidget> wit
           children: [
             GestureDetector(
               onTap: widget.dismissible ? widget.onClose : null,
-              child: ZwapTutorialAnimatedBackgroundBlur(
-                duration: const Duration(milliseconds: 300),
-                sigma: 10,
-              ),
+              child: widget.blur
+                  ? ZwapTutorialAnimatedBackgroundBlur(
+                      duration: const Duration(milliseconds: 300),
+                      sigma: 10,
+                    )
+                  : Container(color: ZwapColors.whiteTransparent),
             ),
             Positioned(
               top: _focusWidgetOffset.dy - 0.005 * _focusWidgetSize.height,
@@ -107,8 +115,8 @@ class _ZwapSimpleTutorialWidgetState extends State<ZwapSimpleTutorialWidget> wit
                   : Container(),
             ),
             Positioned(
-              top: _topOffset,
-              left: _leftOffset,
+              top: _topOffset + widget.overlayOffset.dy,
+              left: _leftOffset + widget.overlayOffset.dx,
               child: AnimatedBuilder(
                 animation: _animationController,
                 builder: (context, child) => Opacity(opacity: _animationController.value, child: child),
