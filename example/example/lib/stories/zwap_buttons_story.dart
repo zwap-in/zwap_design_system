@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/radio/zwap_radio_widget.dart';
+import 'package:zwap_design_system/molecules/molecules.dart';
 import 'package:zwap_design_system/utils/edge_notifier_scroll_controller.dart';
 
 const List<IconData> _icons = [
@@ -176,6 +177,7 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                               loading: _loading,
                               disabled: _disabled,
                               decorations: ZwapButtonDecorations.primaryLight(),
+                              onTap: () => ZwapToasts.showSuccessToast("akdjfaskdjfaklsdjfòja hdfajkòsdfa", context: context),
                             ),
                           ),
                           Tooltip(
@@ -188,6 +190,7 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                               loading: _loading,
                               disabled: _disabled,
                               decorations: ZwapButtonDecorations.secondaryLight(),
+                              onTap: () => ZwapToasts.defaultDuration = const Duration(hours: 1),
                             ),
                           ),
                           Tooltip(

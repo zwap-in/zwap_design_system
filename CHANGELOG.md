@@ -922,3 +922,6 @@ a
 
 ## 0.1.678
 * Bug correction and improvements
+
+## 0.1.679
+* Added global [defaultDuration] to ZwapToast

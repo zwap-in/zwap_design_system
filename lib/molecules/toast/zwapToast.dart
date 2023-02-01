@@ -58,9 +58,13 @@ class ZwapToasts {
   static ZwapToasts? __instance;
   static ZwapToasts get _instance => __instance ??= ZwapToasts._();
 
+  Duration _defaultDuration = Duration(seconds: 3);
   ToastFuture? _lastToast;
 
   ZwapToasts._();
+
+  /// Set the global default toast duration
+  static set defaultDuration(Duration value) => _instance._defaultDuration = value;
 
   @Deprecated("This widget should never be used as it is not optimized, use static methods instead.\nWill be removed in the future")
   static Widget toastWidget(String normalText, bool isError, double width, Function() dismiss) {
@@ -126,7 +130,7 @@ class ZwapToasts {
           if (onDismiss != null) onDismiss();
         },
       ),
-      duration: duration ?? const Duration(seconds: 3),
+      duration: duration ?? _instance._defaultDuration,
       position: ToastPosition.top,
       handleTouch: showDismiss,
       onDismiss: () {
