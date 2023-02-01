@@ -58,7 +58,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   final List<String> values = [
     'asdkfjaskdlfjaskdlf',
-    'asdkfjaskdlfjaskdlf',
+    'asdkfjaskfjaskdlf',
     'asdfsasdkfjdlf',
     'sdfasdkfjdlf',
     'asdkfsdfasjdlf',
@@ -69,7 +69,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
     'asdaskfjdfdddlf',
   ];
 
-  String? _selectedSearchItem;
+  String? _selectedSearchItem = 'asdkfjaskdlfjaskdlf';
 
   String _richValue = '';
 
@@ -353,6 +353,11 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 lessItems: List.generate(40, (i) => i * 2),
               ),
               SizedBox(height: 20),
+              ZwapText(
+                text: 'Chips Input',
+                zwapTextType: ZwapTextType.bigBodySemibold,
+                textColor: ZwapColors.primary900Dark,
+              ),
               ZwapChipsInput<String>(
                 errorMessage: _error ? 'djfò aksdjf òas' : null,
                 itemHeigth: 22,
@@ -386,30 +391,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   padding: status.isHeader ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     children: [
-                      Icon(([
-                        Icons.abc_sharp,
-                        Icons.access_time_filled_rounded,
-                        Icons.access_time_filled_outlined,
-                        Icons.accessibility,
-                        Icons.accessibility_sharp,
-                        Icons.accessibility_rounded,
-                        Icons.accessibility_outlined,
-                        Icons.accessibility_new,
-                        Icons.accessibility_new_sharp,
-                        Icons.accessibility_new_rounded,
-                        Icons.accessibility_new_outlined,
-                        Icons.accessible,
-                        Icons.accessible_sharp,
-                        Icons.accessible_rounded,
-                        Icons.accessible_outlined,
-                        Icons.accessible_forward,
-                        Icons.accessible_forward_sharp,
-                        Icons.accessible_forward_rounded,
-                        Icons.accessible_forward_outlined,
-                        Icons.account_balance,
-                        Icons.account_balance_sharp,
-                      ]..shuffle())
-                          .first),
+                      Icon(Icons.face),
                       const SizedBox(width: 12),
                       ZwapText(
                         text: i,

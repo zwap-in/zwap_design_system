@@ -151,9 +151,10 @@ class _ZwapChipsInputState<T> extends State<ZwapChipsInput<T>> {
     _provider = _ZwapChipsInputProvider<T>(
       builderCallback: widget.itemBuilder,
       searchCallback: widget.searchItem,
-      onItemPicked: (item, selected) {
+      onItemPicked: (item, selected) async {
         if (widget.onItemPicked != null) widget.onItemPicked!(item, selected);
-        _inputKey.updateOverlayPosition();
+        await Future.delayed(const Duration(milliseconds: 75));
+        _inputKey.closeIfOpen();
       },
       values: widget.items,
       initialSelectedItems: widget.selectedItems.map((i) => i.hashCode).toList(),

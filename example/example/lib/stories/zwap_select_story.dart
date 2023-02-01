@@ -119,7 +119,6 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                         hintText: "Seleziona un elemento",
                         label: "Zwap Select",
                         callBackFunction: (value, _) {
-                          print(value);
                           setState(() => _selected = value);
                         },
                         selected: _selected,

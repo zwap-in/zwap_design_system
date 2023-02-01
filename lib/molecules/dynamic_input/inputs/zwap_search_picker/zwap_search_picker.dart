@@ -75,6 +75,8 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
       widget.getItemCopy,
     );
 
+    if (widget.selectedItem != null) _inputController.text = widget.getItemCopy(widget.selectedItem!);
+
     _inputNode.addListener(_focusListener);
   }
 

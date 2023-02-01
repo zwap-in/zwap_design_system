@@ -919,3 +919,6 @@ a
 
 ## 0.1.677
 * Improved ZwapTutorialOverlay
+
+## 0.1.678
+* Bug correction and improvements
