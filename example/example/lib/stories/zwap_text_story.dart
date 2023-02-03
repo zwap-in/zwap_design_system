@@ -93,7 +93,6 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
             ),
             SizedBox(height: 22),
             ZwapRichText.safeText(
-              maxLines: 3,
               textSpans: [
                 ZwapTextSpan.fromZwapTypography(
                   text: "Ullamco elit proident duis laboris sint labore aliquip laborum voluptate tempor eu laborum.",

@@ -208,7 +208,7 @@ class ZwapRichText extends StatelessWidget {
     this.style,
     this.textAlign,
     this.maxLines,
-    this.textOverflow = TextOverflow.ellipsis,
+    this.textOverflow = TextOverflow.clip,
   })  : this.textSpans = [],
         this._isSafeText = false,
         super(key: key);
@@ -222,7 +222,7 @@ class ZwapRichText extends StatelessWidget {
     this.style,
     this.textAlign,
     this.maxLines,
-    this.textOverflow = TextOverflow.ellipsis,
+    this.textOverflow = TextOverflow.clip,
   })  : this.texts = {},
         this._isSafeText = true,
         super(key: key);

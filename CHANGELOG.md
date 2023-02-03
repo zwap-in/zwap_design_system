@@ -925,3 +925,6 @@ a
 
 ## 0.1.679
 * Added global [defaultDuration] to ZwapToast
+
+## 0.1.680
+* Fix in ZwapRichText
