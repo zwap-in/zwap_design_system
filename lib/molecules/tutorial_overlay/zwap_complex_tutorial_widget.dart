@@ -39,6 +39,9 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
   /// Called when the close icon is pressed
   final Function()? onClose;
 
+  /// If not null, the related widget will be used as constraints for the blurred region
+  final GlobalKey? blurRegion;
+
   const ZwapComplexTutorialWidget({
     Key? key,
     required this.focusWidgetKey,
@@ -54,6 +57,7 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
     this.onClose,
     this.showClose = false,
     this.overlayOffset = Offset.zero,
+    this.blurRegion,
   }) : super(key: key);
 
   @override
@@ -83,8 +87,6 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
       upperBound: 1,
     )..forward();
 
-    
-
     if (widget.width == null) WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -93,6 +95,14 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
     final double _topOffset = _focusWidgetOffset.dy + _focusWidgetSize.height;
     final double _leftOffset = _focusWidgetOffset.dx + (_focusWidgetSize.width - (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0)) / 2;
 
+    Rect? _blurRegion;
+
+    if (widget.blurRegion != null) {
+      _blurRegion = widget.blurRegion!.globalPaintBounds;
+    }
+
+    print(widget.blurRegion);
+    print(_blurRegion);
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -100,13 +110,32 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            GestureDetector(
-              onTap: widget.showClose ? widget.onClose : null,
-              child: ZwapTutorialAnimatedBackgroundBlur(
-                duration: const Duration(milliseconds: 300),
-                sigma: 10,
+            if (_blurRegion == null)
+              Positioned(
+                child: GestureDetector(
+                  onTap: widget.showClose ? widget.onClose : null,
+                  child: ZwapTutorialAnimatedBackgroundBlur(
+                    duration: const Duration(milliseconds: 300),
+                    sigma: 10,
+                  ),
+                ),
+              )
+            else
+              Positioned.fromRect(
+                rect: _blurRegion,
+                child: GestureDetector(
+                  onTap: widget.showClose ? widget.onClose : null,
+                  child: Container(
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(color: ZwapColors.transparent),
+                    child: ZwapTutorialAnimatedBackgroundBlur(
+                      duration: const Duration(milliseconds: 300),
+                      sigma: 10,
+                      color: ZwapColors.neutral200.withOpacity(0.2),
+                    ),
+                  ),
+                ),
               ),
-            ),
             Positioned(
               top: _focusWidgetOffset.dy - 0.005 * _focusWidgetSize.height,
               left: _focusWidgetOffset.dx - 0.005 * _focusWidgetSize.width,

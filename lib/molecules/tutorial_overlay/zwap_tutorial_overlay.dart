@@ -1,6 +1,7 @@
 library zwap_tutorial_overlay;
 
 import 'dart:async';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 

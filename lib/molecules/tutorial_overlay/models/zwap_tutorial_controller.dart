@@ -22,6 +22,12 @@ class ZwapTutorialController {
   final InsertOverlayCallback insertOverlayCallback;
 
   List<GlobalKey> _focusWidgetKeys = [];
+
+  /// Contains the keys related to the same index [_focusWidgetKey]
+  ///
+  /// Those keys are used to blur only a region of the screen
+  List<GlobalKey?> _blurRegionKeys = [];
+
   int? _currentStep;
   OverlayEntry? _entry;
 
@@ -29,7 +35,9 @@ class ZwapTutorialController {
   //? in this map and build the real list only on when start method have been called
   Map<int, GlobalKey> _tmpKeys = {};
 
-  ZwapTutorialController({required this.steps, this.betweenStepCallback, required this.insertOverlayCallback});
+  ZwapTutorialController({required this.steps, this.betweenStepCallback, required this.insertOverlayCallback}) {
+    this._blurRegionKeys = List.generate(steps.length, (index) => null);
+  }
 
   void _buildFocusWidgetKeysList() {
     //? Check if the registered values and the steps list are compactible
@@ -47,7 +55,10 @@ class ZwapTutorialController {
     _currentStep = startFrom ?? 0;
     final ZwapTutorialStep _firstStep = steps[_currentStep!];
 
-    _entry?.remove();
+    if (_entry != null) {
+      if (_entry!.mounted) _entry!.remove();
+      _entry = null;
+    }
 
     _entry = ZwapTutorialOverlayEntry(
       uniqueKey: GlobalKey(),
@@ -64,6 +75,7 @@ class ZwapTutorialController {
         showClose: _firstStep.showClose,
         showEnd: _currentStep! + 1 == steps.length,
         width: _firstStep.width,
+        blurRegion: _blurRegionKeys[_currentStep!],
       ),
     );
 
@@ -74,6 +86,12 @@ class ZwapTutorialController {
   GlobalKey<_ZwapTutorialOverlayWrapperState> registerTutorialStep(int stepNumber) {
     final GlobalKey<_ZwapTutorialOverlayWrapperState> _key = GlobalKey();
     _tmpKeys[stepNumber] = _key;
+    return _key;
+  }
+
+  GlobalKey registerTutorialStepBackgroundRegion(int stepNumber) {
+    final GlobalKey<_ZwapTutorialOverlayWrapperState> _key = GlobalKey();
+    _blurRegionKeys[stepNumber] = _key;
     return _key;
   }
 
@@ -108,6 +126,7 @@ class ZwapTutorialController {
       uniqueKey: GlobalKey(),
       builder: (_) => ZwapComplexTutorialWidget(
         focusWidgetKey: _focusWidgetKeys[_currentStep!],
+        blurRegion: _blurRegionKeys[_currentStep!],
         child: _nextStep.content,
         backgroundColor: _nextStep.backgroundColor,
         height: _nextStep.height,

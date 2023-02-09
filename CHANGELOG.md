@@ -928,3 +928,6 @@ a
 
 ## 0.1.680
 * Fix in ZwapRichText
+
+## 0.1.681
+* Added new feature to zwap tutorial overlay widget to resize blurred area

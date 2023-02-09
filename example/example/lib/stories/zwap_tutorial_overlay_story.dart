@@ -62,6 +62,7 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
           )
         ],
         child: Center(
+          key: _controller.registerTutorialStepBackgroundRegion(0),
           child: Column(
             children: [
               Container(
@@ -131,7 +132,7 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
                     uniqueKey: GlobalKey(),
                     fadeOutDuration: const Duration(milliseconds: 100),
                     builder: (_) => ZwapSimpleTutorialWidget(
-                      overlayOffset: const Offset(-130 , 5),
+                      overlayOffset: const Offset(-130, 5),
                       focusWidgetWrapper: (context, child) => ChangeNotifierProvider.value(
                         value: _fakeProvider,
                         child: child,
