@@ -934,3 +934,6 @@ a
 
 ## 0.1.682
 * Reskin of zwap complex tutorial with new logics
+
+## 0.1.683
+* Added focusWidgetWrapper property even on complex tutorial widgets

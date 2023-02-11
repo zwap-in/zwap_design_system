@@ -81,6 +81,7 @@ class ZwapTutorialController {
         showEnd: _currentStep! + 1 == steps.length,
         width: _firstStep.width,
         blurRegion: _blurRegionKeys[_currentStep!],
+        focusWidgetWrapper: _firstStep.focusWidgetWrapper,
       ),
     );
 
@@ -148,6 +149,7 @@ class ZwapTutorialController {
         showSkip: _nextStep.showSkip,
         showEnd: _currentStep! + 1 == steps.length,
         width: _nextStep.width,
+        focusWidgetWrapper: _nextStep.focusWidgetWrapper,
       ),
     );
 

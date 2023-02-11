@@ -155,7 +155,11 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
                         child: Builder(
                           builder: widget.focusWidgetWrapper != null
                               ? (context) => widget.focusWidgetWrapper!(
-                                  context, Builder(builder: (_focusWidgetKey.currentWidget as ZwapTutorialOverlayFocusWidget).childBuilder))
+                                    context,
+                                    Builder(
+                                      builder: (_focusWidgetKey.currentWidget as ZwapTutorialOverlayFocusWidget).childBuilder,
+                                    ),
+                                  )
                               : (_focusWidgetKey.currentWidget as ZwapTutorialOverlayFocusWidget).childBuilder,
                         ),
                       ),

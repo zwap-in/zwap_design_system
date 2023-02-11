@@ -20,11 +20,15 @@ class ZwapTutorialStep {
   ///  By default offset is Offset.zero
   final Offset overlayOffset;
 
+  /// If provided used to wrap the focus widget copy
+  final Widget Function(BuildContext, Widget)? focusWidgetWrapper;
+
   ZwapTutorialStep({
     required this.content,
     this.onClose,
     this.width,
     this.height,
+    this. focusWidgetWrapper,
     this.backgroundColor,
     this.overlayOffset = Offset.zero,
     this.showBack = false,
