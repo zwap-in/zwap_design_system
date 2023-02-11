@@ -63,16 +63,21 @@ class ZwapTutorialController {
     _entry = ZwapTutorialOverlayEntry(
       uniqueKey: GlobalKey(),
       builder: (_) => ZwapComplexTutorialWidget(
+        index: _currentStep!,
+        stepsCount: steps.length,
         focusWidgetKey: _focusWidgetKeys[_currentStep!],
         child: _firstStep.content,
         backgroundColor: _firstStep.backgroundColor,
         height: _firstStep.height,
         onBack: _currentStep == 0 ? null : back,
-        onClose: _firstStep.onClose,
+        onClose: () {
+          if (_firstStep.onClose != null) _firstStep.onClose!();
+          end();
+        },
         onForward: _currentStep! + 1 == steps.length ? end : forward,
         overlayOffset: _firstStep.overlayOffset,
-        showBack: _currentStep != 0,
-        showClose: _firstStep.showClose,
+        showBack: _firstStep.showBack && _currentStep != 0,
+        showSkip: _firstStep.showSkip,
         showEnd: _currentStep! + 1 == steps.length,
         width: _firstStep.width,
         blurRegion: _blurRegionKeys[_currentStep!],
@@ -125,17 +130,22 @@ class ZwapTutorialController {
     _entry = ZwapTutorialOverlayEntry(
       uniqueKey: GlobalKey(),
       builder: (_) => ZwapComplexTutorialWidget(
+        index: _currentStep!,
+        stepsCount: steps.length,
         focusWidgetKey: _focusWidgetKeys[_currentStep!],
         blurRegion: _blurRegionKeys[_currentStep!],
         child: _nextStep.content,
         backgroundColor: _nextStep.backgroundColor,
         height: _nextStep.height,
         onBack: _currentStep == 0 ? null : back,
-        onClose: _nextStep.onClose,
+        onClose: () {
+          if (_nextStep.onClose != null) _nextStep.onClose!();
+          end();
+        },
         onForward: _currentStep! + 1 == steps.length ? end : forward,
         overlayOffset: _nextStep.overlayOffset,
-        showBack: _currentStep != 0,
-        showClose: _nextStep.showClose,
+        showBack: _nextStep.showBack && _currentStep != 0,
+        showSkip: _nextStep.showSkip,
         showEnd: _currentStep! + 1 == steps.length,
         width: _nextStep.width,
       ),

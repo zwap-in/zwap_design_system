@@ -31,23 +31,25 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
       insertOverlayCallback: (entry) => Overlay.of(context)?.insert(entry),
       steps: [
         ZwapTutorialStep(
+            showSkip: true,
+            width: 220,
+            overlayOffset: const Offset(30, 0),
             content: ZwapTutorialStepContent(
-          leading: Text('✨', style: TextStyle(fontSize: 32)),
-          title: 'Ciao 1',
-          subtitle: "Irure do fugiat mollit irure est et.",
-        )),
+              title: 'Da qui potrai condividere la tua agenda con tutti.',
+              subtitle: "Da qui potrai condividere la tua agenda con tutti.",
+            )),
         ZwapTutorialStep(
+            showBack: true,
             content: ZwapTutorialStepContent(
-          leading: Text('🔮', style: TextStyle(fontSize: 32)),
-          title: 'Ciao 2',
-          subtitle: "Irure do fugiat mollit irure est et.",
-        )),
+              title: 'Ciao 2',
+              subtitle: "Irure do fugiat mollit irure est et.",
+            )),
         ZwapTutorialStep(
+            showSkip: true,
             content: ZwapTutorialStepContent(
-          leading: Text('🫂', style: TextStyle(fontSize: 32)),
-          title: 'Ciao 3',
-          subtitle: "Irure do fugiat mollit irure est et.",
-        )),
+              title: 'Ciao 3',
+              subtitle: "Irure do fugiat mollit irure est et.",
+            )),
       ],
     );
   }

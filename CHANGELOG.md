@@ -931,3 +931,6 @@ a
 
 ## 0.1.681
 * Added new feature to zwap tutorial overlay widget to resize blurred area
+
+## 0.1.682
+* Reskin of zwap complex tutorial with new logics

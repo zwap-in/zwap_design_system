@@ -34,7 +34,7 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
   /// If true a close icon will be shown and user can finish the tutorial in this step
   ///
   /// Is showClose is true the step can be dismissed clicking outside the tutorial widget
-  final bool showClose;
+  final bool showSkip;
 
   /// Called when the close icon is pressed
   final Function()? onClose;
@@ -42,10 +42,18 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
   /// If not null, the related widget will be used as constraints for the blurred region
   final GlobalKey? blurRegion;
 
+  /// The index of the current step
+  final int index;
+
+  /// The total flow steps count
+  final int stepsCount;
+
   const ZwapComplexTutorialWidget({
     Key? key,
     required this.focusWidgetKey,
     required this.child,
+    required this.index,
+    required this.stepsCount,
     this.focusWidgetWrapper,
     this.width,
     this.height,
@@ -55,7 +63,7 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
     this.onBack,
     this.onForward,
     this.onClose,
-    this.showClose = false,
+    this.showSkip = false,
     this.overlayOffset = Offset.zero,
     this.blurRegion,
   }) : super(key: key);
@@ -93,7 +101,9 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
   @override
   Widget build(BuildContext context) {
     final double _topOffset = _focusWidgetOffset.dy + _focusWidgetSize.height;
-    final double _leftOffset = _focusWidgetOffset.dx + (_focusWidgetSize.width - (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0)) / 2;
+
+    double _leftOffset = _focusWidgetOffset.dx + (_focusWidgetSize.width - (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0)) / 2;
+    if (_leftOffset >= MediaQuery.of(context).size.width - 30 - (widget.width ?? 300)) _leftOffset = MediaQuery.of(context).size.width - 330;
 
     Rect? _blurRegion;
 
@@ -101,8 +111,6 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
       _blurRegion = widget.blurRegion!.globalPaintBounds;
     }
 
-    print(widget.blurRegion);
-    print(_blurRegion);
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -113,7 +121,7 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
             if (_blurRegion == null)
               Positioned(
                 child: GestureDetector(
-                  onTap: widget.showClose ? widget.onClose : null,
+                  onTap: widget.showSkip ? widget.onClose : null,
                   child: ZwapTutorialAnimatedBackgroundBlur(
                     duration: const Duration(milliseconds: 300),
                     sigma: 10,
@@ -124,7 +132,7 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
               Positioned.fromRect(
                 rect: _blurRegion,
                 child: GestureDetector(
-                  onTap: widget.showClose ? widget.onClose : null,
+                  onTap: widget.showSkip ? widget.onClose : null,
                   child: Container(
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(color: ZwapColors.transparent),
@@ -155,8 +163,8 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
                   : Container(),
             ),
             Positioned(
-              top: _topOffset,
-              left: _leftOffset,
+              top: _topOffset + widget.overlayOffset.dy,
+              left: _leftOffset + widget.overlayOffset.dx,
               child: AnimatedBuilder(
                 animation: _animationController,
                 builder: (context, child) => Opacity(opacity: _animationController.value, child: child),
@@ -166,12 +174,14 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
                   showEnd: widget.showEnd,
                   onBack: widget.onBack,
                   onForward: widget.onForward,
-                  color: widget.backgroundColor ?? ZwapColors.shades0,
+                  color: widget.backgroundColor ?? ZwapColors.shades100.withOpacity(.7),
                   height: widget.height,
                   width: widget.width,
-                  showClose: widget.showClose,
-                  onClose: widget.onClose,
+                  showSkip: widget.showSkip,
+                  onSkip: widget.onClose,
                   step: widget.child,
+                  index: widget.index,
+                  stepsCount: widget.stepsCount,
                 ),
               ),
             )

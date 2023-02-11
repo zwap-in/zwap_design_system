@@ -4,15 +4,16 @@ class ZwapTutorialStep {
   final ZwapTutorialStepContent content;
 
   /// Called each time this step is disposed
-  ///
-  /// ! Called even if showClose is false
   final Function()? onClose;
   final double? width;
   final double? height;
   final Color? backgroundColor;
 
-  /// If true a close icon will be shown and user can finish the tutorial in this step
-  final bool showClose;
+  /// If true the user can go to the previous step
+  final bool showBack;
+
+  /// If true the user can skip (actually close)
+  final bool showSkip;
 
   /// The translate offset of the overlay, if zero the overlay if in the bottom center of the focus widget
   ///
@@ -25,7 +26,8 @@ class ZwapTutorialStep {
     this.width,
     this.height,
     this.backgroundColor,
-    this.showClose = false,
     this.overlayOffset = Offset.zero,
+    this.showBack = false,
+    this.showSkip = false,
   });
 }
