@@ -23,15 +23,20 @@ class ZwapTutorialStep {
   /// If provided used to wrap the focus widget copy
   final Widget Function(BuildContext, Widget)? focusWidgetWrapper;
 
+  final DecorationDirection decorationDirection;
+  final double decorationTranslation;
+
   ZwapTutorialStep({
     required this.content,
     this.onClose,
     this.width,
     this.height,
-    this. focusWidgetWrapper,
+    this.focusWidgetWrapper,
     this.backgroundColor,
     this.overlayOffset = Offset.zero,
     this.showBack = false,
     this.showSkip = false,
+    this.decorationDirection = DecorationDirection.bottom,
+    this.decorationTranslation = 0,
   });
 }

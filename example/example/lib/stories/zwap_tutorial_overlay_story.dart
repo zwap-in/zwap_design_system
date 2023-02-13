@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/button/zwap_button.dart';
+import 'package:zwap_design_system/atoms/clippers/zwap_message_clipper.dart';
 import 'package:zwap_design_system/atoms/text/text.dart';
 import 'package:zwap_design_system/atoms/toolTip/zwap_tooltip.dart';
 import 'package:zwap_design_system/molecules/tutorial_overlay/zwap_tutorial_overlay.dart';
@@ -45,11 +46,14 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
               subtitle: "Irure do fugiat mollit irure est et.",
             )),
         ZwapTutorialStep(
+            decorationDirection: DecorationDirection.right,
+            decorationTranslation: 13,
             focusWidgetWrapper: (_, child) => Container(
                   color: ZwapColors.success400,
                   padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 4),
                   child: child,
                 ),
+            overlayOffset: Offset(10, 0),
             showSkip: true,
             content: ZwapTutorialStepContent(
               title: 'Ciao 3',

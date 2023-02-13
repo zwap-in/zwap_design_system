@@ -943,3 +943,6 @@ a
 
 ## 0.1.685
 * Added possibility to provide [insertOverlay] callback in start and goToStep callback instead of the constructor
+
+## 0.1.686
+* Added direction to tutorial overlay

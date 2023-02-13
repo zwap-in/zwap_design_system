@@ -33,6 +33,9 @@ class _MultipleStepWidget extends StatelessWidget {
   /// Called when "forward" (or "end" if showEnd is true) button is pressed
   final Function()? onForward;
 
+  final DecorationDirection decorationDirection;
+  final double decorationTranslation;
+
   const _MultipleStepWidget({
     Key? key,
     this.width,
@@ -47,13 +50,51 @@ class _MultipleStepWidget extends StatelessWidget {
     this.onSkip,
     this.onBack,
     this.onForward,
+    this.decorationDirection = DecorationDirection.top,
+    this.decorationTranslation = 0,
   })  : assert(!(showSkip && showBack), "Cannot showing both skip and back buttons, choose one"),
         super(key: key);
 
+  DecorationDirection _reverse(DecorationDirection dir) {
+    switch (dir) {
+      case DecorationDirection.top:
+        return DecorationDirection.bottom;
+      case DecorationDirection.right:
+        return DecorationDirection.left;
+      case DecorationDirection.bottom:
+        return DecorationDirection.top;
+      case DecorationDirection.left:
+        return DecorationDirection.right;
+    }
+  }
+
+  bool get _isHorizontal => [DecorationDirection.left, DecorationDirection.right].contains(decorationDirection);
+
   @override
   Widget build(BuildContext context) {
+    late final EdgeInsets _padding;
+    final EdgeInsets _twenty = const EdgeInsets.all(16);
+
+    switch (decorationDirection) {
+      case DecorationDirection.top:
+        _padding = _twenty.copyWith(bottom: 24);
+        break;
+      case DecorationDirection.right:
+        _padding = _twenty.copyWith(left: 24);
+        break;
+      case DecorationDirection.bottom:
+        _padding = _twenty.copyWith(top: 24);
+        break;
+      case DecorationDirection.left:
+        _padding = _twenty.copyWith(right: 24);
+        break;
+    }
+
     return ClipPath(
-      clipper: ZwapMessageClipper(),
+      clipper: ZwapMessageClipper(
+        direction: _reverse(decorationDirection),
+        decorationOffset: decorationTranslation,
+      ),
       child: Container(
         width: width ?? 300,
         height: height,
@@ -61,7 +102,7 @@ class _MultipleStepWidget extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(12),
         ),
-        padding: const EdgeInsets.all(20),
+        padding: _padding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

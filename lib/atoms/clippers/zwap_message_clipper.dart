@@ -50,7 +50,6 @@ class ZwapMessageClipper extends CustomClipper<Path> {
           ..lineTo(0, radius + decorationSize.height)
           ..arcToPoint(Offset(radius, decorationSize.height), radius: Radius.circular(radius));
       case DecorationDirection.right:
-        throw UnimplementedError();
       /* return Path()
           ..moveTo(radius, 0)
           ..lineTo(size.width - radius - decorationSize.width, 0)

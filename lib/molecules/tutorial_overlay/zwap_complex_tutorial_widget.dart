@@ -48,6 +48,9 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
   /// The total flow steps count
   final int stepsCount;
 
+  final DecorationDirection decorationDirection;
+  final double decorationTranslation;
+
   const ZwapComplexTutorialWidget({
     Key? key,
     required this.focusWidgetKey,
@@ -66,6 +69,8 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
     this.showSkip = false,
     this.overlayOffset = Offset.zero,
     this.blurRegion,
+    this.decorationDirection = DecorationDirection.top,
+    this.decorationTranslation = 0,
   }) : super(key: key);
 
   @override
@@ -100,10 +105,30 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
 
   @override
   Widget build(BuildContext context) {
-    final double _topOffset = _focusWidgetOffset.dy + _focusWidgetSize.height;
+    late double _topOffset;
+    late double _leftOffset;
 
-    double _leftOffset = _focusWidgetOffset.dx + (_focusWidgetSize.width - (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0)) / 2;
-    if (_leftOffset >= MediaQuery.of(context).size.width - 30 - (widget.width ?? 300)) _leftOffset = MediaQuery.of(context).size.width - 330;
+    switch (widget.decorationDirection) {
+      case DecorationDirection.top:
+        _topOffset = _focusWidgetOffset.dy - (_stepWidgetKey.globalPaintBounds?.height ?? 0);
+        _leftOffset = _focusWidgetOffset.dx + (_focusWidgetSize.width - (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0)) / 2;
+        break;
+      case DecorationDirection.right:
+        _topOffset = _focusWidgetOffset.dy;
+        _leftOffset = _focusWidgetOffset.dx + (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0) + 12;
+        break;
+      case DecorationDirection.bottom:
+        _topOffset = _focusWidgetOffset.dy + _focusWidgetSize.height;
+        _leftOffset = _focusWidgetOffset.dx + (_focusWidgetSize.width - (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0)) / 2;
+        break;
+      case DecorationDirection.left:
+        _topOffset = _focusWidgetOffset.dy;
+        _leftOffset = _focusWidgetOffset.dx - (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0) - 12;
+        break;
+    }
+
+    _leftOffset = min(MediaQuery.of(context).size.width - 30 - (widget.width ?? 300), max(16, _leftOffset));
+    _topOffset = min(MediaQuery.of(context).size.height - 15 - (widget.height ?? 300), max(16, _topOffset));
 
     Rect? _blurRegion;
 
@@ -186,6 +211,8 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
                   step: widget.child,
                   index: widget.index,
                   stepsCount: widget.stepsCount,
+                  decorationDirection: widget.decorationDirection,
+                  decorationTranslation: widget.decorationTranslation,
                 ),
               ),
             )
