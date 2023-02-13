@@ -101,6 +101,12 @@ class ZwapTutorialController {
     return _key;
   }
 
+  GlobalKey registerTutorialStepBackgroundRegionFor(List<int> steps) {
+    final GlobalKey<_ZwapTutorialOverlayWrapperState> _key = GlobalKey();
+    for (int i in steps) _blurRegionKeys[i] = _key;
+    return _key;
+  }
+
   Future forward() async {
     if (_currentStep == null || _currentStep! + 1 == steps.length) return;
 

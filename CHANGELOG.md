@@ -937,3 +937,6 @@ a
 
 ## 0.1.683
 * Added focusWidgetWrapper property even on complex tutorial widgets
+
+## 0.1.684
+* Added [registerTutorialStepBackgroundRegionFor] method in [ZwapTutorialController]
