@@ -108,22 +108,24 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
     late double _topOffset;
     late double _leftOffset;
 
+    final Rect _stepWidgetSize = _stepWidgetKey.globalPaintBounds ?? Rect.zero;
+
     switch (widget.decorationDirection) {
       case DecorationDirection.top:
-        _topOffset = _focusWidgetOffset.dy - (_stepWidgetKey.globalPaintBounds?.height ?? 0);
-        _leftOffset = _focusWidgetOffset.dx + (_focusWidgetSize.width - (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0)) / 2;
+        _topOffset = _focusWidgetOffset.dy - _stepWidgetSize.height;
+        _leftOffset = _focusWidgetOffset.dx + (_focusWidgetSize.width - (_stepWidgetSize.width)) / 2;
         break;
       case DecorationDirection.right:
         _topOffset = _focusWidgetOffset.dy;
-        _leftOffset = _focusWidgetOffset.dx + (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0) + 12;
+        _leftOffset = _focusWidgetOffset.dx + _stepWidgetSize.height + 12;
         break;
       case DecorationDirection.bottom:
         _topOffset = _focusWidgetOffset.dy + _focusWidgetSize.height;
-        _leftOffset = _focusWidgetOffset.dx + (_focusWidgetSize.width - (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0)) / 2;
+        _leftOffset = _focusWidgetOffset.dx + (_focusWidgetSize.width - (_stepWidgetSize.width)) / 2;
         break;
       case DecorationDirection.left:
         _topOffset = _focusWidgetOffset.dy;
-        _leftOffset = _focusWidgetOffset.dx - (widget.width ?? _stepWidgetKey.globalPaintBounds?.width ?? 0) - 12;
+        _leftOffset = _focusWidgetOffset.dx - _stepWidgetSize.height - 12;
         break;
     }
 

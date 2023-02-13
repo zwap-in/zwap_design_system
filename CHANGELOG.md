@@ -949,3 +949,6 @@ a
 
 ## 0.1.687
 * Fixes in tutorial controller
+
+## 0.1.688
+* Other fixes
