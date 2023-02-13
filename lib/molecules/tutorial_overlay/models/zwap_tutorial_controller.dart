@@ -19,7 +19,7 @@ class ZwapTutorialController {
   /// Used to insert the given entry in the Overlay of context
   ///
   /// Usually is something like that: `(entry) => Overlay.of(context)?.insert(entry);`
-  final InsertOverlayCallback? insertOverlayCallback;
+  InsertOverlayCallback? insertOverlayCallback;
 
   List<GlobalKey> _focusWidgetKeys = [];
 
@@ -113,16 +113,16 @@ class ZwapTutorialController {
     return _key;
   }
 
-  Future forward() async {
+  Future forward({InsertOverlayCallback? insertOverlay}) async {
     if (_currentStep == null || _currentStep! + 1 == steps.length) return;
 
-    await goToStep(_currentStep! + 1);
+    await goToStep(_currentStep! + 1, insertOverlay: insertOverlay);
   }
 
-  Future back() async {
+  Future back({InsertOverlayCallback? insertOverlay}) async {
     if (_currentStep == null || _currentStep == 0) return;
 
-    await goToStep(_currentStep! - 1);
+    await goToStep(_currentStep! - 1, insertOverlay: insertOverlay);
   }
 
   /// Go to the given stepNumber step disposing the current step only if needed.
@@ -181,7 +181,10 @@ class ZwapTutorialController {
   }
 
   void _insertOverlay(OverlayEntry entry, InsertOverlayCallback? insertOverlay) {
-    if (insertOverlay != null) insertOverlay(entry);
+    if (insertOverlay != null) {
+      insertOverlay(entry);
+      insertOverlayCallback = insertOverlay;
+    }
     insertOverlayCallback!(entry);
   }
 }

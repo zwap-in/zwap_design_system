@@ -946,3 +946,6 @@ a
 
 ## 0.1.686
 * Added direction to tutorial overlay
+
+## 0.1.687
+* Fixes in tutorial controller
