@@ -184,6 +184,7 @@ class ZwapTutorialController {
     if (insertOverlay != null) {
       insertOverlay(entry);
       insertOverlayCallback = insertOverlay;
+      return;
     }
     insertOverlayCallback!(entry);
   }

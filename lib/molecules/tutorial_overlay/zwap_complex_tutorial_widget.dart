@@ -100,7 +100,9 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
       upperBound: 1,
     )..forward();
 
-    if (widget.width == null) WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    if (widget.width == null) {
+      Future.delayed(const Duration(milliseconds: 50), () => setState(() {}));
+    }
   }
 
   @override
@@ -199,22 +201,26 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
               child: AnimatedBuilder(
                 animation: _animationController,
                 builder: (context, child) => Opacity(opacity: _animationController.value, child: child),
-                child: _MultipleStepWidget(
-                  key: _stepWidgetKey,
-                  showBack: widget.showBack,
-                  showEnd: widget.showEnd,
-                  onBack: widget.onBack,
-                  onForward: widget.onForward,
-                  color: widget.backgroundColor ?? ZwapColors.shades100.withOpacity(.7),
-                  height: widget.height,
-                  width: widget.width,
-                  showSkip: widget.showSkip,
-                  onSkip: widget.onClose,
-                  step: widget.child,
-                  index: widget.index,
-                  stepsCount: widget.stepsCount,
-                  decorationDirection: widget.decorationDirection,
-                  decorationTranslation: widget.decorationTranslation,
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 100),
+                  opacity: _stepWidgetKey.currentWidget != null ? 1 : 0,
+                  child: _MultipleStepWidget(
+                    key: _stepWidgetKey,
+                    showBack: widget.showBack,
+                    showEnd: widget.showEnd,
+                    onBack: widget.onBack,
+                    onForward: widget.onForward,
+                    color: widget.backgroundColor ?? ZwapColors.shades100.withOpacity(.7),
+                    height: widget.height,
+                    width: widget.width,
+                    showSkip: widget.showSkip,
+                    onSkip: widget.onClose,
+                    step: widget.child,
+                    index: widget.index,
+                    stepsCount: widget.stepsCount,
+                    decorationDirection: widget.decorationDirection,
+                    decorationTranslation: widget.decorationTranslation,
+                  ),
                 ),
               ),
             )

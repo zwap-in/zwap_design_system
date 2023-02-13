@@ -952,3 +952,6 @@ a
 
 ## 0.1.688
 * Other fixes
+
+## 0.1.689
+* Other fixes on tutorial components
