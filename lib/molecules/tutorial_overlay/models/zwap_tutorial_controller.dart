@@ -1,7 +1,7 @@
 part of zwap_tutorial_overlay;
 
 typedef ZwapBetweenStepCallback = FutureOr<void> Function(int currentStep, bool reverse);
-typedef InsertOverlayCallback = Function(OverlayEntry entry);
+typedef InsertOverlayCallback = FutureOr<void> Function(OverlayEntry entry);
 
 class ZwapTutorialController {
   /// Steps must be exactly the same lenght as the number of key generated with registerTutorialStep method
@@ -19,7 +19,7 @@ class ZwapTutorialController {
   /// Used to insert the given entry in the Overlay of context
   ///
   /// Usually is something like that: `(entry) => Overlay.of(context)?.insert(entry);`
-  final InsertOverlayCallback insertOverlayCallback;
+  final InsertOverlayCallback? insertOverlayCallback;
 
   List<GlobalKey> _focusWidgetKeys = [];
 
@@ -35,7 +35,7 @@ class ZwapTutorialController {
   //? in this map and build the real list only on when start method have been called
   Map<int, GlobalKey> _tmpKeys = {};
 
-  ZwapTutorialController({required this.steps, this.betweenStepCallback, required this.insertOverlayCallback}) {
+  ZwapTutorialController({required this.steps, this.betweenStepCallback, this.insertOverlayCallback}) {
     this._blurRegionKeys = List.generate(steps.length, (index) => null);
   }
 
@@ -47,7 +47,11 @@ class ZwapTutorialController {
     }
   }
 
-  void start({int? startFrom}) {
+  /// If [insertOverlay] is not null will be used instead of [insertOverlayCallback]
+  ///
+  /// [insertOverlay] must be not null if [insertOverlayCallback] is null
+  void start({int? startFrom, InsertOverlayCallback? insertOverlay}) {
+    assert(insertOverlay != null || insertOverlayCallback != null, "One of insertOverlay and insertOverlayCallback must be not null");
     _buildFocusWidgetKeysList();
 
     assert(startFrom == null || startFrom < _focusWidgetKeys.length);
@@ -85,7 +89,7 @@ class ZwapTutorialController {
       ),
     );
 
-    insertOverlayCallback(_entry!);
+    _insertOverlay(_entry!, insertOverlay);
   }
 
   /// Return an unique global key and register this step
@@ -122,7 +126,7 @@ class ZwapTutorialController {
   /// Go to the given stepNumber step disposing the current step only if needed.
   ///
   /// The betweenStepCallback is called with the second paramenter as [reverse] (the second parameter of this methos)
-  Future goToStep(int stepNumber, {bool reverse = false}) async {
+  Future goToStep(int stepNumber, {bool reverse = false, InsertOverlayCallback? insertOverlay}) async {
     if (_entry != null) {
       final Duration _fadeDuration = (_entry as ZwapTutorialOverlayEntry).fadeOutDuration;
       _entry!.remove();
@@ -159,7 +163,7 @@ class ZwapTutorialController {
       ),
     );
 
-    insertOverlayCallback(_entry!);
+    _insertOverlay(_entry!, insertOverlay);
   }
 
   Future end() async {
@@ -170,5 +174,10 @@ class ZwapTutorialController {
     }
 
     _currentStep = null;
+  }
+
+  void _insertOverlay(OverlayEntry entry, InsertOverlayCallback? insertOverlay) {
+    if (insertOverlay != null) insertOverlay(entry);
+    insertOverlayCallback!(entry);
   }
 }
