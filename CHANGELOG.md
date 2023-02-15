@@ -958,3 +958,6 @@ a
 
 ## 0.1.690
 * Prepared version for flutter >= 3.0.0
+
+## 0.1.691
+* Removed google fonts
