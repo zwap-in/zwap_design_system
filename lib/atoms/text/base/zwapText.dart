@@ -1,6 +1,5 @@
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
