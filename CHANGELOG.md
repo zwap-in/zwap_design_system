@@ -961,3 +961,6 @@ a
 
 ## 0.1.691
 * Removed google fonts
+
+## 0.1.693
+* Smaller font files, but with less characters
