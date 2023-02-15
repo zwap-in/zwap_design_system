@@ -955,3 +955,6 @@ a
 
 ## 0.1.689
 * Other fixes on tutorial components
+
+## 0.1.690
+* Prepared version for flutter >= 3.0.0
