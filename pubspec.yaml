@@ -1,10 +1,10 @@
 name: zwap_design_system
 description: This is a package to build a standard design system kit for any zwap projects
-version: 0.1.693
+version: 0.1.694
 homepage: https://github.com/zwap-in/zwap_design_system
 
 environment:
-  sdk: '>=2.18.6 <4.0.0'
+  sdk: ">=2.18.6 <4.0.0"
   flutter: ">=3.0.0"
 
 dependencies:
@@ -59,33 +59,33 @@ flutter:
   fonts:
     - family: SFUIText
       fonts:
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Light.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Light-subset.ttf
           weight: 300
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-LightItalic.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-LightItalic-subset.ttf
           weight: 300
           style: italic
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Regular.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Regular-subset.ttf
           weight: 400
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-RegularItalic.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-RegularItalic-subset.ttf
           weight: 400
           style: italic
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Medium.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Medium-subset.ttf
           weight: 500
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-MediumItalic.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-MediumItalic-subset.ttf
           weight: 500
           style: italic
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Semibold.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Semibold-subset.ttf
           weight: 600
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-SemiboldItalic.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-SemiboldItalic-subset.ttf
           weight: 600
           style: italic
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Bold.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Bold-subset.ttf
           weight: 700
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-BoldItalic.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-BoldItalic-subset.ttf
           weight: 700
           style: italic
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Heavy.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-Heavy-subset.ttf
           weight: 800
-        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-HeavyItalic.ttf
+        - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-HeavyItalic-subset.ttf
           weight: 800
           style: italic

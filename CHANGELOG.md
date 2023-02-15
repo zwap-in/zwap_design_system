@@ -964,3 +964,6 @@ a
 
 ## 0.1.693
 * Smaller font files, but with less characters
+
+## 0.1.694
+* Fixed problem
