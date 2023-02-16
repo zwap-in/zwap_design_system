@@ -104,9 +104,7 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
       upperBound: 1,
     )..forward();
 
-    if (widget.width == null) {
-      Future.delayed(const Duration(milliseconds: 50), () => setState(() {}));
-    }
+    Future.delayed(const Duration(milliseconds: 50), () => setState(() {}));
   }
 
   @override
@@ -135,19 +133,19 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
         break;
     }
 
-    if(widget.log) _log('Offset: ${Offset(_leftOffset, _topOffset)}');
+    if (widget.log) _log('Offset: ${Offset(_leftOffset, _topOffset)}');
 
     _leftOffset = min(MediaQuery.of(context).size.width - 30 - (widget.width ?? 300), max(16, _leftOffset));
     _topOffset = min(MediaQuery.of(context).size.height - 15 - (widget.height ?? 140), max(16, _topOffset));
 
-   if(widget.log) _log('Safe offset: ${Offset(_leftOffset, _topOffset)}');
-   if(widget.log) _log('Actual offset: ${Offset(_leftOffset, _topOffset) + widget.overlayOffset}');
+    if (widget.log) _log('Safe offset: ${Offset(_leftOffset, _topOffset)}');
+    if (widget.log) _log('Actual offset: ${Offset(_leftOffset, _topOffset) + widget.overlayOffset}');
 
     Rect? _blurRegion;
 
     if (widget.blurRegion != null) {
       _blurRegion = widget.blurRegion!.globalPaintBounds;
-     if(widget.log) _log('Blur region rect: $_blurRegion');
+      if (widget.log) _log('Blur region rect: $_blurRegion');
     }
 
     return Material(

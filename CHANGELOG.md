@@ -973,3 +973,6 @@ a
 
 ## 0.1.696
 * Added log for Zwap Complex Tutorial flows
+
+## 0.1.697
+* Fixed bug in ZwapComplexTutorialWidget
