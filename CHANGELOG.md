@@ -967,3 +967,6 @@ a
 
 ## 0.1.694
 * Fixed problem
+
+## 0.1.695
+* Added right message custom clipper (now all directions are supported)

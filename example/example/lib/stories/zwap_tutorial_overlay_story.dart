@@ -45,7 +45,7 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
               subtitle: "Irure do fugiat mollit irure est et.",
             )),
         ZwapTutorialStep(
-            decorationDirection: DecorationDirection.right,
+            decorationDirection: DecorationDirection.left,
             decorationTranslation: 13,
             focusWidgetWrapper: (_, child) => Container(
                   color: ZwapColors.success400,

@@ -33,6 +33,8 @@ class ZwapMessageClipper extends CustomClipper<Path> {
         break;
     }
 
+    final Radius _borderRadius = Radius.circular(radius);
+
     switch (direction) {
       case DecorationDirection.top:
         return Path()
@@ -42,59 +44,59 @@ class ZwapMessageClipper extends CustomClipper<Path> {
           ..arcToPoint(Offset(radius + _decorationOffset + 3, 3), radius: Radius.circular(4))
           ..lineTo(radius + _decorationOffset + decorationSize.width / 2, decorationSize.height)
           ..lineTo(size.width - radius, decorationSize.height)
-          ..arcToPoint(Offset(size.width, decorationSize.height + radius), radius: Radius.circular(radius))
+          ..arcToPoint(Offset(size.width, decorationSize.height + radius), radius: _borderRadius)
           ..lineTo(size.width, size.height - radius)
-          ..arcToPoint(Offset(size.width - radius, size.height), radius: Radius.circular(radius))
+          ..arcToPoint(Offset(size.width - radius, size.height), radius: _borderRadius)
           ..lineTo(radius, size.height)
-          ..arcToPoint(Offset(0, size.height - radius), radius: Radius.circular(radius))
+          ..arcToPoint(Offset(0, size.height - radius), radius: _borderRadius)
           ..lineTo(0, radius + decorationSize.height)
-          ..arcToPoint(Offset(radius, decorationSize.height), radius: Radius.circular(radius));
+          ..arcToPoint(Offset(radius, decorationSize.height), radius: _borderRadius);
       case DecorationDirection.right:
-      /* return Path()
+        return Path()
           ..moveTo(radius, 0)
           ..lineTo(size.width - radius - decorationSize.width, 0)
-          ..arcToPoint(Offset(size.width - decorationSize.width, radius), radius: Radius.circular(radius))
+          ..arcToPoint(Offset(size.width - decorationSize.width, radius), radius: _borderRadius)
+          ..lineTo(size.width - decorationSize.width, radius + _decorationOffset)
+          ..lineTo(size.width - 3, radius + _decorationOffset + decorationSize.height / 2 - 3)
+          ..arcToPoint(Offset(size.width - 3, radius + _decorationOffset + decorationSize.height / 2 + 3), radius: Radius.circular(4))
+          ..lineTo(size.width - decorationSize.width, radius + _decorationOffset + decorationSize.height)
           ..lineTo(size.width - decorationSize.width, size.height - radius)
-          ..arcToPoint(Offset(size.width - radius, size.height), radius: Radius.circular(radius))
-          ..lineTo(radius + decorationSize.width, size.height)
-          ..arcToPoint(Offset(decorationSize.width, size.height - radius), radius: Radius.circular(radius))
-          ..lineTo(decorationSize.width, radius + decorationSize.height + _decorationOffset)
-          ..lineTo(3, radius + decorationSize.height / 2 + 3 + _decorationOffset)
-          ..arcToPoint(Offset(3, radius + decorationSize.height / 2 - 3 + _decorationOffset), radius: Radius.circular(4))
-          ..lineTo(decorationSize.width, radius + _decorationOffset)
-          ..lineTo(decorationSize.width, radius)
-          ..arcToPoint(Offset(decorationSize.width + radius, 0), radius: Radius.circular(radius)); */
+          ..arcToPoint(Offset(size.width - radius - decorationSize.width, size.height), radius: _borderRadius)
+          ..lineTo(radius, size.height)
+          ..arcToPoint(Offset(0, size.height - radius), radius: _borderRadius)
+          ..lineTo(0, radius)
+          ..arcToPoint(Offset(radius, 0), radius: _borderRadius);
       case DecorationDirection.bottom:
         return Path()
           ..moveTo(radius, 0)
           ..lineTo(size.width - radius, 0)
-          ..arcToPoint(Offset(size.width, radius), radius: Radius.circular(radius))
+          ..arcToPoint(Offset(size.width, radius), radius: _borderRadius)
           ..lineTo(size.width, size.height - radius - decorationSize.height)
-          ..arcToPoint(Offset(size.width - radius, size.height - decorationSize.height), radius: Radius.circular(radius))
+          ..arcToPoint(Offset(size.width - radius, size.height - decorationSize.height), radius: _borderRadius)
           ..lineTo(radius + _decorationOffset + decorationSize.width, size.height - decorationSize.height)
           ..lineTo(radius + _decorationOffset + decorationSize.width / 2 + 3, size.height - 3)
           ..arcToPoint(Offset(radius + _decorationOffset + decorationSize.width / 2 - 3, size.height - 3), radius: Radius.circular(4))
           ..lineTo(radius + _decorationOffset + decorationSize.width / 2 - 3, size.height - 3)
           ..lineTo(radius + _decorationOffset, size.height - decorationSize.height)
           ..lineTo(radius, size.height - decorationSize.height)
-          ..arcToPoint(Offset(0, size.height - radius - decorationSize.height), radius: Radius.circular(radius))
+          ..arcToPoint(Offset(0, size.height - radius - decorationSize.height), radius: _borderRadius)
           ..lineTo(0, radius)
-          ..arcToPoint(Offset(radius, 0), radius: Radius.circular(radius));
+          ..arcToPoint(Offset(radius, 0), radius: _borderRadius);
       case DecorationDirection.left:
         return Path()
           ..moveTo(radius + decorationSize.width, 0)
           ..lineTo(size.width - radius, 0)
-          ..arcToPoint(Offset(size.width, radius), radius: Radius.circular(radius))
+          ..arcToPoint(Offset(size.width, radius), radius: _borderRadius)
           ..lineTo(size.width, size.height - radius)
-          ..arcToPoint(Offset(size.width - radius, size.height), radius: Radius.circular(radius))
+          ..arcToPoint(Offset(size.width - radius, size.height), radius: _borderRadius)
           ..lineTo(radius + decorationSize.width, size.height)
-          ..arcToPoint(Offset(decorationSize.width, size.height - radius), radius: Radius.circular(radius))
+          ..arcToPoint(Offset(decorationSize.width, size.height - radius), radius: _borderRadius)
           ..lineTo(decorationSize.width, radius + decorationSize.height + _decorationOffset)
           ..lineTo(3, radius + decorationSize.height / 2 + 3 + _decorationOffset)
           ..arcToPoint(Offset(3, radius + decorationSize.height / 2 - 3 + _decorationOffset), radius: Radius.circular(4))
           ..lineTo(decorationSize.width, radius + _decorationOffset)
           ..lineTo(decorationSize.width, radius)
-          ..arcToPoint(Offset(decorationSize.width + radius, 0), radius: Radius.circular(radius));
+          ..arcToPoint(Offset(decorationSize.width + radius, 0), radius: _borderRadius);
     }
   }
 

@@ -119,7 +119,7 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
         break;
       case DecorationDirection.right:
         _topOffset = _focusWidgetOffset.dy;
-        _leftOffset = _focusWidgetOffset.dx + _stepWidgetSize.height + 12;
+        _leftOffset = _focusWidgetOffset.dx + _stepWidgetSize.width + 12;
         break;
       case DecorationDirection.bottom:
         _topOffset = _focusWidgetOffset.dy + _focusWidgetSize.height;
@@ -127,12 +127,12 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
         break;
       case DecorationDirection.left:
         _topOffset = _focusWidgetOffset.dy;
-        _leftOffset = _focusWidgetOffset.dx - _stepWidgetSize.height - 12;
+        _leftOffset = _focusWidgetOffset.dx - _stepWidgetSize.width - 12;
         break;
     }
 
     _leftOffset = min(MediaQuery.of(context).size.width - 30 - (widget.width ?? 300), max(16, _leftOffset));
-    _topOffset = min(MediaQuery.of(context).size.height - 15 - (widget.height ?? 300), max(16, _topOffset));
+    _topOffset = min(MediaQuery.of(context).size.height - 15 - (widget.height ?? 140), max(16, _topOffset));
 
     Rect? _blurRegion;
 
