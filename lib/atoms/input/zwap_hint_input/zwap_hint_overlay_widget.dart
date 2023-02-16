@@ -8,7 +8,17 @@ import 'package:zwap_design_system/atoms/input/zwap_hint_input/zwap_hint_provide
 class ZwapHintOverlayWidget extends StatelessWidget {
   final int maxHints;
 
-  const ZwapHintOverlayWidget({this.maxHints = 4, Key? key}) : super(key: key);
+  /// The provided bool is true if mouse has just entered,
+  /// false otherwise
+  ///
+  /// Called only when the mouse pass the bound
+  final Function(bool) onMouseEnterExit;
+
+  const ZwapHintOverlayWidget({
+    required this.onMouseEnterExit,
+    this.maxHints = 4,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,24 +44,28 @@ class ZwapHintOverlayWidget extends StatelessWidget {
       curve: Curves.decelerate,
       top: _searchFieldRect.top + _searchFieldRect.height + 7,
       left: _searchFieldRect.left - 5,
-      child: Container(
-        decoration: BoxDecoration(
-          color: ZwapColors.shades0,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(color: Color(0x26808080), blurRadius: 60, spreadRadius: -4, offset: Offset(0, 30)),
-            BoxShadow(color: Color(0x0d808080), blurRadius: 60, spreadRadius: -6, offset: Offset(0, 30)),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: _showedItemsKeys
-              .map((key) => _SingleItemWidget(
-                    keyId: key,
-                    value: _items[key]!,
-                  ))
-              .toList(),
+      child: MouseRegion(
+        onEnter: (_) => onMouseEnterExit(true),
+        onExit: (_) => onMouseEnterExit(false),
+        child: Container(
+          decoration: BoxDecoration(
+            color: ZwapColors.shades0,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(color: Color(0x26808080), blurRadius: 60, spreadRadius: -4, offset: Offset(0, 30)),
+              BoxShadow(color: Color(0x0d808080), blurRadius: 60, spreadRadius: -6, offset: Offset(0, 30)),
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _showedItemsKeys
+                .map((key) => _SingleItemWidget(
+                      keyId: key,
+                      value: _items[key]!,
+                    ))
+                .toList(),
+          ),
         ),
       ),
     );

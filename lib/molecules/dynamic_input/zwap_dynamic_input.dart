@@ -158,7 +158,7 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
       entity: _entry,
     );
 
-    Overlay.of(context)?.insert(
+    Overlay.of(context).insert(
       _entry = OverlayEntry(
         builder: (_) => widget.builder != null ? widget.builder!(context, _child) : _child,
       ),

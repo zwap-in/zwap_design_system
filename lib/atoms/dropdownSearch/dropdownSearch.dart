@@ -64,7 +64,7 @@ class _DropDownSearchState extends State<DropDownSearch> {
   void changeOverlay(bool isLoading) {
     this._overlayEntry.remove();
     this._overlayEntry = this._createOverlayEntry(isLoading);
-    Overlay.of(context)?.insert(this._overlayEntry);
+    Overlay.of(context).insert(this._overlayEntry);
   }
 
   /// It handles any chang inside the input field
@@ -83,7 +83,7 @@ class _DropDownSearchState extends State<DropDownSearch> {
     this._focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         this._overlayEntry = this._createOverlayEntry(false);
-        Overlay.of(context)?.insert(this._overlayEntry);
+        Overlay.of(context).insert(this._overlayEntry);
       } else {
         if (!this._overlayEntry.mounted) {
           this._overlayEntry.remove();

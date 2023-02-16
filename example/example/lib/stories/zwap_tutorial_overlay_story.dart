@@ -81,7 +81,7 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
                 child: Center(
                   child: GestureDetector(
                     onTap: () => _controller.start(
-                      insertOverlay: (e) => Overlay.of(context)?.insert(e),
+                      insertOverlay: (e) => Overlay.of(context).insert(e),
                     ),
                     child: ZwapTutorialOverlayFocusWidget(
                       key: _controller.registerTutorialStep(0),
@@ -215,7 +215,7 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
                     ),
                   );
 
-                  Overlay.of(context)?.insert(entry);
+                  Overlay.of(context).insert(entry);
                 },
                 child: Container(
                   margin: const EdgeInsets.only(right: 75),

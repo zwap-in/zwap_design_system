@@ -976,3 +976,6 @@ a
 
 ## 0.1.697
 * Fixed bug in ZwapComplexTutorialWidget
+
+## 0.1.698
+* Corrected a bug in ZwapHintInput widget and removed some warnings

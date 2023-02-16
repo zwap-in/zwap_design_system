@@ -234,7 +234,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   'pl': 'sdfasd',
                   'cn': 'afdasdf',
                   'cz': 'gerger',
-                  'dk': 'kmbaresf',
                   'jp': 'sdeg4ergf',
                   'gr': 'sdfasd',
                   'ua': 'afdasdf',

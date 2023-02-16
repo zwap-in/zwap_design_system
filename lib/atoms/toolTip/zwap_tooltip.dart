@@ -185,7 +185,7 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
         break;
     }
 
-    Overlay.of(context)?.insert(
+    Overlay.of(context).insert(
       _entry = OverlayEntry(
         builder: (context) => Positioned(
           top: _position.dy,

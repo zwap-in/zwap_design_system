@@ -203,7 +203,7 @@ class _ZwapIconDropDownsState extends State<ZwapIconDropDowns> {
       _dropdownOverlay!.remove();
       _dropdownOverlay = null;
     } else
-      Overlay.of(context)?.insert(_dropdownOverlay = _createOverlay());
+      Overlay.of(context).insert(_dropdownOverlay = _createOverlay());
 
     setState(() {});
   }

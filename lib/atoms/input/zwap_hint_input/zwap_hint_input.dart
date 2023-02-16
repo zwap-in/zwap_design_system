@@ -99,6 +99,8 @@ class _ZwapHintInputState extends State<ZwapHintInput> {
   Color get _defaultBorderColor =>
       widget.minItems != null && _provider.selectedItems.length >= widget.minItems! ? ZwapColors.success400 : ZwapColors.neutral300;
 
+  bool _isMouseInsideOverlay = false;
+
   @override
   void initState() {
     super.initState();
@@ -120,17 +122,20 @@ class _ZwapHintInputState extends State<ZwapHintInput> {
   }
 
   void _checkOverlay() {
-    if (!_focussed && _entry != null) {
+    if (!_isMouseInsideOverlay && !_focussed && _entry != null) {
       _entry!.remove();
       _entry = null;
     }
 
     if (_focussed && _entry == null) {
-      Overlay.of(context)?.insert(
+      Overlay.of(context).insert(
         _entry = OverlayEntry(
           builder: (_) => ChangeNotifierProvider.value(
             value: _provider,
-            child: ZwapHintOverlayWidget(maxHints: widget.maxHints),
+            child: ZwapHintOverlayWidget(
+              maxHints: widget.maxHints,
+              onMouseEnterExit: (isInside) => setState(() => _isMouseInsideOverlay = isInside),
+            ),
           ),
         ),
       );
@@ -150,7 +155,7 @@ class _ZwapHintInputState extends State<ZwapHintInput> {
         if (!mounted) return;
         _provider.items = Map.from(widget.items);
       });
-      
+
     if (_didSelectedItemsChange())
       Future.delayed(const Duration(milliseconds: 50), () {
         if (!mounted) return;

@@ -168,7 +168,7 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
       } catch (e) {}
       _pickerOverlay = null;
     } else {
-      Overlay.of(context)?.insert(_pickerOverlay = _createOverlay());
+      Overlay.of(context).insert(_pickerOverlay = _createOverlay());
       if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
     }
 

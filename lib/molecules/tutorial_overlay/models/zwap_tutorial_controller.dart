@@ -21,7 +21,7 @@ class ZwapTutorialController {
 
   /// Used to insert the given entry in the Overlay of context
   ///
-  /// Usually is something like that: `(entry) => Overlay.of(context)?.insert(entry);`
+  /// Usually is something like that: `(entry) => Overlay.of(context).insert(entry);`
   InsertOverlayCallback? insertOverlayCallback;
 
   List<GlobalKey> _focusWidgetKeys = [];

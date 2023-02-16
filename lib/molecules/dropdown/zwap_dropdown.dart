@@ -314,7 +314,7 @@ class _ZwapDropDownState extends State<ZwapDropDown> {
         if (widget.onFocusChange != null) await widget.onFocusChange!(true);
         _inputFocusNode.requestFocus();
       }
-      Overlay.of(context)?.insert(_dropdownOverlay = _createOverlay());
+      Overlay.of(context).insert(_dropdownOverlay = _createOverlay());
     }
 
     setState(() {});

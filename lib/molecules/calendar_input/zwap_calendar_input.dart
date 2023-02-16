@@ -119,7 +119,7 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
     final Rect? _inputRect = _inputKey.globalPaintBounds;
     if (_inputRect == null) return;
 
-    Overlay.of(context)?.insert(
+    Overlay.of(context).insert(
       _calendarEntry = OverlayEntry(
         builder: (_) => ChangeNotifierProvider<_ZwapCalendarInputProvider>.value(
           value: _calendarProvider,

@@ -69,7 +69,7 @@ class _ZwapRichInputState extends State<ZwapRichInput> {
     final Offset _cursorOffset = _provider._node.offset +
         _painter.getOffsetForCaret(TextPosition(offset: _provider._richInputController.value.selection.baseOffset), caretPrototype);
 
-    Overlay.of(context)?.insert(
+    Overlay.of(context).insert(
       _entry = OverlayEntry(
         builder: (context) {
           return AnimatedPositioned(

@@ -384,7 +384,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
       } catch (e) {}
       _selectOverlay = null;
     } else {
-      Overlay.of(context)?.insert(_selectOverlay = _createOverlay());
+      Overlay.of(context).insert(_selectOverlay = _createOverlay());
       // if (!_inputFocus.hasFocus) _inputFocus.requestFocus();
     }
 
