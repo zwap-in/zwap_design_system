@@ -29,6 +29,7 @@ class _ZwapTutorialOverlayStoryState extends State<ZwapTutorialOverlayStory> {
     super.initState();
 
     _controller = ZwapTutorialController(
+      log: true,
       steps: [
         ZwapTutorialStep(
             showSkip: true,

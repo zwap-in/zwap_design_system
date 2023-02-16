@@ -1,8 +1,8 @@
 library zwap_tutorial_overlay;
 
 import 'dart:async';
-import 'dart:html';
 import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 
@@ -24,3 +24,4 @@ part 'models/zwap_tutorial_step.dart';
 part 'models/zwap_tutorial_step_content.dart';
 part 'models/zwap_tutorial_overlay_entry.dart';
 
+void _log(String message) => dev.log(message, name: 'ZWAP TUTORIALS');

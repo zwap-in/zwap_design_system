@@ -970,3 +970,6 @@ a
 
 ## 0.1.695
 * Added right message custom clipper (now all directions are supported)
+
+## 0.1.696
+* Added log for Zwap Complex Tutorial flows

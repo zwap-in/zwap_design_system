@@ -4,6 +4,9 @@ typedef ZwapBetweenStepCallback = FutureOr<void> Function(int currentStep, bool 
 typedef InsertOverlayCallback = FutureOr<void> Function(OverlayEntry entry);
 
 class ZwapTutorialController {
+  /// If true some infos are printed in the console
+  final bool log;
+
   /// Steps must be exactly the same lenght as the number of key generated with registerTutorialStep method
   ///
   /// Obviously the number provided in the registerTutorialStep methos must be the same od the index of the corrisponding step
@@ -35,7 +38,7 @@ class ZwapTutorialController {
   //? in this map and build the real list only on when start method have been called
   Map<int, GlobalKey> _tmpKeys = {};
 
-  ZwapTutorialController({required this.steps, this.betweenStepCallback, this.insertOverlayCallback}) {
+  ZwapTutorialController({this.log = false, required this.steps, this.betweenStepCallback, this.insertOverlayCallback}) {
     this._blurRegionKeys = List.generate(steps.length, (index) => null);
   }
 
@@ -51,6 +54,8 @@ class ZwapTutorialController {
   ///
   /// [insertOverlay] must be not null if [insertOverlayCallback] is null
   void start({int? startFrom, InsertOverlayCallback? insertOverlay}) {
+    if (log) _log('Started flow from index ${startFrom ?? 0}');
+
     assert(insertOverlay != null || insertOverlayCallback != null, "One of insertOverlay and insertOverlayCallback must be not null");
     _buildFocusWidgetKeysList();
 
@@ -67,6 +72,7 @@ class ZwapTutorialController {
     _entry = ZwapTutorialOverlayEntry(
       uniqueKey: GlobalKey(),
       builder: (_) => ZwapComplexTutorialWidget(
+        log: log,
         index: _currentStep!,
         stepsCount: steps.length,
         focusWidgetKey: _focusWidgetKeys[_currentStep!],
@@ -96,18 +102,24 @@ class ZwapTutorialController {
 
   /// Return an unique global key and register this step
   GlobalKey<_ZwapTutorialOverlayWrapperState> registerTutorialStep(int stepNumber) {
+    if (log) _log('Registered focus key for step $stepNumber');
+
     final GlobalKey<_ZwapTutorialOverlayWrapperState> _key = GlobalKey();
     _tmpKeys[stepNumber] = _key;
     return _key;
   }
 
   GlobalKey registerTutorialStepBackgroundRegion(int stepNumber) {
+    if (log) _log('Registered background key for step $stepNumber');
+
     final GlobalKey<_ZwapTutorialOverlayWrapperState> _key = GlobalKey();
     _blurRegionKeys[stepNumber] = _key;
     return _key;
   }
 
   GlobalKey registerTutorialStepBackgroundRegionFor(List<int> steps) {
+    if (log) _log('Registered background key for steps $steps');
+
     final GlobalKey<_ZwapTutorialOverlayWrapperState> _key = GlobalKey();
     for (int i in steps) _blurRegionKeys[i] = _key;
     return _key;
@@ -129,6 +141,8 @@ class ZwapTutorialController {
   ///
   /// The betweenStepCallback is called with the second paramenter as [reverse] (the second parameter of this methos)
   Future goToStep(int stepNumber, {bool reverse = false, InsertOverlayCallback? insertOverlay}) async {
+    if (log) _log('Going to step: $stepNumber');
+
     if (_entry != null) {
       final Duration _fadeDuration = (_entry as ZwapTutorialOverlayEntry).fadeOutDuration;
       _entry!.remove();
@@ -143,6 +157,7 @@ class ZwapTutorialController {
     _entry = ZwapTutorialOverlayEntry(
       uniqueKey: GlobalKey(),
       builder: (_) => ZwapComplexTutorialWidget(
+        log: log,
         index: _currentStep!,
         stepsCount: steps.length,
         focusWidgetKey: _focusWidgetKeys[_currentStep!],
@@ -171,6 +186,8 @@ class ZwapTutorialController {
   }
 
   Future end() async {
+    if (log) _log('Flow ended');
+
     if (_entry != null) {
       final Duration _fadeDuration = (_entry as ZwapTutorialOverlayEntry).fadeOutDuration;
       _entry!.remove();
@@ -181,6 +198,8 @@ class ZwapTutorialController {
   }
 
   void _insertOverlay(OverlayEntry entry, InsertOverlayCallback? insertOverlay) {
+    if (log) _log('Inserted entry $_entry');
+
     if (insertOverlay != null) {
       insertOverlay(entry);
       insertOverlayCallback = insertOverlay;

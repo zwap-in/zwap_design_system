@@ -51,6 +51,9 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
   final DecorationDirection decorationDirection;
   final double decorationTranslation;
 
+  /// If true some info are logged in the console
+  final bool log;
+
   const ZwapComplexTutorialWidget({
     Key? key,
     required this.focusWidgetKey,
@@ -71,6 +74,7 @@ class ZwapComplexTutorialWidget extends StatefulWidget {
     this.blurRegion,
     this.decorationDirection = DecorationDirection.top,
     this.decorationTranslation = 0,
+    this.log = false,
   }) : super(key: key);
 
   @override
@@ -131,13 +135,19 @@ class _ZwapComplexTutorialWidgetState extends State<ZwapComplexTutorialWidget> w
         break;
     }
 
+    if(widget.log) _log('Offset: ${Offset(_leftOffset, _topOffset)}');
+
     _leftOffset = min(MediaQuery.of(context).size.width - 30 - (widget.width ?? 300), max(16, _leftOffset));
     _topOffset = min(MediaQuery.of(context).size.height - 15 - (widget.height ?? 140), max(16, _topOffset));
+
+   if(widget.log) _log('Safe offset: ${Offset(_leftOffset, _topOffset)}');
+   if(widget.log) _log('Actual offset: ${Offset(_leftOffset, _topOffset) + widget.overlayOffset}');
 
     Rect? _blurRegion;
 
     if (widget.blurRegion != null) {
       _blurRegion = widget.blurRegion!.globalPaintBounds;
+     if(widget.log) _log('Blur region rect: $_blurRegion');
     }
 
     return Material(
