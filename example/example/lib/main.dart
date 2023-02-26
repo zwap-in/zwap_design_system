@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
                 if (_loading)
                   return const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(ZwapColors.primary700), strokeWidth: 1.8));
 
-                return OKToast(child: const StoryBookWidget());
+                return AppListenerWrapper(child: OKToast(child: const StoryBookWidget()));
               },
             ),
           ),

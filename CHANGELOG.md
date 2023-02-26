@@ -979,3 +979,6 @@ a
 
 ## 0.1.698
 * Corrected a bug in ZwapHintInput widget and removed some warnings
+
+## 0.1.699
+* Fixed problem in Tutorial library
