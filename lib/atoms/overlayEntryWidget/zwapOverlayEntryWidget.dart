@@ -262,7 +262,7 @@ class _ZwapOverlayEntryWidgetState extends State<ZwapOverlayEntryWidget> {
     PointerEventProvider.instance.removePointerListener(_pointerDownListener);
     PointerEventProvider.instance.removeScrollListener(_scrollListener);
 
-    widget.entity?.remove();
+    if (widget.entity?.mounted ?? false) widget.entity?.remove();
     if (widget.onAutoClose != null) widget.onAutoClose!();
   }
 

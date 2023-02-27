@@ -982,3 +982,6 @@ a
 
 ## 0.1.699
 * Fixed problem in Tutorial library
+
+## 0.1.700
+* Fixed bug in ZwapOverlayEntryWidget
