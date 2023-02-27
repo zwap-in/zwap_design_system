@@ -82,10 +82,10 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
 
   @override
   void didUpdateWidget(covariant ZwapCheckBoxPicker oldWidget) {
-    if (_error != widget.error) setState(() => _error = widget.error);
+    if (_error != widget.error && mounted) setState(() => _error = widget.error);
     if (!listEquals(_provider.selectedKeys, widget.selectedItems)) {
       _provider.selectedKeys = widget.selectedItems;
-      setState(() {});
+      if (mounted) setState(() {});
     }
 
     super.didUpdateWidget(oldWidget);
@@ -117,8 +117,8 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                 dynamicLabel: _provider.selectedKeys.isEmpty ? null : widget.dynamicLabel,
                 activeColor: _error ? ZwapColors.error400 : widget.activeColor,
                 defaultColor: _error ? ZwapColors.error400 : null,
-                onOpen: () => setState(() => _focussed = true),
-                onClose: () => setState(() => _focussed = false),
+                onOpen: mounted ? () => setState(() => _focussed = true) : null,
+                onClose: mounted ? () => setState(() => _focussed = false) : null,
                 focussed: _focussed,
                 builder: (context, child) => ChangeNotifierProvider.value(value: _provider, child: child),
                 content: Row(
@@ -304,7 +304,7 @@ class _CheckBoxListTileWidgetState extends State<_CheckBoxListTileWidget> {
 
     return InkWell(
       onTap: () => context.read<_ZwapCheckBoxPickerProvider>().toggleItem(widget.keyValue),
-      onHover: (isHovered) => setState(() => _hovered = isHovered),
+      onHover: (isHovered) => mounted ? setState(() => _hovered = isHovered) : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.decelerate,

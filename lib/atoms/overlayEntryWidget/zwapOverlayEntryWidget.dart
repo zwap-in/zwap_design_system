@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
 extension _ZwapOverlayEntryChildExt on ZwapOverlayEntryChild {
-  ZwapOverlayEntryChild _copyWithKey(GlobalKey<ZwapOverlayEntryChildState> key) => ZwapOverlayEntryChild(
+  ZwapOverlayEntryChild _copyWithWrapper(Widget Function(BuildContext, Widget) wrapper) => ZwapOverlayEntryChild._wrap(
+        wrapper,
         key: key,
         height: height,
         width: width,
@@ -74,7 +75,22 @@ class ZwapOverlayEntryChild extends StatefulWidget {
   final double? width;
   final double? height;
 
+  final Widget Function(BuildContext, Widget)? _wrapper;
+
   ZwapOverlayEntryChild({
+    Key? key,
+    this.left,
+    this.top,
+    this.right,
+    this.bottom,
+    this.width,
+    this.height,
+    required this.child,
+  })  : this._wrapper = null,
+        super(key: key);
+
+  ZwapOverlayEntryChild._wrap(
+    this._wrapper, {
     Key? key,
     this.left,
     this.top,
@@ -165,7 +181,15 @@ class ZwapOverlayEntryChildState extends State<ZwapOverlayEntryChild> {
       bottom: _bottom,
       width: _width,
       height: _height,
-      child: GestureDetector(behavior: HitTestBehavior.opaque, child: widget.child, onTap: () {}),
+      child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          child: widget._wrapper == null
+              ? widget.child
+              : widget._wrapper!(
+                  context,
+                  widget.child,
+                ),
+          onTap: () {}),
     );
   }
 }
@@ -196,12 +220,16 @@ class ZwapOverlayEntryWidget extends StatefulWidget {
 
 class _ZwapOverlayEntryWidgetState extends State<ZwapOverlayEntryWidget> {
   final GlobalKey<ZwapOverlayEntryChildState> _widgetKey = GlobalKey<ZwapOverlayEntryChildState>();
+  late OverlayEntry? _entry;
+  bool _inside = false;
 
   @override
   void initState() {
     super.initState();
     PointerEventProvider.instance.addPointerDownListener(_pointerDownListener);
     PointerEventProvider.instance.addScrollListener(_scrollListener);
+
+    _entry = widget.entity;
 
     /*  PointerEventProvider.instance.addScrollListener((s) {
       _close();
@@ -254,15 +282,18 @@ class _ZwapOverlayEntryWidgetState extends State<ZwapOverlayEntryWidget> {
   void _scrollListener(ScrollNotification not) => _close();
 
   void _checkIfClose(Offset position) {
-    Rect _widgetPos = _widgetKey.globalPaintBounds ?? Rect.zero;
-    if (!_widgetPos.contains(position)) _close();
+    print('inside: $_inside');
+    if (!_inside) _close();
   }
 
   void _close() {
     PointerEventProvider.instance.removePointerListener(_pointerDownListener);
     PointerEventProvider.instance.removeScrollListener(_scrollListener);
 
-    if (widget.entity?.mounted ?? false) widget.entity?.remove();
+    if (_entry?.mounted ?? false) {
+      _entry?.remove();
+      _entry = null;
+    }
     if (widget.onAutoClose != null) widget.onAutoClose!();
   }
 
@@ -272,7 +303,15 @@ class _ZwapOverlayEntryWidgetState extends State<ZwapOverlayEntryWidget> {
 
     return Stack(
       children: [
-        widget.child._copyWithKey(_widgetKey),
+        widget.child._copyWithWrapper(
+          (_, child) => MouseRegion(
+            onEnter: (_) {
+              _inside = true;
+            },
+            onExit: (_) => _inside = false,
+            child: child,
+          ),
+        ),
       ],
     );
   }

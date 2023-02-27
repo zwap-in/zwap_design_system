@@ -154,7 +154,7 @@ class _ZwapYearPickerState extends State<ZwapYearPicker> {
     }
 
     if (_inputFocus.hasFocus && !_isOverlayOpened) _toggleOverlay();
-    if (!_inputFocus.hasFocus && _isOverlayOpened) _toggleOverlay();
+    //if (!_inputFocus.hasFocus && _isOverlayOpened) _toggleOverlay();
 
     if (!_inputFocus.hasFocus &&
         (_yearPickerProvider.selected == null || int.tryParse(_inputController.text) != _yearPickerProvider.selected) &&

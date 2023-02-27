@@ -109,7 +109,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 child: ZwapInlineSelect<int>(
                   selectedItem: _valueInline,
                   onSelected: (i) {
-                    print(i);
                     setState(() => _valueInline = i);
                   },
                   items: [1, 2, 3],

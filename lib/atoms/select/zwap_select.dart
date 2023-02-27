@@ -425,7 +425,10 @@ class _ZwapSelectState extends State<ZwapSelect> {
 
               return ZwapOverlayEntryWidget(
                 entity: _selectOverlay,
-                onAutoClose: () => _provider.toggleOverlay(),
+                onAutoClose: () {
+                  _provider.toggleOverlay();
+                  _selectOverlay = null;
+                },
                 child: ZwapOverlayEntryChild(
                   top: _reverseOpen ? null : _top,
                   bottom: _reverseOpen ? _bottom : null,
