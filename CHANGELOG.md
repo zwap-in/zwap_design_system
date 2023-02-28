@@ -991,3 +991,9 @@ a
 
 ## 0.1.702
 * Fixed problem in ZwapOverlayEntryWidget
+
+## 0.1.703
+* Fixed problem in ZwapOverlayEntryWidget
+
+## 0.1.704
+* Handled a limit case in ZwapOverlayEntryWidget

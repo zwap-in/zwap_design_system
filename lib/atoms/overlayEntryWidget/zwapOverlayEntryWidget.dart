@@ -225,24 +225,36 @@ class _ZwapOverlayEntryWidgetState extends State<ZwapOverlayEntryWidget> {
   @override
   void initState() {
     super.initState();
-    PointerEventProvider.instance.addPointerDownListener(_pointerDownListener);
-    PointerEventProvider.instance.addScrollListener(_scrollListener);
+    PointerEventProvider.instance.addPointerDownListener(_pointerDownListener, [_entry.hashCode.toString()]);
+    PointerEventProvider.instance.addScrollListener(_scrollListener, [_entry.hashCode.toString()]);
 
     _entry = widget.entity;
+
+    _entry?.addListener(() {
+      print('ciao, mounted: ${_entry?.mounted}');
+    });
+
+    print('added listener');
   }
 
-  void _pointerDownListener(PointerDownEvent event) => _close();
+  void _pointerDownListener(PointerDownEvent event) {
+    Rect _widgetRect = _widgetKey.globalPaintBounds ?? Rect.zero;
+
+    if (_widgetRect.contains(event.position)) return;
+    _close();
+  }
+
   void _scrollListener(ScrollNotification not) => _close();
 
   void _close() {
+    PointerEventProvider.instance.removePointerListener(_pointerDownListener);
+    PointerEventProvider.instance.removeScrollListener(_scrollListener);
+
     if (widget.autoClose) {
       if (_entry?.mounted ?? false) {
         _entry?.remove();
         _entry = null;
       }
-
-      PointerEventProvider.instance.removePointerListener(_pointerDownListener);
-      PointerEventProvider.instance.removeScrollListener(_scrollListener);
 
       if (widget.onAutoClose != null) widget.onAutoClose!();
     }
@@ -250,9 +262,12 @@ class _ZwapOverlayEntryWidgetState extends State<ZwapOverlayEntryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.autoClose) return widget.child;
-
-    return Stack(children: [widget.child]);
+    return Stack(children: [
+      widget.child._copyWithWrapper((_, child) => Container(
+            key: _widgetKey,
+            child: child,
+          ))
+    ]);
   }
 }
 
@@ -298,14 +313,28 @@ class PointerEventProvider {
   static _PointerEventProvider get instance => _instance._provider;
 }
 
-class _PointerEventProvider extends ChangeNotifier {
-  final List<PointerListener<PointerUpEvent>> _pointerUpListeners;
-  final List<PointerListener<PointerDownEvent>> _pointerDownListeners;
-  final List<PointerListener<PointerCancelEvent>> _pointerCancelListeners;
-  final List<PointerListener<PointerHoverEvent>> _pointerHoverListeners;
-  final List<PointerListener<PointerMoveEvent>> _pointerMoveListeners;
+class _PointerListenerDecorator<T extends PointerEvent> {
+  PointerListener<T> listener;
+  List<String> tags;
 
-  final List<ScrollListener> _scrollListener;
+  _PointerListenerDecorator(this.listener, this.tags);
+}
+
+class _ScrollListenerDecorator {
+  ScrollListener listener;
+  List<String> tags;
+
+  _ScrollListenerDecorator(this.listener, this.tags);
+}
+
+class _PointerEventProvider extends ChangeNotifier {
+  final List<_PointerListenerDecorator<PointerUpEvent>> _pointerUpListeners;
+  final List<_PointerListenerDecorator<PointerDownEvent>> _pointerDownListeners;
+  final List<_PointerListenerDecorator<PointerCancelEvent>> _pointerCancelListeners;
+  final List<_PointerListenerDecorator<PointerHoverEvent>> _pointerHoverListeners;
+  final List<_PointerListenerDecorator<PointerMoveEvent>> _pointerMoveListeners;
+
+  final List<_ScrollListenerDecorator> _scrollListener;
 
   _PointerEventProvider()
       : this._pointerUpListeners = [],
@@ -315,20 +344,29 @@ class _PointerEventProvider extends ChangeNotifier {
         this._scrollListener = [],
         this._pointerMoveListeners = [];
 
-  void addPointerUpListener(PointerListener<PointerUpEvent> listener) => _pointerUpListeners.add(listener);
-  void addPointerDownListener(PointerListener<PointerDownEvent> listener) => _pointerDownListeners.add(listener);
-  void addPointerCancelListener(PointerListener<PointerCancelEvent> listener) => _pointerCancelListeners.add(listener);
-  void addPointerHoverListener(PointerListener<PointerHoverEvent> listener) => _pointerHoverListeners.add(listener);
-  void addPointerMoveListener(PointerListener<PointerMoveEvent> listener) => _pointerMoveListeners.add(listener);
+  void addPointerUpListener(PointerListener<PointerUpEvent> listener, [List<String> tags = const []]) =>
+      _pointerUpListeners.add(_PointerListenerDecorator(listener, tags));
 
-  void addScrollListener(ScrollListener listener) => _scrollListener.add(listener);
+  void addPointerDownListener(PointerListener<PointerDownEvent> listener, [List<String> tags = const []]) =>
+      _pointerDownListeners.add(_PointerListenerDecorator(listener, tags));
+
+  void addPointerCancelListener(PointerListener<PointerCancelEvent> listener, [List<String> tags = const []]) =>
+      _pointerCancelListeners.add(_PointerListenerDecorator(listener, tags));
+
+  void addPointerHoverListener(PointerListener<PointerHoverEvent> listener, [List<String> tags = const []]) =>
+      _pointerHoverListeners.add(_PointerListenerDecorator(listener, tags));
+
+  void addPointerMoveListener(PointerListener<PointerMoveEvent> listener, [List<String> tags = const []]) =>
+      _pointerMoveListeners.add(_PointerListenerDecorator(listener, tags));
+
+  void addScrollListener(ScrollListener listener, [List<String> tags = const []]) => _scrollListener.add(_ScrollListenerDecorator(listener, tags));
 
   void removePointerListener<T extends PointerEvent>(PointerListener<T> listener) {
-    if (T == PointerUpEvent) _pointerUpListeners.remove(listener);
-    if (T == PointerDownEvent) _pointerDownListeners.remove(listener);
-    if (T == PointerCancelEvent) _pointerCancelListeners.remove(listener);
-    if (T == PointerHoverEvent) _pointerHoverListeners.remove(listener);
-    if (T == PointerMoveEvent) _pointerMoveListeners.remove(listener);
+    if (T == PointerUpEvent) _pointerUpListeners.removeWhere((d) => d.listener == listener);
+    if (T == PointerDownEvent) _pointerDownListeners.removeWhere((d) => d.listener == listener);
+    if (T == PointerCancelEvent) _pointerCancelListeners.removeWhere((d) => d.listener == listener);
+    if (T == PointerHoverEvent) _pointerHoverListeners.removeWhere((d) => d.listener == listener);
+    if (T == PointerMoveEvent) _pointerMoveListeners.removeWhere((d) => d.listener == listener);
   }
 
   void removeScrollListener(ScrollListener listener) => _scrollListener.remove(listener);
@@ -348,10 +386,24 @@ class _PointerEventProvider extends ChangeNotifier {
   }
 
   void _notifyScroll(ScrollNotification notification) {
-    for (ScrollListener l in _scrollListener) l(notification);
+    for (ScrollListener l in _scrollListener.map((d) => d.listener)) l(notification);
   }
 
-  void _notifyAllIn<T extends PointerEvent>(List<PointerListener<T>> list, T e) {
-    for (PointerListener<T> listener in list) listener(e);
+  void _notifyAllIn<T extends PointerEvent>(List<_PointerListenerDecorator<T>> list, T e) {
+    for (PointerListener<T> listener in list.map((d) => d.listener)) listener(e);
   }
+
+  void removeAllRelatedToTag(String tag) {
+    for (_PointerListenerDecorator dec in _pointerUpListeners) if (dec.tags.contains(tag)) _pointerUpListeners.remove(dec);
+    for (_PointerListenerDecorator dec in _pointerDownListeners) if (dec.tags.contains(tag)) _pointerDownListeners.remove(dec);
+    for (_PointerListenerDecorator dec in _pointerCancelListeners) if (dec.tags.contains(tag)) _pointerCancelListeners.remove(dec);
+    for (_PointerListenerDecorator dec in _pointerHoverListeners) if (dec.tags.contains(tag)) _pointerHoverListeners.remove(dec);
+    for (_PointerListenerDecorator dec in _pointerMoveListeners) if (dec.tags.contains(tag)) _pointerMoveListeners.remove(dec);
+
+    for (_ScrollListenerDecorator dec in _scrollListener) if (dec.tags.contains(tag)) _scrollListener.remove(dec);
+  }
+}
+
+extension PointerEventProviderForEntry on _PointerEventProvider {
+  void removeAllRelatedToEntry(OverlayEntry entry) => removeAllRelatedToTag(entry.hashCode.toString());
 }
