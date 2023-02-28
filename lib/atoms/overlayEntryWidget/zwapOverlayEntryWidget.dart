@@ -388,13 +388,12 @@ class _PointerEventProvider extends ChangeNotifier {
   }
 
   void removeAllRelatedToTag(String tag) {
-    for (_PointerListenerDecorator dec in _pointerUpListeners) if (dec.tags.contains(tag)) _pointerUpListeners.remove(dec);
-    for (_PointerListenerDecorator dec in _pointerDownListeners) if (dec.tags.contains(tag)) _pointerDownListeners.remove(dec);
-    for (_PointerListenerDecorator dec in _pointerCancelListeners) if (dec.tags.contains(tag)) _pointerCancelListeners.remove(dec);
-    for (_PointerListenerDecorator dec in _pointerHoverListeners) if (dec.tags.contains(tag)) _pointerHoverListeners.remove(dec);
-    for (_PointerListenerDecorator dec in _pointerMoveListeners) if (dec.tags.contains(tag)) _pointerMoveListeners.remove(dec);
-
-    for (_ScrollListenerDecorator dec in _scrollListener) if (dec.tags.contains(tag)) _scrollListener.remove(dec);
+    _pointerUpListeners.removeWhere((dec) => dec.tags.contains(tag));
+    _pointerDownListeners.removeWhere((dec) => dec.tags.contains(tag));
+    _pointerCancelListeners.removeWhere((dec) => dec.tags.contains(tag));
+    _pointerHoverListeners.removeWhere((dec) => dec.tags.contains(tag));
+    _pointerMoveListeners.removeWhere((dec) => dec.tags.contains(tag));
+    _scrollListener.removeWhere((dec) => dec.tags.contains(tag));
   }
 }
 

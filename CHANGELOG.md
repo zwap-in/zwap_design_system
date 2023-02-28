@@ -1000,3 +1000,6 @@ a
 
 ## 0.1.705
 * Removed print and an error in ZwapOverlayEntryWidget
+
+## 0.1.706
+* Fixed problem with concurrency
