@@ -225,16 +225,10 @@ class _ZwapOverlayEntryWidgetState extends State<ZwapOverlayEntryWidget> {
   @override
   void initState() {
     super.initState();
-    PointerEventProvider.instance.addPointerDownListener(_pointerDownListener, [_entry.hashCode.toString()]);
-    PointerEventProvider.instance.addScrollListener(_scrollListener, [_entry.hashCode.toString()]);
-
     _entry = widget.entity;
 
-    _entry?.addListener(() {
-      print('ciao, mounted: ${_entry?.mounted}');
-    });
-
-    print('added listener');
+    PointerEventProvider.instance.addPointerDownListener(_pointerDownListener, [_entry.hashCode.toString()]);
+    PointerEventProvider.instance.addScrollListener(_scrollListener, [_entry.hashCode.toString()]);
   }
 
   void _pointerDownListener(PointerDownEvent event) {
