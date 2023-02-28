@@ -988,3 +988,6 @@ a
 
 ## 0.1.701
 * Fixed problem in ZwapOverlayEntryWidget and in ZwapYearPicker
+
+## 0.1.702
+* Fixed problem in ZwapOverlayEntryWidget

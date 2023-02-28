@@ -221,7 +221,6 @@ class ZwapOverlayEntryWidget extends StatefulWidget {
 class _ZwapOverlayEntryWidgetState extends State<ZwapOverlayEntryWidget> {
   final GlobalKey<ZwapOverlayEntryChildState> _widgetKey = GlobalKey<ZwapOverlayEntryChildState>();
   late OverlayEntry? _entry;
-  bool _inside = false;
 
   @override
   void initState() {
@@ -230,90 +229,30 @@ class _ZwapOverlayEntryWidgetState extends State<ZwapOverlayEntryWidget> {
     PointerEventProvider.instance.addScrollListener(_scrollListener);
 
     _entry = widget.entity;
-
-    /*  PointerEventProvider.instance.addScrollListener((s) {
-      _close();
-      /*  if (s is! ScrollUpdateNotification) return;
-      late final Rect? _pos;
-
-      switch (s.metrics.axis) {
-        case Axis.horizontal:
-          _pos = _widgetKey._move(Offset(s.scrollDelta ?? 0, 0));
-          break;
-        case Axis.vertical:
-          _pos = _widgetKey._move(Offset(0, s.scrollDelta ?? 0));
-          break;
-      }
-
-      Rect _safeArea = Rect.fromLTRB(30, 70, MediaQuery.of(context).size.width - 30, MediaQuery.of(context).size.height - 70);
-      if (_pos == null) return;
-
-      print('top: ${_pos.top <= _safeArea.top} -- bottom: ${_pos.bottom >= _safeArea.bottom}');
-      //print('left: ${_pos.left <= _safeArea.left}');
-      //print('right: ${_pos.right >= _safeArea.right}');
-
-      bool _isInUnsafeArea() =>
-          _pos!.top <= _safeArea.top || _pos.bottom >= _safeArea.bottom || _pos.left <= _safeArea.left || _pos.right >= _safeArea.right;
-
-      return;
- */
-      /*      switch (s.metrics.axis) {
-        case Axis.horizontal:
-          if (_intersection.left == 30) return _close();
-          if (_intersection.right == 30) return _close();
-          break;
-        case Axis.vertical:
-          print(_intersection);
-          if (_intersection.top == 70) {
-            print('top');
-            return _close();
-          }
-          if (_intersection.bottom == 70) {
-            print(_pos);
-            print('bottom');
-            return _close();
-          }
-          break;
-      } */
-    }); */
   }
 
-  void _pointerDownListener(PointerDownEvent event) => _checkIfClose(event.position);
+  void _pointerDownListener(PointerDownEvent event) => _close();
   void _scrollListener(ScrollNotification not) => _close();
 
-  void _checkIfClose(Offset position) {
-    print('inside: $_inside');
-    if (!_inside) _close();
-  }
-
   void _close() {
-    PointerEventProvider.instance.removePointerListener(_pointerDownListener);
-    PointerEventProvider.instance.removeScrollListener(_scrollListener);
+    if (widget.autoClose) {
+      if (_entry?.mounted ?? false) {
+        _entry?.remove();
+        _entry = null;
+      }
 
-    if (_entry?.mounted ?? false) {
-      _entry?.remove();
-      _entry = null;
+      PointerEventProvider.instance.removePointerListener(_pointerDownListener);
+      PointerEventProvider.instance.removeScrollListener(_scrollListener);
+
+      if (widget.onAutoClose != null) widget.onAutoClose!();
     }
-    if (widget.onAutoClose != null) widget.onAutoClose!();
   }
 
   @override
   Widget build(BuildContext context) {
     if (!widget.autoClose) return widget.child;
 
-    return Stack(
-      children: [
-        widget.child._copyWithWrapper(
-          (_, child) => MouseRegion(
-            onEnter: (_) {
-              _inside = true;
-            },
-            onExit: (_) => _inside = false,
-            child: child,
-          ),
-        ),
-      ],
-    );
+    return Stack(children: [widget.child]);
   }
 }
 
@@ -385,11 +324,11 @@ class _PointerEventProvider extends ChangeNotifier {
   void addScrollListener(ScrollListener listener) => _scrollListener.add(listener);
 
   void removePointerListener<T extends PointerEvent>(PointerListener<T> listener) {
-    if (T is PointerUpEvent) _pointerUpListeners.remove(listener);
-    if (T is PointerDownEvent) _pointerDownListeners.remove(listener);
-    if (T is PointerCancelEvent) _pointerCancelListeners.remove(listener);
-    if (T is PointerHoverEvent) _pointerHoverListeners.remove(listener);
-    if (T is PointerMoveEvent) _pointerMoveListeners.remove(listener);
+    if (T == PointerUpEvent) _pointerUpListeners.remove(listener);
+    if (T == PointerDownEvent) _pointerDownListeners.remove(listener);
+    if (T == PointerCancelEvent) _pointerCancelListeners.remove(listener);
+    if (T == PointerHoverEvent) _pointerHoverListeners.remove(listener);
+    if (T == PointerMoveEvent) _pointerMoveListeners.remove(listener);
   }
 
   void removeScrollListener(ScrollListener listener) => _scrollListener.remove(listener);
