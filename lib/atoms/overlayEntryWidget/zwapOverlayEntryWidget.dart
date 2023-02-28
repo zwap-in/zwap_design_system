@@ -384,7 +384,8 @@ class _PointerEventProvider extends ChangeNotifier {
   }
 
   void _notifyAllIn<T extends PointerEvent>(List<_PointerListenerDecorator<T>> list, T e) {
-    for (PointerListener<T> listener in list.map((d) => d.listener)) listener(e);
+    final List<PointerListener<T>> _listeners = list.map((d) => d.listener).toList();
+    for (PointerListener<T> listener in _listeners) listener(e);
   }
 
   void removeAllRelatedToTag(String tag) {

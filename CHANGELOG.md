@@ -1003,3 +1003,6 @@ a
 
 ## 0.1.706
 * Fixed problem with concurrency
+
+## 0.1.707
+* Fixed problem with concurrency
