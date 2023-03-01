@@ -18,6 +18,7 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
   Color _firstColor = ZwapColors.neutral800;
   Color _secondColor = ZwapColors.shades100;
 
+  final TextStyle _richSpans = TextStyle(color: ZwapColors.primary900Dark, fontSize: 26);
   //TODO (Marchetti): Add dropdowns for pick colors and text types
 
   @override
@@ -150,6 +151,31 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
               colors: [Colors.amber, Colors.red, Colors.blue],
               stops: [0, 0.9, 1],
             ),
+            SizedBox(height: 60),
+            ZwapRichText.safeText(
+              textSpans: [
+                ZwapTextSpan(text: 'Hai raggiunto il limite di\n', textStyle: _richSpans),
+                ZwapGradientTextSpan(
+                  forcedTranslation: Offset(0, 3.4),
+                  text: 'limite',
+                  colors: [ZwapColors.warning200, ZwapColors.warning400],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomLeft,
+                  textStyle: _richSpans.copyWith(color: ZwapColors.shades0, fontWeight: FontWeight.w800),
+                ),
+                ZwapTextSpan(text: ' di ', textStyle: _richSpans),
+                ZwapGradientTextSpan(
+                  forcedTranslation: Offset(0, 3.4),
+                  text: '4 meetings',
+                  colors: [ZwapColors.warning400, ZwapColors.buttonGrad.colors.first],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomLeft,
+                  textStyle: _richSpans.copyWith(color: ZwapColors.shades0, fontWeight: FontWeight.w800),
+                ),
+              ],
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 60),
           ],
         ),
       ),

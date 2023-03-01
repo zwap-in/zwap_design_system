@@ -1006,3 +1006,6 @@ a
 
 ## 0.1.707
 * Fixed problem with concurrency
+
+## 0.1.708
+* Restored old version of [ZwapOverlayEntryWidget], this one was broke
