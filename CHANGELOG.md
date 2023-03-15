@@ -1009,3 +1009,7 @@ a
 
 ## 0.1.708
 * Restored old version of [ZwapOverlayEntryWidget], this one was broke
+
+## 0.1.709
+* Handled limit case in ZwapTooltip widget, now if widget has been deactivated, the overlay will disappear
+

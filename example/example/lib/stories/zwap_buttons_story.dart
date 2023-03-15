@@ -126,14 +126,23 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                       SizedBox(height: 24)
                     ]
                   : [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ZwapRadioButton(active: _selectedRadio == 0),
-                          SizedBox(width: 24),
-                          ZwapRadioButton(active: _selectedRadio == 1),
-                        ],
-                      ),
+                      if (_selectedRadio != 0)
+                        ZwapTooltip(
+                          message: 'sdlkfasdkfljaskdlf',
+                          child: InkWell(
+                            onTap: () {
+                              setState(() => _selectedRadio = 0);
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ZwapRadioButton(active: _selectedRadio == 0),
+                                SizedBox(width: 24),
+                                ZwapRadioButton(active: _selectedRadio == 1),
+                              ],
+                            ),
+                          ),
+                        ),
                       SizedBox(height: 24),
                       ZwapButton(
                         width: 170,

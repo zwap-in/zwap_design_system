@@ -238,8 +238,14 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
   }
 
   @override
+  void deactivate() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _hideOverlay());
+    super.deactivate();
+  }
+
+  @override
   void dispose() {
-    _hideOverlay();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _hideOverlay());
     super.dispose();
   }
 
@@ -308,6 +314,7 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
   double _opacity = 0;
 
   Future<void> close() async {
+    if (!mounted) return;
     setState(() => _opacity = 0);
     await Future.delayed(widget.animationDuration);
   }
