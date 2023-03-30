@@ -1013,3 +1013,6 @@ a
 ## 0.1.709
 * Handled limit case in ZwapTooltip widget, now if widget has been deactivated, the overlay will disappear
 
+## 0.1.710
+* Added showClear flag on ZwapSearchPicker widget
+

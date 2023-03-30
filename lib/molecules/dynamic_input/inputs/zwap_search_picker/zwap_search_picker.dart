@@ -35,6 +35,8 @@ class ZwapSearchPicker<T> extends StatefulWidget {
   /// * no_results_found
   final String Function(String)? translateKey;
 
+  final bool showClear;
+
   const ZwapSearchPicker({
     required this.performSearch,
     required this.getItemCopy,
@@ -44,6 +46,7 @@ class ZwapSearchPicker<T> extends StatefulWidget {
     this.placeholder,
     this.noResultsWidget,
     this.translateKey,
+    this.showClear = true,
     Key? key,
   })  : assert(noResultsWidget != null || translateKey != null),
         super(key: key);
@@ -154,7 +157,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
               noResultsWidget: widget.noResultsWidget,
               translateKey: widget.translateKey,
             ),
-            showDeleteIcon: _selectedItem != null,
+            showDeleteIcon: widget.showClear && _selectedItem != null,
             onDelete: () {
               context.read<_ZwapSearchInputProvider<T>>().pickItem(null);
               if (!_hasFocus) _inputController.text = '';
