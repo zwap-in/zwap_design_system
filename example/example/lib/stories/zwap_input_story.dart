@@ -7,6 +7,7 @@ import 'package:zwap_design_system/atoms/check_option/zwap_check_option.dart';
 import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
 import 'package:zwap_design_system/atoms/text_controller/tags_text_conroller.dart';
 import 'package:zwap_design_system/molecules/calendar_input/zwap_calendar_input.dart';
+import 'package:zwap_design_system/molecules/date_picker/zwap_date_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_check_box_picker/zwap_check_box_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_input/zwap_chips_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_floating_picker/zwap_floating_picker.dart';
@@ -77,16 +78,39 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   double _value = 0.7;
 
+  DateTime? _date;
+
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
 
     return Center(
       child: Container(
-        width: 420,
+        width: 500,
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Flexible(
+                    child: ZwapDatePicker(
+                      value: _date,
+                      onChange: (v) => setState(() => _date = v),
+                      decoratorBuilder: (_) => Icon(Icons.calendar_month),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: ZwapDatePicker(
+                      value: _date,
+                      onChange: (v) => setState(() => _date = v),
+                      dateFormatter: 'yyyy-MM-ddTHH:mm:ss.mmmuuu',
+                      enableWhere: (d) => d.isAfter(DateTime.now()),
+                    ),
+                  ),
+                ],
+              ),
               ZwapText(
                 text: 'Rich input',
                 zwapTextType: ZwapTextType.mediumBodyRegular,

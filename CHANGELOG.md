@@ -1016,3 +1016,5 @@ a
 ## 0.1.710
 * Added showClear flag on ZwapSearchPicker widget
 
+## 0.1.711
+* Added ZwapDatePicker widget
