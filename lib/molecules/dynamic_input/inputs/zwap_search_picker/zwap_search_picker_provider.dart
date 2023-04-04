@@ -1,16 +1,25 @@
 part of zwap.dynamic_inputs.search_picker;
 
 class _ZwapSearchInputProvider<T> extends ChangeNotifier {
+  final TextEditingController inputController = TextEditingController();
   final GlobalKey<ZwapDynamicInputState> _inputKey = GlobalKey();
   Timer? _searchTimer;
+
+  final Map<T, String> _addedKeyValue = {};
 
   late List<T> _emptySearchData;
   int _emptySearchLastPage = 1;
   bool _emptySearchHasMoreResults = true;
 
-  GetCopyOfItemCallback<T> getCopyOfItemCallback;
+  GetCopyOfItemCallback<T> _getCopyOfItemCallback;
   PerformSearchCallback<T> _performSearchCallback;
   ItemSelectedCallback<T>? _onItemSelected;
+  AddItemCallback<T>? _onItemAdded;
+
+  GetCopyOfItemCallback<T> get getCopyOfItemCallback => (item) {
+        if (_addedKeyValue[item] != null) return _addedKeyValue[item]!;
+        return _getCopyOfItemCallback(item);
+      };
 
   T? _selectedItem;
   List<T> _data;
@@ -26,7 +35,8 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
     this._performSearchCallback,
     this._onItemSelected,
     this._selectedItem,
-    this.getCopyOfItemCallback,
+    this._getCopyOfItemCallback,
+    this._onItemAdded,
   ) : super() {
     _emptySearchData = _data;
   }
@@ -36,6 +46,7 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
   T? get selectedItem => _selectedItem;
   List<T> get data => _data;
   GlobalKey<ZwapDynamicInputState> get inputKey => _inputKey;
+  String get search => _search;
 
   set search(String value) {
     _startSearchTimer();
@@ -101,7 +112,6 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
     _inputKey.closeIfOpen();
 
     if (_onItemSelected != null) _onItemSelected!(item);
-    
 
     notifyListeners();
   }
@@ -111,6 +121,20 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
     _data = _emptySearchData;
     _page = _emptySearchLastPage;
     _hasMoreResults = _emptySearchHasMoreResults;
+    notifyListeners();
+  }
+
+  void addItem(String value) async {
+    if (_onItemAdded == null) return;
+    final T? _newItem = await _onItemAdded!(_search);
+    if (_newItem == null) return;
+
+    Future.delayed(Duration.zero, () => inputController.text = value);
+    _selectedItem = _newItem;
+    _data = [_newItem, ..._data];
+
+    _inputKey.closeIfOpen();
+
     notifyListeners();
   }
 }

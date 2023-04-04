@@ -15,6 +15,7 @@ part 'zwap_search_picker_provider.dart';
 typedef PerformSearchCallback<T> = FutureOr<List<T>> Function(String search, int page);
 typedef ItemSelectedCallback<T> = void Function(T? item);
 typedef GetCopyOfItemCallback<T> = String Function(T item);
+typedef AddItemCallback<T> = FutureOr<T?> Function(String value);
 
 class ZwapSearchPicker<T> extends StatefulWidget {
   final T? selectedItem;
@@ -37,6 +38,26 @@ class ZwapSearchPicker<T> extends StatefulWidget {
 
   final bool showClear;
 
+  /// If true and while search the [performSearch] callback return "no results"
+  /// the user can add the inserted data
+  ///
+  /// Default to false
+  final bool canAddItem;
+
+  /// Must be not null if [canAddItem] is true
+  ///
+  /// Called each time the user add some not present data
+  ///
+  /// ! the returned [T] data is added automatically to
+  /// available values, editing [initialValues] will
+  /// not have effects
+  ///
+  /// If returns [null] the adding operation si aborted
+  ///
+  /// Don't needs to be handled in [getItemCopy] callback.
+  /// The added value is stored and auto handled
+  final AddItemCallback<T>? onAddItem;
+
   const ZwapSearchPicker({
     required this.performSearch,
     required this.getItemCopy,
@@ -47,8 +68,11 @@ class ZwapSearchPicker<T> extends StatefulWidget {
     this.noResultsWidget,
     this.translateKey,
     this.showClear = true,
+    this.canAddItem = false,
+    this.onAddItem,
     Key? key,
   })  : assert(noResultsWidget != null || translateKey != null),
+        assert(!canAddItem || onAddItem != null, "onAddItem callback must be not null id [canAddItem] is true"),
         super(key: key);
 
   @override
@@ -58,7 +82,6 @@ class ZwapSearchPicker<T> extends StatefulWidget {
 class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
   late final _ZwapSearchInputProvider<T> _provider;
 
-  final TextEditingController _inputController = TextEditingController();
   final FocusNode _inputNode = FocusNode();
 
   bool _hasFocus = false;
@@ -72,13 +95,14 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
       widget.performSearch,
       (item) {
         if (widget.onItemSelected != null) widget.onItemSelected!(item);
-        if (item != null) _inputController.text = widget.getItemCopy(item);
+        if (item != null) _provider.inputController.text = widget.getItemCopy(item);
       },
       widget.selectedItem,
       widget.getItemCopy,
+      widget.onAddItem,
     );
 
-    if (widget.selectedItem != null) _inputController.text = widget.getItemCopy(widget.selectedItem!);
+    if (widget.selectedItem != null) _provider.inputController.text = _provider.getCopyOfItemCallback(widget.selectedItem!);
 
     _inputNode.addListener(_focusListener);
   }
@@ -86,12 +110,12 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
   void _focusListener() {
     setState(() => _hasFocus = _inputNode.hasFocus);
     if (_hasFocus) {
-      _inputController.text = '';
+      _provider.inputController.text = '';
       _provider.inputKey.openIfClose();
     }
 
     if (!_hasFocus) {
-      _inputController.text = _provider.selectedItem == null ? '' : widget.getItemCopy(_provider.selectedItem!);
+      _provider.inputController.text = _provider.selectedItem == null ? '' : _provider.getCopyOfItemCallback(_provider.selectedItem!);
     }
   }
 
@@ -99,7 +123,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
   void didUpdateWidget(covariant ZwapSearchPicker<T> oldWidget) {
     if (widget.selectedItem != _provider.selectedItem) {
       _provider._selectedItem = widget.selectedItem;
-      _inputController.text = widget.selectedItem == null ? '' : widget.getItemCopy(widget.selectedItem!);
+      _provider.inputController.text = widget.selectedItem == null ? '' : _provider.getCopyOfItemCallback(widget.selectedItem!);
       setState(() {});
     }
 
@@ -127,7 +151,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: TextField(
-                      controller: _inputController,
+                      controller: _provider.inputController,
                       focusNode: _inputNode,
                       style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
                       decoration: InputDecoration(
@@ -156,11 +180,12 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
             overlay: _ZwapSearchInputOverlay<T>(
               noResultsWidget: widget.noResultsWidget,
               translateKey: widget.translateKey,
+              canAddItem: widget.canAddItem,
             ),
             showDeleteIcon: widget.showClear && _selectedItem != null,
             onDelete: () {
               context.read<_ZwapSearchInputProvider<T>>().pickItem(null);
-              if (!_hasFocus) _inputController.text = '';
+              if (!_hasFocus) _provider.inputController.text = '';
             },
             focussed: _hasFocus,
             onOpen: () {
@@ -184,9 +209,12 @@ class _ZwapSearchInputOverlay<T> extends StatefulWidget {
   final Function(String)? translateKey;
   final Widget? noResultsWidget;
 
+  final bool canAddItem;
+
   const _ZwapSearchInputOverlay({
     this.translateKey,
     this.noResultsWidget,
+    required this.canAddItem,
     Key? key,
   }) : super(key: key);
 
@@ -222,6 +250,11 @@ class _ZwapSearchInputOverlayState<T> extends State<_ZwapSearchInputOverlay<T>> 
       );
 
     if (_items.isEmpty) {
+      //? No results, sho the add item widget
+      if (widget.canAddItem) {
+        return _AddItemWidget<T>();
+      }
+
       if (widget.noResultsWidget != null) return widget.noResultsWidget!;
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
@@ -315,6 +348,70 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
                 text: _getCopy(widget.item),
                 zwapTextType: ZwapTextType.bigBodyRegular,
                 textColor: _textColor(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AddItemWidget<T> extends StatefulWidget {
+  const _AddItemWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_AddItemWidget<T>> createState() => _AddItemWidgetState<T>();
+}
+
+class _AddItemWidgetState<T> extends State<_AddItemWidget<T>> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final String _searchValue = context.select<_ZwapSearchInputProvider<T>, String>((pro) => pro.search);
+
+    Color _getColor() {
+      //if (_disabled && _selected) return ZwapColors.primary50;
+      //if (_disabled) return ZwapColors.shades0;
+      if (_hovered) return ZwapColors.neutral50;
+
+      return ZwapColors.shades0;
+    }
+
+    return InkWell(
+      onTap: () => context.read<_ZwapSearchInputProvider<T>>().addItem(_searchValue),
+      onHover: (isHovered) => setState(() => _hovered = isHovered),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        color: _getColor(),
+        width: double.infinity,
+        constraints: BoxConstraints(minHeight: 44),
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Row(
+          children: [
+            Expanded(
+              child: ZwapRichText.safeText(
+                textSpans: [
+                  ZwapTextSpan.fromZwapTypography(
+                    text: '$_searchValue',
+                    textType: ZwapTextType.mediumBodySemibold,
+                    textColor: ZwapColors.primary900Dark,
+                  ),
+                  ZwapTextSpan.fromZwapTypography(
+                    text: ' non è disponibile? ',
+                    textType: ZwapTextType.mediumBodyRegular,
+                    textColor: ZwapColors.primary900Dark,
+                  ),
+                  ZwapTextSpan.fromZwapTypography(
+                    text: 'Premi qui per aggiungere.',
+                    textType: ZwapTextType.mediumBodySemibold,
+                    textColor: ZwapColors.primary900Dark,
+                  ),
+                ],
               ),
             ),
           ],

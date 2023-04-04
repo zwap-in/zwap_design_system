@@ -299,6 +299,11 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               const SizedBox(height: 8),
               ZwapSearchPicker<String>(
+                canAddItem: true,
+                onAddItem: (v) {
+                  print(v);
+                  return v;
+                },
                 selectedItem: _selectedSearchItem,
                 performSearch: (search, page) async {
                   if (search.isEmpty && page == 2)

@@ -1018,3 +1018,6 @@ a
 
 ## 0.1.711
 * Added ZwapDatePicker widget
+
+## 0.1.712
+* Added "add new value" action in ZwapSearchPicker
