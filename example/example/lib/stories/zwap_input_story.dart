@@ -8,6 +8,7 @@ import 'package:zwap_design_system/atoms/input/zwap_input_with_tags.dart';
 import 'package:zwap_design_system/atoms/text_controller/tags_text_conroller.dart';
 import 'package:zwap_design_system/molecules/calendar_input/zwap_calendar_input.dart';
 import 'package:zwap_design_system/molecules/date_picker/zwap_date_picker.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_category_input/zwap_category_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_check_box_picker/zwap_check_box_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_input/zwap_chips_input.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_floating_picker/zwap_floating_picker.dart';
@@ -30,6 +31,39 @@ class ZwapInputStory extends StatefulWidget {
 }
 
 class _ZwapInputStoryState extends State<ZwapInputStory> {
+  final Map<String, List<String>> _categories = {
+    "Design": [
+      "Design case",
+      "Design grafico",
+      "Design web",
+      "Design mobile",
+      "Design UX",
+    ],
+    "Sviluppo software": [
+      "Sviluppo web",
+      "Sviluppo mobile",
+      "Sviluppo backend",
+      "Sviluppo frontend",
+      "Sviluppo fullstack",
+    ],
+    "Marketing": [
+      "Marketing online",
+      "Marketing offline",
+      "Marketing digitale",
+      "Marketing strategico",
+      "Marketing operativo",
+    ],
+    "Gestione": [
+      "Gestione aziendale",
+      "Gestione progetti",
+      "Gestione risorse umane",
+      "Gestione risorse finanziarie",
+      "Gestione risorse tecniche",
+    ],
+  };
+
+  String? _selectedIntValue;
+
   final Map<String, String> _items = {
     "1": "design",
     "2": "designer",
@@ -111,6 +145,26 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   ),
                 ],
               ),
+              ZwapText(
+                text: 'Category input',
+                zwapTextType: ZwapTextType.mediumBodyRegular,
+                textColor: ZwapColors.primary900Dark,
+              ),
+              SizedBox(height: 5),
+              ZwapCategoryInput<String, String>(
+                selectedValue: _selectedIntValue,
+                values: _categories,
+                getCopyOfCategory: (s) => s,
+                getCopyOfItem: (integer) => '$integer',
+                filterItems: (integer, f) {
+                  print('$integer <-> ${integer.contains(f.toLowerCase().trim())}');
+                  return integer.contains(f.toLowerCase().trim());
+                },
+                onSelected: (i) => setState(() => _selectedIntValue = i),
+                translateKey: (k) => 'Nessun risultato',
+                placeholder: 'Seleziona un elemento',
+              ),
+              SizedBox(height: 25),
               ZwapText(
                 text: 'Rich input',
                 zwapTextType: ZwapTextType.mediumBodyRegular,

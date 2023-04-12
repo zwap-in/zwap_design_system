@@ -1021,3 +1021,6 @@ a
 
 ## 0.1.712
 * Added "add new value" action in ZwapSearchPicker
+
+## 0.1.713
+* Added ZwapCategoryPicker widget
