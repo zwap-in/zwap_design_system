@@ -58,6 +58,13 @@ class ZwapSearchPicker<T> extends StatefulWidget {
   /// The added value is stored and auto handled
   final AddItemCallback<T>? onAddItem;
 
+  /// If not null, the search will be performed only
+  /// after the user stop typing for the specified duration
+  final Duration? debounceDuration;
+
+  /// If true, the chevron icon will be shown
+  final bool showChevron;
+
   const ZwapSearchPicker({
     required this.performSearch,
     required this.getItemCopy,
@@ -70,6 +77,8 @@ class ZwapSearchPicker<T> extends StatefulWidget {
     this.showClear = true,
     this.canAddItem = false,
     this.onAddItem,
+    this.debounceDuration,
+    this.showChevron = true,
     Key? key,
   })  : assert(noResultsWidget != null || translateKey != null),
         assert(!canAddItem || onAddItem != null, "onAddItem callback must be not null id [canAddItem] is true"),
@@ -100,6 +109,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
       widget.selectedItem,
       widget.getItemCopy,
       widget.onAddItem,
+      widget.debounceDuration,
     );
 
     if (widget.selectedItem != null) _provider.inputController.text = _provider.getCopyOfItemCallback(widget.selectedItem!);
@@ -163,17 +173,19 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                AnimatedRotation(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.decelerate,
-                  turns: _hasFocus ? 0.25 : 0.75,
-                  child: Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    size: 16,
-                    color: ZwapColors.text65,
+                if (widget.showChevron) ...[
+                  const SizedBox(width: 12),
+                  AnimatedRotation(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.decelerate,
+                    turns: _hasFocus ? 0.25 : 0.75,
+                    child: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 16,
+                      color: ZwapColors.text65,
+                    ),
                   ),
-                ),
+                ],
                 const SizedBox(width: 12),
               ],
             ),
@@ -250,6 +262,8 @@ class _ZwapSearchInputOverlayState<T> extends State<_ZwapSearchInputOverlay<T>> 
       );
 
     if (_items.isEmpty) {
+      if (context.read<_ZwapSearchInputProvider<T>>().search.isEmpty) return Container();
+
       //? No results, sho the add item widget
       if (widget.canAddItem) {
         return _AddItemWidget<T>();

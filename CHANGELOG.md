@@ -1033,3 +1033,7 @@ a
 
 ## 0.1.717
 * Bug fixed in ZwapCategoryPicker widget
+
+## 0.1.718
+* Added debounceDuration and showChevron properties to ZwapSearchPicker widget
+* If there are no results with empty search string, ZwapSearchPicker widget will not show the "no results" message

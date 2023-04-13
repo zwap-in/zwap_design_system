@@ -353,13 +353,15 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               const SizedBox(height: 8),
               ZwapSearchPicker<String>(
-                canAddItem: true,
+                canAddItem: false,
+                showChevron: false,
                 onAddItem: (v) {
                   print(v);
                   return v;
                 },
                 selectedItem: _selectedSearchItem,
                 performSearch: (search, page) async {
+                  await Future.delayed(const Duration(seconds: 1));
                   if (search.isEmpty && page == 2)
                     return [
                       'lkjfrtyuhjnmkh',
@@ -373,7 +375,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   return search.isEmpty ? values : values.where((e) => e.contains(search)).toList();
                 },
                 getItemCopy: (s) => s,
-                initialValues: values,
+                initialValues: [],
                 translateKey: (_) => 'Nessun risultato',
                 placeholder: "Ciao ciao ciao ciao",
                 onItemSelected: (s) {
