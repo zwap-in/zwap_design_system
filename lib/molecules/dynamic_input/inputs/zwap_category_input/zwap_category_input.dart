@@ -113,8 +113,8 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
   @override
   void didUpdateWidget(covariant ZwapCategoryInput<T, S> oldWidget) {
     if (widget.selectedValue != _provider.selectedValue) {
-      _provider.selectedValue = widget.selectedValue;
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        _provider.selectedValue = widget.selectedValue;
         _provider.inputController.text = widget.selectedValue == null ? '' : _provider.getCopyOfItem(widget.selectedValue!);
         setState(() {});
       });
