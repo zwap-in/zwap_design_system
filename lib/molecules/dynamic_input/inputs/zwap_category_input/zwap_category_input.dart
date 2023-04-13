@@ -46,7 +46,7 @@ class ZwapCategoryInput<T, S> extends StatefulWidget {
 
   /// Used to translate those keys:
   /// * no_results_found
-  final String Function(String) translateKey;
+  final String Function(String key) translateKey;
 
   /// If true and the [selectedItem] is not null, a clear button
   /// will be shown.
@@ -170,7 +170,9 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
                 const SizedBox(width: 12),
               ],
             ),
-            overlay: _ZwapCategoryInputOverlay<T, S>(),
+            overlay: _ZwapCategoryInputOverlay<T, S>(
+              noResultsTranslated: (_) => widget.translateKey('no_results_found'),
+            ),
             showDeleteIcon: widget.showClear && _selectedItem != null,
             onDelete: () {
               context.read<_ZwapCategoryProvider<T, S>>().selectedValue = null;
@@ -195,10 +197,15 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
 }
 
 class _ZwapCategoryInputOverlay<T, S> extends StatelessWidget {
-  const _ZwapCategoryInputOverlay({super.key});
+  final String Function(String) noResultsTranslated;
+
+  const _ZwapCategoryInputOverlay({
+    super.key,
+    required this.noResultsTranslated,
+  });
 
   double _calculateHeight(Map<T, List<S>> values) {
-    if (values.isEmpty) return 0;
+    if (values.isEmpty) return 50;
     return values.keys.length * 36 + values.values.map((l) => l.length).reduce((v, e) => v += e) * 32;
   }
 
@@ -213,31 +220,41 @@ class _ZwapCategoryInputOverlay<T, S> extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         curve: Curves.decelerate,
         height: max(50, min(_calculateHeight(values), 420)),
-        child: CustomScrollView(
-          slivers: values.entries
-              .map(
-                (entry) => SliverStickyHeader(
-                    header: Container(
-                      height: 36,
-                      width: double.infinity,
-                      color: ZwapColors.shades0,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      alignment: Alignment.centerLeft,
-                      child: ZwapText(
-                        text: getCopyOfCategory(entry.key).toUpperCase(),
-                        zwapTextType: ZwapTextType.mediumBodySemibold,
-                        textColor: ZwapColors.text65,
-                      ),
-                    ),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (_, index) => _SingleItemWidget<T, S>(item: entry.value[index]),
-                        childCount: entry.value.length,
-                      ),
-                    )),
+        child: values.isEmpty
+            ? Container(
+                padding: const EdgeInsets.only(left: 20),
+                alignment: Alignment.centerLeft,
+                child: ZwapText(
+                  text: noResultsTranslated(context.read<_ZwapCategoryProvider<T, S>>().filter),
+                  zwapTextType: ZwapTextType.bigBodyRegular,
+                  textColor: ZwapColors.primary900Dark,
+                ),
               )
-              .toList(),
-        ),
+            : CustomScrollView(
+                slivers: values.entries
+                    .map(
+                      (entry) => SliverStickyHeader(
+                          header: Container(
+                            height: 36,
+                            width: double.infinity,
+                            color: ZwapColors.shades0,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            alignment: Alignment.centerLeft,
+                            child: ZwapText(
+                              text: getCopyOfCategory(entry.key).toUpperCase(),
+                              zwapTextType: ZwapTextType.mediumBodySemibold,
+                              textColor: ZwapColors.text65,
+                            ),
+                          ),
+                          sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (_, index) => _SingleItemWidget<T, S>(item: entry.value[index]),
+                              childCount: entry.value.length,
+                            ),
+                          )),
+                    )
+                    .toList(),
+              ),
       ),
     );
   }

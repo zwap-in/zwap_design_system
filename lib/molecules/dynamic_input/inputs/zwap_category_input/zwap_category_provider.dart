@@ -47,6 +47,7 @@ class _ZwapCategoryProvider<T, S> extends ChangeNotifier {
 
   Map<T, List<S>> get values => _tmpValues;
   S? get selectedValue => _selectedValue;
+  String get filter => inputController.text;
 
   set selectedValue(S? value) {
     _selectedValue = value;

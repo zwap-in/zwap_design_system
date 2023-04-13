@@ -161,7 +161,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   return integer.contains(f.toLowerCase().trim());
                 },
                 onSelected: (i) => setState(() => _selectedIntValue = i),
-                translateKey: (k) => 'Nessun risultato',
+                translateKey: (k) => 'Nessun risultato per sadf',
                 placeholder: 'Seleziona un elemento',
               ),
               SizedBox(height: 25),

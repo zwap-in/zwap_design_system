@@ -1030,3 +1030,6 @@ a
 
 ## 0.1.715
 * Bug fixed in ZwapCategoryPicker widget
+
+## 0.1.717
+* Bug fixed in ZwapCategoryPicker widget
