@@ -4,12 +4,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_search_picker/zwap_search_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:zwap_utils/zwap_utils.dart';
 
 import '../../zwap_dynamic_input.dart';
 
@@ -117,7 +115,7 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
     if (widget.selectedValue != _provider.selectedValue) {
       _provider.selectedValue = widget.selectedValue;
       _provider.inputController.text = widget.selectedValue == null ? '' : _provider.getCopyOfItem(widget.selectedValue!);
-      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
     }
 
     super.didUpdateWidget(oldWidget);

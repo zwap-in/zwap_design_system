@@ -1024,3 +1024,6 @@ a
 
 ## 0.1.713
 * Added ZwapCategoryPicker widget
+
+## 0.1.714
+* Bug fixed in ZwapCategoryPicker widget
