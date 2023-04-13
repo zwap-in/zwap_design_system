@@ -65,6 +65,10 @@ class ZwapSearchPicker<T> extends StatefulWidget {
   /// If true, the chevron icon will be shown
   final bool showChevron;
 
+  /// If grater than 0, the search will be performed only
+  /// if the inserted text length is grater than the specified length
+  final int minSearchLength;
+
   const ZwapSearchPicker({
     required this.performSearch,
     required this.getItemCopy,
@@ -79,6 +83,7 @@ class ZwapSearchPicker<T> extends StatefulWidget {
     this.onAddItem,
     this.debounceDuration,
     this.showChevron = true,
+    this.minSearchLength = 0,
     Key? key,
   })  : assert(noResultsWidget != null || translateKey != null),
         assert(!canAddItem || onAddItem != null, "onAddItem callback must be not null id [canAddItem] is true"),
@@ -110,6 +115,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
       widget.getItemCopy,
       widget.onAddItem,
       widget.debounceDuration,
+      widget.minSearchLength,
     );
 
     if (widget.selectedItem != null) _provider.inputController.text = _provider.getCopyOfItemCallback(widget.selectedItem!);

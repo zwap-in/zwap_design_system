@@ -17,6 +17,7 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
   AddItemCallback<T>? _onItemAdded;
 
   Duration? _debounceDuration;
+  int minSearchLength;
 
   GetCopyOfItemCallback<T> get getCopyOfItemCallback => (item) {
         if (_addedKeyValue[item] != null) return _addedKeyValue[item]!;
@@ -40,6 +41,7 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
     this._getCopyOfItemCallback,
     this._onItemAdded,
     this._debounceDuration,
+    this.minSearchLength,
   ) : super() {
     _emptySearchData = _data;
   }
@@ -74,6 +76,8 @@ class _ZwapSearchInputProvider<T> extends ChangeNotifier {
   }
 
   void _performSearch() async {
+    if (minSearchLength != 0 && _search.length < minSearchLength) return;
+
     if (_search.isEmpty) {
       _data = _emptySearchData;
       _page = _emptySearchLastPage;
