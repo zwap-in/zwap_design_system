@@ -14,6 +14,7 @@ import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_chips_inp
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_floating_picker/zwap_floating_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_search_picker/zwap_search_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_simple_picker/zwap_simple_picker.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_time_picker/zwap_time_picker.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 import 'package:zwap_design_system/molecules/molecules.dart';
 import 'package:zwap_design_system/molecules/rangeSlider/zwap_range_slider.dart';
@@ -114,6 +115,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   DateTime? _date;
 
+  TimeOfDay? time;
+
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
@@ -163,6 +166,38 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 onSelected: (i) => setState(() => _selectedIntValue = i),
                 translateKey: (k) => 'Nessun risultato per sadf',
                 placeholder: 'Seleziona un elemento',
+              ),
+              SizedBox(height: 25),
+              ZwapText(
+                text: 'Time picker',
+                zwapTextType: ZwapTextType.mediumBodyRegular,
+                textColor: ZwapColors.primary900Dark,
+              ),
+              SizedBox(height: 5),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 120,
+                    child: ZwapTimePicker(
+                      value: time,
+                      placeholder: "XX:XX",
+                      showClear: false,
+                      onChanged: (v) => setState(() => time = v),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Container(
+                    width: 120,
+                    child: ZwapTimePicker(
+                      value: time,
+                      gap: TimePickerGap.fifteenMinutes,
+                      placeholder: "XX:XX",
+                      showClear: true,
+                      onChanged: (v) => setState(() => time = v),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 25),
               ZwapText(

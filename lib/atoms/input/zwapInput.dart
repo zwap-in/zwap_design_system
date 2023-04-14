@@ -173,6 +173,8 @@ class ZwapInput extends StatefulWidget {
   /// Default to true
   final bool showCheckboxOnSuccessState;
 
+  final bool forceNoBorders;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -220,6 +222,7 @@ class ZwapInput extends StatefulWidget {
     this.helperWidget,
     this.showCheckboxOnSuccessState = true,
     this.placeholderStyle,
+    this.forceNoBorders = false,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -271,6 +274,7 @@ class ZwapInput extends StatefulWidget {
     this.helperWidget,
     this.showCheckboxOnSuccessState = true,
     this.placeholderStyle,
+    this.forceNoBorders = false,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -349,15 +353,18 @@ class _ZwapInputState extends State<ZwapInput> {
     return defaultColor;
   }
 
-  InputBorder _getZwapInputBorder(Color borderColor) => widget.useOutlinedDecoration
-      ? OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
-          borderSide: BorderSide(color: borderColor, width: 1, style: BorderStyle.solid),
-        )
-      : UnderlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
-          borderSide: BorderSide(color: borderColor, width: 1.8, style: BorderStyle.solid),
-        );
+  InputBorder _getZwapInputBorder(Color borderColor) {
+    if (widget.forceNoBorders) return InputBorder.none;
+    return widget.useOutlinedDecoration
+        ? OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
+            borderSide: BorderSide(color: borderColor, width: 1, style: BorderStyle.solid),
+          )
+        : UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
+            borderSide: BorderSide(color: borderColor, width: 1.8, style: BorderStyle.solid),
+          );
+  }
 
   /// The field decoration for any text field
   InputDecoration _getTextFieldDecoration() {

@@ -1043,3 +1043,6 @@ a
 
 ## 0.1.720
 * Little changes in ZwapCategoryPicker widget
+
+## 0.1.721
+* Added ZwapTimePicker widget
