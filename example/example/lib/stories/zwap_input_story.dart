@@ -178,23 +178,22 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: 120,
                     child: ZwapTimePicker(
                       value: time,
                       placeholder: "XX:XX",
                       showClear: false,
                       onChanged: (v) => setState(() => time = v),
+                      title: "DALLE",
                     ),
                   ),
                   const SizedBox(width: 12),
                   Container(
-                    width: 120,
                     child: ZwapTimePicker(
                       value: time,
-                      gap: TimePickerGap.fifteenMinutes,
                       placeholder: "XX:XX",
-                      showClear: true,
+                      showClear: false,
                       onChanged: (v) => setState(() => time = v),
+                      title: "ALLE",
                     ),
                   ),
                 ],

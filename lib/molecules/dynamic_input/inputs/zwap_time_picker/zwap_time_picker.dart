@@ -51,9 +51,6 @@ class ZwapTimePicker extends StatefulWidget {
   /// The placeholder text to show when the input is empty.
   final String placeholder;
 
-  /// Whether to show the chevron icon or not.
-  final bool showChevron;
-
   /// Whether to show the clear icon or not.
   ///
   /// Clear icon is always showed only if [value]
@@ -68,12 +65,14 @@ class ZwapTimePicker extends StatefulWidget {
   /// the value will be the closest time respecting the gap.
   final bool mustRespectGap;
 
+  final String title;
+
   const ZwapTimePicker({
+    required this.title,
     this.value,
     this.onChanged,
     this.gap = TimePickerGap.thirtyMinutes,
     this.placeholder = '',
-    this.showChevron = true,
     this.mustRespectGap = true,
     this.showClear = true,
     super.key,
@@ -139,73 +138,78 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<_ZwapTimePickerProvider>.value(
-      value: _provider,
-      child: Builder(
-        builder: (context) {
-          final TimeOfDay? _selectedItem = context.select<_ZwapTimePickerProvider, TimeOfDay?>((pro) => pro.value);
+    return Container(
+      width: 96,
+      child: ChangeNotifierProvider<_ZwapTimePickerProvider>.value(
+        value: _provider,
+        child: Builder(
+          builder: (context) {
+            final TimeOfDay? _selectedItem = context.select<_ZwapTimePickerProvider, TimeOfDay?>((pro) => pro.value);
 
-          return ZwapDynamicInput(
-            key: _provider.inputKey,
-            builder: (context, child) => ChangeNotifierProvider<_ZwapTimePickerProvider>.value(
-              value: _provider,
-              child: child,
-            ),
-            content: Row(
-              children: [
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: TextField(
-                      controller: _provider.inputController,
-                      focusNode: _inputNode,
-                      style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: widget.placeholder,
-                      ),
-                      cursorColor: ZwapColors.primary900Dark,
-                      onEditingComplete: () {
-                        _provider.validateInput();
-                        _provider.inputKey.closeIfOpen();
-                      },
-                    ),
-                  ),
-                ),
-                if (widget.showChevron) ...[
+            return ZwapDynamicInput(
+              key: _provider.inputKey,
+              activeColor: ZwapColors.primary700,
+              builder: (context, child) => ChangeNotifierProvider<_ZwapTimePickerProvider>.value(
+                value: _provider,
+                child: child,
+              ),
+              content: Row(
+                children: [
                   const SizedBox(width: 12),
-                  AnimatedRotation(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.decelerate,
-                    turns: _hasFocus ? 0.25 : 0.75,
-                    child: Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      size: 16,
-                      color: ZwapColors.text65,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 8),
+                          ZwapText.customStyle(
+                            text: widget.title,
+                            customTextStyle: ZwapTextType.smallBodySemibold.copyWith(
+                              fontSize: 10,
+                              color: ZwapColors.neutral400,
+                              height: 1.1,
+                            ),
+                          ),
+                          TextField(
+                            controller: _provider.inputController,
+                            focusNode: _inputNode,
+                            style: getTextStyle(ZwapTextType.bigBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+                            decoration: InputDecoration.collapsed(
+                              border: InputBorder.none,
+                              hintText: widget.placeholder,
+                            ),
+                            cursorColor: ZwapColors.primary900Dark,
+                            onEditingComplete: () {
+                              _provider.validateInput();
+                              _provider.inputKey.closeIfOpen();
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
-                const SizedBox(width: 12),
-              ],
-            ),
-            overlay: _TimePickerOverlay(),
-            showDeleteIcon: widget.showClear && _selectedItem != null,
-            onDelete: () {
-              context.read<_ZwapTimePickerProvider>().updateValue(null);
-              if (!_hasFocus) _provider.inputController.text = '';
-            },
-            focussed: _hasFocus,
-            onOpen: () {
-              if (_inputNode.hasFocus) return;
-              _inputNode.requestFocus();
-            },
-            onClose: () {
-              if (!_inputNode.hasFocus) return;
-              _inputNode.unfocus();
-            },
-          );
-        },
+              ),
+              overlay: _TimePickerOverlay(),
+              showDeleteIcon: widget.showClear && _selectedItem != null,
+              onDelete: () {
+                context.read<_ZwapTimePickerProvider>().updateValue(null);
+                if (!_hasFocus) _provider.inputController.text = '';
+              },
+              focussed: _hasFocus,
+              onOpen: () {
+                if (_inputNode.hasFocus) return;
+                _inputNode.requestFocus();
+              },
+              onClose: () {
+                if (!_inputNode.hasFocus) return;
+                _inputNode.unfocus();
+              },
+            );
+          },
+        ),
       ),
     );
   }
