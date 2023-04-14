@@ -235,14 +235,14 @@ class _ZwapCategoryInputOverlay<T, S> extends StatelessWidget {
                     .map(
                       (entry) => SliverStickyHeader(
                           header: Container(
-                            height: 36,
+                            height: 40,
                             width: double.infinity,
                             color: ZwapColors.shades0,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 10),
                             alignment: Alignment.centerLeft,
                             child: ZwapText(
                               text: getCopyOfCategory(entry.key).toUpperCase(),
-                              zwapTextType: ZwapTextType.mediumBodySemibold,
+                              zwapTextType: ZwapTextType.mediumBodyBold,
                               textColor: ZwapColors.text65,
                             ),
                           ),
@@ -288,9 +288,13 @@ class _SingleItemWidgetState<T, S> extends State<_SingleItemWidget<T, S>> {
       onHover: (hovered) => setState(() => _hovered = hovered),
       child: Container(
         width: double.infinity,
-        height: 32,
+        height: 36,
         decoration: BoxDecoration(
-          color: _hovered ? ZwapColors.primary50 : ZwapColors.shades0,
+          color: _selected
+              ? ZwapColors.primary100
+              : _hovered
+                  ? ZwapColors.primary50
+                  : ZwapColors.shades0,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Row(
@@ -299,7 +303,7 @@ class _SingleItemWidgetState<T, S> extends State<_SingleItemWidget<T, S>> {
               child: ZwapText(
                 text: getCopyOfItem(widget.item),
                 zwapTextType: ZwapTextType.bigBodyRegular,
-                textColor: _selected ? ZwapColors.primary700 : ZwapColors.primary900Dark,
+                textColor: ZwapColors.primary900Dark,
               ),
             ),
             if (_decoration != null) ...[

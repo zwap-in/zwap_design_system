@@ -1040,3 +1040,6 @@ a
   
 ## 0.1.719
 * Add minSearchLength property to ZwapSearchPicker widget
+
+## 0.1.720
+* Little changes in ZwapCategoryPicker widget
