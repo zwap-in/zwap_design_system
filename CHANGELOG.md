@@ -1049,3 +1049,6 @@ a
 
 ## 0.1.722
 * Improvements to ZwapDateTimePicker widget
+
+## 0.1.723
+* Improvements to ZwapDateTimePicker widget

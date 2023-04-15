@@ -107,7 +107,7 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.value != widget.value) {
-      _provider.updateValue(widget.value);
+      _provider.updateValue(widget.value, callOnChanged: false);
     }
   }
 
@@ -155,10 +155,10 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
               ),
               content: Row(
                 children: [
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.only(bottom: 9),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,6 +172,7 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
                               height: 1.1,
                             ),
                           ),
+                          const SizedBox(height: 3),
                           TextField(
                             controller: _provider.inputController,
                             focusNode: _inputNode,

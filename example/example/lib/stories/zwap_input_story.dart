@@ -182,7 +182,10 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                       value: time,
                       placeholder: "XX:XX",
                       showClear: false,
-                      onChanged: (v) => setState(() => time = v),
+                      onChanged: (v) {
+                        print('changed $v');
+                        setState(() => time = v);
+                      },
                       title: "DALLE",
                     ),
                   ),

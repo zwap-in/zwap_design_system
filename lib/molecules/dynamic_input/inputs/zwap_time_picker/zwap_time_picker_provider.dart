@@ -61,13 +61,9 @@ class _ZwapTimePickerProvider extends ChangeNotifier {
     _notifyTimer?.cancel();
 
     if (inputController.text.length > 4) {
-      final TimeOfDay? _newValue = _TimeExt.tryParse(inputController.text);
-      if (_newValue != null) {
-        _notifyTimer = Timer(const Duration(milliseconds: 500), () {
-          _value = _newValue;
-          onChanged?.call(_newValue);
-        });
-      }
+      _notifyTimer = Timer(const Duration(milliseconds: 200), () {
+        validateInput();
+      });
     }
 
     notifyListeners();
@@ -80,9 +76,14 @@ class _ZwapTimePickerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateValue(TimeOfDay? value) {
+  void updateValue(TimeOfDay? value, {bool callOnChanged = true}) {
+    if (_value == value) return;
+
     _value = value;
     inputController.text = _value == null ? '' : formatTime(_value!);
+    if (callOnChanged && onChanged != null) {
+      onChanged!(_value);
+    }
   }
 
   List<TimeOfDay> get suggestion {
