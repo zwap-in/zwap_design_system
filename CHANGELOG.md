@@ -1052,3 +1052,6 @@ a
 
 ## 0.1.723
 * Improvements to ZwapDateTimePicker widget
+
+## 0.1.724
+* Added ZwapSeparatedDivider widget

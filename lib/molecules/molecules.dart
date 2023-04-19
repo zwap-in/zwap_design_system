@@ -16,3 +16,5 @@ export 'yearPicker/year_picker.dart';
 export 'resumeEditElements/zwapResumeEditElements.dart';
 export 'checkBoxText/zwap_checkbox_text.dart';
 export 'dropdown/zwap_dropdown.dart';
+
+export 'zwap_separated_divider/zwap_separated_divider.dart';
