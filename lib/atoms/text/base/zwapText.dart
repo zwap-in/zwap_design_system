@@ -5,6 +5,51 @@ import 'package:taastrap/taastrap.dart';
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
 
+class ZwapTranslation extends Pattern {
+  /// Used to translate keys, must be not null and not return null
+  static String? Function(String)? translate;
+
+  /// Called each time user edit the value of the translation
+  static Future<void> Function(String key, String newValue)? updateValue;
+
+  /// If this value is true, the text will be editable
+  static bool enableEdits = false;
+
+  /// This value will be used to retrieve the translation
+  /// from the [translate] function
+  final String key;
+
+  /// If this value is false, the text will not be editable
+  /// even if the [ZwapTranslation] is in edit mode
+  final bool enableEdit;
+
+  ZwapTranslation(this.key, {this.enableEdit = true});
+
+  String getTranslation() {
+    assert(translate != null, "Did you forget to add a translate function handler in [ZwapTranslation]?");
+    final String? _res = translate!(key);
+
+    if (_res == null) {
+      throw Exception("The key [$key] is not present in the translation file");
+    }
+
+    return _res;
+  }
+
+  @override
+  Iterable<Match> allMatches(String string, [int start = 0]) {
+    throw UnimplementedError("[ZwapTranslation] does not support [allMatches] method");
+  }
+
+  @override
+  Match? matchAsPrefix(String string, [int start = 0]) {
+    throw UnimplementedError("[ZwapTranslation] does not support [matchAsPrefix] method");
+  }
+
+  @override
+  String toString() => key;
+}
+
 /// The device
 class FontSizeDevice {
   /// The font size for the desktop M version
@@ -146,7 +191,7 @@ double textWidth(String text, TextStyle style, {TextAlign textAlign = TextAlign.
 /// Component to rendering text in base of style and device type
 class ZwapText extends StatelessWidget implements ResponsiveWidget {
   /// The text to display inside this rendering
-  final String text;
+  final Pattern text;
 
   /// The zwap text type
   final ZwapTextType zwapTextType;
@@ -203,29 +248,107 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
         _selectable = true,
         super(key: key);
 
+  String get actualText {
+    if (text is String) {
+      return text as String;
+    } else if (isZwapTranslation) {
+      return (text as ZwapTranslation).getTranslation();
+    }
+
+    return text.toString();
+  }
+
+  bool get isZwapTranslation => text is ZwapTranslation;
+
   @override
   Widget build(BuildContext context) {
     if (_selectable)
       return SelectableText(
-        this.text,
+        actualText,
         maxLines: maxLines,
         textScaleFactor: 1,
         textAlign: this.textAlign,
         style: customTextStyle ?? getTextStyle(this.zwapTextType).apply(color: this.textColor),
       );
 
-    return Text(
-      this.text,
-      maxLines: maxLines,
-      overflow: textOverflow,
-      textScaleFactor: 1,
-      textAlign: this.textAlign,
-      style: customTextStyle ?? getTextStyle(this.zwapTextType).apply(color: this.textColor),
-    );
+    Text _text() => Text(
+          actualText,
+          maxLines: maxLines,
+          overflow: textOverflow,
+          textScaleFactor: 1,
+          textAlign: this.textAlign,
+          style: customTextStyle ?? getTextStyle(this.zwapTextType).apply(color: this.textColor),
+        );
+
+    if (ZwapTranslation.enableEdits && isZwapTranslation)
+      return _WrapWithEditTextTooltip(
+        text: text as ZwapTranslation,
+        builder: _text,
+      );
+    return _text();
   }
 
   @override
   double getSize() {
-    return getTextSize(this.text, this.zwapTextType).width;
+    return getTextSize(actualText, this.zwapTextType).width;
+  }
+}
+
+class _WrapWithEditTextTooltip extends StatefulWidget {
+  final ZwapTranslation text;
+  final Text Function() builder;
+
+  const _WrapWithEditTextTooltip({
+    required this.text,
+    required this.builder,
+    super.key,
+  });
+
+  @override
+  State<_WrapWithEditTextTooltip> createState() => _WrapWithEditTextTooltipState();
+}
+
+class _WrapWithEditTextTooltipState extends State<_WrapWithEditTextTooltip> {
+  Future<void> overrideValue(String newValue) async {
+    if (ZwapTranslation.updateValue != null) {
+      await ZwapTranslation.updateValue!(widget.text.toString(), newValue);
+      setState(() {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: "Click to edit",
+      child: InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("Edit text"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ZwapText(
+                    text: "Text was: ",
+                    zwapTextType: ZwapTextType.smallBodySemibold,
+                    textColor: ZwapColors.neutral500,
+                  ),
+                  const SizedBox(height: 4),
+                  widget.builder(),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: TextEditingController(text: widget.text.getTranslation()),
+                    onChanged: (value) => overrideValue(value),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        child: widget.builder(),
+      ),
+    );
   }
 }

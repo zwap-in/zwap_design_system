@@ -21,6 +21,19 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
   final TextStyle _richSpans = TextStyle(color: ZwapColors.primary900Dark, fontSize: 26);
   //TODO (Marchetti): Add dropdowns for pick colors and text types
 
+  final Map<String, String> _translations = {
+    'ciao': 'Text one',
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    ZwapTranslation.translate = (k) => _translations[k];
+    ZwapTranslation.updateValue = (k, v) async => _translations[k] = v;
+
+    ZwapTranslation.enableEdits = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -72,7 +85,12 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Center(child: ZwapText(text: "Test one", textColor: _firstColor, zwapTextType: _firstTextType)),
+                    child: Center(
+                        child: ZwapText(
+                      text: ZwapTranslation("ciao"),
+                      textColor: _firstColor,
+                      zwapTextType: _firstTextType,
+                    )),
                   ),
                   Expanded(
                     child: Center(child: ZwapText(text: "Test two", textColor: _firstColor, zwapTextType: _firstTextType)),

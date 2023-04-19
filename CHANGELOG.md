@@ -1055,3 +1055,6 @@ a
 
 ## 0.1.724
 * Added ZwapSeparatedDivider widget
+
+## 0.1.725
+* First version of zwap change test feature
