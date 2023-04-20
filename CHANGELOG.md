@@ -1058,3 +1058,6 @@ a
 
 ## 0.1.725
 * First version of zwap change test feature
+
+## 0.1.726
+* Added ZwapCopyFieldWidget widget to molecules

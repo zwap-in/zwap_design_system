@@ -18,3 +18,4 @@ export 'checkBoxText/zwap_checkbox_text.dart';
 export 'dropdown/zwap_dropdown.dart';
 
 export 'zwap_separated_divider/zwap_separated_divider.dart';
+export 'copy_field_widget/copy_field_widget.dart';
