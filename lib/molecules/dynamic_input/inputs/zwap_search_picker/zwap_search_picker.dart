@@ -69,6 +69,9 @@ class ZwapSearchPicker<T> extends StatefulWidget {
   /// if the inserted text length is grater than the specified length
   final int minSearchLength;
 
+  /// In value is not null showed minified in the top left corner
+  final String? label;
+
   const ZwapSearchPicker({
     required this.performSearch,
     required this.getItemCopy,
@@ -84,6 +87,7 @@ class ZwapSearchPicker<T> extends StatefulWidget {
     this.debounceDuration,
     this.showChevron = true,
     this.minSearchLength = 0,
+    this.label,
     Key? key,
   })  : assert(noResultsWidget != null || translateKey != null),
         assert(!canAddItem || onAddItem != null, "onAddItem callback must be not null id [canAddItem] is true"),
@@ -154,68 +158,120 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
         builder: (context) {
           final T? _selectedItem = context.select<_ZwapSearchInputProvider<T>, T?>((pro) => pro.selectedItem);
 
-          return ZwapDynamicInput(
-            key: _provider.inputKey,
-            builder: (context, child) => ChangeNotifierProvider.value(
-              value: _provider,
-              child: child,
-            ),
-            content: Row(
+          return Container(
+            height: widget.label == null ? 48 : 56,
+            child: Stack(
               children: [
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: TextField(
-                      controller: _provider.inputController,
-                      focusNode: _inputNode,
-                      style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: widget.placeholder ?? '',
+                Positioned.fill(
+                    top: widget.label == null ? 0 : 8,
+                    child: ZwapDynamicInput(
+                      key: _provider.inputKey,
+                      builder: (context, child) => ChangeNotifierProvider.value(
+                        value: _provider,
+                        child: child,
                       ),
-                      cursorColor: ZwapColors.primary900Dark,
-                      onChanged: (value) => context.read<_ZwapSearchInputProvider<T>>().search = value,
+                      content: Row(
+                        children: [
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: TextField(
+                                controller: _provider.inputController,
+                                focusNode: _inputNode,
+                                style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: widget.placeholder ?? '',
+                                ),
+                                cursorColor: ZwapColors.primary900Dark,
+                                onChanged: (value) => context.read<_ZwapSearchInputProvider<T>>().search = value,
+                              ),
+                            ),
+                          ),
+                          if (widget.showChevron) ...[
+                            const SizedBox(width: 12),
+                            AnimatedRotation(
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.decelerate,
+                              turns: _hasFocus ? 0.25 : 0.75,
+                              child: Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                                size: 16,
+                                color: ZwapColors.text65,
+                              ),
+                            ),
+                          ],
+                          const SizedBox(width: 12),
+                        ],
+                      ),
+                      overlay: _ZwapSearchInputOverlay<T>(
+                        noResultsWidget: widget.noResultsWidget,
+                        translateKey: widget.translateKey,
+                        canAddItem: widget.canAddItem,
+                      ),
+                      showDeleteIcon: widget.showClear && _selectedItem != null,
+                      onDelete: () {
+                        context.read<_ZwapSearchInputProvider<T>>().pickItem(null);
+                        if (!_hasFocus) _provider.inputController.text = '';
+                      },
+                      focussed: _hasFocus,
+                      onOpen: () {
+                        if (_inputNode.hasFocus) return;
+                        _inputNode.requestFocus();
+                      },
+                      onClose: () {
+                        _provider.clearSearch();
+
+                        if (!_inputNode.hasFocus) return;
+                        _inputNode.unfocus();
+                      },
+                    )),
+                if (widget.label != null)
+                  Positioned(
+                    left: 10,
+                    child: AnimatedSize(
+                      duration: const Duration(milliseconds: 100),
+                      curve: Curves.decelerate,
+                      alignment: Alignment.topLeft,
+                      child: _provider.selectedItem != null
+                          ? Container(
+                              decoration: BoxDecoration(
+                                color: ZwapColors.shades0,
+                                gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
+                                  ZwapColors.whiteTransparent,
+                                  ZwapColors.shades0,
+                                ], stops: [
+                                  0,
+                                  0.47
+                                ]),
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              child: ZwapText.customStyle(
+                                text: widget.label!,
+                                customTextStyle: getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(
+                                    color: /* _isHovered
+                                                    ? ZwapColors.primary400
+                                                    : (_selectOverlay?.mounted ?? false)
+                                                        ? ZwapColors.primary700
+                                                        : */
+                                        ZwapColors.neutral500,
+                                    fontSize: 11,
+                                    letterSpacing: 0.1),
+                              ),
+                            )
+                          : Container(
+                              width: textWidth(
+                                widget.label!,
+                                getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(fontSize: 10, letterSpacing: 0.1, height: 1),
+                              ),
+                              key: UniqueKey(),
+                            ),
                     ),
                   ),
-                ),
-                if (widget.showChevron) ...[
-                  const SizedBox(width: 12),
-                  AnimatedRotation(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.decelerate,
-                    turns: _hasFocus ? 0.25 : 0.75,
-                    child: Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      size: 16,
-                      color: ZwapColors.text65,
-                    ),
-                  ),
-                ],
-                const SizedBox(width: 12),
               ],
             ),
-            overlay: _ZwapSearchInputOverlay<T>(
-              noResultsWidget: widget.noResultsWidget,
-              translateKey: widget.translateKey,
-              canAddItem: widget.canAddItem,
-            ),
-            showDeleteIcon: widget.showClear && _selectedItem != null,
-            onDelete: () {
-              context.read<_ZwapSearchInputProvider<T>>().pickItem(null);
-              if (!_hasFocus) _provider.inputController.text = '';
-            },
-            focussed: _hasFocus,
-            onOpen: () {
-              if (_inputNode.hasFocus) return;
-              _inputNode.requestFocus();
-            },
-            onClose: () {
-              _provider.clearSearch();
-
-              if (!_inputNode.hasFocus) return;
-              _inputNode.unfocus();
-            },
           );
         },
       ),

@@ -1061,3 +1061,6 @@ a
 
 ## 0.1.726
 * Added ZwapCopyFieldWidget widget to molecules
+
+## 0.1.727
+* Added label to ZwapSearchPicker widget

@@ -421,6 +421,38 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 },
               ),
               SizedBox(height: 20),
+              ZwapSearchPicker<String>(
+                canAddItem: false,
+                showChevron: false,
+                label: "Llkdafjhsjkd ga",
+                onAddItem: (v) {
+                  print(v);
+                  return v;
+                },
+                selectedItem: _selectedSearchItem,
+                performSearch: (search, page) async {
+                  await Future.delayed(const Duration(seconds: 1));
+                  if (search.isEmpty && page == 2)
+                    return [
+                      'lkjfrtyuhjnmkh',
+                      'lkhgrtyuhjnmkh',
+                      'ljhgftyuhjnmkh',
+                      'lkjhgfryuhjnmkh',
+                      'kjhgfrtuhjnmkh',
+                      'lkjhgfrtymkh',
+                    ];
+
+                  return search.isEmpty ? values : values.where((e) => e.contains(search)).toList();
+                },
+                getItemCopy: (s) => s,
+                initialValues: [],
+                translateKey: (_) => 'Nessun risultato',
+                placeholder: "Ciao ciao ciao ciao",
+                onItemSelected: (s) {
+                  print(s);
+                  _selectedSearchItem = s;
+                },
+              ),
               SizedBox(height: 20),
               SizedBox(height: 20),
               ZwapSwitch(
