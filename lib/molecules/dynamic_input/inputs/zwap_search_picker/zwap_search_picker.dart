@@ -72,6 +72,11 @@ class ZwapSearchPicker<T> extends StatefulWidget {
   /// In value is not null showed minified in the top left corner
   final String? label;
 
+  /// If not provided [ZwapColors.primary900Dark] is used
+  ///
+  /// Used while hovered or focused
+  final Color? activeColor;
+
   const ZwapSearchPicker({
     required this.performSearch,
     required this.getItemCopy,
@@ -88,6 +93,7 @@ class ZwapSearchPicker<T> extends StatefulWidget {
     this.showChevron = true,
     this.minSearchLength = 0,
     this.label,
+    this.activeColor,
     Key? key,
   })  : assert(noResultsWidget != null || translateKey != null),
         assert(!canAddItem || onAddItem != null, "onAddItem callback must be not null id [canAddItem] is true"),
@@ -165,6 +171,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                 Positioned.fill(
                     top: widget.label == null ? 0 : 8,
                     child: ZwapDynamicInput(
+                      activeColor: widget.activeColor,
                       key: _provider.inputKey,
                       builder: (context, child) => ChangeNotifierProvider.value(
                         value: _provider,

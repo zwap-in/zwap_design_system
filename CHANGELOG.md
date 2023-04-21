@@ -1064,3 +1064,6 @@ a
 
 ## 0.1.727
 * Added label to ZwapSearchPicker widget
+
+## 0.1.728
+* Added [activeColor] to ZwapSearchPicker widget

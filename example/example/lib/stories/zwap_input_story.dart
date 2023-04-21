@@ -422,6 +422,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               SizedBox(height: 20),
               ZwapSearchPicker<String>(
+                activeColor: ZwapColors.primary700,
                 canAddItem: false,
                 showChevron: false,
                 label: "Llkdafjhsjkd ga",
