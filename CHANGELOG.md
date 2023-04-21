@@ -1067,3 +1067,6 @@ a
 
 ## 0.1.728
 * Added [activeColor] to ZwapSearchPicker widget
+
+## 0.1.729
+* Changed intl package version
