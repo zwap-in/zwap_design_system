@@ -1070,3 +1070,6 @@ a
 
 ## 0.1.729
 * Changed intl package version
+
+## 0.1.730
+* Added `copy_clipboard` path in ZwapIcons
