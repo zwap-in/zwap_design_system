@@ -56,6 +56,11 @@ class ZwapCategoryInput<T, S> extends StatefulWidget {
   /// widget, this widget will be placed at the end of the element.
   final Widget? Function(S item)? addDecoratorTo;
 
+  /// If provided, showed as the label of the input.
+  ///
+  /// If [placeholder] is null this value will be used instead.
+  final String? label;
+
   ZwapCategoryInput({
     Key? key,
     required this.selectedValue,
@@ -68,6 +73,7 @@ class ZwapCategoryInput<T, S> extends StatefulWidget {
     this.placeholder,
     this.showClear = true,
     this.addDecoratorTo,
+    this.label,
   }) : super(key: key);
 
   @override
@@ -132,6 +138,7 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
           final S? _selectedItem = context.select<_ZwapCategoryProvider<T, S>, S?>((pro) => pro.selectedValue);
 
           return ZwapDynamicInput(
+            dynamicLabel: widget.label,
             key: _provider.inputKey,
             builder: (context, child) => ChangeNotifierProvider<_ZwapCategoryProvider<T, S>>.value(
               value: _provider,
@@ -149,7 +156,7 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
                       style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: widget.placeholder ?? '',
+                        hintText: widget.placeholder ?? widget.label ?? '',
                       ),
                       cursorColor: ZwapColors.primary900Dark,
                       onChanged: (value) => context.read<_ZwapCategoryProvider<T, S>>().filter = value,

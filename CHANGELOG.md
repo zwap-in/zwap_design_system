@@ -1073,3 +1073,6 @@ a
 
 ## 0.1.730
 * Added `copy_clipboard` path in ZwapIcons
+
+## 0.1.731
+* Added label property to ZwapCategoryPicker widget

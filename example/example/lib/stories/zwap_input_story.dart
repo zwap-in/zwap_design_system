@@ -155,6 +155,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               SizedBox(height: 5),
               ZwapCategoryInput<String, String>(
+                label: "Category",
                 selectedValue: _selectedIntValue,
                 values: _categories,
                 getCopyOfCategory: (s) => s,
