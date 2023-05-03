@@ -127,6 +127,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const SizedBox(height: 700),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [

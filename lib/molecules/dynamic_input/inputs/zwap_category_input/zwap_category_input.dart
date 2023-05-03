@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_search_picker/zwap_search_picker.dart';
 
 import '../../zwap_dynamic_input.dart';
@@ -203,17 +204,33 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
   }
 }
 
-class _ZwapCategoryInputOverlay<T, S> extends StatelessWidget {
+class _ZwapCategoryInputOverlay<T, S> extends StatefulWidget {
   final String Function(String) noResultsTranslated;
 
   const _ZwapCategoryInputOverlay({
-    super.key,
     required this.noResultsTranslated,
+    super.key,
   });
 
+  @override
+  State<_ZwapCategoryInputOverlay<T, S>> createState() => _ZwapCategoryInputOverlayState<T, S>();
+}
+
+class _ZwapCategoryInputOverlayState<T, S> extends State<_ZwapCategoryInputOverlay<T, S>> {
   double _calculateHeight(Map<T, List<S>> values) {
     if (values.isEmpty) return 50;
-    return values.keys.length * 36 + values.values.map((l) => l.length).reduce((v, e) => v += e) * 32;
+    double _height = 0;
+
+    _height = values.keys.length * 36 + values.values.map((l) => l.length).reduce((v, e) => v += e) * 32;
+
+    final Rect? _inputRect = context.read<_ZwapCategoryProvider<T, S>>().inputKey.globalPaintBounds;
+    double? _maxHeight = _inputRect == null ? null : MediaQuery.of(context).size.height - _inputRect.top - _inputRect.height - 32;
+
+    if (MediaQuery.of(context).size.height - _inputRect!.top - _inputRect.height - 32 < 250) {
+      _maxHeight = 420;
+    }
+
+    return max(50, min(_height, (_maxHeight ?? 420) - 32));
   }
 
   @override
@@ -226,13 +243,13 @@ class _ZwapCategoryInputOverlay<T, S> extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.decelerate,
-        height: max(50, min(_calculateHeight(values), 420)),
+        height: _calculateHeight(values),
         child: values.isEmpty
             ? Container(
                 padding: const EdgeInsets.only(left: 20),
                 alignment: Alignment.centerLeft,
                 child: ZwapText(
-                  text: noResultsTranslated(context.read<_ZwapCategoryProvider<T, S>>().filter),
+                  text: widget.noResultsTranslated(context.read<_ZwapCategoryProvider<T, S>>().filter),
                   zwapTextType: ZwapTextType.bigBodyRegular,
                   textColor: ZwapColors.primary900Dark,
                 ),

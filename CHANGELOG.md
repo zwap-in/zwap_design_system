@@ -1076,3 +1076,6 @@ a
 
 ## 0.1.731
 * Added label property to ZwapCategoryPicker widget
+
+## 0.1.732
+* Now ZwapCategoryPicker overlay height is dynamic based on the input position

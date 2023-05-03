@@ -10,6 +10,16 @@ extension ZwapDynamicInputKeyExt on GlobalKey<ZwapDynamicInputState> {
   void updateOverlayPosition() => currentState?._updateOverlayPosition();
 }
 
+extension ZwapDynamicInputOverlayExt on GlobalKey {
+  /// Return true if overlay should be mounted on the top
+  /// of the input field
+  bool get openOverlayOnTop {
+    if (globalPaintBounds == null || currentContext == null) return false;
+
+    return MediaQuery.of(currentContext!).size.height - (globalPaintBounds!.bottomCenter.dy + 8) - 50 < 225;
+  }
+}
+
 class ZwapDynamicInput extends StatefulWidget {
   final bool focussed;
 
