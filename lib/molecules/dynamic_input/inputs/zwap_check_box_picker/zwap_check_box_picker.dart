@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 import 'package:collection/collection.dart';
+
 part 'zwap_check_box_picker_provider.dart';
+part 'zwap_check_box_picker_chip.dart';
 
 typedef ZwapCheckBoxPickerItemBuilder = Widget Function(BuildContext context, String key, String value);
 
@@ -42,6 +44,21 @@ class ZwapCheckBoxPicker extends StatefulWidget {
   final bool showClearButton;
   final Function()? onClearAll;
 
+  /// If true the widget width will be the max available,
+  /// otherwise it will be the min available
+  final bool expand;
+
+  /// In provided, used to sort the selected items showed in the header
+  final int Function(String keyA, String keyB)? sortItems;
+
+  /// If greater than 0, the minimum number of items that must be selected
+  final int minSelectedItems;
+
+  /// If not empty will be showed as the overlay label
+  final String overlayLabel;
+
+  final ZwapCheckBoxPickerChipDecoration chipDecorations;
+
   const ZwapCheckBoxPicker({
     required this.values,
     this.selectedItems = const [],
@@ -55,6 +72,11 @@ class ZwapCheckBoxPicker extends StatefulWidget {
     this.dynamicLabel,
     this.showClearButton = false,
     this.onClearAll,
+    this.expand = true,
+    this.sortItems,
+    this.minSelectedItems = 0,
+    this.overlayLabel = '',
+    this.chipDecorations = const ZwapCheckBoxPickerChipDecoration(),
     Key? key,
   }) : super(key: key);
 
@@ -77,6 +99,7 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
       initialSelectedKeys: widget.selectedItems,
       onToggleItem: widget.onToggleItem,
       onClearAll: widget.onClearAll,
+      minSelectedItems: widget.minSelectedItems,
     );
   }
 
@@ -99,6 +122,11 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
         builder: (context) {
           final List<String> _selectedKeys = context.select<_ZwapCheckBoxPickerProvider, List<String>>((state) => state.selectedKeys);
 
+          Widget _wrapWithExpanded(Widget child) {
+            if (widget.expand) return Expanded(child: child);
+            return child;
+          }
+
           return Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,6 +140,7 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                 const SizedBox(height: 8),
               ],
               ZwapDynamicInput(
+                expanded: widget.expand,
                 showDeleteIcon: widget.showClearButton && _selectedKeys.isNotEmpty,
                 onDelete: _provider.clear,
                 dynamicLabel: _provider.selectedKeys.isEmpty ? null : widget.dynamicLabel,
@@ -122,10 +151,10 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                 focussed: _focussed,
                 builder: (context, child) => ChangeNotifierProvider.value(value: _provider, child: child),
                 content: Row(
-                  mainAxisSize: MainAxisSize.max,
+                  mainAxisSize: widget.expand ? MainAxisSize.max : MainAxisSize.min,
                   children: [
-                    Expanded(
-                      child: AnimatedSwitcher(
+                    _wrapWithExpanded(
+                      AnimatedSwitcher(
                         duration: const Duration(milliseconds: 200),
                         child: Align(
                           alignment: Alignment.centerLeft,
@@ -141,7 +170,12 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                                     textOverflow: TextOverflow.ellipsis,
                                   ),
                                 )
-                              : _ChipsWidget(builder: widget.itemBuilder),
+                              : _ChipsWidget(
+                                  builder: widget.itemBuilder,
+                                  expand: widget.expand,
+                                  sort: widget.sortItems,
+                                  chipDecorations: widget.chipDecorations,
+                                ),
                         ),
                       ),
                     ),
@@ -159,7 +193,11 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
                     const SizedBox(width: 12),
                   ],
                 ),
-                overlay: _OverlayContentWidget(builder: widget.itemBuilder),
+                overlay: _OverlayContentWidget(
+                  builder: widget.itemBuilder,
+                  sort: widget.sortItems,
+                  title: widget.overlayLabel,
+                ),
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -189,23 +227,38 @@ class _ZwapCheckBoxPickerState extends State<ZwapCheckBoxPicker> {
 
 class _ChipsWidget extends StatelessWidget {
   final ZwapCheckBoxPickerItemBuilder? builder;
-  const _ChipsWidget({required this.builder, Key? key}) : super(key: key);
+  final bool expand;
+  final int Function(String a, String b)? sort;
+  final ZwapCheckBoxPickerChipDecoration chipDecorations;
+
+  const _ChipsWidget({
+    required this.builder,
+    required this.expand,
+    required this.sort,
+    required this.chipDecorations,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<String> _selectedKeys = context.select<_ZwapCheckBoxPickerProvider, List<String>>((state) => state.selectedKeys);
+    final List<String> _keys = List.from(context.select<_ZwapCheckBoxPickerProvider, List<String>>((state) => state.selectedKeys));
+    if (sort != null) _keys.sort(sort!);
 
     return Container(
-      width: double.infinity,
+      width: expand ? double.infinity : null,
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         scrollDirection: Axis.horizontal,
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: _selectedKeys
+          children: _keys
               .mapIndexed((i, k) => Padding(
                     padding: i == 0 ? EdgeInsets.zero : const EdgeInsets.only(left: 8),
-                    child: _SingleChilpWidget(builder: builder, keyValue: k),
+                    child: _SingleChipWidget(
+                      builder: builder,
+                      keyValue: k,
+                      chipDecorations: chipDecorations,
+                    ),
                   ))
               .toList(),
         ),
@@ -214,58 +267,23 @@ class _ChipsWidget extends StatelessWidget {
   }
 }
 
-class _SingleChilpWidget extends StatelessWidget {
-  final String keyValue;
-  final ZwapCheckBoxPickerItemBuilder? builder;
-
-  const _SingleChilpWidget({
-    required this.builder,
-    required this.keyValue,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final String _text = context.select<_ZwapCheckBoxPickerProvider, String>((state) => state.values[keyValue] ?? '--');
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: ZwapColors.neutral100,
-      ),
-      child: Row(
-        children: [
-          if (builder != null)
-            builder!(context, keyValue, _text)
-          else
-            ZwapText(
-              text: _text,
-              zwapTextType: ZwapTextType.mediumBodyRegular,
-              textColor: ZwapColors.primary900Dark,
-            ),
-          const SizedBox(width: 12),
-          InkWell(
-            onTap: () => context.read<_ZwapCheckBoxPickerProvider>().toggleItem(keyValue),
-            child: Container(width: 20, height: 20, child: Icon(Icons.close_rounded, size: 16, color: ZwapColors.text65)),
-          )
-        ],
-      ),
-    );
-  }
-}
-
 class _OverlayContentWidget extends StatelessWidget {
   final ZwapCheckBoxPickerItemBuilder? builder;
+  final int Function(String, String)? sort;
+  final String title;
 
   const _OverlayContentWidget({
     required this.builder,
+    required this.sort,
+    required this.title,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Map<String, String> _values = context.select<_ZwapCheckBoxPickerProvider, Map<String, String>>((state) => state.values);
+    final List<String> _keys = List.from(_values.keys);
+    if (sort != null) _keys.sort(sort!);
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 240),
@@ -273,7 +291,24 @@ class _OverlayContentWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: _values.entries.map((entry) => _CheckBoxListTileWidget(builder: builder, keyValue: entry.key)).toList(),
+          children: [
+            if (title.isNotEmpty)
+              Container(
+                height: 40,
+                width: double.infinity,
+                child: ZwapText(
+                  text: title,
+                  zwapTextType: ZwapTextType.mediumBodyBold,
+                  textColor: ZwapColors.text65,
+                ),
+                padding: const EdgeInsets.fromLTRB(20, 12, 8, 4),
+              ),
+            ..._keys
+                .map(
+                  (k) => _CheckBoxListTileWidget(builder: builder, keyValue: k),
+                )
+                .toList(),
+          ],
         ),
       ),
     );
@@ -302,6 +337,10 @@ class _CheckBoxListTileWidgetState extends State<_CheckBoxListTileWidget> {
     final bool _isSelected = context.select<_ZwapCheckBoxPickerProvider, bool>((state) => state.selectedKeys.contains(widget.keyValue));
     final String _text = context.select<_ZwapCheckBoxPickerProvider, String>((state) => state.values[widget.keyValue] ?? '--');
 
+    final bool _disable = context.select<_ZwapCheckBoxPickerProvider, bool>(
+      (pro) => pro.minSelectedItems > 0 && pro.selectedKeys.length == pro.minSelectedItems,
+    );
+
     return InkWell(
       onTap: () => context.read<_ZwapCheckBoxPickerProvider>().toggleItem(widget.keyValue),
       onHover: (isHovered) => mounted ? setState(() => _hovered = isHovered) : null,
@@ -318,6 +357,7 @@ class _CheckBoxListTileWidgetState extends State<_CheckBoxListTileWidget> {
           children: [
             ZwapCheckBox(
               value: _isSelected,
+              disabled: _disable,
               onCheckBoxClick: (_) => context.read<_ZwapCheckBoxPickerProvider>().toggleItem(widget.keyValue),
             ),
             const SizedBox(width: 12),

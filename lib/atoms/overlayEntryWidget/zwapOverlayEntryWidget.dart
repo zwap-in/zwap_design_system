@@ -105,7 +105,7 @@ class ZwapOverlayEntryChildState extends State<ZwapOverlayEntryChild> {
       bottom: _bottom,
       width: _width,
       height: _height,
-      child: GestureDetector(behavior: HitTestBehavior.opaque, child: widget.child, onTap: () {}),
+      child: GestureDetector(behavior: HitTestBehavior.opaque, child: widget.child),
     );
   }
 }
@@ -145,11 +145,13 @@ class ZwapOverlayEntryWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onTap: () => _close(),
         child: Container(
           width: double.infinity,
           height: double.infinity,
           color: Colors.transparent,
+          clipBehavior: Clip.none,
           child: Stack(
             children: [child],
           ),

@@ -1079,3 +1079,7 @@ a
 
 ## 0.1.732
 * Now ZwapCategoryPicker overlay height is dynamic based on the input position
+
+## 0.1.733
+* Some new features in ZwapCheckBoxPicker widget (min selected, decoration)
+* new RadioOverlayPicker and DecoratedRadioOverlayPicker widgets

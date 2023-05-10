@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
@@ -50,6 +52,8 @@ class ZwapDynamicInput extends StatefulWidget {
 
   final void Function()? onDelete;
 
+  final bool expanded;
+
   const ZwapDynamicInput({
     required this.content,
     required this.overlay,
@@ -63,6 +67,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.dynamicLabel,
     this.showDeleteIcon = false,
     this.onDelete,
+    this.expanded = true,
     Key? key,
   })  : this._lockHeight = true,
         super(key: key);
@@ -82,6 +87,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.dynamicLabel,
     this.showDeleteIcon = false,
     this.onDelete,
+    this.expanded = true,
     Key? key,
   })  : this._lockHeight = false,
         super(key: key);
@@ -162,7 +168,7 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
         left: _overlayLeftOffset,
         child: _ZwapDynamicInputOverlay(
           child: widget.overlay,
-          width: _inputRect.width,
+          width: max(220, _inputRect.width),
         ),
       ),
       entity: _entry,
@@ -209,6 +215,8 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
 
   @override
   Widget build(BuildContext context) {
+    Widget _wrapWithExpanded(Widget child) => widget.expanded ? Expanded(child: child) : child;
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hovered = true),
@@ -218,13 +226,13 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
         child: Stack(
           children: [
             Row(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: widget.expanded ? MainAxisSize.max : MainAxisSize.min,
               children: [
-                Expanded(
-                  child: AnimatedContainer(
+                _wrapWithExpanded(
+                  AnimatedContainer(
                     key: _inputKey,
                     duration: const Duration(milliseconds: 200),
-                    width: double.infinity,
+                    width: widget.expanded ? double.infinity : null,
                     height: widget._lockHeight ? (_dynamicLabel != null && _dynamicLabel!.isNotEmpty ? 52 : 48) : null,
                     decoration: BoxDecoration(
                       color: widget.backgroundColor,

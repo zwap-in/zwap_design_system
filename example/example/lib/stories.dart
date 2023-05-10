@@ -1,3 +1,4 @@
+import 'package:example/stories/zwap_slot_duration_story.dart';
 import 'package:example/stories/zwap_toast_story.dart';
 import 'package:example/stories/zwap_tooltip_story.dart';
 
@@ -32,6 +33,7 @@ enum ZwapStories {
   form,
   toast,
   tooltip,
+  slotDuration,
 }
 
 class ZwapStory {
@@ -47,6 +49,11 @@ class ZwapStory {
 }
 
 List<ZwapStory> stories = [
+  ZwapStory(
+    name: "Slot Duration Widgets",
+    builder: (context) => const ZwapSlotDurationStory(),
+    story: ZwapStories.slotDuration,
+  ),
   ZwapStory(
     name: "ZwapButton",
     builder: (context) => const ZwapButtonsStory(),
