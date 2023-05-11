@@ -1083,3 +1083,6 @@ a
 ## 0.1.733
 * Some new features in ZwapCheckBoxPicker widget (min selected, decoration)
 * new RadioOverlayPicker and DecoratedRadioOverlayPicker widgets
+
+## 0.1.734
+* Fixed a problem in time picker widget

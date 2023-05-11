@@ -27,7 +27,7 @@ class _ZwapTimePickerProvider extends ChangeNotifier {
   late final MaskedTextController inputController;
   Timer? _notifyTimer;
 
-  final TimePickerGap _gap;
+  TimePickerGap _gap;
   final bool mustRespectGap;
 
   TimeOfDay? _value;

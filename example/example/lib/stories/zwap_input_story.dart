@@ -92,6 +92,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   List<String> _selectedLanguages = [];
 
+  bool _gapOfHalf = true;
+
   final List<String> values = [
     'asdkfjaskdlfjaskdlf',
     'asdkfjaskfjaskdlf',
@@ -179,11 +181,17 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  ZwapSwitch(
+                    value: _gapOfHalf,
+                    onChange: (v) => setState(() => _gapOfHalf = v),
+                  ),
+                  const SizedBox(width: 12),
                   Container(
                     child: ZwapTimePicker(
                       value: time,
                       placeholder: "XX:XX",
                       showClear: false,
+                      gap: _gapOfHalf ? TimePickerGap.thirtyMinutes : TimePickerGap.fifteenMinutes,
                       onChanged: (v) {
                         print('changed $v');
                         setState(() => time = v);

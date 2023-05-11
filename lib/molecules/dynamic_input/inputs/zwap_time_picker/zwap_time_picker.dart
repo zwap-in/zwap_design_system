@@ -109,6 +109,11 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
     if (oldWidget.value != widget.value) {
       _provider.updateValue(widget.value, callOnChanged: false);
     }
+
+    if (oldWidget.gap != widget.gap) {
+      _provider._gap = widget.gap;
+      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    }
   }
 
   @override
@@ -147,6 +152,7 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
             final TimeOfDay? _selectedItem = context.select<_ZwapTimePickerProvider, TimeOfDay?>((pro) => pro.value);
 
             return ZwapDynamicInput(
+              minOverlayWidth: 96,
               key: _provider.inputKey,
               activeColor: ZwapColors.primary700,
               builder: (context, child) => ChangeNotifierProvider<_ZwapTimePickerProvider>.value(
@@ -230,19 +236,21 @@ class _TimePickerOverlayState extends State<_TimePickerOverlay> {
 
     if (_suggestedTimes.isEmpty) return Container();
 
-    return InkWell(
-      onTap: () {},
-      onHover: (hovered) {
-        context.read<_ZwapTimePickerProvider>().suspendFocusOutListener = hovered;
-      },
-      child: Container(
-        color: ZwapColors.shades0,
-        constraints: BoxConstraints(maxHeight: 240),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: _suggestedTimes.map((time) => _SingleTimeWidget(time: time)).toList(),
+    return Container(
+      child: InkWell(
+        onTap: () {},
+        onHover: (hovered) {
+          context.read<_ZwapTimePickerProvider>().suspendFocusOutListener = hovered;
+        },
+        child: Container(
+          color: ZwapColors.shades0,
+          constraints: BoxConstraints(maxHeight: 240),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: _suggestedTimes.map((time) => _SingleTimeWidget(time: time)).toList(),
+            ),
           ),
         ),
       ),

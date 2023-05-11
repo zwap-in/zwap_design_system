@@ -54,6 +54,9 @@ class ZwapDynamicInput extends StatefulWidget {
 
   final bool expanded;
 
+  /// If not provided 220 is used
+  final double? minOverlayWidth;
+
   const ZwapDynamicInput({
     required this.content,
     required this.overlay,
@@ -68,6 +71,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.showDeleteIcon = false,
     this.onDelete,
     this.expanded = true,
+    this.minOverlayWidth,
     Key? key,
   })  : this._lockHeight = true,
         super(key: key);
@@ -88,6 +92,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.showDeleteIcon = false,
     this.onDelete,
     this.expanded = true,
+    this.minOverlayWidth,
     Key? key,
   })  : this._lockHeight = false,
         super(key: key);
@@ -168,7 +173,7 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
         left: _overlayLeftOffset,
         child: _ZwapDynamicInputOverlay(
           child: widget.overlay,
-          width: max(220, _inputRect.width),
+          width: max(widget.minOverlayWidth ?? 220, _inputRect.width),
         ),
       ),
       entity: _entry,
