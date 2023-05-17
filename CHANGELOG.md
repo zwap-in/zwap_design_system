@@ -1089,3 +1089,6 @@ a
 
 ## 0.1.735
 * Added ZwapWrapSelector to molecules
+
+## 0.1.736
+* Added alignment property to ZwapWrapSelector widget

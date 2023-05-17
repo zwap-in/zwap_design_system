@@ -28,6 +28,9 @@ class ZwapWrapSelector<T> extends StatefulWidget {
   /// Placeholder text for the search field
   final String placeholder;
 
+  /// The content alignment, default is [WrapAlignment.start]
+  final WrapAlignment alignment;
+
   /// Basically a wrap that has an input field
   /// where the user can search and select items
   ///
@@ -38,6 +41,7 @@ class ZwapWrapSelector<T> extends StatefulWidget {
     required this.children,
     required this.onSelected,
     required this.selectBuilder,
+    this.alignment = WrapAlignment.start,
     this.placeholder = 'Search here',
     super.key,
   });
@@ -66,6 +70,7 @@ class _ZwapWrapSelectorState<T> extends State<ZwapWrapSelector<T>> {
     return Container(
       width: double.infinity,
       child: Wrap(
+        alignment: widget.alignment,
         spacing: 8,
         runSpacing: 8,
         children: [
