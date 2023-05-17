@@ -1086,3 +1086,6 @@ a
 
 ## 0.1.734
 * Fixed a problem in time picker widget
+
+## 0.1.735
+* Added ZwapWrapSelector to molecules
