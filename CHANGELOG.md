@@ -1092,3 +1092,6 @@ a
 
 ## 0.1.736
 * Added alignment property to ZwapWrapSelector widget
+
+## 0.1.737
+* Fixed a problem in completion in ZwapButton with big radius

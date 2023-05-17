@@ -126,6 +126,29 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                       SizedBox(height: 24)
                     ]
                   : [
+                      ZwapButton(
+                        key: ValueKey('next_ob_button'),
+                        width: 194,
+                        height: 55,
+                        decorations: ZwapButtonDecorations.primaryLight(
+                          internalPadding: EdgeInsets.zero,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        completionValue: _completionValue,
+                        disabled: false,
+                        loading: _loading,
+                        buttonChild: ZwapButtonChild.textWithIcon(
+                          text: 'Prossimo',
+                          iconPosition: ZwapButtonIconPosition.right,
+                          icon: Icons.arrow_circle_right_outlined,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          iconSize: 20,
+                        ),
+                        onTap: () async {
+                          print('asdlfkasjdklfajsdklfa');
+                        },
+                      ),
                       if (_selectedRadio != 0)
                         ZwapTooltip(
                           message: 'sdlkfasdkfljaskdlf',

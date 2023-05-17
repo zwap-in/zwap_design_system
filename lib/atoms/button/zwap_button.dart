@@ -548,42 +548,23 @@ class _ZwapButtonState extends State<ZwapButton> {
                         builder: (context) {
                           final double _width = _completion * (widget.width ?? 0);
 
-                          double _height = widget.height ?? 0;
-
-                          double? _topPadding;
-                          double? _bottomPadding;
-
-                          if (_width < (_decorations.borderRadius?.topLeft.x ?? 0)) {
-                            final double _topEmptySpace = (_decorations.borderRadius?.topLeft.y ?? 0) *
-                                (((_decorations.borderRadius?.topLeft.x ?? 0) - _width) / (_decorations.borderRadius?.topLeft.x ?? 1));
-
-                            _height -= _topEmptySpace;
-                            _topPadding = _topEmptySpace;
-                          }
-                          if (_width < (_decorations.borderRadius?.bottomLeft.x ?? 0)) {
-                            final double _bottomEmptySpace = (_decorations.borderRadius?.bottomLeft.y ?? 0) *
-                                (((_decorations.borderRadius?.bottomLeft.x ?? 0) - _width) / (_decorations.borderRadius?.bottomLeft.x ?? 1));
-                            _height -= _bottomEmptySpace;
-                            _bottomPadding = _bottomEmptySpace;
-                          }
-
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            curve: Curves.decelerate,
-                            height: _height,
-                            width: _width,
-                            margin: EdgeInsets.only(top: _topPadding ?? 0, bottom: _bottomPadding ?? 0),
-                            decoration: BoxDecoration(
-                              color: _decorations.backgroundColor,
-                              borderRadius: BorderRadius.only(
-                                topLeft: _decorations.borderRadius?.topLeft ?? Radius.circular(0),
-                                bottomLeft: _decorations.borderRadius?.bottomLeft ?? Radius.circular(0),
-                                topRight: _width > (widget.width ?? 0) - (_decorations.borderRadius?.topRight.x ?? 0)
-                                    ? _decorations.borderRadius?.topRight ?? Radius.circular(0)
-                                    : Radius.circular(0),
-                                bottomRight: _width > (widget.width ?? 0) - (_decorations.borderRadius?.bottomRight.x ?? 0)
-                                    ? _decorations.borderRadius?.topRight ?? Radius.circular(0)
-                                    : Radius.circular(0),
+                          return ClipRRect(
+                            borderRadius: _decorations.borderRadius,
+                            child: Container(
+                              width: widget.width,
+                              alignment: Alignment.centerLeft,
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.decelerate,
+                                height: widget.height ?? 0,
+                                width: _width,
+                                decoration: BoxDecoration(
+                                  color: _decorations.backgroundColor,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: _decorations.borderRadius?.topRight ?? Radius.circular(0),
+                                    bottomRight: _decorations.borderRadius?.bottomRight ?? Radius.circular(0),
+                                  ),
+                                ),
                               ),
                             ),
                           );
