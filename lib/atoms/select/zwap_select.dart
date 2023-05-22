@@ -422,6 +422,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
               Map<String, String> _allValues = context.select<_ZwapSelectProvider, Map<String, String>>((pro) => pro.values);
               List<String> _selectedValues = context.select<_ZwapSelectProvider, List<String>>((pro) => pro.selectedValues);
               String? _hoveredItemKey = context.select<_ZwapSelectProvider, String?>((pro) => pro.currentHoveredKey);
+              final String _currentTextValue = context.select<_ZwapSelectProvider, String>((pro) => pro._currentValue);
 
               return ZwapOverlayEntryWidget(
                 entity: _selectOverlay,
@@ -509,37 +510,31 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                         hovered ? '_random_key_for_this_item_2341234112341252456375' : null,
                                                     borderRadius: BorderRadius.circular(8),
                                                     child: Container(
-                                                      width: double.infinity,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.transparent,
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
-                                                      child: Row(
-                                                        children: [
-                                                          //TODO: traduci
-                                                          ZwapRichText.safeText(
-                                                            textSpans: [
-                                                              ZwapTextSpan.fromZwapTypography(
-                                                                text: '${_provider._inputController.text}',
-                                                                textType: ZwapTextType.bodySemiBold,
-                                                                textColor: ZwapColors.shades100,
-                                                              ),
-                                                              ZwapTextSpan.fromZwapTypography(
-                                                                text: ' ${widget.translateText('not_here')} ',
-                                                                textType: ZwapTextType.bodyRegular,
-                                                                textColor: ZwapColors.shades100,
-                                                              ),
-                                                              ZwapTextSpan.fromZwapTypography(
-                                                                text: widget.translateText('add_here'),
-                                                                textType: ZwapTextType.bodySemiBold,
-                                                                textColor: ZwapColors.shades100,
-                                                              ),
-                                                            ],
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
+                                                        width: double.infinity,
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.transparent,
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+                                                        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 7),
+                                                        child: ZwapRichText.safeText(
+                                                          textSpans: [
+                                                            ZwapTextSpan.fromZwapTypography(
+                                                              text: '${_currentTextValue}',
+                                                              textType: ZwapTextType.bodySemiBold,
+                                                              textColor: ZwapColors.shades100,
+                                                            ),
+                                                            ZwapTextSpan.fromZwapTypography(
+                                                              text: ' ${widget.translateText('not_here')} ',
+                                                              textType: ZwapTextType.bodyRegular,
+                                                              textColor: ZwapColors.shades100,
+                                                            ),
+                                                            ZwapTextSpan.fromZwapTypography(
+                                                              text: widget.translateText('add_here'),
+                                                              textType: ZwapTextType.bodySemiBold,
+                                                              textColor: ZwapColors.shades100,
+                                                            ),
+                                                          ],
+                                                        )),
                                                   ),
                                                 ),
                                               )
@@ -777,7 +772,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                 child: TextField(
                                                   controller: _provider._inputController,
                                                   focusNode: _provider._inputFocusNode,
-                                                  readOnly: !widget.canSearch || _provider._isSmall,
+                                                  readOnly: (!widget.canSearch && !widget.canAddItem) || _provider._isSmall,
                                                   decoration: InputDecoration.collapsed(hintText: widget.hintText, hintStyle: widget.hintTextStyle),
                                                   cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
                                                   keyboardType: TextInputType.none,

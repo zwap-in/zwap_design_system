@@ -1095,3 +1095,7 @@ a
 
 ## 0.1.737
 * Fixed a problem in completion in ZwapButton with big radius
+
+## 0.1.738
+* Added some style options (background, border and dynamic label color) to ZwapInput widget
+* Improvements to ZwapSelect widget (not user can add without enabling dynamic search)

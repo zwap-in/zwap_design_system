@@ -104,7 +104,6 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                     Container(
                       width: 300,
                       child: ZwapSelect(
-                        canSearch: true,
                         canAddItem: true,
                         onAddItem: (value) {
                           setState(() => _selected = value);
@@ -113,9 +112,6 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                           if (_selected != null && !_values!.any((e) => e == _selected)) _selected!: _selected!,
                           ...Map.fromIterable(_values!, key: (i) => i, value: (i) => i),
                         },
-                        fetchMoreData: (String newQuery, int pageNumber) async {
-                          return Map.fromIterable(await _getNewValues(newQuery, pageNumber), key: (i) => i, value: (i) => i);
-                        },
                         hintText: "Seleziona un elemento",
                         label: "Zwap Select",
                         callBackFunction: (value, _) {
@@ -123,13 +119,11 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                         },
                         selected: _selected,
                         initialPageNumber: 2,
-                        betweenFetchDuration: const Duration(seconds: 2),
-                        onEmptyResponseDuration: const Duration(seconds: 10),
                         translateText: (key) => {
                           'not_here': 'non c\'è?',
                           'add_here': 'Aggiungilo qui',
                         }[key]!,
-                        searchType: ZwapSelectSearchTypes.dynamic,
+                        searchType: ZwapSelectSearchTypes.locale,
                       ),
                     ),
                     Container(
@@ -156,7 +150,6 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                     Container(
                       width: 500,
                       child: ZwapSelect.multiple(
-                        canSearch: true,
                         values: Map.fromEntries(List.generate(50,
                             (i) => MapEntry<String, String>(i.toString(), '$i-$i•$i ${i % 3 == 0 ? 'djhfasjdhflajsdh fadhfdjfh adjf agh' : ''}'))),
                         hintText: "Seleziona un elemento",
@@ -166,12 +159,6 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                         initialPageNumber: 2,
                         canAddItem: true,
                         onAddItem: (item) => print(item),
-                        fetchMoreData: (search, _) async {
-                          await Future.delayed(const Duration(milliseconds: 800));
-                          return search.isEmpty ? {} : {search: search};
-                        },
-                        betweenFetchDuration: const Duration(seconds: 2),
-                        onEmptyResponseDuration: const Duration(seconds: 10),
                         translateText: (key) => {
                           'not_here': 'Non trovi quello che cerchi?',
                           'add_here': 'Aggiungilo qui',

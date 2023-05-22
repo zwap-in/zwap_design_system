@@ -129,7 +129,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 700),
+              //const SizedBox(height: 700),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -151,6 +151,31 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   ),
                 ],
               ),
+              ZwapText(
+                text: 'Zwap input with style',
+                zwapTextType: ZwapTextType.mediumBodyRegular,
+                textColor: ZwapColors.primary900Dark,
+              ),
+              SizedBox(height: 5),
+              Container(
+                padding: const EdgeInsets.all(25),
+                color: Color(0xff000013).withOpacity(.9),
+                child: ZwapInput(
+                  dynamicLabel: "Label",
+                  dynamicLabelTextStyle: getTextStyle(ZwapTextType.mediumBodySemibold),
+                  dynamicLabelColor: ZwapColors.shades0,
+                  keyCallBackFunction: (value) => print('key $value'),
+                  backgroundColor: Color(0xffD9D9D9).withOpacity(.1),
+                  textStyle: ZwapTextType.bigBodyRegular.copyWith(color: ZwapColors.shades0),
+                  cursorColor: ZwapColors.neutral200,
+                  enabledBorderColor: ZwapColors.shades0,
+                  hoveredBorderColor: ZwapColors.shades0,
+                  disabledBorderColor: ZwapColors.shades0,
+                  focussedBorderColor: ZwapColors.primary700,
+                  borderWidth: 1.5,
+                ),
+              ),
+              SizedBox(height: 55),
               ZwapText(
                 text: 'Category input',
                 zwapTextType: ZwapTextType.mediumBodyRegular,
@@ -193,7 +218,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                       showClear: false,
                       gap: _gapOfHalf ? TimePickerGap.thirtyMinutes : TimePickerGap.fifteenMinutes,
                       onChanged: (v) {
-                        print('changed $v');
                         setState(() => time = v);
                       },
                       title: "DALLE",
@@ -403,7 +427,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 canAddItem: false,
                 showChevron: false,
                 onAddItem: (v) {
-                  print(v);
                   return v;
                 },
                 selectedItem: _selectedSearchItem,

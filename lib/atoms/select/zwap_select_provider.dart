@@ -307,7 +307,7 @@ class _ZwapSelectProvider extends ChangeNotifier {
       _tmpValues = {};
       notifyListeners();
     }
-    if (_inputController.text.isNotEmpty) _isLoading = true;
+    if (_inputController.text.isNotEmpty && searchType != ZwapSelectSearchTypes.locale) _isLoading = true;
     notifyListeners();
 
     if (_notifyForDynamicSearch) _searchTimer = Timer(const Duration(milliseconds: 800), _searchCallback);
