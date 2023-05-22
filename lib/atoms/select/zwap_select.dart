@@ -168,6 +168,9 @@ class ZwapSelect extends StatefulWidget {
   /// select widget when [error] is true
   final String? errorText;
 
+  final Color? backgroundColor;
+  final Color? borderColor;
+
   ///Regular ZwapSelect
   ZwapSelect({
     Key? key,
@@ -193,6 +196,8 @@ class ZwapSelect extends StatefulWidget {
     this.dynamicLabel,
     this.error = false,
     this.errorText,
+    this.backgroundColor,
+    this.borderColor,
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
         this.valuesByCategory = {},
@@ -224,6 +229,8 @@ class ZwapSelect extends StatefulWidget {
     this.dynamicLabel,
     this.error = false,
     this.errorText,
+    this.backgroundColor,
+    this.borderColor,
   })  : this.selectedValues = [],
         this._type = _ZwapSelectTypes.regular,
         this.values = {
@@ -258,6 +265,8 @@ class ZwapSelect extends StatefulWidget {
     this.itemBuilder,
     this.error = false,
     this.errorText,
+    this.backgroundColor,
+    this.borderColor,
   })  : this.selected = null,
         this._type = _ZwapSelectTypes.multiple,
         this._hasCategories = false,
@@ -288,6 +297,8 @@ class ZwapSelect extends StatefulWidget {
     this.searchDelayDuration,
     this.error = false,
     this.errorText,
+    this.backgroundColor,
+    this.borderColor,
   })  : this.selected = null,
         this._type = _ZwapSelectTypes.multiple,
         this.values = {
@@ -445,7 +456,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                         onKeyEvent: _provider.keyboardHandler,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: ZwapColors.neutral300,
+                            color: widget.borderColor ?? ZwapColors.neutral300,
                             borderRadius: openReverse
                                 ? BorderRadius.only(
                                     topLeft: Radius.circular(widget.borderRadius),
@@ -459,7 +470,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                           child: Container(
                             width: (_selectKey.globalPaintBounds?.size.width ?? 2) - 2,
                             decoration: BoxDecoration(
-                              color: ZwapColors.shades0,
+                              color: widget.backgroundColor ?? ZwapColors.shades0,
                               borderRadius: openReverse
                                   ? BorderRadius.only(
                                       topLeft: Radius.circular(widget.borderRadius),
@@ -685,14 +696,14 @@ class _ZwapSelectState extends State<ZwapSelect> {
                             decoration: isOverlayMounted
                                 ? openReverse
                                     ? BoxDecoration(
-                                        color: ZwapColors.neutral300,
+                                        color: widget.borderColor ?? ZwapColors.neutral300,
                                         borderRadius: BorderRadius.only(
                                           bottomLeft: Radius.circular(widget.borderRadius),
                                           bottomRight: Radius.circular(widget.borderRadius),
                                         ),
                                       )
                                     : BoxDecoration(
-                                        color: ZwapColors.neutral300,
+                                        color: widget.borderColor ?? ZwapColors.neutral300,
                                         borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(widget.borderRadius),
                                           topRight: Radius.circular(widget.borderRadius),
@@ -702,8 +713,8 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                     color: _error
                                         ? ZwapColors.error400
                                         : this._isHovered
-                                            ? ZwapColors.primary300
-                                            : ZwapColors.neutral300,
+                                            ? widget.borderColor ?? ZwapColors.primary300
+                                            : widget.borderColor ?? ZwapColors.neutral300,
                                     borderRadius: BorderRadius.circular(widget.borderRadius),
                                   ),
                             child: AnimatedContainer(
@@ -712,7 +723,7 @@ class _ZwapSelectState extends State<ZwapSelect> {
                               key: _selectKey,
                               height: 45 + (isOverlayMounted ? 1 : 0),
                               decoration: BoxDecoration(
-                                color: ZwapColors.shades0,
+                                color: widget.backgroundColor ?? ZwapColors.shades0,
                                 borderRadius: isOverlayMounted
                                     ? openReverse
                                         ? BorderRadius.only(
@@ -773,7 +784,11 @@ class _ZwapSelectState extends State<ZwapSelect> {
                                                   controller: _provider._inputController,
                                                   focusNode: _provider._inputFocusNode,
                                                   readOnly: (!widget.canSearch && !widget.canAddItem) || _provider._isSmall,
-                                                  decoration: InputDecoration.collapsed(hintText: widget.hintText, hintStyle: widget.hintTextStyle),
+                                                  decoration: InputDecoration.collapsed(
+                                                    hintText: widget.hintText,
+                                                    hintStyle: widget.hintTextStyle,
+                                                    fillColor: widget.backgroundColor,
+                                                  ),
                                                   cursorColor: widget.canSearch ? ZwapColors.shades100 : ZwapColors.shades0,
                                                   keyboardType: TextInputType.none,
                                                   textInputAction: TextInputAction.go,

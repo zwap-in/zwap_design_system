@@ -1,5 +1,6 @@
 library zwap.dynamic_inputs.simple_picker;
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/zwap_dynamic_input.dart';
 import 'package:provider/provider.dart';
@@ -68,6 +69,21 @@ class ZwapSimplePicker<T> extends StatefulWidget {
   /// [showLessItemUntilLength]
   final List<T>? lessItems;
 
+  /// If true, when user unfocus this widget, the first item
+  /// that is actually selected will be showed on the header
+  final bool keepFirstItemOnHeader;
+
+  final bool showChevron;
+
+  /// The label showed above the widget
+  final String? dynamicLabel;
+
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final Color? hoveredBorderColor;
+  final Color? textColor;
+  final Color? dynamicLabelColor;
+
   const ZwapSimplePicker({
     required SimplePickerGetCopy<T> getCopyOfItem,
     required this.isItemIncludedIsSearch,
@@ -82,6 +98,14 @@ class ZwapSimplePicker<T> extends StatefulWidget {
     this.showLessItem = false,
     this.showLessItemUntilLength = 1,
     this.lessItems,
+    this.keepFirstItemOnHeader = false,
+    this.showChevron = false,
+    this.dynamicLabel,
+    this.backgroundColor,
+    this.borderColor,
+    this.hoveredBorderColor,
+    this.textColor,
+    this.dynamicLabelColor,
     Key? key,
   })  : this.getCopyOfItem = getCopyOfItem,
         this.itemBuilder = null,
@@ -105,6 +129,14 @@ class ZwapSimplePicker<T> extends StatefulWidget {
     this.showLessItem = false,
     this.showLessItemUntilLength = 1,
     this.lessItems,
+    this.keepFirstItemOnHeader = false,
+    this.showChevron = false,
+    this.dynamicLabel,
+    this.backgroundColor,
+    this.borderColor,
+    this.hoveredBorderColor,
+    this.textColor,
+    this.dynamicLabelColor,
     Key? key,
   })  : this.getCopyOfItem = null,
         this.itemBuilder = itemBuilder,
@@ -131,7 +163,7 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
   void initState() {
     super.initState();
 
-    _searchNode.addListener(() => setState(() {}));
+    _searchNode.addListener(_focusListener);
 
     _provider = _ZwapSimplePickerProvider<T>(
       getCopy: widget.getCopyOfItem,
@@ -154,10 +186,26 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
     _inputKey.closeIfOpen();
     _searchController.clear();
     _provider.search = '';
+
+    if (widget.keepFirstItemOnHeader && _provider.getCopy != null && _provider.items.where((i) => _provider.getIsSelected(i)).isNotEmpty)
+      _searchController.text = _provider.getCopy!(_provider.items.firstWhere((element) => _provider.getIsSelected!(element)));
   }
 
   void _controllerListener() {
-    if (!_focussed && _searchController.text.length > 1) _inputKey.openIfClose();
+    if (!_focussed && _searchController.text.length > 1 && !widget.keepFirstItemOnHeader) {
+      _inputKey.openIfClose();
+    }
+  }
+
+  void _focusListener() {
+    if (!_searchNode.hasFocus &&
+        widget.keepFirstItemOnHeader &&
+        _provider.getCopy != null &&
+        _provider.items.where((i) => _provider.getIsSelected(i)).isNotEmpty) {
+      _searchController.text = _provider.getCopy!(_provider.items.firstWhere((element) => _provider.getIsSelected!(element)));
+    }
+
+    setState(() {});
   }
 
   @override
@@ -174,6 +222,26 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
 
   @override
   Widget build(BuildContext context) {
+    Widget _wrapWithChevron(Widget child) {
+      if (widget.showChevron) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(child: child),
+            const SizedBox(width: 12),
+            Icon(
+              Icons.keyboard_arrow_down,
+              color: _focussed ? ZwapColors.transparent : (widget.dynamicLabelColor ?? ZwapColors.primary900Dark),
+              size: 24,
+            ),
+            const SizedBox(width: 12),
+          ],
+        );
+      }
+
+      return child;
+    }
+
     return ChangeNotifierProvider<_ZwapSimplePickerProvider<T>>.value(
       value: _provider,
       child: Builder(
@@ -185,11 +253,15 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
               ZwapText(
                 text: widget.label!,
                 zwapTextType: ZwapTextType.bigBodySemibold,
-                textColor: ZwapColors.primary900Dark,
+                textColor: widget.dynamicLabelColor ?? ZwapColors.primary900Dark,
               ),
               const SizedBox(height: 8),
             ],
             ZwapDynamicInput(
+              dynamicLabel: widget.dynamicLabel,
+              activeColor: widget.hoveredBorderColor,
+              backgroundColor: widget.backgroundColor,
+              defaultColor: widget.borderColor,
               key: _inputKey,
               onOpen: () => setState(() => _focussed = true),
               onClose: () => setState(() => _focussed = false),
@@ -198,16 +270,22 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
                 value: _provider,
                 child: child,
               ),
-              content: Padding(
-                padding: const EdgeInsets.only(left: 12),
-                child: TextField(
-                  controller: _searchController,
-                  focusNode: _searchNode,
-                  decoration: InputDecoration(border: InputBorder.none, hintText: widget.placeholder),
-                  cursorColor: ZwapColors.primary900Dark,
-                  onTap: _inputKey.toggleOverlay,
-                  onChanged: (value) => context.read<_ZwapSimplePickerProvider<T>>().search = value,
-                  style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+              content: _wrapWithChevron(
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: TextField(
+                    controller: _searchController,
+                    focusNode: _searchNode,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: widget.placeholder,
+                      hintStyle: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: widget.textColor ?? ZwapColors.primary900Dark),
+                    ),
+                    cursorColor: widget.textColor ?? ZwapColors.primary900Dark,
+                    onTap: _inputKey.toggleOverlay,
+                    onChanged: (value) => context.read<_ZwapSimplePickerProvider<T>>().search = value,
+                    style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: widget.textColor ?? ZwapColors.primary900Dark),
+                  ),
                 ),
               ),
               overlay: _OverlayContentWidget<T>(
@@ -309,7 +387,7 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
       hoverColor: ZwapColors.transparent,
       splashColor: ZwapColors.transparent,
       highlightColor: ZwapColors.transparent,
-      onTap: (_selected || _disabled) ? null : () => context.read<_ZwapSimplePickerProvider<T>>().onItemTap(widget.item),
+      onTap: (_disabled) ? null : () => context.read<_ZwapSimplePickerProvider<T>>().onItemTap(widget.item),
       onHover: (isHovered) => setState(() => _hovered = isHovered),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),

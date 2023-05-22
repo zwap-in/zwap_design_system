@@ -102,28 +102,34 @@ class _ZwapSelectStoryState extends State<ZwapSelectStory> {
                 child: Column(
                   children: [
                     Container(
-                      width: 300,
-                      child: ZwapSelect(
-                        canAddItem: true,
-                        onAddItem: (value) {
-                          setState(() => _selected = value);
-                        },
-                        values: {
-                          if (_selected != null && !_values!.any((e) => e == _selected)) _selected!: _selected!,
-                          ...Map.fromIterable(_values!, key: (i) => i, value: (i) => i),
-                        },
-                        hintText: "Seleziona un elemento",
-                        label: "Zwap Select",
-                        callBackFunction: (value, _) {
-                          setState(() => _selected = value);
-                        },
-                        selected: _selected,
-                        initialPageNumber: 2,
-                        translateText: (key) => {
-                          'not_here': 'non c\'è?',
-                          'add_here': 'Aggiungilo qui',
-                        }[key]!,
-                        searchType: ZwapSelectSearchTypes.locale,
+                      padding: const EdgeInsets.all(25),
+                      color: Color(0xff000013).withOpacity(.9),
+                      child: Container(
+                        width: 300,
+                        child: ZwapSelect(
+                          backgroundColor: Color(0xffD9D9D9).withOpacity(.1),
+                          borderColor: Color(0xffD9D9D9).withOpacity(.1),
+                          canAddItem: true,
+                          onAddItem: (value) {
+                            setState(() => _selected = value);
+                          },
+                          values: {
+                            if (_selected != null && !_values!.any((e) => e == _selected)) _selected!: _selected!,
+                            ...Map.fromIterable(_values!, key: (i) => i, value: (i) => i),
+                          },
+                          hintText: "Seleziona un elemento",
+                          label: "Zwap Select",
+                          callBackFunction: (value, _) {
+                            setState(() => _selected = value);
+                          },
+                          selected: _selected,
+                          initialPageNumber: 2,
+                          translateText: (key) => {
+                            'not_here': 'non c\'è?',
+                            'add_here': 'Aggiungilo qui',
+                          }[key]!,
+                          searchType: ZwapSelectSearchTypes.locale,
+                        ),
                       ),
                     ),
                     Container(

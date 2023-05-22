@@ -290,7 +290,10 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [ZwapColors.whiteTransparent, ZwapColors.shades0],
+                          colors: [
+                            widget.backgroundColor?.withOpacity(0) ?? ZwapColors.whiteTransparent,
+                            widget.backgroundColor?.withOpacity(1) ?? ZwapColors.shades0,
+                          ],
                           stops: [0, 0.47],
                         ),
                         borderRadius: BorderRadius.circular(3),

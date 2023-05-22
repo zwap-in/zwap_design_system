@@ -80,7 +80,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
   List<String> _selectedItems = [];
 
   final List<String> _secondSelected = [];
-  final List<int> _thirdSelected = [];
+  List<int> _thirdSelected = [];
 
   bool _disableSimplePicker = false;
 
@@ -525,6 +525,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               SizedBox(height: 20),
               ZwapSimplePicker<int>(
+                showChevron: true,
                 disabled: _disableSimplePicker,
                 items: List.generate(1000, (i) => i),
                 getCopyOfItem: (i) => '$i~$i•$i',
@@ -533,10 +534,37 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 label: "Simple picker (int)",
                 placeholder: "Ex incididunt occaecat ",
                 translateKey: (_) => 'Nessun risultato',
-                onItemPicked: (i) => _thirdSelected.contains(i) ? setState(() => _thirdSelected.remove(i)) : setState(() => _thirdSelected.add(i)),
+                onItemPicked: (i) => setState(() => _thirdSelected = [i]),
                 showLessItem: true,
                 showLessItemUntilLength: 3,
                 lessItems: List.generate(40, (i) => i * 2),
+                keepFirstItemOnHeader: true,
+              ),
+              SizedBox(height: 20),
+              Container(
+                color: ZwapColors.primary900Dark,
+                padding: const EdgeInsets.all(20),
+                child: ZwapSimplePicker<int>(
+                  // dynamicLabel: "Ciaociaocicoaciaocai",
+                  showChevron: true,
+                  textColor: ZwapColors.shades0,
+                  backgroundColor: Color(0xffD9D9D9).withOpacity(.1),
+                  dynamicLabelColor: ZwapColors.shades0,
+                  hoveredBorderColor: ZwapColors.primary700,
+                  borderColor: ZwapColors.shades0,
+                  disabled: _disableSimplePicker,
+                  items: List.generate(1000, (i) => i),
+                  getCopyOfItem: (i) => '$i~$i•$i',
+                  getIsSelected: (i) => _thirdSelected.contains(i),
+                  isItemIncludedIsSearch: (i, s) => i % s.length == 0,
+                  placeholder: "Ex incididunt occaecat ",
+                  translateKey: (_) => 'Nessun risultato',
+                  onItemPicked: (i) => setState(() => _thirdSelected = [i]),
+                  showLessItem: true,
+                  showLessItemUntilLength: 3,
+                  lessItems: List.generate(40, (i) => i * 2),
+                  keepFirstItemOnHeader: true,
+                ),
               ),
               SizedBox(height: 20),
               ZwapText(

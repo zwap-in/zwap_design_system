@@ -1099,3 +1099,6 @@ a
 ## 0.1.738
 * Added some style options (background, border and dynamic label color) to ZwapInput widget
 * Improvements to ZwapSelect widget (not user can add without enabling dynamic search)
+
+## 0.1.739
+* Improvements to ZwapSelect widget and ZwapSimplePicker widget
