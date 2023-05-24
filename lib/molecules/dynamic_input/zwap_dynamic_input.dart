@@ -286,23 +286,22 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
                     alignment: Alignment.topLeft,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: ZwapColors.shades0,
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            widget.backgroundColor?.withOpacity(0) ?? ZwapColors.whiteTransparent,
-                            widget.backgroundColor?.withOpacity(1) ?? ZwapColors.shades0,
-                          ],
-                          stops: [0, 0.47],
-                        ),
+                        color: widget.backgroundColor?.withOpacity(1) ?? ZwapColors.shades0,
+                        gradient: widget.backgroundColor != null
+                            ? null
+                            : LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [ZwapColors.whiteTransparent, ZwapColors.shades0],
+                                stops: [0, 0.47],
+                              ),
                         borderRadius: BorderRadius.circular(3),
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       child: ZwapText.customStyle(
                         text: _dynamicLabel!,
                         customTextStyle: getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(
-                          color: _active ? widget.activeColor ?? ZwapColors.primary900Dark : (widget.defaultColor ?? ZwapColors.neutral500),
+                          color: _active ? (widget.activeColor ?? ZwapColors.primary900Dark) : (widget.activeColor ?? ZwapColors.neutral500),
                           fontSize: 11,
                           letterSpacing: 0.1,
                         ),

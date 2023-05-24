@@ -1102,3 +1102,6 @@ a
 
 ## 0.1.739
 * Improvements to ZwapSelect widget and ZwapSimplePicker widget
+
+## 0.1.740
+* Added style options to ZwapCategoryPicker widget

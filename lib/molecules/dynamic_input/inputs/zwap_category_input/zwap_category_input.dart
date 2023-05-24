@@ -62,6 +62,11 @@ class ZwapCategoryInput<T, S> extends StatefulWidget {
   /// If [placeholder] is null this value will be used instead.
   final String? label;
 
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final Color? activeBorderColor;
+  final Color? textColor;
+
   ZwapCategoryInput({
     Key? key,
     required this.selectedValue,
@@ -75,6 +80,10 @@ class ZwapCategoryInput<T, S> extends StatefulWidget {
     this.showClear = true,
     this.addDecoratorTo,
     this.label,
+    this.backgroundColor,
+    this.borderColor,
+    this.activeBorderColor,
+    this.textColor,
   }) : super(key: key);
 
   @override
@@ -139,6 +148,9 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
           final S? _selectedItem = context.select<_ZwapCategoryProvider<T, S>, S?>((pro) => pro.selectedValue);
 
           return ZwapDynamicInput(
+            backgroundColor: widget.backgroundColor,
+            activeColor: widget.activeBorderColor,
+            defaultColor: widget.borderColor,
             dynamicLabel: widget.label,
             key: _provider.inputKey,
             builder: (context, child) => ChangeNotifierProvider<_ZwapCategoryProvider<T, S>>.value(
@@ -154,12 +166,13 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
                     child: TextField(
                       controller: _provider.inputController,
                       focusNode: _inputNode,
-                      style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+                      style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: widget.textColor ?? ZwapColors.primary900Dark),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: widget.placeholder ?? widget.label ?? '',
+                        hintStyle: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: widget.textColor ?? ZwapColors.primary900Dark),
                       ),
-                      cursorColor: ZwapColors.primary900Dark,
+                      cursorColor: widget.textColor ?? ZwapColors.primary900Dark,
                       onChanged: (value) => context.read<_ZwapCategoryProvider<T, S>>().filter = value,
                     ),
                   ),
@@ -172,7 +185,7 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
                   child: Icon(
                     Icons.arrow_back_ios_new_rounded,
                     size: 16,
-                    color: ZwapColors.text65,
+                    color: widget.textColor ?? ZwapColors.text65,
                   ),
                 ),
                 const SizedBox(width: 12),
