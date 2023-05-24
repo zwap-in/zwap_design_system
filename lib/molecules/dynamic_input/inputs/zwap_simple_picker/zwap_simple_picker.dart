@@ -15,6 +15,15 @@ typedef SimplePickerSearchItem<T> = bool Function(T item, String searchValue);
 typedef SimplePickerItemBuilder<T> = Widget Function(BuildContext context, T item);
 
 class ZwapSimplePicker<T> extends StatefulWidget {
+  /// If is free input user can type anything and then
+  /// click the "add" if no items are found
+  ///
+  /// When user type the [onCustomPicked] callback is called
+  ///
+  /// ! Marking an input as free input will disable the auto clear
+  /// ! of the input when user close the overlay
+  final bool isFreeInput;
+
   final List<T> items;
 
   /// Used to get the text to print for a single item
@@ -84,6 +93,8 @@ class ZwapSimplePicker<T> extends StatefulWidget {
   final Color? textColor;
   final Color? dynamicLabelColor;
 
+  final void Function(String value)? onCustomPicked;
+
   const ZwapSimplePicker({
     required SimplePickerGetCopy<T> getCopyOfItem,
     required this.isItemIncludedIsSearch,
@@ -106,6 +117,8 @@ class ZwapSimplePicker<T> extends StatefulWidget {
     this.hoveredBorderColor,
     this.textColor,
     this.dynamicLabelColor,
+    this.isFreeInput = false,
+    this.onCustomPicked,
     Key? key,
   })  : this.getCopyOfItem = getCopyOfItem,
         this.itemBuilder = null,
@@ -137,6 +150,8 @@ class ZwapSimplePicker<T> extends StatefulWidget {
     this.hoveredBorderColor,
     this.textColor,
     this.dynamicLabelColor,
+    this.isFreeInput = false,
+    this.onCustomPicked,
     Key? key,
   })  : this.getCopyOfItem = null,
         this.itemBuilder = itemBuilder,
@@ -187,11 +202,14 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
     _searchController.clear();
     _provider.search = '';
 
-    if (widget.keepFirstItemOnHeader && _provider.getCopy != null && _provider.items.where((i) => _provider.getIsSelected(i)).isNotEmpty)
+    if (widget.keepFirstItemOnHeader && _provider.getCopy != null && _provider.items.where((i) => _provider.getIsSelected(i)).isNotEmpty) {
       _searchController.text = _provider.getCopy!(_provider.items.firstWhere((element) => _provider.getIsSelected!(element)));
+    }
   }
 
   void _controllerListener() {
+    widget.onCustomPicked?.call(_searchController.text);
+
     if (!_focussed && _searchController.text.length > 1 && !widget.keepFirstItemOnHeader) {
       _inputKey.openIfClose();
     }
@@ -202,7 +220,7 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
         widget.keepFirstItemOnHeader &&
         _provider.getCopy != null &&
         _provider.items.where((i) => _provider.getIsSelected(i)).isNotEmpty) {
-      _searchController.text = _provider.getCopy!(_provider.items.firstWhere((element) => _provider.getIsSelected!(element)));
+      _searchController.text = _provider.getCopy!(_provider.items.firstWhere((element) => _provider.getIsSelected(element)));
     }
 
     setState(() {});
@@ -289,6 +307,7 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
                 ),
               ),
               overlay: _OverlayContentWidget<T>(
+                canAddItem: widget.isFreeInput,
                 noResultsWidget: widget.noResultsWidget,
                 translateKey: widget.translateKey,
               ),
@@ -303,8 +322,10 @@ class _ZwapSimplePickerState<T> extends State<ZwapSimplePicker<T>> {
 class _OverlayContentWidget<T> extends StatelessWidget {
   final Function(String)? translateKey;
   final Widget? noResultsWidget;
+  final bool canAddItem;
 
   const _OverlayContentWidget({
+    required this.canAddItem,
     this.translateKey,
     this.noResultsWidget,
     Key? key,
@@ -315,6 +336,7 @@ class _OverlayContentWidget<T> extends StatelessWidget {
     final List<T> _items = context.select<_ZwapSimplePickerProvider<T>, List<T>>((pro) => pro._filteredItems);
 
     if (_items.isEmpty) {
+      if (canAddItem) return Container();
       if (noResultsWidget != null) return noResultsWidget!;
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
@@ -332,7 +354,9 @@ class _OverlayContentWidget<T> extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: _items.map((i) => _SingleItemWidget<T>(item: i)).toList(),
+          children: [
+            ..._items.map((i) => _SingleItemWidget<T>(item: i)).toList(),
+          ],
         ),
       ),
     );

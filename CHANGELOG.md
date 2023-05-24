@@ -1105,3 +1105,6 @@ a
 
 ## 0.1.740
 * Added style options to ZwapCategoryPicker widget
+
+## 0.1.741
+* Now ZwapSimplePicker can be used as a text field (ie: not only for pick a value)

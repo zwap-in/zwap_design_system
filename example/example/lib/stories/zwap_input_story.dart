@@ -179,6 +179,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 color: Color(0xff000013).withOpacity(.9),
                 padding: const EdgeInsets.all(20),
                 child: ZwapSimplePicker<int>(
+                  onCustomPicked: (s) => print(s),
                   // dynamicLabel: "Ciaociaocicoaciaocai",
                   showChevron: true,
                   textColor: ZwapColors.shades0,
@@ -197,7 +198,8 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   showLessItem: true,
                   showLessItemUntilLength: 3,
                   lessItems: List.generate(40, (i) => i * 2),
-                  keepFirstItemOnHeader: true,
+                  keepFirstItemOnHeader: false,
+                  
                 ),
               ),
               SizedBox(height: 20),
