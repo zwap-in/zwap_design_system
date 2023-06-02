@@ -86,27 +86,25 @@ class ZwapPercentWidgetDecorations {
     this.border,
   });
 
-  const ZwapPercentWidgetDecorations.defaultDecorations({
-    this.backgroundColor = ZwapColors.shades0,
-    this.shadows = const [ZwapShadow.levelOne],
-    this.borderRadius = const BorderRadius.all(const Radius.circular(30)),
-    this.titleStyle: ZwapTypography.bigBodyBold,
-    this.subtitleStyle: ZwapTypography.extraSmallBodyRegular,
-    this.border,
-    this.contentPadding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-    this.percentIndicatorDecorations = const ZwapPercentIndicatorDecorations.descrutive(),
-  });
+  factory ZwapPercentWidgetDecorations.defaultDecorations() => ZwapPercentWidgetDecorations(
+        backgroundColor: ZwapColors.shades0,
+        shadows: const [ZwapShadow.levelOne],
+        borderRadius: const BorderRadius.all(const Radius.circular(30)),
+        titleStyle: ZwapTypography.bigBodyBold,
+        subtitleStyle: ZwapTypography.extraSmallBodyRegular,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        percentIndicatorDecorations: const ZwapPercentIndicatorDecorations.descrutive(),
+      );
 
-  const ZwapPercentWidgetDecorations.flat({
-    this.backgroundColor = ZwapColors.shades0,
-    this.shadows = const [],
-    this.borderRadius = const BorderRadius.all(const Radius.circular(30)),
-    this.titleStyle: ZwapTypography.bigBodyBold,
-    this.subtitleStyle: ZwapTypography.extraSmallBodyRegular,
-    this.border,
-    this.contentPadding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-    this.percentIndicatorDecorations = const ZwapPercentIndicatorDecorations.descrutive(),
-  });
+  factory ZwapPercentWidgetDecorations.flat() => ZwapPercentWidgetDecorations(
+        backgroundColor: ZwapColors.shades0,
+        shadows: const [],
+        borderRadius: const BorderRadius.all(const Radius.circular(30)),
+        titleStyle: ZwapTypography.bigBodyBold,
+        subtitleStyle: ZwapTypography.extraSmallBodyRegular,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        percentIndicatorDecorations: const ZwapPercentIndicatorDecorations.descrutive(),
+      );
 
   ZwapPercentWidgetDecorations copyWith({
     Color? backgroundColor,
@@ -185,7 +183,7 @@ class ZwapPercentWidget extends StatefulWidget {
   final int titleMaxLines;
   final int subtitleMaxLines;
 
-  const ZwapPercentWidget({
+  ZwapPercentWidget({
     this.width = 390,
     this.height = 96,
     required this.percentValue,
@@ -193,11 +191,12 @@ class ZwapPercentWidget extends StatefulWidget {
     this.insidePercentContent = const ZwapPercentWidgetPercentContent.percent(),
     this.subtitle,
     this.button,
-    this.decorations = const ZwapPercentWidgetDecorations.defaultDecorations(),
+    ZwapPercentWidgetDecorations? decorations,
     this.titleMaxLines = 1,
     this.subtitleMaxLines = 2,
     Key? key,
-  }) : super(key: key);
+  })  : this.decorations = decorations ?? ZwapPercentWidgetDecorations.defaultDecorations(),
+        super(key: key);
 
   @override
   State<ZwapPercentWidget> createState() => _ZwapPercentWidgetState();

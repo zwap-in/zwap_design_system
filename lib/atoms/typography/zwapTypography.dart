@@ -120,8 +120,29 @@ extension ZwapTextTypeExt on ZwapTextType {
       );
 }
 
+enum ZwapFontFamilies {
+  sfUiText,
+  manrope;
+
+  String get _name {
+    switch (this) {
+      case ZwapFontFamilies.sfUiText:
+        return 'SFUIText';
+      case ZwapFontFamilies.manrope:
+        return 'Manrope';
+    }
+  }
+}
+
 /// Custom typography style for zwap design system kit
 class ZwapTypography {
+  ZwapFontFamilies fontFamily;
+
+  ZwapTypography._({this.fontFamily = ZwapFontFamilies.sfUiText});
+
+  static ZwapTypography? _instance;
+  static ZwapTypography get instance => _instance ??= ZwapTypography._();
+
   static TextStyle h1() {
     return TextStyle(
       fontSize: 24,
@@ -130,7 +151,7 @@ class ZwapTypography {
       fontStyle: FontStyle.normal,
       height: 1.6,
       color: ZwapColors.shades100,
-      fontFamily: 'SFUIText',
+      fontFamily: instance.fontFamily._name,
       package: 'zwap_design_system',
     );
   }
@@ -143,7 +164,7 @@ class ZwapTypography {
       fontStyle: FontStyle.normal,
       height: 1.6,
       color: ZwapColors.shades100,
-      fontFamily: 'SFUIText',
+      fontFamily: instance.fontFamily._name,
       package: 'zwap_design_system',
     );
   }
@@ -156,7 +177,7 @@ class ZwapTypography {
       fontStyle: FontStyle.normal,
       height: 1.5,
       color: ZwapColors.shades100,
-      fontFamily: 'SFUIText',
+      fontFamily: instance.fontFamily._name,
       package: 'zwap_design_system',
     );
   }
@@ -168,7 +189,7 @@ class ZwapTypography {
       fontStyle: FontStyle.normal,
       height: 1.43,
       color: ZwapColors.shades100,
-      fontFamily: 'SFUIText',
+      fontFamily: instance.fontFamily._name,
       package: 'zwap_design_system',
     );
   }
@@ -180,7 +201,7 @@ class ZwapTypography {
       fontStyle: FontStyle.normal,
       height: 1.8,
       color: ZwapColors.shades100,
-      fontFamily: 'SFUIText',
+      fontFamily: instance.fontFamily._name,
       package: 'zwap_design_system',
     );
   }
@@ -193,7 +214,7 @@ class ZwapTypography {
       fontStyle: FontStyle.normal,
       height: 1.45,
       color: ZwapColors.shades100,
-      fontFamily: 'SFUIText',
+      fontFamily: instance.fontFamily._name,
       package: 'zwap_design_system',
     );
   }
@@ -206,7 +227,7 @@ class ZwapTypography {
       fontStyle: FontStyle.normal,
       height: 1.45,
       color: ZwapColors.shades100,
-      fontFamily: 'SFUIText',
+      fontFamily: instance.fontFamily._name,
       package: 'zwap_design_system',
     );
   }
@@ -220,7 +241,7 @@ class ZwapTypography {
       fontStyle: FontStyle.normal,
       height: 1.43,
       color: ZwapColors.shades100,
-      fontFamily: 'SFUIText',
+      fontFamily: instance.fontFamily._name,
       package: 'zwap_design_system',
     );
   }
@@ -233,7 +254,7 @@ class ZwapTypography {
       fontStyle: FontStyle.normal,
       height: 1.43,
       color: ZwapColors.shades100,
-      fontFamily: 'SFUIText',
+      fontFamily: instance.fontFamily._name,
       package: 'zwap_design_system',
     );
   }
@@ -246,349 +267,349 @@ class ZwapTypography {
       fontStyle: FontStyle.normal,
       height: 1.43,
       color: ZwapColors.shades100,
-      fontFamily: 'SFUIText',
+      fontFamily: instance.fontFamily._name,
       package: 'zwap_design_system',
     );
   }
   //? see https://websemantics.uk/tools/font-size-conversion-pixel-point-em-rem-percent/ for convertions
 
-  static const TextStyle extraHeading = TextStyle(
+  static TextStyle extraHeading = TextStyle(
     fontWeight: FontWeight.w800,
     fontStyle: FontStyle.normal,
     fontSize: 48,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle bigHeading = TextStyle(
+  static TextStyle bigHeading = TextStyle(
     fontWeight: FontWeight.w800,
     fontStyle: FontStyle.normal,
     fontSize: 40,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle mediumHeading = TextStyle(
+  static TextStyle mediumHeading = TextStyle(
     fontWeight: FontWeight.w800,
     fontStyle: FontStyle.normal,
     fontSize: 32,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle semiboldH1 = TextStyle(
+  static TextStyle semiboldH1 = TextStyle(
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
     fontSize: 24,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle heavyH1 = TextStyle(
+  static TextStyle heavyH1 = TextStyle(
     fontWeight: FontWeight.w800,
     fontStyle: FontStyle.normal,
     fontSize: 24,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle semiboldH2 = TextStyle(
+  static TextStyle semiboldH2 = TextStyle(
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
     fontSize: 20,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle heavyH2 = TextStyle(
+  static TextStyle heavyH2 = TextStyle(
     fontWeight: FontWeight.w800,
     fontStyle: FontStyle.normal,
     fontSize: 20,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle semiboldH3 = TextStyle(
+  static TextStyle semiboldH3 = TextStyle(
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
     fontSize: 16,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle heavyH3 = TextStyle(
+  static TextStyle heavyH3 = TextStyle(
     fontWeight: FontWeight.w800,
     fontStyle: FontStyle.normal,
     fontSize: 16,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle extraSmallBodyRegular = TextStyle(
+  static TextStyle extraSmallBodyRegular = TextStyle(
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     fontSize: 11,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle smallBodyLight = TextStyle(
+  static TextStyle smallBodyLight = TextStyle(
     fontWeight: FontWeight.w300,
     fontStyle: FontStyle.normal,
     fontSize: 12,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle smallBodyRegular = TextStyle(
+  static TextStyle smallBodyRegular = TextStyle(
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     fontSize: 12,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle smallBodyMedium = TextStyle(
+  static TextStyle smallBodyMedium = TextStyle(
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
     fontSize: 12,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle smallBodySemibold = TextStyle(
+  static TextStyle smallBodySemibold = TextStyle(
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
     fontSize: 12,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle smallBodyBold = TextStyle(
+  static TextStyle smallBodyBold = TextStyle(
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.normal,
     fontSize: 12,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle smallBodyExtraBold = TextStyle(
+  static TextStyle smallBodyExtraBold = TextStyle(
     fontWeight: FontWeight.w800,
     fontStyle: FontStyle.normal,
     fontSize: 12,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle smallBodyBlack = TextStyle(
+  static TextStyle smallBodyBlack = TextStyle(
     fontWeight: FontWeight.w900,
     fontStyle: FontStyle.normal,
     fontSize: 12,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle mediumBodyLight = TextStyle(
+  static TextStyle mediumBodyLight = TextStyle(
     fontWeight: FontWeight.w300,
     fontStyle: FontStyle.normal,
     fontSize: 14,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle mediumBodyRegular = TextStyle(
+  static TextStyle mediumBodyRegular = TextStyle(
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     fontSize: 14,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle mediumBodyMedium = TextStyle(
+  static TextStyle mediumBodyMedium = TextStyle(
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
     fontSize: 14,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle mediumBodySemibold = TextStyle(
+  static TextStyle mediumBodySemibold = TextStyle(
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
     fontSize: 14,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle mediumBodyBold = TextStyle(
+  static TextStyle mediumBodyBold = TextStyle(
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.normal,
     fontSize: 14,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle mediumBodyExtraBold = TextStyle(
+  static TextStyle mediumBodyExtraBold = TextStyle(
     fontWeight: FontWeight.w800,
     fontStyle: FontStyle.normal,
     fontSize: 14,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle mediumBodyBlack = TextStyle(
+  static TextStyle mediumBodyBlack = TextStyle(
     fontWeight: FontWeight.w900,
     fontStyle: FontStyle.normal,
     fontSize: 14,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle bigBodyLight = TextStyle(
+  static TextStyle bigBodyLight = TextStyle(
     fontWeight: FontWeight.w300,
     fontStyle: FontStyle.normal,
     fontSize: 16,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle bigBodyRegular = TextStyle(
+  static TextStyle bigBodyRegular = TextStyle(
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     fontSize: 16,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle bigBodyMedium = TextStyle(
+  static TextStyle bigBodyMedium = TextStyle(
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
     fontSize: 16,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle bigBodySemibold = TextStyle(
+  static TextStyle bigBodySemibold = TextStyle(
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
     fontSize: 16,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle bigBodyBold = TextStyle(
+  static TextStyle bigBodyBold = TextStyle(
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.normal,
     fontSize: 16,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle bigBodyExtraBold = TextStyle(
+  static TextStyle bigBodyExtraBold = TextStyle(
     fontWeight: FontWeight.w800,
     fontStyle: FontStyle.normal,
     fontSize: 16,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
-  static const TextStyle bigBodyBlack = TextStyle(
+  static TextStyle bigBodyBlack = TextStyle(
     fontWeight: FontWeight.w900,
     fontStyle: FontStyle.normal,
     fontSize: 16,
     height: 1.43,
     letterSpacing: -0.24,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 
   /// This is the new version (design system 1.1) of buttonText
-  static const TextStyle textButton = TextStyle(
+  static TextStyle textButton = TextStyle(
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
     fontSize: 16,
     height: 1.43,
     color: ZwapColors.shades100,
-    fontFamily: 'SFUIText',
+    fontFamily: instance.fontFamily._name,
     package: 'zwap_design_system',
   );
 }

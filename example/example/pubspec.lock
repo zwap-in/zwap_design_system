@@ -584,7 +584,7 @@ packages:
       path: "../.."
       relative: true
     source: path
-    version: "0.1.736"
+    version: "0.1.741"
   zwap_utils:
     dependency: "direct main"
     description:

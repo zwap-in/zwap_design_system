@@ -35,6 +35,16 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
   /// can be 0 or 1
   int _selectedRadio = 0;
 
+  void toggleFamily() {
+    if (ZwapTypography.instance.fontFamily == ZwapFontFamilies.manrope) {
+      ZwapTypography.instance.fontFamily = ZwapFontFamilies.sfUiText;
+    } else {
+      ZwapTypography.instance.fontFamily = ZwapFontFamilies.manrope;
+    }
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final LinearGradient _buttonGradient = LinearGradient(
@@ -94,6 +104,10 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                 gradient: ZwapColors.acquaGradient(),
                 thumbGradient: ZwapColors.violetGradient(),
                 draggingThumbExtent: -6,
+              ),
+              ZwapButton(
+                buttonChild: ZwapButtonChild.text(text: 'Toggle'),
+                onTap: toggleFamily,
               ),
             ],
           ),

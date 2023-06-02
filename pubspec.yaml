@@ -1,6 +1,6 @@
 name: zwap_design_system
 description: This is a package to build a standard design system kit for any zwap projects
-version: 0.1.741
+version: 0.1.742
 homepage: https://github.com/zwap-in/zwap_design_system
 
 environment:
@@ -93,3 +93,20 @@ flutter:
         - asset: packages/zwap_design_system/fonts/SFUIText/SFUIText-HeavyItalic-subset.ttf
           weight: 800
           style: italic
+    - family: Manrope
+      fonts:
+        - asset: packages/zwap_design_system/fonts/Manrope/Manrope-ExtraLight.ttf
+          weight: 200
+        - asset: packages/zwap_design_system/fonts/Manrope/Manrope-Light.ttf
+          weight: 300
+        - asset: packages/zwap_design_system/fonts/Manrope/Manrope-Regular.ttf
+          weight: 400
+        - asset: packages/zwap_design_system/fonts/Manrope/Manrope-Medium.ttf
+          weight: 500
+        - asset: packages/zwap_design_system/fonts/Manrope/Manrope-Semibold.ttf
+          weight: 600
+        - asset: packages/zwap_design_system/fonts/Manrope/Manrope-Bold.ttf
+          weight: 700
+        - asset: packages/zwap_design_system/fonts/Manrope/Manrope-ExtraBold.ttf
+          weight: 800
+      
