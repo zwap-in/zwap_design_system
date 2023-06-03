@@ -184,6 +184,8 @@ class ZwapInput extends StatefulWidget {
 
   final double borderWidth;
 
+  final TextStyle? labelTextStyle;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -239,6 +241,7 @@ class ZwapInput extends StatefulWidget {
     this.backgroundColor,
     this.dynamicLabelColor,
     this.borderWidth = 1,
+    this.labelTextStyle,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -298,6 +301,7 @@ class ZwapInput extends StatefulWidget {
     this.backgroundColor,
     this.dynamicLabelColor,
     this.borderWidth = 1,
+    this.labelTextStyle,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -497,10 +501,12 @@ class _ZwapInputState extends State<ZwapInput> {
       children: [
         Padding(
           padding: EdgeInsets.only(bottom: 5),
-          child: ZwapText(
+          child: ZwapText.customStyle(
             text: widget.label!,
-            zwapTextType: ZwapTextType.bodySemiBold,
-            textColor: widget.disabled ? ZwapColors.neutral300 : ZwapColors.neutral600,
+            customTextStyle: widget.labelTextStyle ??
+                ZwapTextType.bodySemiBold.copyWith(
+                  color: widget.disabled ? ZwapColors.neutral300 : ZwapColors.neutral600,
+                ),
           ),
         ),
       ],
