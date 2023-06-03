@@ -57,6 +57,11 @@ class ZwapDynamicInput extends StatefulWidget {
   /// If not provided 220 is used
   final double? minOverlayWidth;
 
+  /// If provided, the border radius of the input field
+  /// 
+  /// Default is 8
+  final double borderRadius;
+
   const ZwapDynamicInput({
     required this.content,
     required this.overlay,
@@ -72,6 +77,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.onDelete,
     this.expanded = true,
     this.minOverlayWidth,
+    this.borderRadius = 8,
     Key? key,
   })  : this._lockHeight = true,
         super(key: key);
@@ -93,6 +99,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.onDelete,
     this.expanded = true,
     this.minOverlayWidth,
+    this.borderRadius = 8,
     Key? key,
   })  : this._lockHeight = false,
         super(key: key);
@@ -241,7 +248,7 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
                     height: widget._lockHeight ? (_dynamicLabel != null && _dynamicLabel!.isNotEmpty ? 52 : 48) : null,
                     decoration: BoxDecoration(
                       color: widget.backgroundColor,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(widget.borderRadius ?? 8),
                       border: Border.all(
                         color: _active ? (widget.activeColor ?? ZwapColors.primary900Dark) : (widget.defaultColor ?? ZwapColors.neutral300),
                       ),

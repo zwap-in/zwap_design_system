@@ -1114,3 +1114,6 @@ a
 
 ## 0.1.743
 * Added static label text style field to ZwapInput widget
+
+## 0.1.744
+* Added border radius property to ZwapCategoryInput widget

@@ -62,6 +62,8 @@ class ZwapCategoryInput<T, S> extends StatefulWidget {
   /// If [placeholder] is null this value will be used instead.
   final String? label;
 
+  final double borderRadius;
+
   final Color? backgroundColor;
   final Color? borderColor;
   final Color? activeBorderColor;
@@ -84,6 +86,7 @@ class ZwapCategoryInput<T, S> extends StatefulWidget {
     this.borderColor,
     this.activeBorderColor,
     this.textColor,
+    this.borderRadius = 8,
   }) : super(key: key);
 
   @override
@@ -148,6 +151,7 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
           final S? _selectedItem = context.select<_ZwapCategoryProvider<T, S>, S?>((pro) => pro.selectedValue);
 
           return ZwapDynamicInput(
+            borderRadius: widget.borderRadius,
             backgroundColor: widget.backgroundColor,
             activeColor: widget.activeBorderColor,
             defaultColor: widget.borderColor,
