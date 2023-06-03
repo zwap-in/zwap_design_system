@@ -21,6 +21,8 @@ class ZwapFloatingPicker<T> extends StatefulWidget {
 
   final bool showClearButton;
 
+  final double borderRadius;
+
   const ZwapFloatingPicker({
     required this.options,
     required this.getItemString,
@@ -28,6 +30,7 @@ class ZwapFloatingPicker<T> extends StatefulWidget {
     this.onSelected,
     this.label,
     this.placeholder,
+    this.borderRadius = 8,
     this.showClearButton = false,
     Key? key,
   }) : super(key: key);
@@ -84,6 +87,7 @@ class _ZwapFloatingPickerState<T> extends State<ZwapFloatingPicker<T>> {
               final bool _itemIsSelected = context.select<ZwapFloatingPickerProvider<T>, bool>((pro) => pro.selectedValue != null);
 
               return ZwapDynamicInput(
+                borderRadius: widget.borderRadius,
                 showDeleteIcon: widget.showClearButton && _itemIsSelected,
                 onDelete: () => context.read<ZwapFloatingPickerProvider<T>>().selectedValue = null,
                 key: _inputKey,

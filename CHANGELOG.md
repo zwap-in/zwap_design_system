@@ -1117,3 +1117,6 @@ a
 
 ## 0.1.744
 * Added border radius property to ZwapCategoryInput widget
+
+## 0.1.745
+* Added border radius property to ZwapFloatingPicker widget
