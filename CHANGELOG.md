@@ -1120,3 +1120,6 @@ a
 
 ## 0.1.745
 * Added border radius property to ZwapFloatingPicker widget
+
+## 0.1.746
+* Added some decorations to ZwapDatePicker

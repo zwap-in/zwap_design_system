@@ -32,12 +32,19 @@ class ZwapDatePicker extends StatefulWidget {
   /// if the function returns true
   final bool Function(DateTime)? enableWhere;
 
+  final double borderRadius;
+  final TextStyle? placeholderStyle;
+  final TextStyle? textStyle;
+
   const ZwapDatePicker({
     this.value,
     this.onChange,
     this.dateFormatter = 'dd/MM/yyyy',
     this.decoratorBuilder,
     this.enableWhere,
+    this.borderRadius = 8,
+    this.placeholderStyle,
+    this.textStyle,
     super.key,
   });
 
@@ -122,17 +129,17 @@ class _ZwapDatePickerState extends State<ZwapDatePicker> {
         height: 48,
         decoration: BoxDecoration(
           color: ZwapColors.shades0,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
           border: Border.all(color: _active ? ZwapColors.primary900Dark : ZwapColors.neutral300),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
             Expanded(
-              child: ZwapText(
+              child: ZwapText.customStyle(
                 text: _value == null ? 'Seleziona una data' : DateFormat(widget.dateFormatter, _languageCode).format(_value!),
-                zwapTextType: ZwapTextType.bigBodyMedium,
-                textColor: ZwapColors.primary900Dark,
+                customTextStyle: (_value == null ? widget.placeholderStyle : widget.textStyle) ??
+                    ZwapTextType.bigBodyMedium.copyWith(color: ZwapColors.primary900Dark),
               ),
             ),
             if (widget.decoratorBuilder != null) ...[
