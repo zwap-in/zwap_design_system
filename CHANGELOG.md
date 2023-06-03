@@ -1108,6 +1108,3 @@ a
 
 ## 0.1.741
 * Now ZwapSimplePicker can be used as a text field (ie: not only for pick a value)
-
-## 0.1.742
-* Added support to multiple font families
