@@ -1123,3 +1123,6 @@ a
 
 ## 0.1.746
 * Added some decorations to ZwapDatePicker
+
+## 0.1.747+1
+* Removed auto font export

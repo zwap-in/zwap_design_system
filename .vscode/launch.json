@@ -26,7 +26,11 @@
             "cwd": "example/example",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "debug"
+            "flutterMode": "debug",
+            "args": [
+                "-d",
+                "chrome"
+            ]
         },
         {
             "name": "example (chrome --profile mode)",
