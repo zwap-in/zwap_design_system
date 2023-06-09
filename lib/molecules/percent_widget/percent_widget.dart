@@ -86,27 +86,29 @@ class ZwapPercentWidgetDecorations {
     this.border,
   });
 
-  const ZwapPercentWidgetDecorations.defaultDecorations({
+  ZwapPercentWidgetDecorations.defaultDecorations({
     this.backgroundColor = ZwapColors.shades0,
     this.shadows = const [ZwapShadow.levelOne],
     this.borderRadius = const BorderRadius.all(const Radius.circular(30)),
-    this.titleStyle: ZwapTypography.bigBodyBold,
-    this.subtitleStyle: ZwapTypography.extraSmallBodyRegular,
+    TextStyle? titleStyle,
+    TextStyle? subtitleStyle,
     this.border,
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     this.percentIndicatorDecorations = const ZwapPercentIndicatorDecorations.descrutive(),
-  });
+  })  : this.titleStyle = titleStyle ?? ZwapTypography.bigBodyBold,
+        this.subtitleStyle = subtitleStyle ?? ZwapTypography.extraSmallBodyRegular;
 
-  const ZwapPercentWidgetDecorations.flat({
+  ZwapPercentWidgetDecorations.flat({
     this.backgroundColor = ZwapColors.shades0,
     this.shadows = const [],
     this.borderRadius = const BorderRadius.all(const Radius.circular(30)),
-    this.titleStyle: ZwapTypography.bigBodyBold,
-    this.subtitleStyle: ZwapTypography.extraSmallBodyRegular,
+    TextStyle? titleStyle,
+    TextStyle? subtitleStyle,
     this.border,
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     this.percentIndicatorDecorations = const ZwapPercentIndicatorDecorations.descrutive(),
-  });
+  })  : this.titleStyle = titleStyle ?? ZwapTypography.bigBodyBold,
+        this.subtitleStyle = subtitleStyle ?? ZwapTypography.extraSmallBodyRegular;
 
   ZwapPercentWidgetDecorations copyWith({
     Color? backgroundColor,
@@ -180,12 +182,14 @@ class ZwapPercentWidget extends StatefulWidget {
   final ZwapButton? button;
 
   /// See `ZwapPercentWidgetDecorations` for details
+  ///
+  /// Default to `ZwapPercentWidgetDecorations.defaultDecorations()`
   final ZwapPercentWidgetDecorations decorations;
 
   final int titleMaxLines;
   final int subtitleMaxLines;
 
-  const ZwapPercentWidget({
+  ZwapPercentWidget({
     this.width = 390,
     this.height = 96,
     required this.percentValue,
@@ -193,11 +197,12 @@ class ZwapPercentWidget extends StatefulWidget {
     this.insidePercentContent = const ZwapPercentWidgetPercentContent.percent(),
     this.subtitle,
     this.button,
-    this.decorations = const ZwapPercentWidgetDecorations.defaultDecorations(),
+    ZwapPercentWidgetDecorations? decorations,
     this.titleMaxLines = 1,
     this.subtitleMaxLines = 2,
     Key? key,
-  }) : super(key: key);
+  })  : this.decorations = decorations ?? ZwapPercentWidgetDecorations.defaultDecorations(),
+        super(key: key);
 
   @override
   State<ZwapPercentWidget> createState() => _ZwapPercentWidgetState();
