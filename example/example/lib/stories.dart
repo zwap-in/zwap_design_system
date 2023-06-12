@@ -1,3 +1,4 @@
+import 'package:example/stories/tests_story.dart';
 import 'package:example/stories/zwap_slot_duration_story.dart';
 import 'package:example/stories/zwap_toast_story.dart';
 import 'package:example/stories/zwap_tooltip_story.dart';
@@ -34,6 +35,7 @@ enum ZwapStories {
   toast,
   tooltip,
   slotDuration,
+  tests,
 }
 
 class ZwapStory {
@@ -128,5 +130,10 @@ List<ZwapStory> stories = [
     name: "Zwap Tooltip",
     builder: (context) => ZwapTooltipStory(),
     story: ZwapStories.tooltip,
+  ),
+  ZwapStory(
+    name: "Zwap Tests",
+    builder: (context) => ZwapTestsStory(),
+    story: ZwapStories.tests,
   ),
 ];

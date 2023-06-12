@@ -551,7 +551,7 @@ class _ZwapInputState extends State<ZwapInput> {
                   child: Container(
                     key: _containerKey,
                     decoration: BoxDecoration(
-                      color: ZwapColors.shades0,
+                      color: widget.backgroundColor ?? ZwapColors.shades0,
                       borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
                       border: Border.all(
                         color: widget.disabled

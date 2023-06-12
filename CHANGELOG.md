@@ -1124,5 +1124,8 @@ a
 ## 0.1.746
 * Added some decorations to ZwapDatePicker
 
-## 0.1.747+1
+## 0.1.747+1 [+2, +3, +4]
 * Removed auto font export
+  
+## 0.1.748
+* Added support for background color even to ZwapInput widget

@@ -176,6 +176,25 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               ),
               SizedBox(height: 20),
               Container(
+                padding: const EdgeInsets.all(25),
+                color: Color(0xff000013).withOpacity(.9),
+                child: ZwapInput.collapsed(
+                  dynamicLabel: "Label",
+                  dynamicLabelTextStyle: getTextStyle(ZwapTextType.mediumBodySemibold),
+                  placeholder: "Veniam ullamco adipisicing esse sit irure elit ad culpa pariatur aliqua.",
+                  dynamicLabelColor: ZwapColors.shades0,
+                  keyCallBackFunction: (value) => print('key $value'),
+                  backgroundColor: Color(0xffD9D9D9).withOpacity(.1),
+                  textStyle: ZwapTextType.bigBodyRegular.copyWith(color: ZwapColors.shades0),
+                  cursorColor: ZwapColors.neutral200,
+                  enabledBorderColor: ZwapColors.shades0,
+                  hoveredBorderColor: ZwapColors.shades0,
+                  disabledBorderColor: ZwapColors.shades0,
+                  focussedBorderColor: ZwapColors.primary700,
+                ),
+              ),
+              SizedBox(height: 20),
+              Container(
                 color: Color(0xff000013).withOpacity(.9),
                 padding: const EdgeInsets.all(20),
                 child: ZwapSimplePicker<int>(
@@ -199,7 +218,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   showLessItemUntilLength: 3,
                   lessItems: List.generate(40, (i) => i * 2),
                   keepFirstItemOnHeader: false,
-                  
                 ),
               ),
               SizedBox(height: 20),
