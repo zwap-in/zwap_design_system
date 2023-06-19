@@ -8,6 +8,7 @@ import 'package:zwap_design_system/atoms/text_controller/initial_text_controller
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
+import 'package:zwap_design_system/utils/streamed_text_controller.dart';
 
 /// Custom component for a standard input with a predefined Zwap style
 class ZwapInput extends StatefulWidget {
@@ -186,6 +187,8 @@ class ZwapInput extends StatefulWidget {
 
   final TextStyle? labelTextStyle;
 
+  final ScrollController? scrollController;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -242,6 +245,7 @@ class ZwapInput extends StatefulWidget {
     this.dynamicLabelColor,
     this.borderWidth = 1,
     this.labelTextStyle,
+    this.scrollController,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -302,6 +306,7 @@ class ZwapInput extends StatefulWidget {
     this.dynamicLabelColor,
     this.borderWidth = 1,
     this.labelTextStyle,
+    this.scrollController,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -323,6 +328,8 @@ class _ZwapInputState extends State<ZwapInput> {
   late bool _hasFocus;
   bool _isHovered = false;
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -341,6 +348,19 @@ class _ZwapInputState extends State<ZwapInput> {
 
     //? Min lenght indicator requires the _containerKey to be mounted in order to wolrk properly, so add a post frame setState callback solve this needing
     if (_showMinLenghtIndicator) WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+
+    if (widget.controller is StreamedTextController) {
+      widget.controller!.addListener(
+        () => _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 70),
+          curve: Curves.easeOut,
+        ),
+      );
+      /* WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.visitChildElements((e) => _visit(e));
+      }); */
+    }
   }
 
   void _focusListener() {
@@ -467,6 +487,7 @@ class _ZwapInputState extends State<ZwapInput> {
     return Theme(
       data: Theme.of(context).copyWith(colorScheme: Theme.of(context).colorScheme.copyWith(primary: ZwapColors.primary400)),
       child: TextField(
+        scrollController: _scrollController,
         controller: this._controller,
         scrollPadding: EdgeInsets.zero,
         enabled: !widget.disabled,

@@ -1129,3 +1129,7 @@ a
   
 ## 0.1.748
 * Added support for background color even to ZwapInput widget
+
+## 0.1.749
+* Started ZwapInputDecorations standard
+* Added ZwapInputDecorations support to ZwapCategoryInput widget

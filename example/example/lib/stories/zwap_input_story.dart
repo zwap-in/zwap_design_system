@@ -1,4 +1,5 @@
 import 'dart:html' as html;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
@@ -21,6 +22,22 @@ import 'package:zwap_design_system/molecules/rangeSlider/zwap_range_slider.dart'
 import 'package:zwap_design_system/molecules/slider/zwap_slider.dart';
 import 'package:zwap_design_system/molecules/zwap_inline_select/zwap_inline_select.dart';
 import 'package:zwap_design_system/molecules/zwap_rich_input/zwap_rich_input.dart';
+import 'package:zwap_design_system/utils/streamed_text_controller.dart';
+
+String _alphabet = "abcdefghijklmnopqrstuvwxyz    ";
+
+Stream<String> _getStream() async* {
+  await Future.delayed(const Duration(milliseconds: 800));
+  for (int i = 0; i < 300; i++) {
+    await Future.delayed(Duration(milliseconds: Random().nextInt(90)));
+    final int _count = Random().nextInt(3) + 1;
+    final String _text = List.generate(_count, (_) => _alphabet[Random().nextInt(_alphabet.length)]).join();
+
+    yield _text;
+  }
+
+  yield "<done>";
+}
 
 enum MyEnum { a, b, c, v, d, f, g }
 
@@ -119,6 +136,23 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   TimeOfDay? time;
 
+  late StreamedTextController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = StreamedTextController();
+
+    _getStream().listen((e) {
+      if (e == '<done>') {
+        _textController.loadingDone();
+        return;
+      }
+
+      _textController.updateLoadingData(_textController.text + e);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
@@ -179,7 +213,10 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 padding: const EdgeInsets.all(25),
                 color: Color(0xff000013).withOpacity(.9),
                 child: ZwapInput.collapsed(
+                  controller: _textController,
                   dynamicLabel: "Label",
+                  minLines: 2,
+                  maxLines: 3,
                   dynamicLabelTextStyle: getTextStyle(ZwapTextType.mediumBodySemibold),
                   placeholder: "Veniam ullamco adipisicing esse sit irure elit ad culpa pariatur aliqua.",
                   dynamicLabelColor: ZwapColors.shades0,

@@ -11,6 +11,9 @@ import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_search_picker/zwap_search_picker.dart';
 
 import '../../zwap_dynamic_input.dart';
+import '../decorations/zwap_input_decorations.dart';
+
+export '../decorations/zwap_input_decorations.dart';
 
 part 'zwap_category_provider.dart';
 
@@ -69,6 +72,8 @@ class ZwapCategoryInput<T, S> extends StatefulWidget {
   final Color? activeBorderColor;
   final Color? textColor;
 
+  final ZwapInputDecorations? decorations;
+
   ZwapCategoryInput({
     Key? key,
     required this.selectedValue,
@@ -87,6 +92,7 @@ class ZwapCategoryInput<T, S> extends StatefulWidget {
     this.activeBorderColor,
     this.textColor,
     this.borderRadius = 8,
+    this.decorations,
   }) : super(key: key);
 
   @override
@@ -152,9 +158,9 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
 
           return ZwapDynamicInput(
             borderRadius: widget.borderRadius,
-            backgroundColor: widget.backgroundColor,
-            activeColor: widget.activeBorderColor,
-            defaultColor: widget.borderColor,
+            backgroundColor: widget.decorations?.backgroundColor ?? widget.backgroundColor,
+            activeColor: widget.decorations?.hoveredBorderColor ?? widget.activeBorderColor,
+            defaultColor: widget.decorations?.borderColor ?? widget.borderColor,
             dynamicLabel: widget.label,
             key: _provider.inputKey,
             builder: (context, child) => ChangeNotifierProvider<_ZwapCategoryProvider<T, S>>.value(
@@ -170,11 +176,13 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
                     child: TextField(
                       controller: _provider.inputController,
                       focusNode: _inputNode,
-                      style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: widget.textColor ?? ZwapColors.primary900Dark),
+                      style: getTextStyle(ZwapTextType.mediumBodyRegular)
+                          .copyWith(color: widget.decorations?.textColor ?? widget.textColor ?? ZwapColors.primary900Dark),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: widget.placeholder ?? widget.label ?? '',
-                        hintStyle: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: widget.textColor ?? ZwapColors.primary900Dark),
+                        hintStyle: getTextStyle(ZwapTextType.mediumBodyRegular)
+                            .copyWith(color: widget.decorations?.textColor ?? widget.textColor ?? ZwapColors.primary900Dark),
                       ),
                       cursorColor: widget.textColor ?? ZwapColors.primary900Dark,
                       onChanged: (value) => context.read<_ZwapCategoryProvider<T, S>>().filter = value,
@@ -189,7 +197,7 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
                   child: Icon(
                     Icons.arrow_back_ios_new_rounded,
                     size: 16,
-                    color: widget.textColor ?? ZwapColors.text65,
+                    color: widget.decorations?.textColor ?? widget.textColor ?? ZwapColors.text65,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -197,6 +205,7 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
             ),
             overlay: _ZwapCategoryInputOverlay<T, S>(
               noResultsTranslated: (_) => widget.translateKey('no_results_found'),
+              decorations: widget.decorations,
             ),
             showDeleteIcon: widget.showClear && _selectedItem != null,
             onDelete: () {
@@ -223,9 +232,11 @@ class _ZwapCategoryInputState<T, S> extends State<ZwapCategoryInput<T, S>> {
 
 class _ZwapCategoryInputOverlay<T, S> extends StatefulWidget {
   final String Function(String) noResultsTranslated;
+  final ZwapInputDecorations? decorations;
 
   const _ZwapCategoryInputOverlay({
     required this.noResultsTranslated,
+    this.decorations,
     super.key,
   });
 
@@ -261,6 +272,7 @@ class _ZwapCategoryInputOverlayState<T, S> extends State<_ZwapCategoryInputOverl
         duration: const Duration(milliseconds: 200),
         curve: Curves.decelerate,
         height: _calculateHeight(values),
+        color: widget.decorations?.overlayColor,
         child: values.isEmpty
             ? Container(
                 padding: const EdgeInsets.only(left: 20),
@@ -268,7 +280,7 @@ class _ZwapCategoryInputOverlayState<T, S> extends State<_ZwapCategoryInputOverl
                 child: ZwapText(
                   text: widget.noResultsTranslated(context.read<_ZwapCategoryProvider<T, S>>().filter),
                   zwapTextType: ZwapTextType.bigBodyRegular,
-                  textColor: ZwapColors.primary900Dark,
+                  textColor: widget.decorations?.overlayTextColor ?? ZwapColors.primary900Dark,
                 ),
               )
             : CustomScrollView(
@@ -284,12 +296,12 @@ class _ZwapCategoryInputOverlayState<T, S> extends State<_ZwapCategoryInputOverl
                             child: ZwapText(
                               text: getCopyOfCategory(entry.key).toUpperCase(),
                               zwapTextType: ZwapTextType.mediumBodyBold,
-                              textColor: ZwapColors.text65,
+                              textColor: widget.decorations?.overlaySecondaryTextColor ?? ZwapColors.text65,
                             ),
                           ),
                           sliver: SliverList(
                             delegate: SliverChildBuilderDelegate(
-                              (_, index) => _SingleItemWidget<T, S>(item: entry.value[index]),
+                              (_, index) => _SingleItemWidget<T, S>(item: entry.value[index], decorations: widget.decorations),
                               childCount: entry.value.length,
                             ),
                           )),
@@ -303,9 +315,11 @@ class _ZwapCategoryInputOverlayState<T, S> extends State<_ZwapCategoryInputOverl
 
 class _SingleItemWidget<T, S> extends StatefulWidget {
   final S item;
+  final ZwapInputDecorations? decorations;
 
   const _SingleItemWidget({
     required this.item,
+    this.decorations,
     super.key,
   });
 
@@ -332,10 +346,10 @@ class _SingleItemWidgetState<T, S> extends State<_SingleItemWidget<T, S>> {
         height: 36,
         decoration: BoxDecoration(
           color: _selected
-              ? ZwapColors.primary100
+              ? widget.decorations?.overlayHoverColor ?? ZwapColors.primary100
               : _hovered
-                  ? ZwapColors.primary50
-                  : ZwapColors.shades0,
+                  ? widget.decorations?.overlayHoverColor ?? ZwapColors.primary50
+                  : widget.decorations?.overlayColor ?? ZwapColors.shades0,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Row(
@@ -344,7 +358,7 @@ class _SingleItemWidgetState<T, S> extends State<_SingleItemWidget<T, S>> {
               child: ZwapText(
                 text: getCopyOfItem(widget.item),
                 zwapTextType: ZwapTextType.bigBodyRegular,
-                textColor: ZwapColors.primary900Dark,
+                textColor: widget.decorations?.overlayTextColor ?? ZwapColors.primary900Dark,
               ),
             ),
             if (_decoration != null) ...[
