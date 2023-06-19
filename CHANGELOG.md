@@ -1133,3 +1133,6 @@ a
 ## 0.1.749
 * Started ZwapInputDecorations standard
 * Added ZwapInputDecorations support to ZwapCategoryInput widget
+
+## 0.1.750
+* Improved decorations support in ZwapCategoryInput widget

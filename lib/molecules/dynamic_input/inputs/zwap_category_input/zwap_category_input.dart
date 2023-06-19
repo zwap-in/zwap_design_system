@@ -290,7 +290,7 @@ class _ZwapCategoryInputOverlayState<T, S> extends State<_ZwapCategoryInputOverl
                           header: Container(
                             height: 40,
                             width: double.infinity,
-                            color: ZwapColors.shades0,
+                            color: widget.decorations?.overlayColor ?? ZwapColors.shades0,
                             padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 10),
                             alignment: Alignment.centerLeft,
                             child: ZwapText(
