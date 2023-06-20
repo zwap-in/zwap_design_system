@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/decorations/zwap_input_decorations.dart';
 import 'package:zwap_design_system/utils/edge_notifier_scroll_controller.dart';
 
 import '../../zwap_dynamic_input.dart';
@@ -77,6 +78,8 @@ class ZwapSearchPicker<T> extends StatefulWidget {
   /// Used while hovered or focused
   final Color? activeColor;
 
+  final ZwapInputDecorations? decorations;
+
   const ZwapSearchPicker({
     required this.performSearch,
     required this.getItemCopy,
@@ -94,6 +97,7 @@ class ZwapSearchPicker<T> extends StatefulWidget {
     this.minSearchLength = 0,
     this.label,
     this.activeColor,
+    this.decorations,
     Key? key,
   })  : assert(noResultsWidget != null || translateKey != null),
         assert(!canAddItem || onAddItem != null, "onAddItem callback must be not null id [canAddItem] is true"),
@@ -186,12 +190,15 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                               child: TextField(
                                 controller: _provider.inputController,
                                 focusNode: _inputNode,
-                                style: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+                                style: getTextStyle(ZwapTextType.mediumBodyRegular)
+                                    .copyWith(color: widget.decorations?.textColor ?? ZwapColors.primary900Dark),
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: widget.placeholder ?? '',
+                                  hintStyle: getTextStyle(ZwapTextType.mediumBodyRegular)
+                                      .copyWith(color: widget.decorations?.hintColor ?? ZwapColors.text65),
                                 ),
-                                cursorColor: ZwapColors.primary900Dark,
+                                cursorColor: widget.decorations?.textColor ?? ZwapColors.primary900Dark,
                                 onChanged: (value) => context.read<_ZwapSearchInputProvider<T>>().search = value,
                               ),
                             ),
@@ -205,7 +212,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                               child: Icon(
                                 Icons.arrow_back_ios_new_rounded,
                                 size: 16,
-                                color: ZwapColors.text65,
+                                color: widget.decorations?.secondaryTextColor ?? ZwapColors.text65,
                               ),
                             ),
                           ],
@@ -216,6 +223,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                         noResultsWidget: widget.noResultsWidget,
                         translateKey: widget.translateKey,
                         canAddItem: widget.canAddItem,
+                        decorations: widget.decorations,
                       ),
                       showDeleteIcon: widget.showClear && _selectedItem != null,
                       onDelete: () {
@@ -244,10 +252,9 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                       child: _provider.selectedItem != null
                           ? Container(
                               decoration: BoxDecoration(
-                                color: ZwapColors.shades0,
                                 gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [
                                   ZwapColors.whiteTransparent,
-                                  ZwapColors.shades0,
+                                  widget.decorations?.backgroundColor ?? ZwapColors.shades0,
                                 ], stops: [
                                   0,
                                   0.47
@@ -263,7 +270,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                                                     : (_selectOverlay?.mounted ?? false)
                                                         ? ZwapColors.primary700
                                                         : */
-                                        ZwapColors.neutral500,
+                                        widget.decorations?.textColor ?? ZwapColors.neutral500,
                                     fontSize: 11,
                                     letterSpacing: 0.1),
                               ),
@@ -289,6 +296,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
 class _ZwapSearchInputOverlay<T> extends StatefulWidget {
   final Function(String)? translateKey;
   final Widget? noResultsWidget;
+  final ZwapInputDecorations? decorations;
 
   final bool canAddItem;
 
@@ -296,6 +304,7 @@ class _ZwapSearchInputOverlay<T> extends StatefulWidget {
     this.translateKey,
     this.noResultsWidget,
     required this.canAddItem,
+    required this.decorations,
     Key? key,
   }) : super(key: key);
 
@@ -326,7 +335,7 @@ class _ZwapSearchInputOverlayState<T> extends State<_ZwapSearchInputOverlay<T>> 
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: LinearProgressIndicator(
           minHeight: 1.5,
-          valueColor: AlwaysStoppedAnimation(ZwapColors.primary700),
+          valueColor: AlwaysStoppedAnimation(widget.decorations?.labelColor ?? ZwapColors.primary700),
         ),
       );
 
@@ -335,7 +344,7 @@ class _ZwapSearchInputOverlayState<T> extends State<_ZwapSearchInputOverlay<T>> 
 
       //? No results, sho the add item widget
       if (widget.canAddItem) {
-        return _AddItemWidget<T>();
+        return _AddItemWidget<T>(decorations: widget.decorations);
       }
 
       if (widget.noResultsWidget != null) return widget.noResultsWidget!;
@@ -344,7 +353,7 @@ class _ZwapSearchInputOverlayState<T> extends State<_ZwapSearchInputOverlay<T>> 
         child: ZwapText(
           text: widget.translateKey!('no_results_found'),
           zwapTextType: ZwapTextType.mediumBodyRegular,
-          textColor: ZwapColors.primary900Dark,
+          textColor: widget.decorations?.textColor ?? ZwapColors.primary900Dark,
         ),
       );
     }
@@ -357,7 +366,7 @@ class _ZwapSearchInputOverlayState<T> extends State<_ZwapSearchInputOverlay<T>> 
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ..._items.map((i) => Flexible(child: _SingleItemWidget<T>(item: i))),
+            ..._items.map((i) => Flexible(child: _SingleItemWidget<T>(item: i, decorations: widget.decorations))),
             if (_isLoadingMoreData)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
@@ -377,9 +386,11 @@ class _ZwapSearchInputOverlayState<T> extends State<_ZwapSearchInputOverlay<T>> 
 
 class _SingleItemWidget<T> extends StatefulWidget {
   final T item;
+  final ZwapInputDecorations? decorations;
 
   const _SingleItemWidget({
     required this.item,
+    required this.decorations,
     Key? key,
   }) : super(key: key);
 
@@ -398,18 +409,18 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
     Color _getColor() {
       //if (_disabled && _selected) return ZwapColors.primary50;
       //if (_disabled) return ZwapColors.shades0;
-      if (_hovered) return ZwapColors.neutral50;
-      if (_selected) return ZwapColors.primary50;
+      if (_hovered) return widget.decorations?.overlayHoverColor ?? ZwapColors.neutral50;
+      if (_selected) return widget.decorations?.overlaySelectedColor ?? ZwapColors.primary50;
 
-      return ZwapColors.shades0;
+      return widget.decorations?.overlayColor ?? ZwapColors.shades0;
     }
 
     Color _textColor() {
       //if (_disabled && _selected) return ZwapColors.neutral700;
       //if (_disabled) return ZwapColors.neutral500;
-      if (_selected) return ZwapColors.text65;
+      if (_selected) return widget.decorations?.overlaySelectedTextColor ?? ZwapColors.text65;
 
-      return ZwapColors.primary900Dark;
+      return widget.decorations?.overlayTextColor ?? ZwapColors.primary900Dark;
     }
 
     return InkWell(
@@ -441,7 +452,10 @@ class _SingleItemWidgetState<T> extends State<_SingleItemWidget<T>> {
 }
 
 class _AddItemWidget<T> extends StatefulWidget {
+  final ZwapInputDecorations? decorations;
+
   const _AddItemWidget({
+    required this.decorations,
     Key? key,
   }) : super(key: key);
 
@@ -459,9 +473,9 @@ class _AddItemWidgetState<T> extends State<_AddItemWidget<T>> {
     Color _getColor() {
       //if (_disabled && _selected) return ZwapColors.primary50;
       //if (_disabled) return ZwapColors.shades0;
-      if (_hovered) return ZwapColors.neutral50;
+      if (_hovered) return widget.decorations?.overlayHoverColor ?? ZwapColors.neutral50;
 
-      return ZwapColors.shades0;
+      return widget.decorations?.overlayColor ?? ZwapColors.shades0;
     }
 
     return InkWell(
@@ -482,17 +496,17 @@ class _AddItemWidgetState<T> extends State<_AddItemWidget<T>> {
                   ZwapTextSpan.fromZwapTypography(
                     text: '$_searchValue',
                     textType: ZwapTextType.mediumBodySemibold,
-                    textColor: ZwapColors.primary900Dark,
+                    textColor: widget.decorations?.overlayTextColor ?? ZwapColors.primary900Dark,
                   ),
                   ZwapTextSpan.fromZwapTypography(
                     text: ' non è disponibile? ',
                     textType: ZwapTextType.mediumBodyRegular,
-                    textColor: ZwapColors.primary900Dark,
+                    textColor: widget.decorations?.overlayTextColor ?? ZwapColors.primary900Dark,
                   ),
                   ZwapTextSpan.fromZwapTypography(
                     text: 'Premi qui per aggiungere.',
                     textType: ZwapTextType.mediumBodySemibold,
-                    textColor: ZwapColors.primary900Dark,
+                    textColor: widget.decorations?.overlayTextColor ?? ZwapColors.primary900Dark,
                   ),
                 ],
               ),

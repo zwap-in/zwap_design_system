@@ -7,15 +7,19 @@ class ZwapInputDecorations {
   final Color? hintColor;
   final Color? textColor;
   final Color? secondaryTextColor;
+  final Color? labelColor;
 
   //* overlay
   final Color? overlayColor;
+  final Color? overlaySelectedColor;
   final Color? overlayTextColor;
   final Color? overlaySecondaryTextColor;
   final Color? overlayHoverColor;
+  final Color? overlaySelectedTextColor;
 
   ZwapInputDecorations({
     this.borderColor,
+    this.labelColor,
     this.hoveredBorderColor,
     this.backgroundColor,
     this.hintColor,
@@ -25,5 +29,7 @@ class ZwapInputDecorations {
     this.overlayTextColor,
     this.overlaySecondaryTextColor,
     this.overlayHoverColor,
+    this.overlaySelectedColor,
+    this.overlaySelectedTextColor,
   });
 }

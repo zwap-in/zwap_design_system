@@ -1136,3 +1136,6 @@ a
 
 ## 0.1.750
 * Improved decorations support in ZwapCategoryInput widget
+
+## 0.1.751
+* Added ZwapInputDecorationSupport to ZwapSearchPicker widget
