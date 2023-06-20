@@ -1145,3 +1145,6 @@ a
 
 ## 0.1.753
 * Fix bug in ZwapSearchPicker background color
+
+## 0.1.754
+* Fix bug in ZwapSearchPicker colors

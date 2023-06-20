@@ -58,13 +58,16 @@ class ZwapDynamicInput extends StatefulWidget {
   final double? minOverlayWidth;
 
   /// If provided, the border radius of the input field
-  /// 
+  ///
   /// Default is 8
   final double borderRadius;
+
+  final Color? overlayColor;
 
   const ZwapDynamicInput({
     required this.content,
     required this.overlay,
+    this.overlayColor,
     this.backgroundColor = ZwapColors.shades0,
     this.builder,
     this.focussed = false,
@@ -87,6 +90,7 @@ class ZwapDynamicInput extends StatefulWidget {
   const ZwapDynamicInput.customSizeContent({
     required this.content,
     required this.overlay,
+    this.overlayColor,
     this.backgroundColor = ZwapColors.shades0,
     this.builder,
     this.focussed = false,
@@ -181,6 +185,7 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
         child: _ZwapDynamicInputOverlay(
           child: widget.overlay,
           width: max(widget.minOverlayWidth ?? 220, _inputRect.width),
+          color: widget.overlayColor,
         ),
       ),
       entity: _entry,
@@ -327,10 +332,12 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
 class _ZwapDynamicInputOverlay extends StatefulWidget {
   final Widget child;
   final double width;
+  final Color? color;
 
   const _ZwapDynamicInputOverlay({
     required this.child,
     required this.width,
+    this.color,
     Key? key,
   }) : super(key: key);
 
@@ -374,7 +381,7 @@ class _ZwapDynamicInputOverlayState extends State<_ZwapDynamicInputOverlay> with
             child: Container(
               width: widget.width,
               decoration: BoxDecoration(
-                color: ZwapColors.shades0,
+                color: widget.color,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: widget.child,

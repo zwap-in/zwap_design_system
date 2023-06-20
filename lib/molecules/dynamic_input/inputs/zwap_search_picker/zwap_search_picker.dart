@@ -175,8 +175,9 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                 Positioned.fill(
                     top: widget.label == null ? 0 : 8,
                     child: ZwapDynamicInput(
-                      backgroundColor: widget.decorations?.backgroundColor,  
+                      backgroundColor: widget.decorations?.backgroundColor,
                       activeColor: widget.activeColor,
+                      overlayColor: widget.decorations?.overlayColor,
                       key: _provider.inputKey,
                       builder: (context, child) => ChangeNotifierProvider.value(
                         value: _provider,
