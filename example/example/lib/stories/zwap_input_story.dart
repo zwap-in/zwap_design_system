@@ -208,6 +208,57 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   focussedBorderColor: ZwapColors.primary700,
                 ),
               ),
+              ZwapText(
+                text: 'Zwap Search picker with decorations: ',
+                zwapTextType: ZwapTextType.mediumBodyRegular,
+                textColor: ZwapColors.primary900Dark,
+              ),
+              Container(
+                padding: const EdgeInsets.all(25),
+                color: Color(0xff000013).withOpacity(.9),
+                child: ZwapSearchPicker<String>(
+                  decorations: ZwapInputDecorations(
+                    backgroundColor: ZwapColors.primary900Dark,
+                    borderColor: ZwapColors.shades0,
+                    hintColor: ZwapColors.shades0,
+                    hoveredBorderColor: ZwapColors.shades0,
+                    overlayColor: Color(0xff262646),
+                    overlayHoverColor: ZwapColors.shades0.withOpacity(.1),
+                    textColor: ZwapColors.shades0,
+                    overlaySecondaryTextColor: ZwapColors.shades0.withOpacity(.7),
+                    overlayTextColor: ZwapColors.shades0,
+                    secondaryTextColor: ZwapColors.shades0.withOpacity(.7),
+                  ),
+                  canAddItem: false,
+                  showChevron: false,
+                  onAddItem: (v) {
+                    return v;
+                  },
+                  selectedItem: _selectedSearchItem,
+                  performSearch: (search, page) async {
+                    await Future.delayed(const Duration(seconds: 1));
+                    if (search.isEmpty && page == 2)
+                      return [
+                        'lkjfrtyuhjnmkh',
+                        'lkhgrtyuhjnmkh',
+                        'ljhgftyuhjnmkh',
+                        'lkjhgfryuhjnmkh',
+                        'kjhgfrtuhjnmkh',
+                        'lkjhgfrtymkh',
+                      ];
+
+                    return search.isEmpty ? values : values.where((e) => e.contains(search)).toList();
+                  },
+                  getItemCopy: (s) => s,
+                  initialValues: [],
+                  translateKey: (_) => 'Nessun risultato',
+                  placeholder: "Ciao ciao ciao ciao",
+                  onItemSelected: (s) {
+                    print(s);
+                    _selectedSearchItem = s;
+                  },
+                ),
+              ),
               SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.all(25),

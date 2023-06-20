@@ -175,6 +175,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                 Positioned.fill(
                     top: widget.label == null ? 0 : 8,
                     child: ZwapDynamicInput(
+                      backgroundColor: widget.decorations?.backgroundColor,  
                       activeColor: widget.activeColor,
                       key: _provider.inputKey,
                       builder: (context, child) => ChangeNotifierProvider.value(
@@ -198,6 +199,7 @@ class _ZwapSearchPickerState<T> extends State<ZwapSearchPicker<T>> {
                                   hintStyle: getTextStyle(ZwapTextType.mediumBodyRegular)
                                       .copyWith(color: widget.decorations?.hintColor ?? ZwapColors.text65),
                                   fillColor: widget.decorations?.backgroundColor,
+                                  filled: true,
                                 ),
                                 cursorColor: widget.decorations?.textColor ?? ZwapColors.primary900Dark,
                                 onChanged: (value) => context.read<_ZwapSearchInputProvider<T>>().search = value,

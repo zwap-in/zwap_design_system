@@ -1142,3 +1142,6 @@ a
 
 ## 0.1.752
 * Improved decorations support in ZwapSearchPicker widget
+
+## 0.1.753
+* Fix bug in ZwapSearchPicker background color
