@@ -1148,3 +1148,6 @@ a
 
 ## 0.1.754
 * Fix bug in ZwapSearchPicker colors
+
+## 0.1.755
+* Added some missing decorations to ZwapInput.collapsed() widget

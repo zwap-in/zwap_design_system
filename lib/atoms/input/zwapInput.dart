@@ -606,6 +606,13 @@ class _ZwapInputState extends State<ZwapInput> {
                               hintStyle: widget.placeholderStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
                               enabled: !widget.disabled,
                               hoverColor: ZwapColors.primary300,
+                              border: _getZwapInputBorder(
+                                _getBorderColor((_focusNode.hasFocus || _isHovered)
+                                    ? (widget.hoveredBorderColor ?? ZwapColors.primary200)
+                                    : (widget.enabledBorderColor ?? ZwapColors.neutral300)),
+                              ),
+                              filled: true,
+                              fillColor: widget.backgroundColor ?? ZwapColors.shades0,
                             ),
                           ),
                         ),
