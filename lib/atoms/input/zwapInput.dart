@@ -574,15 +574,17 @@ class _ZwapInputState extends State<ZwapInput> {
                     decoration: BoxDecoration(
                       color: widget.backgroundColor ?? ZwapColors.shades0,
                       borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
-                      border: Border.all(
-                        color: widget.disabled
-                            ? _getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)
-                            : (_focusNode.hasFocus || _isHovered)
-                                ? _getBorderColor(ZwapColors.primary300)
-                                : _getBorderColor(ZwapColors.neutral300),
-                        width: 1,
-                        style: BorderStyle.solid,
-                      ),
+                      border: widget.forceNoBorders
+                          ? null
+                          : Border.all(
+                              color: widget.disabled
+                                  ? _getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)
+                                  : (_focusNode.hasFocus || _isHovered)
+                                      ? _getBorderColor(ZwapColors.primary300)
+                                      : _getBorderColor(ZwapColors.neutral300),
+                              width: 1,
+                              style: BorderStyle.solid,
+                            ),
                     ),
                     padding: _showMinLenghtIndicator
                         ? widget.internalPadding.copyWith(
@@ -605,7 +607,6 @@ class _ZwapInputState extends State<ZwapInput> {
                               hintText: widget.placeholder!,
                               hintStyle: widget.placeholderStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
                               enabled: !widget.disabled,
-                              hoverColor: ZwapColors.primary300,
                               border: _getZwapInputBorder(
                                 _getBorderColor((_focusNode.hasFocus || _isHovered)
                                     ? (widget.hoveredBorderColor ?? ZwapColors.primary200)

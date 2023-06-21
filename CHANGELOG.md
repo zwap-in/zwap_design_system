@@ -1151,3 +1151,6 @@ a
 
 ## 0.1.755
 * Added some missing decorations to ZwapInput.collapsed() widget
+
+## 0.1.756
+* Some others improvements to ZwapInput.collapsed() widget
