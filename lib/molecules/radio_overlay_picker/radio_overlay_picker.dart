@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/atoms/radio/zwap_radio_widget.dart';
-import 'package:collection/collection.dart';
+import 'package:zwap_design_system/molecules/dynamic_input/inputs/decorations/zwap_input_decorations.dart';
 
 class _RadioOverlayPickerProvider<T extends Enum> extends ChangeNotifier {
   List<T> _availableValues;
@@ -73,6 +73,8 @@ class RadioOverlayPicker<T extends Enum> extends StatefulWidget {
   final FontWeight fontWeight;
   final double spaceBetween;
 
+  final ZwapInputDecorations? inputDecorations;
+
   RadioOverlayPicker({
     this.selected,
     required this.values,
@@ -85,6 +87,7 @@ class RadioOverlayPicker<T extends Enum> extends StatefulWidget {
     this.spaceBetween = 4,
     this.headerValueLabel,
     this.overlayOffset = const Offset(0, 30),
+    this.inputDecorations,
     super.key,
   })  : assert(values.isNotEmpty, "Values cannot be empty"),
         assert(placeholder != null || selected != null, "Placeholder cannot be null if selected is null");
@@ -157,7 +160,10 @@ class RadioOverlayPickerState<T extends Enum> extends State<RadioOverlayPicker<T
             offset: widget.overlayOffset,
             child: ChangeNotifierProvider<_RadioOverlayPickerProvider<T>>.value(
               value: _provider,
-              child: _RadioOverlay<T>(getValueLabel: widget.getValueLabel),
+              child: _RadioOverlay<T>(
+                getValueLabel: widget.getValueLabel,
+                inputDecorations: widget.inputDecorations,
+              ),
             ),
           ),
         ),
@@ -199,7 +205,7 @@ class RadioOverlayPickerState<T extends Enum> extends State<RadioOverlayPicker<T
                 customTextStyle: ZwapTextType.bigBodySemibold.copyWith(
                   fontSize: widget.fontSize,
                   fontWeight: widget.fontWeight,
-                  color: ZwapColors.primary900Dark,
+                  color: widget.inputDecorations?.textColor ?? ZwapColors.primary900Dark,
                 ),
               ),
             ),
@@ -211,7 +217,7 @@ class RadioOverlayPickerState<T extends Enum> extends State<RadioOverlayPicker<T
               child: Icon(
                 Icons.keyboard_arrow_down_rounded,
                 size: widget.chevronSize,
-                color: ZwapColors.primary900Dark,
+                color: widget.inputDecorations?.textColor ?? ZwapColors.primary900Dark,
               ),
             ),
             Container(
@@ -231,9 +237,11 @@ class RadioOverlayPickerState<T extends Enum> extends State<RadioOverlayPicker<T
 
 class _RadioOverlay<T extends Enum> extends StatefulWidget {
   final String Function(T value) getValueLabel;
+  final ZwapInputDecorations? inputDecorations;
 
   const _RadioOverlay({
     required this.getValueLabel,
+    required this.inputDecorations,
     super.key,
   });
 
@@ -273,7 +281,7 @@ class _RadioOverlayState<T extends Enum> extends State<_RadioOverlay<T>> {
             width: 220,
             constraints: BoxConstraints(maxHeight: 300),
             decoration: BoxDecoration(
-              color: ZwapColors.shades0,
+              color: widget.inputDecorations?.overlayColor ?? ZwapColors.shades0,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(offset: const Offset(0, 30), blurRadius: 60, spreadRadius: -6, color: Color(0xff808080).withOpacity(.05)),
@@ -301,7 +309,7 @@ class _RadioOverlayState<T extends Enum> extends State<_RadioOverlay<T>> {
                                   child: ZwapText(
                                     text: widget.getValueLabel(value),
                                     zwapTextType: _selectedValue == value ? ZwapTextType.bigBodySemibold : ZwapTextType.bigBodyRegular,
-                                    textColor: ZwapColors.primary900Dark,
+                                    textColor: widget.inputDecorations?.overlayTextColor ?? ZwapColors.primary900Dark,
                                   ),
                                 ),
                               ],

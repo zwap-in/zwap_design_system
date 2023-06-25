@@ -1154,3 +1154,6 @@ a
 
 ## 0.1.756
 * Some others improvements to ZwapInput.collapsed() widget
+
+## 0.1.757
+* Added ZwapInputDecoration support to RadioOverlayPicker

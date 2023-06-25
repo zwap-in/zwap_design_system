@@ -163,7 +163,30 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              //const SizedBox(height: 700),
+              const SizedBox(height: 70),
+              Container(
+                height: 550,
+                decoration: BoxDecoration(
+                  color: const Color(0xff0C0C2F),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: ZwapColors.shades0.withOpacity(.3), width: 1),
+                ),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: ZwapInput.collapsed(
+                    internalPadding: EdgeInsets.zero,
+                    cursorColor: ZwapColors.shades0.withOpacity(.8),
+                    placeholder: 'Incolla o digita qui la tua job description',
+                    placeholderStyle: ZwapTextType.bigBodyRegular.copyWith(color: ZwapColors.shades0.withOpacity(.6)),
+                    textStyle: ZwapTextType.bigBodyRegular.copyWith(color: ZwapColors.shades0),
+                    backgroundColor: const Color(0xff0C0C2F),
+                    forceNoBorders: true,
+                    minLines: 7,
+                    maxLines: 500,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 70),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -213,6 +236,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                 zwapTextType: ZwapTextType.mediumBodyRegular,
                 textColor: ZwapColors.primary900Dark,
               ),
+
               Container(
                 padding: const EdgeInsets.all(25),
                 color: Color(0xff000013).withOpacity(.9),

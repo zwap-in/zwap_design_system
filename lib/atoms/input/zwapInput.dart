@@ -189,6 +189,8 @@ class ZwapInput extends StatefulWidget {
 
   final ScrollController? scrollController;
 
+  final EdgeInsets? scrollPadding;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -246,6 +248,7 @@ class ZwapInput extends StatefulWidget {
     this.borderWidth = 1,
     this.labelTextStyle,
     this.scrollController,
+    this.scrollPadding,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -307,6 +310,7 @@ class ZwapInput extends StatefulWidget {
     this.borderWidth = 1,
     this.labelTextStyle,
     this.scrollController,
+    this.scrollPadding,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -489,7 +493,7 @@ class _ZwapInputState extends State<ZwapInput> {
       child: TextField(
         scrollController: _scrollController,
         controller: this._controller,
-        scrollPadding: EdgeInsets.zero,
+        scrollPadding: widget.scrollPadding ?? EdgeInsets.zero,
         enabled: !widget.disabled,
         keyboardType: widget._isCollapsed ? TextInputType.multiline : widget.textInputType,
         maxLines: widget.maxLines,
