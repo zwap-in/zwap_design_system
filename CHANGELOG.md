@@ -1160,3 +1160,6 @@ a
 
 ## 0.1.758
 * Added borderColor property to ZwapTooltip
+
+## 0.1.759
+* Added backgroundColor property to ZwapTooltip

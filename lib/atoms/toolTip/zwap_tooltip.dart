@@ -87,6 +87,9 @@ class ZwapTooltip extends StatefulWidget {
   /// The color of the borders
   final Color? borderColor;
 
+  /// The color of the background
+  final Color? backgroundColor;
+
   /// Show a customized tooltip message when user hover
   /// this widget with mouse
   ///
@@ -106,6 +109,7 @@ class ZwapTooltip extends StatefulWidget {
     this.disappearAfter = const Duration(seconds: 5),
     this.simple = false,
     this.borderColor,
+    this.backgroundColor,
     Key? key,
   })  : this.builder = null,
         super(key: key);
@@ -129,6 +133,7 @@ class ZwapTooltip extends StatefulWidget {
     this.disappearAfter = const Duration(seconds: 5),
     this.simple = false,
     this.borderColor,
+    this.backgroundColor,
     Key? key,
   })  : this.message = null,
         super(key: key);
@@ -197,6 +202,7 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
           left: _position.dx,
           child: _ZwapTooltipOverlay(
             key: _overlayKey,
+            backgroundColor: widget.backgroundColor,
             animationDuration: widget.animationDuration,
             direction: _direction,
             style: widget.style ?? getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.shades0),
@@ -300,6 +306,7 @@ class _ZwapTooltipOverlay extends StatefulWidget {
   final bool simple;
 
   final Color? borderColor;
+  final Color? backgroundColor;
 
   const _ZwapTooltipOverlay({
     required this.message,
@@ -311,6 +318,7 @@ class _ZwapTooltipOverlay extends StatefulWidget {
     required this.decorationOffset,
     required this.simple,
     this.borderColor,
+    this.backgroundColor,
     Key? key,
   })  : assert(message != null || builder != null, "A message or a builder callback must be provided"),
         super(key: key);
@@ -357,7 +365,7 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
       }
 
     final Widget content = Container(
-      color: ZwapColors.shades100.withOpacity(.7),
+      color: widget.backgroundColor ?? ZwapColors.shades100.withOpacity(.7),
       padding: widget.padding + _extraPadding,
       child: widget.message == null
           ? widget.builder!(context)
