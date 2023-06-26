@@ -84,6 +84,9 @@ class ZwapTooltip extends StatefulWidget {
   /// Default to false
   final bool simple;
 
+  /// The color of the borders
+  final Color? borderColor;
+
   /// Show a customized tooltip message when user hover
   /// this widget with mouse
   ///
@@ -102,6 +105,7 @@ class ZwapTooltip extends StatefulWidget {
     this.delay = Duration.zero,
     this.disappearAfter = const Duration(seconds: 5),
     this.simple = false,
+    this.borderColor,
     Key? key,
   })  : this.builder = null,
         super(key: key);
@@ -124,6 +128,7 @@ class ZwapTooltip extends StatefulWidget {
     this.delay = Duration.zero,
     this.disappearAfter = const Duration(seconds: 5),
     this.simple = false,
+    this.borderColor,
     Key? key,
   })  : this.message = null,
         super(key: key);
@@ -200,6 +205,7 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
             decorationOffset: widget.decorationTranslation,
             builder: widget.builder,
             simple: widget.simple,
+            borderColor: widget.borderColor,
           ),
         ),
       ),
@@ -293,6 +299,8 @@ class _ZwapTooltipOverlay extends StatefulWidget {
 
   final bool simple;
 
+  final Color? borderColor;
+
   const _ZwapTooltipOverlay({
     required this.message,
     required this.builder,
@@ -302,6 +310,7 @@ class _ZwapTooltipOverlay extends StatefulWidget {
     required this.animationDuration,
     required this.decorationOffset,
     required this.simple,
+    this.borderColor,
     Key? key,
   })  : assert(message != null || builder != null, "A message or a builder callback must be provided"),
         super(key: key);
@@ -358,14 +367,30 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
             ),
     );
 
-    Widget _wrapContent(Widget child) => Material(
-          color: ZwapColors.transparent,
-          child: AnimatedOpacity(
-            opacity: _opacity,
-            duration: widget.animationDuration,
+    Widget _wrapContent(Widget child) {
+      if (widget.borderColor != null) {
+        child = ClipPath(
+          clipper: ZwapMessageClipper(
+            direction: widget.direction,
+            decorationOffset: widget.decorationOffset,
+          ),
+          child: Container(
+            color: widget.borderColor,
+            padding: const EdgeInsets.all(1),
             child: child,
           ),
         );
+      }
+
+      return Material(
+        color: ZwapColors.transparent,
+        child: AnimatedOpacity(
+          opacity: _opacity,
+          duration: widget.animationDuration,
+          child: child,
+        ),
+      );
+    }
 
     if (widget.simple)
       return _wrapContent(

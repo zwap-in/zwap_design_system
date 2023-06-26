@@ -1157,3 +1157,6 @@ a
 
 ## 0.1.757
 * Added ZwapInputDecoration support to RadioOverlayPicker
+
+## 0.1.758
+* Added borderColor property to ZwapTooltip

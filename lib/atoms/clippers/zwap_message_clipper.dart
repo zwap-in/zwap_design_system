@@ -11,11 +11,14 @@ class ZwapMessageClipper extends CustomClipper<Path> {
   /// With decoration offset = 0 the decoration is in the middle
   double? decorationOffset;
 
+  final Color? borderColor;
+
   ZwapMessageClipper({
     this.radius = 14,
     Size? decorationSize,
     this.direction = DecorationDirection.top,
     this.decorationOffset,
+    this.borderColor,
   }) : this.decorationSize =
             decorationSize ?? ([DecorationDirection.top, DecorationDirection.bottom].contains(direction) ? Size(20, 12) : Size(12, 20));
 
