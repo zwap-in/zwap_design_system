@@ -1166,3 +1166,6 @@ a
 
 ## 0.1.760
 * Added decorations and other customizations properties to ZwapSlider
+
+## 0.1.761
+* Improved StreamedTextController
