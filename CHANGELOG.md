@@ -1169,3 +1169,6 @@ a
 
 ## 0.1.761
 * Improved StreamedTextController
+
+## 0.1.762
+* Improved StreamedTextController
