@@ -5,6 +5,59 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 
+class ZwapSliderDecoration {
+  final Color? backgroundColor;
+  final Color? disabledBackgroundColor;
+
+  final Color? fillColor;
+  final Color? disabledFillColor;
+
+  final BorderRadius? borderRadius;
+
+  final Color? thumbColor;
+  final Color? disabledThumbColor;
+
+  final double backgroundHeight;
+  final double fillHeight;
+
+  ZwapSliderDecoration({
+    this.backgroundColor,
+    this.disabledBackgroundColor,
+    this.fillColor,
+    this.disabledFillColor,
+    this.borderRadius,
+    this.thumbColor,
+    this.disabledThumbColor,
+    this.backgroundHeight = 4,
+    this.fillHeight = 4,
+  });
+
+  const ZwapSliderDecoration.primary()
+      : backgroundColor = null,
+        disabledBackgroundColor = null,
+        fillColor = null,
+        disabledFillColor = null,
+        borderRadius = null,
+        thumbColor = null,
+        disabledThumbColor = null,
+        backgroundHeight = 4,
+        fillHeight = 4;
+
+  ZwapSliderDecoration copyWith({
+    Color? backgroundColor,
+    Color? fillColor,
+    BorderRadius? borderRadius,
+    Color? thumbColor,
+  }) {
+    return ZwapSliderDecoration(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      fillColor: fillColor ?? this.fillColor,
+      borderRadius: borderRadius ?? this.borderRadius,
+      thumbColor: thumbColor ?? this.thumbColor,
+    );
+  }
+}
+
 /// FEATURE: appearing label on press thumb
 /// FEATURE: decorationsw
 
@@ -32,6 +85,9 @@ class ZwapSlider extends StatefulWidget {
   /// Default to false
   final bool disabled;
 
+  final ZwapSliderDecoration decoration;
+  final Widget? thumbChild;
+
   const ZwapSlider({
     this.value,
     this.minValue = 0,
@@ -39,6 +95,8 @@ class ZwapSlider extends StatefulWidget {
     this.thumbSize = 16,
     this.onChange,
     this.disabled = false,
+    this.decoration = const ZwapSliderDecoration.primary(),
+    this.thumbChild,
     Key? key,
   }) : super(key: key);
 
@@ -134,26 +192,33 @@ class _ZwapSliderState extends State<ZwapSlider> {
               children: [
                 //? Placeholder line
                 Positioned(
-                  top: (_thumbSize / 2) - 1,
+                  top: (_thumbSize / 2) - (widget.decoration.backgroundHeight / 2),
                   left: _thumbSize / 2,
                   right: _thumbSize / 2,
                   child: Container(
-                    height: 4,
-                    decoration: BoxDecoration(color: ZwapColors.neutral200, borderRadius: BorderRadius.circular(2)),
+                    height: widget.decoration.backgroundHeight,
+                    decoration: BoxDecoration(
+                      color: (_disabled ? widget.decoration.disabledBackgroundColor : widget.decoration.backgroundColor) ?? ZwapColors.neutral200,
+                      borderRadius: widget.decoration.borderRadius ?? BorderRadius.circular(2),
+                    ),
                   ),
                 ),
                 //? Range line
                 AnimatedPositioned(
                   duration: _animationDuration,
                   curve: Curves.decelerate,
-                  top: (_thumbSize / 2) - 1,
+                  top: (_thumbSize / 2) - (widget.decoration.fillHeight / 2),
                   left: _thumbSize / 2,
-                  right: _maxWidth! - _thumbOffset - 2,
+                  right: _maxWidth! - _thumbOffset - (_thumbSize / 2),
                   child: Container(
                     width: double.infinity,
-                    height: 4,
-                    decoration:
-                        BoxDecoration(color: _disabled ? ZwapColors.neutral500 : ZwapColors.primary700, borderRadius: BorderRadius.circular(2)),
+                    height: widget.decoration.backgroundHeight,
+                    decoration: BoxDecoration(
+                      color: _disabled
+                          ? widget.decoration.disabledFillColor ?? ZwapColors.neutral500
+                          : widget.decoration.fillColor ?? ZwapColors.primary700,
+                      borderRadius: widget.decoration.borderRadius ?? BorderRadius.circular(2),
+                    ),
                   ),
                 ),
                 //? Start thumb widget
@@ -184,16 +249,19 @@ class _ZwapSliderState extends State<ZwapSlider> {
                               setState(() => _isDragging = false);
                             },
                       child: Container(
-                        height: 16,
-                        width: 16,
+                        height: widget.thumbSize,
+                        width: widget.thumbSize,
                         decoration: BoxDecoration(
-                          color: _disabled ? ZwapColors.neutral50 : ZwapColors.shades0,
-                          borderRadius: BorderRadius.circular(8),
+                          color: _disabled
+                              ? widget.decoration.disabledThumbColor ?? ZwapColors.neutral50
+                              : widget.decoration.thumbColor ?? ZwapColors.shades0,
+                          borderRadius: BorderRadius.circular(1000),
                           boxShadow: [
                             BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
                             BoxShadow(offset: Offset(0, 3), color: Color(0xff091E42).withOpacity(0.2), blurRadius: 5),
                           ],
                         ),
+                        child: widget.thumbChild,
                       ),
                     ),
                   ),

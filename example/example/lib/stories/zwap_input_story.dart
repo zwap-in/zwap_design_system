@@ -160,9 +160,50 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
     return Center(
       child: Container(
         width: 500,
+        padding: const EdgeInsets.all(32),
+        color: const Color(0xff0C0C2F),
         child: SingleChildScrollView(
           child: Column(
             children: [
+              ZwapText(
+                text: '$_value',
+                zwapTextType: ZwapTextType.bigBodyExtraBold,
+                textColor: ZwapColors.shades0,
+              ),
+              const SizedBox(height: 70),
+              Container(
+                width: double.infinity,
+                child: ZwapSlider(
+                  value: _value,
+                  onChange: (value) => setState(() => _value = value),
+                  thumbChild: Center(
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color: ZwapColors.primary700,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.menu_rounded,
+                          color: ZwapColors.shades0,
+                          size: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  thumbSize: 32,
+                  decoration: ZwapSliderDecoration(
+                    backgroundColor: ZwapColors.shades0.withOpacity(.2),
+                    fillColor: ZwapColors.primary700,
+                    thumbColor: ZwapColors.shades0.withOpacity(.15),
+                    borderRadius: BorderRadius.circular(100),
+                    fillHeight: 16,
+                    backgroundHeight: 16,
+                  ),
+                ),
+              ),
               const SizedBox(height: 70),
               Container(
                 height: 550,

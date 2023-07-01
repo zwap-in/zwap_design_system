@@ -1163,3 +1163,6 @@ a
 
 ## 0.1.759
 * Added backgroundColor property to ZwapTooltip
+
+## 0.1.760
+* Added decorations and other customizations properties to ZwapSlider
