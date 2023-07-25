@@ -6,11 +6,13 @@ import 'package:taastrap/taastrap.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 
 class ZwapTranslation extends Pattern {
+  static Future<void> Function(BuildContext context, Future<void> Function(String newValue) overrideValue, String originalText)? showEditTextModal;
+
   /// Used to translate keys, must be not null and not return null
   static String? Function(String)? translate;
 
   /// Called each time user edit the value of the translation
-  static Future<void> Function(String key, String newValue)? updateValue;
+  static Future<void> Function(String key, dynamic newValue)? updateValue;
 
   /// If this value is true, the text will be editable
   static bool enableEdits = false;
@@ -322,6 +324,11 @@ class _WrapWithEditTextTooltipState extends State<_WrapWithEditTextTooltip> {
       message: "Click to edit",
       child: InkWell(
         onTap: () {
+          if (ZwapTranslation.showEditTextModal != null) {
+            ZwapTranslation.showEditTextModal!(context, overrideValue, widget.text.getTranslation());
+            return;
+          }
+
           showDialog(
             context: context,
             builder: (context) => AlertDialog(

@@ -1172,3 +1172,6 @@ a
 
 ## 0.1.762
 * Improved StreamedTextController
+
+## 0.1.763
+* Improved [ZwapTranslation] feature inside [ZwapText]
