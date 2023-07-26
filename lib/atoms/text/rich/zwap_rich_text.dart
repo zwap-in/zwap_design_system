@@ -69,7 +69,7 @@ class ZwapTextSpan {
         throw Exception("Did you forget to add a showEditTextModal handler in [ZwapTranslation]?");
       }
 
-      if (_t.enableEdit) {
+      if (ZwapTranslation.enableEdits && _t.enableEdit) {
         if (_t.useLongPress) {
           _gestureRecognizer.onSecondaryTap = _handleEdit;
         } else {
@@ -389,7 +389,7 @@ class _LinkedMultyStyleTextState extends State<_LinkedMultyStyleText> {
                         style: span.textStyle ?? widget.style,
                         recognizer: _gestureRecognizer,
                         onEnter: (_) {
-                          if (_t.enableEdit) {
+                          if (ZwapTranslation.enableEdits && _t.enableEdit) {
                             ZwapToasts.showInfoToast(
                               _t.useLongPress ? "Right click to edit" : "Click to edit",
                               context: context,
