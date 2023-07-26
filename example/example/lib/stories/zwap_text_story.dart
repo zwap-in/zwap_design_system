@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:zwap_design_system/atoms/text/base/zwap_gradient_text.dart';
 import 'package:zwap_design_system/molecules/moleculesText/zwap_expandable_text.dart';
 import 'package:zwap_design_system/zwap_design_system.dart';
 
@@ -23,12 +22,19 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
 
   final Map<String, String> _translations = {
     'ciao': 'Text one',
+    'expand': "Con Zwap espandi",
+    '500': "del 500%gggg",
+    'net': 'la tua rete',
   };
 
   @override
   void initState() {
     super.initState();
-    ZwapTranslation.translate = (k, args) => _translations[k];
+    ZwapTranslation.translate = (k, args) {
+      final String _value = _translations[k] ?? k;
+      if (args.isNotEmpty) return '$_value ${args.length}';
+      return _value;
+    };
     ZwapTranslation.enableEdits = true;
   }
 
@@ -44,7 +50,7 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
             ZwapRichText.safeText(
               textSpans: [
                 ZwapTextSpan(
-                  text: "Con Zwap espandi\n",
+                  text: ZwapTranslation('expand', decorate: (t) => '$t\n'),
                   textStyle: getTextStyle(ZwapTextType.bigBodyBold).copyWith(
                     color: ZwapColors.primary900Dark,
                     fontSize: 48,
@@ -56,7 +62,10 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                 ZwapGradientTextSpan.fromGradient(
                   forcedHeight: 54,
                   forcedTranslation: Offset(0, 7),
-                  text: "del 500%gggg",
+                  text: ZwapTranslation(
+                    '500',
+                    arguments: {'ciao': 'ciao'},
+                  ),
                   gradient: LinearGradient(colors: [Color(0xff3E4FF7), Color(0xffDD0783)]),
                   textStyle: getTextStyle(ZwapTextType.bigBodyBold).copyWith(
                     color: ZwapColors.primary900Dark,
@@ -66,7 +75,11 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                   ),
                 ),
                 ZwapTextSpan(
-                  text: " la tua rete",
+                  text: ZwapTranslation(
+                    'net',
+                    decorate: (t) => ' $t',
+                    useLongPress: true,
+                  ),
                   textStyle: getTextStyle(ZwapTextType.bigBodyBold).copyWith(
                     color: ZwapColors.primary900Dark,
                     fontSize: 48,
@@ -85,7 +98,7 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                   Expanded(
                     child: Center(
                         child: ZwapText(
-                      text: ZwapTranslation("ciao"),
+                      text: ZwapTranslation("ciao", enableEdit: false),
                       textColor: _firstColor,
                       zwapTextType: _firstTextType,
                     )),

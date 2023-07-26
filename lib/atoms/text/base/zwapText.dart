@@ -1,9 +1,13 @@
+library zwap.text;
+
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
 import 'package:taastrap/taastrap.dart';
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
+
+part 'zwap_gradient_text.dart';
 
 class ZwapTranslation extends Pattern {
   static Future<void> Function(BuildContext context, void Function() updateValue, String textKey)? showEditTextModal;
@@ -29,7 +33,7 @@ class ZwapTranslation extends Pattern {
   /// instead of a simple tap
   final bool useLongPress;
 
-  /// If not null, the [decorate] function will be called
+  /// If not null, the [_decorate] function will be called
   /// each time the [ZwapTranslation] is rendered
   ///
   /// This function can be used to merge the string fetched from
@@ -48,7 +52,7 @@ class ZwapTranslation extends Pattern {
   ///
   /// Here the rendered text is "Hello!", but the editable value is only the [text] parameter,
   /// so "Hello".
-  final String Function(String)? decorate;
+  final String Function(String)? _decorate;
 
   /// The [arguments] property is used to insert dynamic values
   /// inside the string
@@ -62,7 +66,7 @@ class ZwapTranslation extends Pattern {
   /// Use the [enableEdit] property to enable/disable the edit mode
   /// for this specific [ZwapTranslation]
   ///
-  /// Use the [decorate] property to decorate the string with other
+  /// Use the [_decorate] property to decorate the string with other
   /// characters
   ///
   /// Use the [useLongPress] property to enable the edit mode with a
@@ -94,9 +98,9 @@ class ZwapTranslation extends Pattern {
     this.key, {
     this.enableEdit = true,
     this.useLongPress = false,
-    this.decorate,
+    String Function(String)? decorate,
     this.arguments = const {},
-  });
+  }) : _decorate = decorate;
 
   String getTranslation() {
     assert(translate != null, "Did you forget to add a translate function handler in [ZwapTranslation]?");
@@ -106,7 +110,7 @@ class ZwapTranslation extends Pattern {
       throw Exception("The key [$key] is not present in the translation file");
     }
 
-    if (decorate != null) return decorate!(_res);
+    if (_decorate != null) return _decorate!(_res);
     return _res;
   }
 
@@ -397,12 +401,27 @@ class _WrapWithEditTextTooltipState extends State<_WrapWithEditTextTooltip> {
       throw Exception("Did you forget to add a showEditTextModal handler in [ZwapTranslation]?");
     }
 
-    return Tooltip(
-      message: widget.text.useLongPress ? "Long press to edit" : "Click to edit",
-      child: widget.text.enableEdit
+    Widget _wrapWithTooltip(Widget child) {
+      if (widget.text.enableEdit) {
+        return Tooltip(
+          message: widget.text.useLongPress ? "Long click to edit" : "Click to edit",
+          child: child,
+        );
+      }
+
+      return child;
+    }
+
+    return _wrapWithTooltip(
+      widget.text.enableEdit
           ? InkWell(
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+              highlightColor: Colors.transparent,
               onLongPress: widget.text.useLongPress ? _handleEdit : null,
-              onTap: widget.text.useLongPress ? null : _handleEdit,
+              onTap: widget.text.useLongPress ? () {} : _handleEdit,
               child: widget.builder(),
             )
           : widget.builder(),

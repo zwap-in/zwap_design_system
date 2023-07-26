@@ -1178,3 +1178,7 @@ a
 
 ## 0.1.764
 * Improved [ZwapTranslation] feature inside [ZwapText]
+
+## 0.1.765
+* Added support for [ZwapTranslation] to [ZwapGradientText] and [ZwapRichText]
+* Improved [ZwapTranslation] feature inside [ZwapText]

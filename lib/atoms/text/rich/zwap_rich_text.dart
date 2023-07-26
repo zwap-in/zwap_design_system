@@ -1,15 +1,10 @@
 /// IMPORTING THIRD PARTY PACKAGES
-import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/link.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:zwap_design_system/molecules/toast/zwapToast.dart';
 import 'package:zwap_utils/zwap_utils.dart';
-
-/// IMPORTING LOCAL PACKAGES
-import '../../typography/zwapTypography.dart';
-
-import '../base/zwapText.dart';
-import '../base/zwap_gradient_text.dart';
 
 //FEATURE (Marchetti): Move ZwapType and Color in a ZwapTextStyle and standardize all types
 
@@ -20,7 +15,9 @@ enum ZwapLinkTarget {
 }
 
 class ZwapTextSpan {
-  final String text;
+  /// Attention: if you use a [ZwapTranslation] with [useLongPress] = true
+  /// the [onSecondayTap] is used instead of [onLongPress]
+  final Pattern text;
 
   List<ZwapTextSpan> children;
 
@@ -59,12 +56,49 @@ class ZwapTextSpan {
                 : null
             : getTextStyle(textType).copyWith(color: textColor);
 
-  InlineSpan _toInlineSpan() => TextSpan(
-        text: text,
+  InlineSpan _toInlineSpan(BuildContext context, void Function() updateWidget) {
+    if (text is ZwapTranslation) {
+      final TapGestureRecognizer _gestureRecognizer = gestureRecognizer ?? TapGestureRecognizer();
+      final ZwapTranslation _t = text as ZwapTranslation;
+
+      void _handleEdit() {
+        if (ZwapTranslation.showEditTextModal != null) {
+          ZwapTranslation.showEditTextModal!(context, updateWidget, _t.key);
+          return;
+        }
+        throw Exception("Did you forget to add a showEditTextModal handler in [ZwapTranslation]?");
+      }
+
+      if (_t.enableEdit) {
+        if (_t.useLongPress) {
+          _gestureRecognizer.onSecondaryTap = _handleEdit;
+        } else {
+          _gestureRecognizer.onTap = _handleEdit;
+        }
+      }
+
+      return TextSpan(
+        text: _t.getTranslation(),
         style: textStyle,
-        recognizer: gestureRecognizer,
-        children: this.children.map((zwapTS) => zwapTS._toInlineSpan()).toList(),
+        onEnter: !_t.enableEdit
+            ? null
+            : (_) => ZwapToasts.showInfoToast(
+                  _t.useLongPress ? "Right click to edit" : "Click to edit",
+                  context: context,
+                  duration: const Duration(milliseconds: 1300),
+                ),
+        recognizer: _gestureRecognizer,
+        children: this.children.map((zwapTS) => zwapTS._toInlineSpan(context, updateWidget)).toList(),
       );
+    }
+
+    return TextSpan(
+      text: text is String ? text as String : text.toString(),
+      style: textStyle,
+      recognizer: gestureRecognizer,
+      children: this.children.map((zwapTS) => zwapTS._toInlineSpan(context, updateWidget)).toList(),
+    );
+  }
 }
 
 /// Gradient test spans supports only the onTap
@@ -81,7 +115,7 @@ class ZwapGradientTextSpan extends ZwapTextSpan {
   final Offset? forcedTranslation;
 
   ZwapGradientTextSpan({
-    required String text,
+    required Pattern text,
     required this.colors,
     TextStyle? textStyle,
     List<ZwapTextSpan> children = const [],
@@ -104,7 +138,7 @@ class ZwapGradientTextSpan extends ZwapTextSpan {
         );
 
   ZwapGradientTextSpan.fromZwapTypography({
-    required String text,
+    required Pattern text,
     required this.colors,
     ZwapTextType? textType,
     Uri? linkToUri,
@@ -128,7 +162,7 @@ class ZwapGradientTextSpan extends ZwapTextSpan {
         );
 
   ZwapGradientTextSpan.fromGradient({
-    required String text,
+    required Pattern text,
     required LinearGradient gradient,
     required TextStyle textStyle,
     List<ZwapTextSpan> children = const [],
@@ -152,39 +186,41 @@ class ZwapGradientTextSpan extends ZwapTextSpan {
         );
 
   @override
-  InlineSpan _toInlineSpan() => WidgetSpan(
-        child: GestureDetector(
-          onTap: () {
-            if (gestureRecognizer != null && gestureRecognizer!.onTap != null) gestureRecognizer!.onTap!();
-          },
-          child: Transform.translate(
-            offset: forcedTranslation ?? Offset.zero,
-            child: Container(
-              height: forcedHeight,
-              child: _gradient != null
-                  ? ZwapGradientText.fromGradient(
-                      gradient: _gradient!,
-                      style: textStyle!,
-                      text: text,
-                    )
-                  : ZwapGradientText.custom(
-                      style: this.textStyle ?? TextStyle(),
-                      text: text,
-                      colors: colors,
-                      begin: begin,
-                      end: end,
-                      stops: stops,
-                    ),
-            ),
+  InlineSpan _toInlineSpan(BuildContext context, void Function() updateWidget) {
+    return WidgetSpan(
+      child: GestureDetector(
+        onTap: () {
+          if (gestureRecognizer != null && gestureRecognizer!.onTap != null) gestureRecognizer!.onTap!();
+        },
+        child: Transform.translate(
+          offset: forcedTranslation ?? Offset.zero,
+          child: Container(
+            height: forcedHeight,
+            child: _gradient != null
+                ? ZwapGradientText.fromGradient(
+                    gradient: _gradient!,
+                    style: textStyle!,
+                    text: text,
+                  )
+                : ZwapGradientText.custom(
+                    style: this.textStyle ?? TextStyle(),
+                    text: text,
+                    colors: colors,
+                    begin: begin,
+                    end: end,
+                    stops: stops,
+                  ),
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 
 /// Component to rendering multi text style
 ///
 /// If no style is provided to this widget or to a text spans tree, DefaultTextStyle will be used
-class ZwapRichText extends StatelessWidget {
+class ZwapRichText extends StatefulWidget {
   final TextAlign? textAlign;
 
   final bool _isSafeText;
@@ -240,10 +276,15 @@ class ZwapRichText extends StatelessWidget {
         this._isSafeText = true,
         super(key: key);
 
+  @override
+  State<ZwapRichText> createState() => _ZwapRichTextState();
+}
+
+class _ZwapRichTextState extends State<ZwapRichText> {
   /// It write each text with correct style and correct color
   List<TextSpan> _getTexts() {
     List<TextSpan> finals = [];
-    this.texts.forEach((key, TupleType<TapGestureRecognizer?, TupleType<ZwapTextType, Color>> value) {
+    this.widget.texts.forEach((key, TupleType<TapGestureRecognizer?, TupleType<ZwapTextType, Color>> value) {
       if (value.a != null) {
         finals.add(TextSpan(text: key, style: getTextStyle(value.b.a).apply(color: value.b.b), recognizer: value.a));
       } else {
@@ -257,21 +298,22 @@ class ZwapRichText extends StatelessWidget {
   Widget build(BuildContext context) {
     late List<InlineSpan> children;
 
-    if (_isSafeText)
-      children = this.textSpans.map((e) => e._toInlineSpan()).toList();
+    if (widget._isSafeText)
+      children = this.widget.textSpans.map((e) => e._toInlineSpan(context, () => setState(() {}))).toList();
     else
       children = _getTexts();
 
-    if (_isSafeText && textSpans.any((t) => t.linkToUri != null)) return _LinkedMultyStyleText(textSpans: textSpans, textAlign: textAlign);
+    if (widget._isSafeText && widget.textSpans.any((t) => t.linkToUri != null))
+      return _LinkedMultyStyleText(textSpans: widget.textSpans, textAlign: widget.textAlign);
 
     return RichText(
       text: TextSpan(
         children: List<InlineSpan>.generate(children.length, (index) => children[index]),
-        style: style,
+        style: widget.style,
       ),
-      textAlign: textAlign ?? TextAlign.start,
-      maxLines: maxLines,
-      overflow: textOverflow,
+      textAlign: widget.textAlign ?? TextAlign.start,
+      maxLines: widget.maxLines,
+      overflow: widget.textOverflow,
     );
   }
 }
@@ -319,22 +361,64 @@ class _LinkedMultyStyleTextState extends State<_LinkedMultyStyleText> {
           child: RichText(
             text: TextSpan(
                 style: widget.style,
-                children: widget.textSpans
-                    .map(
-                      (span) => TextSpan(
-                        text: span.text,
+                children: widget.textSpans.map(
+                  (span) {
+                    if (span.text is ZwapTranslation) {
+                      final TapGestureRecognizer _gestureRecognizer = span.gestureRecognizer ?? TapGestureRecognizer();
+                      final ZwapTranslation _t = span.text as ZwapTranslation;
+
+                      void _handleEdit() {
+                        if (ZwapTranslation.showEditTextModal != null) {
+                          ZwapTranslation.showEditTextModal!(context, () => setState(() {}), _t.key);
+                          return;
+                        }
+                        throw Exception("Did you forget to add a showEditTextModal handler in [ZwapTranslation]?");
+                      }
+
+                      if (_t.enableEdit) {
+                        if (_t.useLongPress) {
+                          _gestureRecognizer.onSecondaryTap = _handleEdit;
+                        } else {
+                          _gestureRecognizer.onTap = _handleEdit;
+                        }
+                      }
+
+                      return TextSpan(
+                        text: _t.getTranslation(),
                         mouseCursor: span.linkToUri != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
                         style: span.textStyle ?? widget.style,
-                        recognizer: span.gestureRecognizer,
+                        recognizer: _gestureRecognizer,
                         onEnter: (_) {
+                          if (_t.enableEdit) {
+                            ZwapToasts.showInfoToast(
+                              _t.useLongPress ? "Right click to edit" : "Click to edit",
+                              context: context,
+                              duration: const Duration(milliseconds: 1300),
+                            );
+                          }
+
                           setState(() {
                             currentUri = span.linkToUri;
                             currentLinkTarget = _getLinkTarget(span.linkTarget);
                           });
                         },
-                      ),
-                    )
-                    .toList()),
+                      );
+                    }
+
+                    return TextSpan(
+                      text: span.text is String ? span.text as String : span.text.toString(),
+                      mouseCursor: span.linkToUri != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+                      style: span.textStyle ?? widget.style,
+                      recognizer: span.gestureRecognizer,
+                      onEnter: (_) {
+                        setState(() {
+                          currentUri = span.linkToUri;
+                          currentLinkTarget = _getLinkTarget(span.linkTarget);
+                        });
+                      },
+                    );
+                  },
+                ).toList()),
             textAlign: widget.textAlign ?? TextAlign.start,
           ),
         );

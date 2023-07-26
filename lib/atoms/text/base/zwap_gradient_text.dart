@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:zwap_design_system/atoms/atoms.dart';
+part of zwap.text;
 
 class ZwapGradientText extends StatelessWidget {
-  final String text;
+  final Pattern text;
 
   /// Copied from [Gradient], see [Gradient] for more details
   final List<Color> colors;
@@ -69,6 +68,16 @@ class ZwapGradientText extends StatelessWidget {
         this.colors = const [],
         super(key: key);
 
+  String get actualText {
+    if (text is String) {
+      return text as String;
+    } else if (text is ZwapTranslation) {
+      return (text as ZwapTranslation).getTranslation();
+    }
+
+    return text.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     final LinearGradient _customGradient = _gradient ??
@@ -79,13 +88,24 @@ class ZwapGradientText extends StatelessWidget {
           end: end ?? Alignment.bottomRight,
         );
 
+    Widget _wrapWithEditable(Text child) {
+      if (ZwapTranslation.enableEdits && text is ZwapTranslation)
+        return _WrapWithEditTextTooltip(
+          text: text as ZwapTranslation,
+          builder: () => child,
+        );
+      return child;
+    }
+
     return ShaderMask(
       shaderCallback: (Rect bounds) => _customGradient.createShader(Offset.zero & bounds.size),
       blendMode: BlendMode.modulate,
-      child: Text(
-        text,
-        style: (_customTextStyle ?? getTextStyle(_textType!).copyWith(color: Colors.white)).copyWith(),
-        textAlign: textAlign ?? TextAlign.center,
+      child: _wrapWithEditable(
+        Text(
+          actualText,
+          style: (_customTextStyle ?? getTextStyle(_textType!).copyWith(color: Colors.white)).copyWith(),
+          textAlign: textAlign ?? TextAlign.center,
+        ),
       ),
     );
   }
