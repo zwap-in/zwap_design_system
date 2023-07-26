@@ -126,6 +126,17 @@ class ZwapTranslation extends Pattern {
 
   @override
   String toString() => key;
+
+  final List<Function()> _notifiers = [];
+
+  /// Used to ad "cascade" callback on notify. Used
+  /// in gradient texts thats are not updating with the child (ZwapText)
+  /// updated
+  void _addNotifierMirror(Function() onNotify) => _notifiers.add(onNotify);
+
+  /// Used to notify the parent that the child has been updated
+  /// and it needs to be updated too
+  void _dispatchNotify() => _notifiers.forEach((element) => element());
 }
 
 /// The device
@@ -388,7 +399,10 @@ class _WrapWithEditTextTooltip extends StatefulWidget {
 
 class _WrapWithEditTextTooltipState extends State<_WrapWithEditTextTooltip> {
   void _updateValue() {
-    if (mounted) setState(() {});
+    if (mounted) {
+      setState(() {});
+      widget.text._dispatchNotify();
+    }
   }
 
   @override
@@ -398,6 +412,7 @@ class _WrapWithEditTextTooltipState extends State<_WrapWithEditTextTooltip> {
         ZwapTranslation.showEditTextModal!(context, _updateValue, widget.text.key);
         return;
       }
+
       throw Exception("Did you forget to add a showEditTextModal handler in [ZwapTranslation]?");
     }
 

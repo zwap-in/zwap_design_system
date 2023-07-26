@@ -1,6 +1,6 @@
 part of zwap.text;
 
-class ZwapGradientText extends StatelessWidget {
+class ZwapGradientText extends StatefulWidget {
   final Pattern text;
 
   /// Copied from [Gradient], see [Gradient] for more details
@@ -68,30 +68,44 @@ class ZwapGradientText extends StatelessWidget {
         this.colors = const [],
         super(key: key);
 
+  @override
+  State<ZwapGradientText> createState() => _ZwapGradientTextState();
+}
+
+class _ZwapGradientTextState extends State<ZwapGradientText> {
   String get actualText {
-    if (text is String) {
-      return text as String;
-    } else if (text is ZwapTranslation) {
-      return (text as ZwapTranslation).getTranslation();
+    if (widget.text is String) {
+      return widget.text as String;
+    } else if (widget.text is ZwapTranslation) {
+      return (widget.text as ZwapTranslation).getTranslation();
     }
 
-    return text.toString();
+    return widget.text.toString();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.text is ZwapTranslation) {
+      (widget.text as ZwapTranslation)._addNotifierMirror(() => setState(() {}));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final LinearGradient _customGradient = _gradient ??
+    final LinearGradient _customGradient = widget._gradient ??
         LinearGradient(
-          colors: colors,
-          stops: stops,
-          begin: begin ?? Alignment.topLeft,
-          end: end ?? Alignment.bottomRight,
+          colors: widget.colors,
+          stops: widget.stops,
+          begin: widget.begin ?? Alignment.topLeft,
+          end: widget.end ?? Alignment.bottomRight,
         );
 
     Widget _wrapWithEditable(Text child) {
-      if (ZwapTranslation.enableEdits && text is ZwapTranslation)
+      if (ZwapTranslation.enableEdits && widget.text is ZwapTranslation)
         return _WrapWithEditTextTooltip(
-          text: text as ZwapTranslation,
+          text: widget.text as ZwapTranslation,
           builder: () => child,
         );
       return child;
@@ -103,8 +117,8 @@ class ZwapGradientText extends StatelessWidget {
       child: _wrapWithEditable(
         Text(
           actualText,
-          style: (_customTextStyle ?? getTextStyle(_textType!).copyWith(color: Colors.white)).copyWith(),
-          textAlign: textAlign ?? TextAlign.center,
+          style: (widget._customTextStyle ?? getTextStyle(widget._textType!).copyWith(color: Colors.white)).copyWith(),
+          textAlign: widget.textAlign ?? TextAlign.center,
         ),
       ),
     );

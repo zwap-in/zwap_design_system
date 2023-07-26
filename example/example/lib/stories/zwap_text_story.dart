@@ -36,6 +36,46 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
       return _value;
     };
     ZwapTranslation.enableEdits = true;
+
+    ZwapTranslation.showEditTextModal = (context, overrideText, currentValue) async {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Edit  aedflkajsdf ajtext"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ZwapText(
+                text: "Text was: ",
+                zwapTextType: ZwapTextType.smallBodySemibold,
+                textColor: ZwapColors.neutral500,
+              ),
+              const SizedBox(height: 4),
+              ZwapText(
+                text: currentValue,
+                zwapTextType: ZwapTextType.mediumBodyRegular,
+                textColor: ZwapColors.secondary400,
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: TextEditingController(text: _translations[currentValue]),
+                onChanged: (value) {
+                  print('sdfasdf $value');
+                  _translations[currentValue] = value;
+                },
+              ),
+            ],
+          ),
+          actions: [
+            ZwapButton(
+              buttonChild: ZwapButtonChild.text(text: "OK"),
+              onTap: () => overrideText(),
+            ),
+          ],
+        ),
+      );
+    };
   }
 
   @override
@@ -98,7 +138,7 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                   Expanded(
                     child: Center(
                         child: ZwapText(
-                      text: ZwapTranslation("ciao", enableEdit: false),
+                      text: ZwapTranslation("ciao"),
                       textColor: _firstColor,
                       zwapTextType: _firstTextType,
                     )),

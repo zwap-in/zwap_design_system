@@ -10,40 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  ZwapTranslation.showEditTextModal = (context, overrideText, currentValue) async {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Edit  aedflkajsdf ajtext"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ZwapText(
-              text: "Text was: ",
-              zwapTextType: ZwapTextType.smallBodySemibold,
-              textColor: ZwapColors.neutral500,
-            ),
-            const SizedBox(height: 4),
-            ZwapText(
-              text: currentValue,
-              zwapTextType: ZwapTextType.mediumBodyRegular,
-              textColor: ZwapColors.secondary400,
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: TextEditingController(text: currentValue),
-              onChanged: (value) {
-                print('sdfasdf $value');
-                overrideText();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  };
-
   runApp(const MyApp());
 }
 
