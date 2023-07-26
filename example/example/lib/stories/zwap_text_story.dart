@@ -28,9 +28,7 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
   @override
   void initState() {
     super.initState();
-    ZwapTranslation.translate = (k) => _translations[k];
-    ZwapTranslation.updateValue = (k, v) async => _translations[k] = v;
-
+    ZwapTranslation.translate = (k, args) => _translations[k];
     ZwapTranslation.enableEdits = true;
   }
 

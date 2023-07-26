@@ -6,13 +6,13 @@ import 'package:taastrap/taastrap.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 
 class ZwapTranslation extends Pattern {
-  static Future<void> Function(BuildContext context, Future<void> Function(String newValue) overrideValue, String originalText)? showEditTextModal;
+  static Future<void> Function(BuildContext context, void Function() updateValue, String textKey)? showEditTextModal;
 
   /// Used to translate keys, must be not null and not return null
-  static String? Function(String)? translate;
-
-  /// Called each time user edit the value of the translation
-  static Future<void> Function(String key, dynamic newValue)? updateValue;
+  ///
+  /// The [arguments] can be provided for each string, usually used for
+  /// insert dynamic values inside the string
+  static String? Function(String, Map<String, dynamic> arguments)? translate;
 
   /// If this value is true, the text will be editable
   static bool enableEdits = false;
@@ -25,16 +25,88 @@ class ZwapTranslation extends Pattern {
   /// even if the [ZwapTranslation] is in edit mode
   final bool enableEdit;
 
-  ZwapTranslation(this.key, {this.enableEdit = true});
+  /// If true the edit action is triggered by a long press
+  /// instead of a simple tap
+  final bool useLongPress;
+
+  /// If not null, the [decorate] function will be called
+  /// each time the [ZwapTranslation] is rendered
+  ///
+  /// This function can be used to merge the string fetched from
+  /// the [translate] function with other strings, such as commas
+  /// or other characters
+  ///
+  /// Example:
+  /// ```
+  /// ZwapTranslation.translate = (key, _) => { "hello": "Hello" }[key];
+  ///
+  /// ZwapTranslation(
+  ///   key: "hello",
+  ///   decorate: (text) => "$text!"
+  /// )
+  /// ```
+  ///
+  /// Here the rendered text is "Hello!", but the editable value is only the [text] parameter,
+  /// so "Hello".
+  final String Function(String)? decorate;
+
+  /// The [arguments] property is used to insert dynamic values
+  /// inside the string
+  ///
+  /// Provided to the translate function
+  final Map<String, dynamic> arguments;
+
+  /// The [key] property is used to retrive the string from the
+  /// [ZwapTranslation.translate] function
+  ///
+  /// Use the [enableEdit] property to enable/disable the edit mode
+  /// for this specific [ZwapTranslation]
+  ///
+  /// Use the [decorate] property to decorate the string with other
+  /// characters
+  ///
+  /// Use the [useLongPress] property to enable the edit mode with a
+  /// long press instead of a simple tap. Useful when the text is clickable
+  ///
+  /// The [arguments] property are deferred to the [translate] function, usually
+  /// used to insert dynamic values inside the string
+  ///
+  /// ---
+  ///
+  /// Example:
+  /// ```
+  /// /// THe translate function return the string in base of the key
+  /// /// replacing the arguments
+  /// ZwapTranslation.translate = (key, args) {...};
+  ///
+  /// ZwapTranslation(
+  ///   key: "greeter",
+  ///   decorate: (text) => "$text!",
+  ///   arguments: { "name": "John" }
+  /// )
+  /// ```
+  ///
+  /// In this example the actual rendered string is "Hello John!". While editing only the
+  /// "greeter" key string will be actually changed. The dynamic name is provided using
+  /// the [arguments] property and the exclamation mark do not belong to the editable string
+  ///
+  ZwapTranslation(
+    this.key, {
+    this.enableEdit = true,
+    this.useLongPress = false,
+    this.decorate,
+    this.arguments = const {},
+  });
 
   String getTranslation() {
     assert(translate != null, "Did you forget to add a translate function handler in [ZwapTranslation]?");
-    final String? _res = translate!(key);
+    final String? _res = translate!(key, arguments!);
 
     if (_res == null) {
       throw Exception("The key [$key] is not present in the translation file");
     }
 
+    if (decorate != null) return decorate!(_res);
     return _res;
   }
 
@@ -311,51 +383,29 @@ class _WrapWithEditTextTooltip extends StatefulWidget {
 }
 
 class _WrapWithEditTextTooltipState extends State<_WrapWithEditTextTooltip> {
-  Future<void> overrideValue(String newValue) async {
-    if (ZwapTranslation.updateValue != null) {
-      await ZwapTranslation.updateValue!(widget.text.toString(), newValue);
-      setState(() {});
-    }
+  void _updateValue() {
+    if (mounted) setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: "Click to edit",
-      child: InkWell(
-        onTap: () {
-          if (ZwapTranslation.showEditTextModal != null) {
-            ZwapTranslation.showEditTextModal!(context, overrideValue, widget.text.getTranslation());
-            return;
-          }
+    void _handleEdit() {
+      if (ZwapTranslation.showEditTextModal != null) {
+        ZwapTranslation.showEditTextModal!(context, _updateValue, widget.text.key);
+        return;
+      }
+      throw Exception("Did you forget to add a showEditTextModal handler in [ZwapTranslation]?");
+    }
 
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text("Edit text"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ZwapText(
-                    text: "Text was: ",
-                    zwapTextType: ZwapTextType.smallBodySemibold,
-                    textColor: ZwapColors.neutral500,
-                  ),
-                  const SizedBox(height: 4),
-                  widget.builder(),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: TextEditingController(text: widget.text.getTranslation()),
-                    onChanged: (value) => overrideValue(value),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-        child: widget.builder(),
-      ),
+    return Tooltip(
+      message: widget.text.useLongPress ? "Long press to edit" : "Click to edit",
+      child: widget.text.enableEdit
+          ? InkWell(
+              onLongPress: widget.text.useLongPress ? _handleEdit : null,
+              onTap: widget.text.useLongPress ? null : _handleEdit,
+              child: widget.builder(),
+            )
+          : widget.builder(),
     );
   }
 }

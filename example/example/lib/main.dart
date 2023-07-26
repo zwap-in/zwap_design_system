@@ -35,7 +35,7 @@ void main() {
               controller: TextEditingController(text: currentValue),
               onChanged: (value) {
                 print('sdfasdf $value');
-                overrideText(value);
+                overrideText();
               },
             ),
           ],

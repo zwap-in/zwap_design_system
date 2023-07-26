@@ -1175,3 +1175,6 @@ a
 
 ## 0.1.763
 * Improved [ZwapTranslation] feature inside [ZwapText]
+
+## 0.1.764
+* Improved [ZwapTranslation] feature inside [ZwapText]
