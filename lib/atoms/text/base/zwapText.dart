@@ -60,6 +60,12 @@ class ZwapTranslation extends Pattern {
   /// Provided to the translate function
   final Map<String, dynamic> arguments;
 
+  /// If true the '\n' character will be replaced with a new line
+  /// character
+  ///
+  /// Default value is true
+  final bool castLineBreaks;
+
   /// The [key] property is used to retrive the string from the
   /// [ZwapTranslation.translate] function
   ///
@@ -94,20 +100,28 @@ class ZwapTranslation extends Pattern {
   /// "greeter" key string will be actually changed. The dynamic name is provided using
   /// the [arguments] property and the exclamation mark do not belong to the editable string
   ///
+  /// ---
+  ///
+  /// Use [castLineBreaks] to replace the '\n' character with a new line character
   ZwapTranslation(
     this.key, {
     this.enableEdit = true,
     this.useLongPress = false,
     String Function(String)? decorate,
     this.arguments = const {},
+    this.castLineBreaks = true,
   }) : _decorate = decorate;
 
   String getTranslation() {
     assert(translate != null, "Did you forget to add a translate function handler in [ZwapTranslation]?");
-    final String? _res = translate!(key, arguments!);
+    String? _res = translate!(key, arguments!);
 
     if (_res == null) {
       throw Exception("The key [$key] is not present in the translation file");
+    }
+
+    if (castLineBreaks) {
+      _res = _res.replaceAll(r"\n", "\n");
     }
 
     if (_decorate != null) return _decorate!(_res);
@@ -125,7 +139,7 @@ class ZwapTranslation extends Pattern {
   }
 
   @override
-  String toString() => key;
+  String toString() => getTranslation();
 
   final List<Function()> _notifiers = [];
 

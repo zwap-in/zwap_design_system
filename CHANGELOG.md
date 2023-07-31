@@ -1188,3 +1188,6 @@ a
 
 ## 0.1.767
 * Fixed bug in the [ZwapTranslation] feature
+
+## 0.1.768
+*  Improved [ZwapTranslation] feature
