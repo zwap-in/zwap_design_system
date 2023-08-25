@@ -80,7 +80,7 @@ class ZwapTextSpan {
       return TextSpan(
         text: _t.getTranslation(),
         style: textStyle,
-        onEnter: !_t.enableEdit
+        onEnter: !_t.enableEdit || !ZwapTranslation.enableEdits
             ? null
             : (_) => ZwapToasts.showInfoToast(
                   _t.useLongPress ? "Right click to edit" : "Click to edit",

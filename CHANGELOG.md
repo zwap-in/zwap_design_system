@@ -1191,3 +1191,6 @@ a
 
 ## 0.1.768
 *  Improved [ZwapTranslation] feature
+
+## 0.1.769
+* Improved [ZwapTranslation] feature

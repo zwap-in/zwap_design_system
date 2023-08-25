@@ -1,4 +1,5 @@
 import 'package:example/stories/tests_story.dart';
+import 'package:example/stories/zwap_charts_story.dart';
 import 'package:example/stories/zwap_slot_duration_story.dart';
 import 'package:example/stories/zwap_toast_story.dart';
 import 'package:example/stories/zwap_tooltip_story.dart';
@@ -20,6 +21,7 @@ import 'package:flutter/material.dart';
 
 enum ZwapStories {
   buttons,
+  charts,
   percent,
   weeklyCalendarPicker,
   checkbox,
@@ -55,6 +57,11 @@ List<ZwapStory> stories = [
     name: "Slot Duration Widgets",
     builder: (context) => const ZwapSlotDurationStory(),
     story: ZwapStories.slotDuration,
+  ),
+  ZwapStory(
+    name: "Slot Charts Widgets",
+    builder: (context) => const ZwapChartsStory(),
+    story: ZwapStories.charts,
   ),
   ZwapStory(
     name: "ZwapButton",
