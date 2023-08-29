@@ -1194,3 +1194,7 @@ a
 
 ## 0.1.769
 * Improved [ZwapTranslation] feature
+
+## 0.1.770
+* Now completion value of [ZwapButton] can be used with gradient 
+* Added options as features to [ZwapButton]

@@ -127,6 +127,56 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                     ]
                   : [
                       ZwapButton(
+                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        height: 32,
+                        width: 130,
+                        buttonChild: ZwapButtonChild.text(text: "Label"),
+                        loading: _loading,
+                        disabled: _disabled,
+                        decorations: ZwapButtonDecorations.primaryLight(),
+                        onTap: () => ZwapToasts.showSuccessToast("akdjfaskdjfaklsdjfòja hdfajkòsdfa", context: context),
+                        rightOptions: ZwapButtonOptions(
+                          options: [
+                            ZwapButtonOption(
+                              label: 'Deseleziona',
+                              icon: Icons.remove_circle_outline,
+                              onTap: () => print('Deseleziona'),
+                            ),
+                            ZwapButtonOption(
+                              label: 'Scarta',
+                              icon: Icons.cancel_outlined,
+                              onTap: () => print('Scarta'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      ZwapButton(
+                        key: ValueKey('slkdfjaksdfj'),
+                        width: 194,
+                        height: 55,
+                        decorations: ZwapButtonDecorations.primaryLight(
+                          internalPadding: EdgeInsets.zero,
+                          borderRadius: BorderRadius.circular(100),
+                          gradient: ZwapColors.violetGradient(),
+                        ),
+                        completionValue: _completionValue,
+                        disabled: false,
+                        loading: _loading,
+                        buttonChild: ZwapButtonChild.textWithIcon(
+                          text: 'Prossimo',
+                          iconPosition: ZwapButtonIconPosition.right,
+                          icon: Icons.arrow_circle_right_outlined,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          iconSize: 20,
+                        ),
+                        onTap: () async {
+                          print('asdlfkasjdklfajsdklfa');
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      ZwapButton(
                         key: ValueKey('next_ob_button'),
                         width: 194,
                         height: 55,
