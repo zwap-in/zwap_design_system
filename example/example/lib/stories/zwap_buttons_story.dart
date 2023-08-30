@@ -134,7 +134,7 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                         loading: _loading,
                         disabled: _disabled,
                         decorations: ZwapButtonDecorations.primaryLight(),
-                        onTap: () => ZwapToasts.showSuccessToast("akdjfaskdjfaklsdjfòja hdfajkòsdfa", context: context),
+                        onTap: ZwapButton.openOptions,
                         rightOptions: ZwapButtonOptions(
                           options: [
                             ZwapButtonOption(

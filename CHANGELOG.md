@@ -1198,3 +1198,6 @@ a
 ## 0.1.770
 * Now completion value of [ZwapButton] can be used with gradient 
 * Added options as features to [ZwapButton]
+
+## 0.1.771
+* Added [ZwapButton.openOptions] static callback to trigger options opening

@@ -8,14 +8,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/atoms/colors/zwapColors.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
-
-import '../constants/zwapConstants.dart';
-import '../typography/zwapTypography.dart';
 
 part './zwap_button_decorations.dart';
 part './zwap_button_options.dart';
+
+extension ZwapButtonOpenOptionsCallback on void Function() {}
 
 //FEATURE: In line buttons (2 bottoni uno affiano all'altro -> su schemi piccoli uno sotto l'altro)
 
@@ -132,6 +130,8 @@ class ZwapButtonChild {
 }
 
 class ZwapButton extends StatefulWidget {
+  static void Function() openOptions = () {};
+
   /// Content of button
   final Widget Function(ZwapButtonStatusDescription)? child;
 
@@ -265,6 +265,7 @@ class ZwapButton extends StatefulWidget {
 }
 
 class _ZwapButtonState extends State<ZwapButton> {
+  final GlobalKey<_ZwapButtonOptionsAppendiceState> _optionsKey = GlobalKey<_ZwapButtonOptionsAppendiceState>();
   late final FocusNode _focusNode;
   late final ZwapButtonDecorations _decorations;
   late final ZwapButtonDecorations _selectedDecorations;
@@ -514,6 +515,7 @@ class _ZwapButtonState extends State<ZwapButton> {
           child,
           const SizedBox(width: 1),
           _ZwapButtonOptionsAppendice(
+            key: _optionsKey,
             decorations: _decorations,
             height: widget.height ?? double.infinity,
             options: widget.rightOptions!,
@@ -538,7 +540,14 @@ class _ZwapButtonState extends State<ZwapButton> {
           duration: const Duration(milliseconds: 200),
           opacity: widget.hide ? 0 : 1,
           child: GestureDetector(
-            onTap: (_loading || _disabled) ? null : widget.onTap,
+            onTap: (_loading || _disabled)
+                ? null
+                : widget.onTap != ZwapButton.openOptions
+                    ? widget.onTap
+                    : () {
+                        if (_optionsKey.currentContext?.mounted != true) return;
+                        _optionsKey.currentState?._showOverlay();
+                      },
             onLongPress: () {
               if (_pressed) setState(() => _pressed = false);
               if (widget.onLongTap != null) widget.onLongTap!();
