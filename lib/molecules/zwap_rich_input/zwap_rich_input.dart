@@ -27,7 +27,7 @@ class ZwapRichInput extends StatefulWidget {
   const ZwapRichInput({
     this.initialValue,
     this.onValueChange,
-    this.canEditFontSize = false,
+    this.canEditFontSize = true,
     super.key,
   });
 
@@ -101,10 +101,11 @@ class _ZwapRichInputState extends State<ZwapRichInput> {
           return TextField(
             focusNode: _node,
             controller: _provider.controller,
-            style: ZwapTextType.mediumBodyRegular.copyWith(fontSize: _maxFontSize),
+            style: ZwapTextType.mediumBodyRegular.copyWith(fontSize: 14),
             decoration: InputDecoration.collapsed(
               hintText: 'Inserisci qui il testo',
             ),
+            strutStyle: StrutStyle(forceStrutHeight: true),
             cursorColor: ZwapColors.primary900Dark,
             minLines: 1,
             maxLines: 500,

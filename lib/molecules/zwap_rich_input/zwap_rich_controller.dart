@@ -205,19 +205,19 @@ class ZwapRichController extends TextEditingController {
 
     final List<TextSpan> children = [];
 
-    double _maxFontSize = defaultTextStyle.fontSize ?? 0;
     for (int i = 0; i < text.length; i++) {
       children.add(
         TextSpan(
           text: text[i],
           style: (_dictionary[i] ?? defaultTextStyle).copyWith(
-              height: min(
+            height: text[i] == 'a' ? 1.5 : 4,
+          ) /* min(
             1.2,
             (_dictionary[i]?.fontSize ?? 0) / (defaultTextStyle.fontSize ?? 1),
-          )),
+          )) */
+          ,
         ),
       );
-      if (_maxFontSize < (_dictionary[i]?.fontSize ?? 0)) _maxFontSize = _dictionary[i]!.fontSize!;
     }
 
     return TextSpan(

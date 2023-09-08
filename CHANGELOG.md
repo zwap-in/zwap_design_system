@@ -1201,3 +1201,6 @@ a
 
 ## 0.1.771
 * Added [ZwapButton.openOptions] static callback to trigger options opening
+
+## 0.1.772
+* Update package version

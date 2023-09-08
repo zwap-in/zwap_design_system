@@ -86,7 +86,7 @@ class _ZwapButtonOptionsAppendiceState extends State<_ZwapButtonOptionsAppendice
 
   bool get _isOpened => _entry?.mounted ?? false;
 
-  void _showOverlay() {
+  void showOverlay() {
     if (_isOpened) return;
 
     final Size _overlaySize = Size(200, 100);
@@ -140,7 +140,7 @@ class _ZwapButtonOptionsAppendiceState extends State<_ZwapButtonOptionsAppendice
 
           setState(() {});
         } else {
-          _showOverlay();
+          showOverlay();
         }
       },
       child: Container(

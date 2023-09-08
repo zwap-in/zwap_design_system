@@ -546,7 +546,7 @@ class _ZwapButtonState extends State<ZwapButton> {
                     ? widget.onTap
                     : () {
                         if (_optionsKey.currentContext?.mounted != true) return;
-                        _optionsKey.currentState?._showOverlay();
+                        _optionsKey.currentState?.showOverlay();
                       },
             onLongPress: () {
               if (_pressed) setState(() => _pressed = false);
