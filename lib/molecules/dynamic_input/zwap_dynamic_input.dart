@@ -64,6 +64,11 @@ class ZwapDynamicInput extends StatefulWidget {
 
   final Color? overlayColor;
 
+  /// Offset added to the one calculated for the overlay.
+  ///
+  /// Used to correct the position of the overlay
+  final Offset translateOffset;
+
   const ZwapDynamicInput({
     required this.content,
     required this.overlay,
@@ -81,6 +86,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.expanded = true,
     this.minOverlayWidth,
     this.borderRadius = 8,
+    this.translateOffset = Offset.zero,
     Key? key,
   })  : this._lockHeight = true,
         super(key: key);
@@ -104,6 +110,7 @@ class ZwapDynamicInput extends StatefulWidget {
     this.expanded = true,
     this.minOverlayWidth,
     this.borderRadius = 8,
+    this.translateOffset = Offset.zero,
     Key? key,
   })  : this._lockHeight = false,
         super(key: key);
@@ -174,6 +181,11 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
     _overlayTopOffset = _openOnTop ? null : _inputRect.bottomLeft.dy + 8;
     _overlayBottomOffset = _openOnTop ? (MediaQuery.of(context).size.height - _inputRect.topCenter.dy) + 8 : null;
     _overlayLeftOffset = _inputRect.left;
+
+    //? Correcting position using [widget.translateOffset]
+    if (_overlayTopOffset != null) _overlayTopOffset = _overlayTopOffset! + widget.translateOffset.dy;
+    if (_overlayBottomOffset != null) _overlayBottomOffset = _overlayBottomOffset! + widget.translateOffset.dy;
+    if (_overlayLeftOffset != null) _overlayLeftOffset = _overlayLeftOffset! + widget.translateOffset.dx;
 
     final Widget _child = ZwapOverlayEntryWidget(
       onAutoClose: _closeOverlay,

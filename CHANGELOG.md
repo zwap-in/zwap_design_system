@@ -1204,3 +1204,6 @@ a
 
 ## 0.1.772
 * Update package version
+
+## 0.1.773
+* Added correct translation offset and decorations properties to [ZwapTimePicker]

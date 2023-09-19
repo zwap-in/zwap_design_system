@@ -458,6 +458,13 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                             setState(() => time = v);
                           },
                           title: "DALLE",
+                          translateOffset: const Offset(-64, 0),
+                          backgroundColor: Colors.transparent,
+                          borderActiveColor: ZwapColors.primary400,
+                          borderDefaultColor: const Color(0xff808092),
+                          overlayColor: ZwapColors.primary900Dark,
+                          titleColor: ZwapColors.shades0,
+                          valueColor: ZwapColors.shades0,
                         ),
                       ),
                       const SizedBox(width: 12),

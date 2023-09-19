@@ -36,15 +36,21 @@ class MyApp extends StatelessWidget {
             supportedLocales: [
               Locale('it', 'IT'),
             ],
-            home: Builder(
-              builder: (context) {
-                final bool _loading = context.select<StoryProvider, bool>((pro) => pro.loading);
-                if (_loading)
-                  return const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(ZwapColors.primary700), strokeWidth: 1.8));
+            home: const StoryBookWidget(),
+            builder: (context, child) {
+              final bool _loading = context.select<StoryProvider, bool>((pro) => pro.loading);
+              if (_loading)
+                return const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(ZwapColors.primary700), strokeWidth: 1.8));
 
-                return OKToast(child: const StoryBookWidget());
-              },
-            ),
+              return OKToast(
+                  child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const SizedBox(width: 64),
+                  Expanded(child: child!),
+                ],
+              ));
+            },
           ),
         );
       },

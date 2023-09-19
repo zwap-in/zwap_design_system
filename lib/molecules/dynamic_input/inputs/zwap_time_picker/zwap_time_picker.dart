@@ -67,6 +67,16 @@ class ZwapTimePicker extends StatefulWidget {
 
   final String title;
 
+  /// Used to correct the overlay position
+  final Offset translateOffset;
+
+  final Color? overlayColor;
+  final Color? borderDefaultColor;
+  final Color? borderActiveColor;
+  final Color? backgroundColor;
+  final Color? valueColor;
+  final Color? titleColor;
+
   const ZwapTimePicker({
     required this.title,
     this.value,
@@ -75,6 +85,13 @@ class ZwapTimePicker extends StatefulWidget {
     this.placeholder = '',
     this.mustRespectGap = true,
     this.showClear = true,
+    this.translateOffset = const Offset(0, 0),
+    this.overlayColor,
+    this.borderDefaultColor,
+    this.borderActiveColor,
+    this.backgroundColor,
+    this.valueColor,
+    this.titleColor,
     super.key,
   });
 
@@ -152,9 +169,16 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
             final TimeOfDay? _selectedItem = context.select<_ZwapTimePickerProvider, TimeOfDay?>((pro) => pro.value);
 
             return ZwapDynamicInput(
+              /// ---tmp
+              backgroundColor: widget.backgroundColor,
+              defaultColor: widget.borderDefaultColor,
+              overlayColor: widget.overlayColor,
+              activeColor: widget.borderActiveColor ?? ZwapColors.primary700,
+
+              /// ---tmp
+              translateOffset: widget.translateOffset,
               minOverlayWidth: 96,
               key: _provider.inputKey,
-              activeColor: ZwapColors.primary700,
               builder: (context, child) => ChangeNotifierProvider<_ZwapTimePickerProvider>.value(
                 value: _provider,
                 child: child,
@@ -174,7 +198,7 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
                             text: widget.title,
                             customTextStyle: ZwapTextType.smallBodySemibold.copyWith(
                               fontSize: 10,
-                              color: ZwapColors.neutral400,
+                              color: widget.titleColor ?? ZwapColors.neutral400,
                               height: 1.1,
                             ),
                           ),
@@ -182,12 +206,12 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
                           TextField(
                             controller: _provider.inputController,
                             focusNode: _inputNode,
-                            style: getTextStyle(ZwapTextType.bigBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+                            style: getTextStyle(ZwapTextType.bigBodyRegular).copyWith(color: widget.valueColor ?? ZwapColors.primary900Dark),
                             decoration: InputDecoration.collapsed(
                               border: InputBorder.none,
                               hintText: widget.placeholder,
                             ),
-                            cursorColor: ZwapColors.primary900Dark,
+                            cursorColor: (widget.valueColor ?? ZwapColors.primary900Dark).withOpacity(.7),
                             onEditingComplete: () {
                               _provider.validateInput();
                               _provider.inputKey.closeIfOpen();
