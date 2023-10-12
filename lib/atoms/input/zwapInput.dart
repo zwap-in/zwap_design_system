@@ -191,6 +191,9 @@ class ZwapInput extends StatefulWidget {
 
   final EdgeInsets? scrollPadding;
 
+  final TextAlign? textAlign;
+  final TextAlignVertical? textAlignVertical;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -249,6 +252,8 @@ class ZwapInput extends StatefulWidget {
     this.labelTextStyle,
     this.scrollController,
     this.scrollPadding,
+    this.textAlign,
+    this.textAlignVertical,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -311,6 +316,8 @@ class ZwapInput extends StatefulWidget {
     this.labelTextStyle,
     this.scrollController,
     this.scrollPadding,
+    this.textAlign,
+    this.textAlignVertical,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -503,7 +510,7 @@ class _ZwapInputState extends State<ZwapInput> {
         textCapitalization: widget.textCapitalization ?? TextCapitalization.sentences,
         cursorColor: widget.cursorColor ?? ZwapColors.shades100,
         obscureText: (widget.autoObscureIfPassword && widget.textInputType == TextInputType.visiblePassword) || widget.obscure,
-        textAlign: TextAlign.start,
+        textAlign: widget.textAlign ?? TextAlign.start,
         focusNode: widget.readOnly ? FocusNode() : _focusNode,
         style: widget.disabled
             ? widget.disabledTextStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral300)
@@ -515,6 +522,7 @@ class _ZwapInputState extends State<ZwapInput> {
         onTap: widget.onTap,
         inputFormatters: widget.inputFormatters,
         onEditingComplete: widget.onEditingComplete,
+        textAlignVertical: widget.textAlignVertical,
       ),
     );
   }

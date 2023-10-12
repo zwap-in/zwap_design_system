@@ -1207,3 +1207,6 @@ a
 
 ## 0.1.773
 * Added correct translation offset and decorations properties to [ZwapTimePicker]
+
+## 0.1.774
+* Added [textAlign] and [textAlignVertical] properties to [ZwapInput]
