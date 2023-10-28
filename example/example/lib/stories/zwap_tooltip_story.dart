@@ -33,6 +33,8 @@ class ZwapTooltipStory extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             ZwapTooltip.builder(
+              transationOffset: Offset(-70, 5),
+              radius: 5,
               borderColor: Colors.white.withOpacity(.3),
               builder: (_) => Container(
                 width: 130,
@@ -53,7 +55,6 @@ class ZwapTooltipStory extends StatelessWidget {
                   ],
                 ),
               ),
-              transationOffset: Offset(40, 5),
               child: Container(
                 height: 70,
                 width: 120,

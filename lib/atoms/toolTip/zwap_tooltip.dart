@@ -90,6 +90,9 @@ class ZwapTooltip extends StatefulWidget {
   /// The color of the background
   final Color? backgroundColor;
 
+  /// The radius of the borders and the decoration
+  final double radius;
+
   /// Show a customized tooltip message when user hover
   /// this widget with mouse
   ///
@@ -110,6 +113,7 @@ class ZwapTooltip extends StatefulWidget {
     this.simple = false,
     this.borderColor,
     this.backgroundColor,
+    this.radius = 14,
     Key? key,
   })  : this.builder = null,
         super(key: key);
@@ -134,6 +138,7 @@ class ZwapTooltip extends StatefulWidget {
     this.simple = false,
     this.borderColor,
     this.backgroundColor,
+    this.radius = 14,
     Key? key,
   })  : this.message = null,
         super(key: key);
@@ -212,6 +217,7 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
             builder: widget.builder,
             simple: widget.simple,
             borderColor: widget.borderColor,
+            radius: widget.radius,
           ),
         ),
       ),
@@ -308,6 +314,8 @@ class _ZwapTooltipOverlay extends StatefulWidget {
   final Color? borderColor;
   final Color? backgroundColor;
 
+  final double radius;
+
   const _ZwapTooltipOverlay({
     required this.message,
     required this.builder,
@@ -316,6 +324,7 @@ class _ZwapTooltipOverlay extends StatefulWidget {
     required this.padding,
     required this.animationDuration,
     required this.decorationOffset,
+    required this.radius,
     required this.simple,
     this.borderColor,
     this.backgroundColor,
@@ -381,6 +390,7 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
           clipper: ZwapMessageClipper(
             direction: widget.direction,
             decorationOffset: widget.decorationOffset,
+            radius: widget.radius + 1,
           ),
           child: Container(
             color: widget.borderColor,
@@ -402,7 +412,7 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
 
     if (widget.simple)
       return _wrapContent(
-        ClipRRect(borderRadius: BorderRadius.circular(14), child: content),
+        ClipRRect(borderRadius: BorderRadius.circular(widget.radius), child: content),
       );
 
     return _wrapContent(
@@ -410,6 +420,7 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
         clipper: ZwapMessageClipper(
           direction: widget.direction,
           decorationOffset: widget.decorationOffset,
+          radius: widget.radius,
         ),
         child: content,
       ),

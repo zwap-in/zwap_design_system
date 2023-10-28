@@ -1210,3 +1210,6 @@ a
 
 ## 0.1.774
 * Added [textAlign] and [textAlignVertical] properties to [ZwapInput]
+
+## 0.1.775
+* Added radius property to zwap tooltip
