@@ -1213,3 +1213,6 @@ a
 
 ## 0.1.775
 * Added radius property to zwap tooltip
+
+## 0.1.776
+* Fixed a problem when combining [borderColor] and [simple] properties in [ZwapTooltip]

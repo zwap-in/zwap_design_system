@@ -386,18 +386,24 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
 
     Widget _wrapContent(Widget child) {
       if (widget.borderColor != null) {
-        child = ClipPath(
-          clipper: ZwapMessageClipper(
-            direction: widget.direction,
-            decorationOffset: widget.decorationOffset,
-            radius: widget.radius + 1,
-          ),
-          child: Container(
-            color: widget.borderColor,
+        final Widget _res = Container(
             padding: const EdgeInsets.all(1),
             child: child,
-          ),
-        );
+            decoration: BoxDecoration(
+              color: widget.borderColor,
+              borderRadius: widget.simple ? BorderRadius.circular(widget.radius + 1) : null,
+            ));
+        if (widget.simple)
+          child = _res;
+        else
+          child = ClipPath(
+            clipper: ZwapMessageClipper(
+              direction: widget.direction,
+              decorationOffset: widget.decorationOffset,
+              radius: widget.radius + 1,
+            ),
+            child: _res,
+          );
       }
 
       return Material(

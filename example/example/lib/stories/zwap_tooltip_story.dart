@@ -14,8 +14,8 @@ class ZwapTooltipStory extends StatelessWidget {
           children: [
             ZwapTooltip(
               message: "Proident aute ea id velit eu mollit.",
-              transationOffset: Offset(40, 5),
-              // simple: true,
+              transationOffset: Offset(100, 5),
+              simple: true,
               position: TooltipPosition.top,
               borderColor: Colors.white.withOpacity(.3),
               child: Container(
