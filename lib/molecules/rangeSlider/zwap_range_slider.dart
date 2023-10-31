@@ -27,6 +27,10 @@ class ZwapRangeSlider extends StatefulWidget {
   /// The size of the thumbs, default to 16
   final double thumbSize;
 
+  final double lineWidth;
+
+  final double lineBorderRadius;
+
   final Function(ZwapRangeValues)? onChange;
 
   const ZwapRangeSlider({
@@ -35,6 +39,8 @@ class ZwapRangeSlider extends StatefulWidget {
     this.maxValue = 5,
     this.thumbSize = 16,
     this.onChange,
+    this.lineWidth = 4,
+    this.lineBorderRadius = 2,
     Key? key,
   }) : super(key: key);
 
@@ -131,25 +137,31 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
               children: [
                 //? Placeholder line
                 Positioned(
-                  top: (_thumbSize / 2) - 1,
+                  top: (_thumbSize / 2) - (widget.lineWidth / 2),
                   left: 1,
                   right: 1,
                   child: Container(
-                    height: 4,
-                    decoration: BoxDecoration(color: ZwapColors.neutral200, borderRadius: BorderRadius.circular(2)),
+                    height: widget.lineWidth,
+                    decoration: BoxDecoration(
+                      color: ZwapColors.neutral200,
+                      borderRadius: BorderRadius.circular(widget.lineBorderRadius),
+                    ),
                   ),
                 ),
                 //? Range line
                 AnimatedPositioned(
                   duration: _animationDuration,
                   curve: Curves.decelerate,
-                  top: (_thumbSize / 2) - 1,
+                  top: (_thumbSize / 2) - (widget.lineWidth / 2),
                   left: _startThumbOffset + 1,
                   right: _endThumbOffset + 1,
                   child: Container(
                     width: double.infinity,
-                    height: 4,
-                    decoration: BoxDecoration(color: ZwapColors.primary700, borderRadius: BorderRadius.circular(2)),
+                    height: widget.lineWidth,
+                    decoration: BoxDecoration(
+                      color: ZwapColors.primary700,
+                      borderRadius: BorderRadius.circular(widget.lineBorderRadius),
+                    ),
                   ),
                 ),
                 //? Start thumb widget
@@ -180,11 +192,11 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
                           setState(() => _showStartIfEquals = !_showStartIfEquals);
                         },
                         child: Container(
-                          height: 16,
-                          width: 16,
+                          height: _thumbSize,
+                          width: _thumbSize,
                           decoration: BoxDecoration(
                             color: ZwapColors.shades0,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(_thumbSize / 2),
                             boxShadow: [
                               BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
                               BoxShadow(offset: Offset(0, 3), color: Color(0xff091E42).withOpacity(0.2), blurRadius: 5),
@@ -222,11 +234,11 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
                           setState(() => _showStartIfEquals = !_showStartIfEquals);
                         },
                         child: Container(
-                          height: 16,
-                          width: 16,
+                          height: _thumbSize,
+                          width: _thumbSize,
                           decoration: BoxDecoration(
                             color: ZwapColors.shades0,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(_thumbSize / 2),
                             boxShadow: [
                               BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
                               BoxShadow(offset: Offset(0, 3), color: Color(0xff091E42).withOpacity(0.2), blurRadius: 5),

@@ -1216,3 +1216,8 @@ a
 
 ## 0.1.776
 * Fixed a problem when combining [borderColor] and [simple] properties in [ZwapTooltip]
+
+## 0.1.777
+* Fixed [thumbSize] behavior in [ZwapRangeSlider]
+* Added [lineWidth] and [lineBorderRadius] property to [ZwapRangeSlider]
+

@@ -631,6 +631,9 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                       value: ZwapRangeValues(min, max),
                       minValue: 5,
                       maxValue: 300,
+                      thumbSize: 32,
+                      lineWidth: 12,
+                      lineBorderRadius: 100,
                       onChange: (value) => setState(() {
                         min = value.min.floorToDouble();
                         max = value.max.floorToDouble();
