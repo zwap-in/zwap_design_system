@@ -1221,3 +1221,5 @@ a
 * Fixed [thumbSize] behavior in [ZwapRangeSlider]
 * Added [lineWidth] and [lineBorderRadius] property to [ZwapRangeSlider]
 
+## 0.1.778
+* Fixed problem while providing initial value in [ZwapRangeSlider]

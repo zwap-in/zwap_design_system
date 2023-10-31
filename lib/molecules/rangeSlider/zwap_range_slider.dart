@@ -75,6 +75,19 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
   bool get _isDragging => _draggedThumb != null;
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_maxWidth == null) return;
+      _startThumbOffset = _maxWidth! * ((widget.value?.min ?? 0) / (widget.maxValue - widget.minValue));
+      _endThumbOffset = _maxWidth! * (1 - ((widget.value?.max ?? 0) / (widget.maxValue - widget.minValue)));
+
+      setState(() {});
+    });
+  }
+
+  @override
   void didUpdateWidget(covariant ZwapRangeSlider oldWidget) {
     if (!_isDragging && widget.value != null && widget.value != _currentValue) {
       _animationDuration = const Duration(milliseconds: 200);

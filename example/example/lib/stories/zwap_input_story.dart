@@ -103,7 +103,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   final int _year = 2020;
 
-  double min = 5;
+  double min = 70;
   double max = 300;
   int _valueInline = 1;
 
@@ -615,6 +615,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                       'dk': 'gerger',
                       'bg': 'kmbaresf',
                       'uk': 'sdeg4ergf',
+
                       'pl': 'sdfasd',
                       'cn': 'afdasdf',
                       'cz': 'gerger',
