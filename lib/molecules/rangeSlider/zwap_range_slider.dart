@@ -80,9 +80,8 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_maxWidth == null) return;
-      _startThumbOffset = _maxWidth! * ((widget.value?.min ?? 0) / (widget.maxValue - widget.minValue));
-      _endThumbOffset = _maxWidth! * (1 - ((widget.value?.max ?? 0) / (widget.maxValue - widget.minValue)));
 
+      _currentValue = widget.value ?? ZwapRangeValues(widget.minValue, widget.maxValue);
       setState(() {});
     });
   }
@@ -122,7 +121,6 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
     _endThumbOffset = _maxWidth! * (1 - (value.max - widget.minValue) / _dValue);
 
     //? Correct values here
-
     _startThumbOffset -= (_startThumbOffset / _maxWidth!) * _thumbSize;
     _endThumbOffset -= (_endThumbOffset / _maxWidth!) * _thumbSize;
 

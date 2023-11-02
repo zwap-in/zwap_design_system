@@ -104,7 +104,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
   final int _year = 2020;
 
   double min = 70;
-  double max = 300;
+  double max = 250;
   int _valueInline = 1;
 
   List<String> _selectedLanguages = [];
@@ -615,7 +615,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                       'dk': 'gerger',
                       'bg': 'kmbaresf',
                       'uk': 'sdeg4ergf',
-
                       'pl': 'sdfasd',
                       'cn': 'afdasdf',
                       'cz': 'gerger',
@@ -628,6 +627,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                   SizedBox(height: 20),
                   const SizedBox(height: 20),
                   Container(
+                    width: 400,
                     child: ZwapRangeSlider(
                       value: ZwapRangeValues(min, max),
                       minValue: 5,
@@ -640,7 +640,6 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                         max = value.max.floorToDouble();
                       }),
                     ),
-                    width: 200,
                   ),
                   SizedBox(height: 15),
                   Container(
@@ -653,7 +652,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                     width: 200,
                   ),
                   SizedBox(height: 5),
-                  Text('$min -- $max'),
+                  Text('$min -- $max', style: ZwapTextType.bigBodyBold.copyWith(color: Colors.white)),
                   SizedBox(height: 15),
                   Text('$_value'),
                   SizedBox(height: 20),
