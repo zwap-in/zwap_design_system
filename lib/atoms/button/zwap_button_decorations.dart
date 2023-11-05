@@ -1,6 +1,8 @@
 part of zwap_button;
 
 class ZwapButtonDecorations {
+  static Color? primaryColor;
+
   final BorderRadius? borderRadius;
   final Border? border;
   final Border? hoverBorder;
@@ -84,7 +86,6 @@ class ZwapButtonDecorations {
     this.animationDuration,
   });
 
-  /// [borderWitdh] Not used if custom border is provided
   ZwapButtonDecorations.primaryLight({
     Border? border,
     Border? disabledBorder,
@@ -115,10 +116,10 @@ class ZwapButtonDecorations {
     Color? pressedContentColor,
     double? borderWitdh,
     this.animationDuration,
-  })  : this.backgroundColor = backgroundColor ?? ZwapColors.primary900,
-        this.focussedColor = focussedColor ?? ZwapColors.primary700,
-        this.hoverColor = hoverColor ?? ZwapColors.primary700,
-        this.disabledColor = disabledColor ?? ZwapColors.primary200,
+  })  : this.backgroundColor = backgroundColor ?? primaryColor ?? ZwapColors.primary900,
+        this.focussedColor = focussedColor ?? primaryColor ?? ZwapColors.primary700,
+        this.hoverColor = hoverColor ?? primaryColor ?? ZwapColors.primary700,
+        this.disabledColor = disabledColor ?? primaryColor?.withOpacity(.15) ?? ZwapColors.primary200,
         this.borderRadius = borderRadius ?? BorderRadius.circular(ZwapRadius.buttonRadius),
         this.border = border,
         this.disabledBorder = disabledBorder,
@@ -138,7 +139,7 @@ class ZwapButtonDecorations {
         this.disabledContentColor = disabledContentColor ?? ZwapColors.shades0,
         this.focussedContentColor = focussedContentColor ?? ZwapColors.shades0,
         this.pressedBorder = pressedBorder ?? Border.all(color: ZwapColors.primary200, width: borderWitdh ?? 2),
-        this.pressedColor = pressedColor ?? ZwapColors.primary700,
+        this.pressedColor = pressedColor ?? primaryColor ?? ZwapColors.primary700,
         this.pressedContentColor = pressedContentColor ?? ZwapColors.shades0,
         this.pressedGradient = pressedGradient,
         this.pressedShadow = pressedShadow;

@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
+  ZwapButtonDecorations.primaryColor = const Color(0xff5D5FEF);
+
   runApp(const MyApp());
 }
 

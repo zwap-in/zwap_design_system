@@ -1226,3 +1226,6 @@ a
 
 ## 0.1.779
 * Fixed problem while providing initial value in [ZwapRangeSlider]
+
+## 0.1.780
+* Little changes in [ZwapButton]
