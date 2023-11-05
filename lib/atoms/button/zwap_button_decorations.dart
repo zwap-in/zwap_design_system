@@ -2,6 +2,7 @@ part of zwap_button;
 
 class ZwapButtonDecorations {
   static Color? primaryColor;
+  static Color? primaryButtonDisabledContentColor;
 
   final BorderRadius? borderRadius;
   final Border? border;
@@ -136,7 +137,7 @@ class ZwapButtonDecorations {
         this.focussedGradient = focussedGradient,
         this.contentColor = contentColor ?? ZwapColors.shades0,
         this.hoverContentColor = hoverContentColor ?? ZwapColors.shades0,
-        this.disabledContentColor = disabledContentColor ?? ZwapColors.shades0,
+        this.disabledContentColor = disabledContentColor ?? primaryButtonDisabledContentColor ?? ZwapColors.shades0.withOpacity(.4),
         this.focussedContentColor = focussedContentColor ?? ZwapColors.shades0,
         this.pressedBorder = pressedBorder ?? Border.all(color: ZwapColors.primary200, width: borderWitdh ?? 2),
         this.pressedColor = pressedColor ?? primaryColor ?? ZwapColors.primary700,
