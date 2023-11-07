@@ -1238,3 +1238,7 @@ a
 
 ## 0.1.783
 * Now [onEndReached] and [onStartReached] callbacks of [EdgeNotifierScrollController] aren't final
+
+## 0.1.784
+* Fixed limit case UX issue in [ZwapTooltip]
+

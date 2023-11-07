@@ -172,7 +172,14 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
 
   @override
   void didUpdateWidget(covariant ZwapTooltip oldWidget) {
-    if (_showTooltip != widget.showTooltip) setState(() => _showTooltip = widget.showTooltip);
+    if (_showTooltip != widget.showTooltip) {
+      setState(() => _showTooltip = widget.showTooltip);
+
+      if (!widget.showTooltip && (_entry?.mounted ?? false)) {
+        _hideOverlay();
+      }
+    }
+
     super.didUpdateWidget(oldWidget);
   }
 
