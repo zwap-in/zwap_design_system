@@ -1242,3 +1242,6 @@ a
 ## 0.1.784
 * Fixed limit case UX issue in [ZwapTooltip]
 
+## 0.1.785
+* Fixed limit case UX issue in [ZwapTooltip]
+
