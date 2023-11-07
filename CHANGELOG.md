@@ -1235,3 +1235,6 @@ a
 
 ## 0.1.782
 * Added [seeMoreLessStyle] property to [ZwapExpandableText]
+
+## 0.1.783
+* Now [onEndReached] and [onStartReached] callbacks of [EdgeNotifierScrollController] aren't final

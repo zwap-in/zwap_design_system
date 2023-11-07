@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 class EdgeNotifierScrollController extends ScrollController {
   bool _canNotify = true;
 
-  final Function()? onEndReached;
-  final Function()? onStartReached;
+  Function()? onEndReached;
+  Function()? onStartReached;
 
   /// If provided EndNotifierScrollController will wait until this duration is passed before call the callback again
   final Duration? delayDuration;
