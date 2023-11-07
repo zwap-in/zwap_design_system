@@ -1232,3 +1232,6 @@ a
 
 ## 0.1.781
 * Little changes in [ZwapButton]
+
+## 0.1.782
+* Added [seeMoreLessStyle] property to [ZwapExpandableText]

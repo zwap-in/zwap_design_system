@@ -7,5 +7,6 @@
         "statusBarItem.hoverBackground": "#2fcefa",
         "statusBarItem.remoteBackground": "#61dafb",
         "statusBarItem.remoteForeground": "#15202b"
-    }
+    },
+    "cmake.sourceDirectory": "/Users/marchetti/Documents/zwap.nosync/zwap_design_system/example/example/windows"
 }

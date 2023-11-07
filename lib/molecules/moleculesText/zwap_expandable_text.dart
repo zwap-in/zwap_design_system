@@ -35,12 +35,15 @@ class ZwapExpandableText extends StatefulWidget {
 
   final TextAlign textAlign;
 
+  final TextStyle? seeMoreLessStyle;
+
   ZwapExpandableText({
     required this.text,
     required this.translateKey,
     required this.maxClosedLines,
     required this.textColor,
     required this.textType,
+    this.seeMoreLessStyle,
     this.textAlign = TextAlign.center,
     Key? key,
   })  : this.customStyle = null,
@@ -52,6 +55,7 @@ class ZwapExpandableText extends StatefulWidget {
     required this.maxClosedLines,
     required this.customStyle,
     this.textAlign = TextAlign.center,
+    this.seeMoreLessStyle,
     Key? key,
   })  : this.textColor = null,
         this.textType = null,
@@ -123,10 +127,12 @@ class _ExpandableTextState extends State<ZwapExpandableText> {
                     onTap: () => setState(() {
                       _showAllText = true;
                     }),
-                    child: ZwapText(
+                    child: ZwapText.customStyle(
                       text: widget.translateKey('see_more'),
-                      zwapTextType: ZwapTextType.smallBodyMedium,
-                      textColor: ZwapColors.neutral700,
+                      customTextStyle: widget.seeMoreLessStyle ??
+                          ZwapTextType.smallBodyRegular.copyWith(
+                            color: ZwapColors.neutral700,
+                          ),
                     ),
                   ),
                 )
@@ -137,10 +143,12 @@ class _ExpandableTextState extends State<ZwapExpandableText> {
                     onTap: () => setState(() {
                       _showAllText = false;
                     }),
-                    child: ZwapText(
+                    child: ZwapText.customStyle(
                       text: widget.translateKey('see_less'),
-                      zwapTextType: ZwapTextType.smallBodyMedium,
-                      textColor: ZwapColors.neutral700,
+                      customTextStyle: widget.seeMoreLessStyle ??
+                          ZwapTextType.smallBodyRegular.copyWith(
+                            color: ZwapColors.neutral700,
+                          ),
                     ),
                   ),
                 )
