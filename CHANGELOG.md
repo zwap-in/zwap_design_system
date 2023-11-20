@@ -1245,3 +1245,6 @@ a
 ## 0.1.785
 * Fixed limit case UX issue in [ZwapTooltip]
 
+## 0.1.786
+* Updated for new version on flutter (3.16)
+

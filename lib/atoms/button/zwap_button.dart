@@ -600,7 +600,7 @@ class _ZwapButtonState extends State<ZwapButton> {
 
                             return _wrapWithShaderMaskIfNeeded(
                               ClipRRect(
-                                borderRadius: _decorations.borderRadius,
+                                borderRadius: _decorations.borderRadius ?? BorderRadius.zero,
                                 child: Container(
                                   width: widget.width,
                                   alignment: Alignment.centerLeft,
