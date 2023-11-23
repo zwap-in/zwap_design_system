@@ -8,17 +8,15 @@ import 'package:zwap_design_system/atoms/atoms.dart';
 import '../colors/zwapColors.dart';
 
 enum ZwapFontFamily {
-  sfUiText,
-  manrope;
+  sfUiText('SFUIText'),
+  manrope('Manrope'),
+  inter('Inter');
 
-  String get familyName {
-    switch (this) {
-      case ZwapFontFamily.sfUiText:
-        return 'SFUIText';
-      case ZwapFontFamily.manrope:
-        return 'Manrope';
-    }
-  }
+  final String name;
+  const ZwapFontFamily(this.name);
+
+  @Deprecated("use [name] instead")
+  String get familyName => name;
 }
 
 /// The text type to get different typo in base of the current device sizes
@@ -266,7 +264,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get bigHeading => TextStyle(
@@ -277,7 +274,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get mediumHeading => TextStyle(
@@ -288,7 +284,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get semiboldH1 => TextStyle(
@@ -299,7 +294,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get heavyH1 => TextStyle(
@@ -310,7 +304,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get semiboldH2 => TextStyle(
@@ -321,7 +314,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get heavyH2 => TextStyle(
@@ -332,7 +324,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get semiboldH3 => TextStyle(
@@ -342,7 +333,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get heavyH3 => TextStyle(
@@ -352,7 +342,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get extraSmallBodyRegular => TextStyle(
@@ -363,7 +352,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get smallBodyLight => TextStyle(
@@ -374,7 +362,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get smallBodyRegular => TextStyle(
@@ -385,7 +372,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get smallBodyMedium => TextStyle(
@@ -396,7 +382,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get smallBodySemibold => TextStyle(
@@ -407,7 +392,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get smallBodyBold => TextStyle(
@@ -418,7 +402,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get smallBodyExtraBold => TextStyle(
@@ -429,7 +412,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get smallBodyBlack => TextStyle(
@@ -440,7 +422,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get mediumBodyLight => TextStyle(
@@ -450,7 +431,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get mediumBodyRegular => TextStyle(
@@ -460,7 +440,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get mediumBodyMedium => TextStyle(
@@ -470,7 +449,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get mediumBodySemibold => TextStyle(
@@ -480,7 +458,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get mediumBodyBold => TextStyle(
@@ -490,7 +467,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get mediumBodyExtraBold => TextStyle(
@@ -500,7 +476,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get mediumBodyBlack => TextStyle(
@@ -510,7 +485,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get bigBodyLight => TextStyle(
@@ -520,7 +494,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get bigBodyRegular => TextStyle(
@@ -530,7 +503,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get bigBodyMedium => TextStyle(
@@ -540,7 +512,6 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get bigBodySemibold => TextStyle(
@@ -551,7 +522,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get bigBodyBold => TextStyle(
@@ -562,7 +532,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get bigBodyExtraBold => TextStyle(
@@ -573,7 +542,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   static TextStyle get bigBodyBlack => TextStyle(
@@ -584,7 +552,6 @@ class ZwapTypography {
         letterSpacing: -0.24,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 
   /// This is the new version (design system 1.1) of buttonText
@@ -595,6 +562,5 @@ class ZwapTypography {
         height: 1.43,
         color: ZwapColors.shades100,
         fontFamily: family.familyName,
-
       );
 }

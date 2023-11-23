@@ -1248,3 +1248,6 @@ a
 ## 0.1.786
 * Updated for new version on flutter (3.16)
 
+## 0.1.787
+* Added new font family (Inter) 
+
