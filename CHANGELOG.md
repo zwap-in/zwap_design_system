@@ -1251,3 +1251,6 @@ a
 ## 0.1.787
 * Added new font family (Inter) 
 
+## 0.1.788
+* Added shortcut to [ZwapText] to use [lineHeight] as [letterSpacing] better
+

@@ -313,6 +313,19 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
 
   final bool _selectable;
 
+  /// The line height for this text (in pixels)
+  ///
+  /// Really useful when design is in figma
+  final double? lineHeight;
+
+  /// The letter spacing for this text (in percent)
+  ///
+  /// Really useful when design is in figma
+  final double? letterSpacing;
+
+  static double convertFontSpacing(double percent, [double fontSize = 16]) => fontSize * percent / 100;
+  static double convertFontHeight(double lineHeight, [double fontSize = 16]) => lineHeight / fontSize;
+
   ZwapText({
     Key? key,
     required this.text,
@@ -321,6 +334,8 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
     this.textAlign,
     this.maxLines,
     this.textOverflow,
+    this.lineHeight,
+    this.letterSpacing,
   })  : this.customTextStyle = null,
         _selectable = false,
         super(key: key);
@@ -332,6 +347,8 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
     this.textAlign,
     this.maxLines,
     this.textOverflow,
+    this.lineHeight,
+    this.letterSpacing,
   })  : assert(customTextStyle != null),
         this.zwapTextType = ZwapTextType.bodyRegular,
         _selectable = false,
@@ -347,6 +364,8 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
     this.textAlign,
     this.maxLines,
     this.textOverflow,
+    this.lineHeight,
+    this.letterSpacing,
   })  : this.customTextStyle = null,
         _selectable = true,
         super(key: key);
@@ -365,13 +384,27 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle _textStyle = customTextStyle ?? getTextStyle(this.zwapTextType).apply(color: this.textColor);
+
+    if (lineHeight != null) {
+      _textStyle = _textStyle.copyWith(
+        height: convertFontHeight(lineHeight!, _textStyle.fontSize ?? 16),
+      );
+    }
+
+    if (letterSpacing != null) {
+      _textStyle = _textStyle.copyWith(
+        letterSpacing: convertFontSpacing(letterSpacing!, _textStyle.fontSize ?? 16),
+      );
+    }
+
     if (_selectable)
       return SelectableText(
         actualText,
         maxLines: maxLines,
         textScaleFactor: 1,
         textAlign: this.textAlign,
-        style: customTextStyle ?? getTextStyle(this.zwapTextType).apply(color: this.textColor),
+        style: _textStyle,
       );
 
     Text _text() => Text(
@@ -380,7 +413,7 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
           overflow: textOverflow,
           textScaleFactor: 1,
           textAlign: this.textAlign,
-          style: customTextStyle ?? getTextStyle(this.zwapTextType).apply(color: this.textColor),
+          style: _textStyle,
         );
 
     if (ZwapTranslation.enableEdits && isZwapTranslation)
