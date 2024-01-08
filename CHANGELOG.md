@@ -1254,3 +1254,6 @@ a
 ## 0.1.788
 * Added shortcut to [ZwapText] to use [lineHeight] as [letterSpacing] better
 
+## 0.1.789
+* Improvements to [ZwapButtonOptions]
+

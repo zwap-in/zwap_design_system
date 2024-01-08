@@ -152,6 +152,34 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                       ),
                       const SizedBox(height: 24),
                       ZwapButton(
+                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        height: 32,
+                        width: 130,
+                        buttonChild: ZwapButtonChild.text(text: "Label"),
+                        loading: _loading,
+                        disabled: _disabled,
+                        decorations: ZwapButtonDecorations.quaternary(
+                          border: Border.all(color: ZwapColors.neutral200),
+                        ),
+                        onTap: ZwapButton.openOptions,
+                        rightOptions: ZwapButtonOptions(
+                          openOnBottom: true,
+                          options: [
+                            ZwapButtonOption(
+                              label: 'Deseleziona',
+                              icon: Icons.remove_circle_outline,
+                              onTap: () => print('Deseleziona'),
+                            ),
+                            ZwapButtonOption(
+                              label: 'Scarta',
+                              icon: Icons.cancel_outlined,
+                              onTap: () => print('Scarta'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      ZwapButton(
                         key: ValueKey('slkdfjaksdfj'),
                         width: 194,
                         height: 55,

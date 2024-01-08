@@ -24,9 +24,12 @@ class ZwapButtonOptions {
   final ZwapButtonOptionDecorations defaultDecorations;
   final List<ZwapButtonOption> options;
 
+  final bool openOnBottom;
+
   const ZwapButtonOptions({
     this.defaultDecorations = const ZwapButtonOptionDecorations.defaultDecoration(),
     required this.options,
+    this.openOnBottom = false,
   });
 }
 
@@ -92,12 +95,23 @@ class _ZwapButtonOptionsAppendiceState extends State<_ZwapButtonOptionsAppendice
     final Size _overlaySize = Size(200, 100);
 
     final double _bottom = _key.globalPaintBounds?.bottom ?? 0;
+    final double _top = _key.globalPaintBounds?.top ?? 0;
+
     final double _screenHeight = MediaQuery.of(context).size.height;
 
-    Offset _overlayOffset = Offset(
-      (_key.globalOffset ?? Offset.zero).dx - _overlaySize.width + 40,
-      (_screenHeight - _bottom) + widget.height + 9.5,
-    );
+    late Offset _overlayOffset;
+
+    if (widget.options.openOnBottom) {
+      _overlayOffset = Offset(
+        (_key.globalOffset ?? Offset.zero).dx - _overlaySize.width + 40,
+        _top + widget.height + 9.5,
+      );
+    } else {
+      _overlayOffset = Offset(
+        (_key.globalOffset ?? Offset.zero).dx - _overlaySize.width + 40,
+        (_screenHeight - _bottom) + widget.height + 9.5,
+      );
+    }
 
     Overlay.of(context).insert(
       _entry = OverlayEntry(
@@ -106,7 +120,8 @@ class _ZwapButtonOptionsAppendiceState extends State<_ZwapButtonOptionsAppendice
           onAutoClose: () => setState(() => _entry = null),
           child: ZwapOverlayEntryChild(
             left: _overlayOffset.dx,
-            bottom: _overlayOffset.dy,
+            bottom: widget.options.openOnBottom ? null : _overlayOffset.dy,
+            top: widget.options.openOnBottom ? _overlayOffset.dy : null,
             child: _ZwapButtonOptionOverlay(
               options: widget.options,
               closeOverlay: () {
@@ -152,6 +167,7 @@ class _ZwapButtonOptionsAppendiceState extends State<_ZwapButtonOptionsAppendice
             topLeft: Radius.circular(0),
             bottomLeft: Radius.circular(0),
           ),
+          border: widget.decorations.border,
         ),
         child: Center(
           child: AnimatedRotation(
@@ -193,7 +209,7 @@ class _ZwapButtonOptionOverlay extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: Container(
         width: 200,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: const Color(0xff19193B),
           borderRadius: BorderRadius.circular(12),
@@ -201,6 +217,7 @@ class _ZwapButtonOptionOverlay extends StatelessWidget {
             BoxShadow(color: ZwapColors.shades100.withOpacity(.2), offset: const Offset(0, 20), blurRadius: 60),
             BoxShadow(color: ZwapColors.shades100.withOpacity(.3), offset: const Offset(0, 30), blurRadius: 60, spreadRadius: -4),
           ],
+          border: Border.all(color: ZwapColors.text65),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
