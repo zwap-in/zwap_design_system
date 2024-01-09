@@ -35,6 +35,11 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
   /// can be 0 or 1
   int _selectedRadio = 0;
 
+  String _completeText = 'Consequat eu voluptate proident';
+  int? _showedChars = 12;
+
+  String get _textPiece => _completeText.substring(0, _showedChars!);
+
   @override
   Widget build(BuildContext context) {
     final LinearGradient _buttonGradient = LinearGradient(
@@ -95,6 +100,15 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                 thumbGradient: ZwapColors.violetGradient(),
                 draggingThumbExtent: -6,
               ),
+              const SizedBox(height: 20),
+              ZwapText(text: 'Text lenght: $_showedChars', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),
+              Slider(
+                value: (_showedChars ?? 1).toDouble(),
+                onChanged: (value) => setState(() => _showedChars = value.toInt()),
+                max: _completeText.length.toDouble(),
+                divisions: _completeText.length,
+                min: 0,
+              ),
             ],
           ),
         ),
@@ -126,26 +140,64 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                       SizedBox(height: 24)
                     ]
                   : [
-                      ZwapButton(
-                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                        height: 32,
-                        width: 130,
-                        buttonChild: ZwapButtonChild.text(text: "Label"),
-                        loading: _loading,
-                        disabled: _disabled,
-                        decorations: ZwapButtonDecorations.primaryLight(),
-                        onTap: ZwapButton.openOptions,
-                        rightOptions: ZwapButtonOptions(
-                          options: [
-                            ZwapButtonOption(
-                              label: 'Deseleziona',
-                              icon: Icons.remove_circle_outline,
-                              onTap: () => print('Deseleziona'),
+                      Row(
+                        children: [
+                          ZwapButton(
+                            margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                            buttonChild: ZwapButtonChild.text(text: _textPiece),
+                            loading: _loading,
+                            disabled: _disabled,
+                            height: 55,
+                            width: 194,
+                            decorations: ZwapButtonDecorations.primaryLight(),
+                            onTap: ZwapButton.openOptions,
+                            rightOptions: ZwapButtonOptions(
+                              options: [
+                                ZwapButtonOption(
+                                  label: 'Deseleziona',
+                                  icon: Icons.remove_circle_outline,
+                                  onTap: () => print('Deseleziona'),
+                                ),
+                                ZwapButtonOption(
+                                  label: 'Scarta',
+                                  icon: Icons.cancel_outlined,
+                                  onTap: () => print('Scarta'),
+                                ),
+                              ],
                             ),
-                            ZwapButtonOption(
-                              label: 'Scarta',
-                              icon: Icons.cancel_outlined,
-                              onTap: () => print('Scarta'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      Container(
+                        width: 400,
+                        height: 400,
+                        color: ZwapColors.neutral200,
+                        child: Column(
+                          children: [
+                            Center(
+                              child: ZwapButton(
+                                margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                                buttonChild: ZwapButtonChild.text(text: _textPiece),
+                                loading: _loading,
+                                disabled: _disabled,
+                                decorations: ZwapButtonDecorations.primaryLight(),
+                                onTap: ZwapButton.openOptions,
+                                /* rightOptions: ZwapButtonOptions(
+                                    options: [
+                                      ZwapButtonOption(
+                                        label: 'Deseleziona',
+                                        icon: Icons.remove_circle_outline,
+                                        onTap: () => print('Deseleziona'),
+                                      ),
+                                      ZwapButtonOption(
+                                        label: 'Scarta',
+                                        icon: Icons.cancel_outlined,
+                                        onTap: () => print('Scarta'),
+                                      ),
+                                    ],
+                                  ), */
+                              ),
                             ),
                           ],
                         ),

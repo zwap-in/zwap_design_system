@@ -1257,3 +1257,8 @@ a
 ## 0.1.789
 * Improvements to [ZwapButtonOptions]
 
+## 0.1.790
+* Shrik wrap support on [ZwapButton]. Now declaring objects without width and height will not cause overflow
+  but make the button adapt to the content.
+* Added the auto show tooltip feature in [ZwapText] if [parentKey] and the related flag are provided
+

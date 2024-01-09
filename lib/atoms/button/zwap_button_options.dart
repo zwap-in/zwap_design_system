@@ -67,7 +67,7 @@ class ZwapButtonOption {
 }
 
 class _ZwapButtonOptionsAppendice extends StatefulWidget {
-  final double height;
+  final double? height;
 
   final ZwapButtonOptions options;
   final ZwapButtonDecorations decorations;
@@ -104,12 +104,12 @@ class _ZwapButtonOptionsAppendiceState extends State<_ZwapButtonOptionsAppendice
     if (widget.options.openOnBottom) {
       _overlayOffset = Offset(
         (_key.globalOffset ?? Offset.zero).dx - _overlaySize.width + 40,
-        _top + widget.height + 9.5,
+        _top + (widget.height ?? 0) + 9.5,
       );
     } else {
       _overlayOffset = Offset(
         (_key.globalOffset ?? Offset.zero).dx - _overlaySize.width + 40,
-        (_screenHeight - _bottom) + widget.height + 9.5,
+        (_screenHeight - _bottom) + (widget.height ?? 0) + 9.5,
       );
     }
 

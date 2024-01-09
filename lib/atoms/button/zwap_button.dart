@@ -15,6 +15,15 @@ part './zwap_button_options.dart';
 
 extension ZwapButtonOpenOptionsCallback on void Function() {}
 
+extension on Border {
+  Border withStrokeAlign(double? align) => Border(
+        top: top.copyWith(strokeAlign: align),
+        bottom: bottom.copyWith(strokeAlign: align),
+        left: left.copyWith(strokeAlign: align),
+        right: right.copyWith(strokeAlign: align),
+      );
+}
+
 //FEATURE: In line buttons (2 bottoni uno affiano all'altro -> su schemi piccoli uno sotto l'altro)
 
 /// Used as argument of the callback when custom childs are builded.
@@ -208,8 +217,8 @@ class ZwapButton extends StatefulWidget {
     required ZwapButtonChild buttonChild,
     this.decorations,
     this.focusNode,
-    this.height = 44,
-    this.width = 116,
+    this.height,
+    this.width,
     this.hide = false,
     this.disabled = false,
     this.onHover,
@@ -266,12 +275,17 @@ class ZwapButton extends StatefulWidget {
 
 class _ZwapButtonState extends State<ZwapButton> {
   final GlobalKey<_ZwapButtonOptionsAppendiceState> _optionsKey = GlobalKey<_ZwapButtonOptionsAppendiceState>();
+  final GlobalKey _buttonKey = GlobalKey();
+  final GlobalKey _buttonContentKey = GlobalKey();
+
   late final FocusNode _focusNode;
   late final ZwapButtonDecorations _decorations;
   late final ZwapButtonDecorations _selectedDecorations;
 
   late final Map<Type, Action<Intent>>? _actions;
   late final Map<ShortcutActivator, Intent>? _shortcuts;
+
+  double? _buttonHeight;
 
   double _completion = 0;
 
@@ -287,6 +301,8 @@ class _ZwapButtonState extends State<ZwapButton> {
 
   @override
   void initState() {
+    super.initState();
+
     _focusNode = widget.focusNode ?? FocusNode();
     _decorations = widget.decorations ?? ZwapButtonDecorations.primaryLight();
     _selectedDecorations = widget.selectedDecorations ?? ZwapButtonDecorations.primaryLight();
@@ -308,7 +324,9 @@ class _ZwapButtonState extends State<ZwapButton> {
         };
     _shortcuts = widget.shortcuts;
 
-    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setState(() => _buttonHeight = _buttonKey.globalPaintBounds?.height);
+    });
   }
 
   @override
@@ -427,14 +445,18 @@ class _ZwapButtonState extends State<ZwapButton> {
         selectedDecorations: _selectedDecorations,
       );
 
-  Widget get _loader => Container(
-        height: min(24, widget.height ?? 0 - 4),
-        width: min(24, widget.width ?? 0 - 4),
+  Widget get _loader {
+    return Container(
+      height: max(16, (widget.height ?? _buttonHeight ?? 12) - _decorations.internalPadding.vertical),
+      width: max(16, (widget.height ?? _buttonHeight ?? 12) - _decorations.internalPadding.vertical),
+      child: Center(
         child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(_contentColor ?? ZwapColors.shades0),
           strokeWidth: 1.2,
         ),
-      );
+      ),
+    );
+  }
 
   BorderRadius get _borderRadius {
     BorderRadius _fixBorderRadius(BorderRadius? radius) {
@@ -445,12 +467,14 @@ class _ZwapButtonState extends State<ZwapButton> {
     return _fixBorderRadius(_selected ? _selectedDecorations.borderRadius : _decorations.borderRadius);
   }
 
+  bool get _shrikWrap => widget.width == null;
+
   Widget _buildZwapButtonChild(BuildContext context) {
     ZwapButtonChild _child = widget.buttonChild!;
 
     if (_child.text != null && (_child.icon != null || _child._customIcon != null))
       return Row(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: _shrikWrap ? MainAxisSize.min : MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -464,14 +488,18 @@ class _ZwapButtonState extends State<ZwapButton> {
                   ),
             SizedBox(width: _child.spaceBetween),
           ],
-          Text(
-            _child.text!,
-            style: ZwapTypography.buttonText().copyWith(
+          ZwapText.customStyle(
+            text: _child.text!,
+            parentKey: _buttonContentKey,
+            customTextStyle: ZwapTypography.buttonText().copyWith(
               fontWeight: _child.fontWeight,
               fontSize: _child.fontSize.toDouble(),
               color: _contentColor,
             ),
             textAlign: TextAlign.center,
+            maxLines: 1,
+            textOverflow: TextOverflow.ellipsis,
+            showTooltipIfOverflow: true,
           ),
           if (_child.iconPosition == ZwapButtonIconPosition.right) ...[
             SizedBox(width: _child.spaceBetween),
@@ -494,20 +522,25 @@ class _ZwapButtonState extends State<ZwapButton> {
                 size: _child.iconSize.toDouble(),
                 color: _contentColor,
               )
-        : Text(
-            _child.text!,
-            style: ZwapTypography.buttonText().copyWith(
+        : ZwapText.customStyle(
+            text: _child.text!,
+            parentKey: _buttonContentKey,
+            customTextStyle: ZwapTypography.buttonText().copyWith(
               fontWeight: _child.fontWeight,
               fontSize: _child.fontSize.toDouble(),
               color: _contentColor,
             ),
+            maxLines: 1,
+            textOverflow: TextOverflow.ellipsis,
+            showTooltipIfOverflow: true,
           );
   }
 
   @override
   Widget build(BuildContext context) {
     Widget _wrapWithRightOptions(Widget child) {
-      if (widget.rightOptions == null) return child;
+      final double? _height = widget.height ?? _buttonHeight;
+      if (widget.rightOptions == null || _height == null) return child;
 
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -517,128 +550,145 @@ class _ZwapButtonState extends State<ZwapButton> {
           _ZwapButtonOptionsAppendice(
             key: _optionsKey,
             decorations: _decorations,
-            height: widget.height ?? double.infinity,
+            height: _height,
             options: widget.rightOptions!,
           ),
         ],
       );
     }
 
-    final Widget _button = AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.decelerate,
-      margin: (widget.margin ?? EdgeInsets.zero).add(
-        widget.hoverElevation != 0
-            ? EdgeInsets.only(
-                top: _hovered ? 0 : widget.hoverElevation,
-                bottom: _hovered ? widget.hoverElevation : 0,
-              )
-            : EdgeInsets.zero,
-      ),
-      child: _wrapWithRightOptions(
-        AnimatedOpacity(
-          duration: const Duration(milliseconds: 200),
-          opacity: widget.hide ? 0 : 1,
-          child: GestureDetector(
-            onTap: (_loading || _disabled)
-                ? null
-                : widget.onTap != ZwapButton.openOptions
-                    ? widget.onTap
-                    : () {
-                        if (_optionsKey.currentContext?.mounted != true) return;
-                        _optionsKey.currentState?.showOverlay();
+    final Widget _button = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.decelerate,
+              margin: (widget.margin ?? EdgeInsets.zero).add(
+                widget.hoverElevation != 0
+                    ? EdgeInsets.only(
+                        top: _hovered ? 0 : widget.hoverElevation,
+                        bottom: _hovered ? widget.hoverElevation : 0,
+                      )
+                    : EdgeInsets.zero,
+              ),
+              child: _wrapWithRightOptions(
+                AnimatedOpacity(
+                  key: _buttonKey,
+                  duration: const Duration(milliseconds: 200),
+                  opacity: widget.hide ? 0 : 1,
+                  child: GestureDetector(
+                    onTap: (_loading || _disabled)
+                        ? null
+                        : widget.onTap != ZwapButton.openOptions
+                            ? widget.onTap
+                            : () {
+                                if (_optionsKey.currentContext?.mounted != true) return;
+                                _optionsKey.currentState?.showOverlay();
+                              },
+                    onLongPress: () {
+                      if (_pressed) setState(() => _pressed = false);
+                      if (widget.onLongTap != null) widget.onLongTap!();
+                    },
+                    onTapDown: (_) => !_pressed ? setState(() => _pressed = true) : null,
+                    onTapUp: (_) => _pressed ? setState(() => _pressed = false) : null,
+                    child: FocusableActionDetector(
+                      focusNode: _focusNode,
+                      enabled: !widget.disabled,
+                      onShowFocusHighlight: (hasFocus) => setState(() => _focussed = hasFocus),
+                      onShowHoverHighlight: (hasHover) {
+                        if (!hasHover && _pressed) setState(() => _pressed = false);
+                        setState(() => _hovered = hasHover);
+                        if (widget.onHover != null) widget.onHover!(hasHover);
                       },
-            onLongPress: () {
-              if (_pressed) setState(() => _pressed = false);
-              if (widget.onLongTap != null) widget.onLongTap!();
-            },
-            onTapDown: (_) => !_pressed ? setState(() => _pressed = true) : null,
-            onTapUp: (_) => _pressed ? setState(() => _pressed = false) : null,
-            child: FocusableActionDetector(
-              focusNode: _focusNode,
-              enabled: !widget.disabled,
-              onShowFocusHighlight: (hasFocus) => setState(() => _focussed = hasFocus),
-              onShowHoverHighlight: (hasHover) {
-                if (!hasHover && _pressed) setState(() => _pressed = false);
-                setState(() => _hovered = hasHover);
-                if (widget.onHover != null) widget.onHover!(hasHover);
-              },
-              actions: _actions,
-              shortcuts: _shortcuts,
-              mouseCursor: widget.hide ? SystemMouseCursors.basic : SystemMouseCursors.click,
-              child: AnimatedContainer(
-                duration: _pressed ? Duration.zero : (_decorations.animationDuration ?? const Duration(milliseconds: 300)),
-                curve: Curves.easeInOut,
-                width: widget.width,
-                height: widget.height,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  boxShadow: [if (_shadow != null) _shadow!],
-                  color: _color,
-                  gradient: _gradient,
-                  borderRadius: _borderRadius,
-                  border: _border,
-                ),
-                child: Stack(
-                  children: [
-                    _FadeAway(
-                      show: _completion != 1,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Builder(
-                          builder: (context) {
-                            final double _width = _completion * (widget.width ?? 0);
+                      actions: _actions,
+                      shortcuts: _shortcuts,
+                      mouseCursor: widget.hide ? SystemMouseCursors.basic : SystemMouseCursors.click,
+                      child: AnimatedContainer(
+                        duration: _pressed ? Duration.zero : (_decorations.animationDuration ?? const Duration(milliseconds: 300)),
+                        curve: Curves.easeInOut,
+                        width: widget.width,
+                        height: widget.height,
+                        decoration: BoxDecoration(
+                          boxShadow: [if (_shadow != null) _shadow!],
+                          color: _color,
+                          gradient: _gradient,
+                          borderRadius: _borderRadius,
+                          border: _border?.withStrokeAlign(BorderSide.strokeAlignCenter),
+                        ),
+                        child: Stack(
+                          fit: StackFit.loose,
+                          children: [
+                            _FadeAway(
+                              show: _completion != 1,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Builder(
+                                  builder: (context) {
+                                    final double _width = _completion * (widget.width ?? 0);
 
-                            Widget _wrapWithShaderMaskIfNeeded(Widget child) {
-                              if (_decorations.gradient == null) return child;
+                                    Widget _wrapWithShaderMaskIfNeeded(Widget child) {
+                                      if (_decorations.gradient == null) return child;
 
-                              return ShaderMask(
-                                shaderCallback: (b) => _decorations.gradient!.createShader(b),
-                                child: child,
-                              );
-                            }
+                                      return ShaderMask(
+                                        shaderCallback: (b) => _decorations.gradient!.createShader(b),
+                                        child: child,
+                                      );
+                                    }
 
-                            return _wrapWithShaderMaskIfNeeded(
-                              ClipRRect(
-                                borderRadius: _decorations.borderRadius ?? BorderRadius.zero,
-                                child: Container(
-                                  width: widget.width,
-                                  alignment: Alignment.centerLeft,
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    curve: Curves.decelerate,
-                                    height: widget.height ?? 0,
-                                    width: _width,
-                                    decoration: BoxDecoration(
-                                      color: _decorations.gradient == null ? _decorations.backgroundColor : Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topRight: _decorations.borderRadius?.topRight ?? Radius.circular(0),
-                                        bottomRight: _decorations.borderRadius?.bottomRight ?? Radius.circular(0),
+                                    return _wrapWithShaderMaskIfNeeded(
+                                      ClipRRect(
+                                        borderRadius: _decorations.borderRadius ?? BorderRadius.zero,
+                                        child: Container(
+                                          width: widget.width,
+                                          alignment: Alignment.centerLeft,
+                                          child: AnimatedContainer(
+                                            duration: const Duration(milliseconds: 200),
+                                            curve: Curves.decelerate,
+                                            height: widget.height ?? 0,
+                                            width: _width,
+                                            decoration: BoxDecoration(
+                                              color: _decorations.gradient == null ? _decorations.backgroundColor : Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topRight: _decorations.borderRadius?.topRight ?? Radius.circular(0),
+                                                bottomRight: _decorations.borderRadius?.bottomRight ?? Radius.circular(0),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 ),
                               ),
-                            );
-                          },
+                            ),
+                            Padding(
+                              padding: _decorations.internalPadding,
+                              child: _loading
+                                  ? Center(child: _loader)
+                                  : widget.buttonChild == null
+                                      ? SizedBox(
+                                          key: _buttonContentKey,
+                                          child: widget.child!(_currentStatus),
+                                        )
+                                      : Center(
+                                          key: _buttonContentKey,
+                                          child: _buildZwapButtonChild(context),
+                                        ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: _decorations.internalPadding,
-                      child: _loading
-                          ? Center(child: _loader)
-                          : widget.buttonChild == null
-                              ? widget.child!(_currentStatus)
-                              : Center(child: _buildZwapButtonChild(context)),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
-      ),
+      ],
     );
 
     if (widget.tooltip == null) return _button;

@@ -3,9 +3,11 @@ library zwap.text;
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
 import 'package:taastrap/taastrap.dart';
+import 'dart:ui' as ui; // Importa 'dart:ui' per accedere a TextPainter e ParagraphStyle
 
 /// IMPORTING LOCAL PACKAGES
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 
 part 'zwap_gradient_text.dart';
 
@@ -292,7 +294,7 @@ double textWidth(String text, TextStyle style, {TextAlign textAlign = TextAlign.
 }
 
 /// Component to rendering text in base of style and device type
-class ZwapText extends StatelessWidget implements ResponsiveWidget {
+class ZwapText extends StatefulWidget implements ResponsiveWidget {
   /// The text to display inside this rendering
   final Pattern text;
 
@@ -323,6 +325,10 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
   /// Really useful when design is in figma
   final double? letterSpacing;
 
+  final GlobalKey? parentKey;
+
+  final bool showTooltipIfOverflow;
+
   static double convertFontSpacing(double percent, [double fontSize = 16]) => fontSize * percent / 100;
   static double convertFontHeight(double lineHeight, [double fontSize = 16]) => lineHeight / fontSize;
 
@@ -336,6 +342,8 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
     this.textOverflow,
     this.lineHeight,
     this.letterSpacing,
+    this.parentKey,
+    this.showTooltipIfOverflow = false,
   })  : this.customTextStyle = null,
         _selectable = false,
         super(key: key);
@@ -349,6 +357,8 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
     this.textOverflow,
     this.lineHeight,
     this.letterSpacing,
+    this.parentKey,
+    this.showTooltipIfOverflow = false,
   })  : assert(customTextStyle != null),
         this.zwapTextType = ZwapTextType.bodyRegular,
         _selectable = false,
@@ -366,73 +376,164 @@ class ZwapText extends StatelessWidget implements ResponsiveWidget {
     this.textOverflow,
     this.lineHeight,
     this.letterSpacing,
+    this.parentKey,
+    this.showTooltipIfOverflow = false,
   })  : this.customTextStyle = null,
         _selectable = true,
         super(key: key);
 
-  String get actualText {
-    if (text is String) {
-      return text as String;
-    } else if (isZwapTranslation) {
-      return (text as ZwapTranslation).getTranslation();
-    }
+  static bool isTextOverflow(
+    String text,
+    Rect boundingRect,
+    TextStyle textStyle,
+    int maxLines,
+  ) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: textStyle),
+      maxLines: maxLines,
+      textDirection: TextDirection.ltr,
+    );
 
-    return text.toString();
+    textPainter.layout(maxWidth: boundingRect.width);
+
+    final bool overflowWidth = textPainter.size.width > boundingRect.width;
+    final bool overflowHeight = maxLines == 1 ? false : textPainter.size.height > boundingRect.height;
+
+    // print('overflowWidth: $overflowWidth - overflowHeight: $overflowHeight');
+    // print('width: ${textPainter.} and max width: ${boundingRect.width}');
+
+    return textPainter.didExceedMaxLines;
   }
 
-  bool get isZwapTranslation => text is ZwapTranslation;
+  @override
+  State<ZwapText> createState() => _ZwapTextState();
+
+  @override
+  double getSize() {
+    return 0;
+  }
+}
+
+class _ZwapTextState extends State<ZwapText> {
+  String get actualText {
+    if (widget.text is String) {
+      return widget.text as String;
+    } else if (isZwapTranslation) {
+      return (widget.text as ZwapTranslation).getTranslation();
+    }
+
+    return widget.text.toString();
+  }
+
+  bool get isZwapTranslation => widget.text is ZwapTranslation;
+
+  bool? _isTextOverlowing;
+
+  bool get isTextOverflowing {
+    if (!widget.showTooltipIfOverflow) return false;
+    if (widget.parentKey == null) return false;
+
+    _isTextOverlowing = ZwapText.isTextOverflow(
+      actualText,
+      widget.parentKey?.globalPaintBounds ?? Rect.zero,
+      widget.customTextStyle ?? getTextStyle(this.widget.zwapTextType),
+      widget.maxLines ?? 1,
+    );
+
+    return _isTextOverlowing!;
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextStyle _textStyle = customTextStyle ?? getTextStyle(this.zwapTextType).apply(color: this.textColor);
+    TextStyle _textStyle = widget.customTextStyle ?? getTextStyle(this.widget.zwapTextType).apply(color: this.widget.textColor);
 
-    if (lineHeight != null) {
+    if (widget.lineHeight != null) {
       _textStyle = _textStyle.copyWith(
-        height: convertFontHeight(lineHeight!, _textStyle.fontSize ?? 16),
+        height: ZwapText.convertFontHeight(widget.lineHeight!, _textStyle.fontSize ?? 16),
       );
     }
 
-    if (letterSpacing != null) {
+    if (widget.letterSpacing != null) {
       _textStyle = _textStyle.copyWith(
-        letterSpacing: convertFontSpacing(letterSpacing!, _textStyle.fontSize ?? 16),
+        letterSpacing: ZwapText.convertFontSpacing(widget.letterSpacing!, _textStyle.fontSize ?? 16),
       );
     }
 
-    if (_selectable)
+    if (widget._selectable)
       return SelectableText(
         actualText,
-        maxLines: maxLines,
+        maxLines: widget.maxLines,
         textScaleFactor: 1,
-        textAlign: this.textAlign,
+        textAlign: this.widget.textAlign,
         style: _textStyle,
       );
 
-    Text _text() => Text(
-          actualText,
-          maxLines: maxLines,
-          overflow: textOverflow,
-          textScaleFactor: 1,
-          textAlign: this.textAlign,
-          style: _textStyle,
+    Widget _text() => _CustomTooltip(
+          text: actualText,
+          getIsOverflown: () => isTextOverflowing,
+          child: Text(
+            actualText,
+            maxLines: widget.maxLines,
+            overflow: widget.textOverflow,
+            textScaleFactor: 1,
+            textAlign: this.widget.textAlign,
+            style: _textStyle,
+          ),
         );
 
     if (ZwapTranslation.enableEdits && isZwapTranslation)
       return _WrapWithEditTextTooltip(
-        text: text as ZwapTranslation,
+        text: widget.text as ZwapTranslation,
         builder: _text,
       );
     return _text();
   }
+}
+
+class _CustomTooltip extends StatefulWidget {
+  final Widget child;
+  final bool Function() getIsOverflown;
+
+  final String text;
+
+  const _CustomTooltip({
+    required this.child,
+    required this.getIsOverflown,
+    required this.text,
+    super.key,
+  });
 
   @override
-  double getSize() {
-    return getTextSize(actualText, this.zwapTextType).width;
+  State<_CustomTooltip> createState() => __CustomTooltipState();
+}
+
+class __CustomTooltipState extends State<_CustomTooltip> {
+  bool _showTooltip = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (isHovering) => setState(() => _showTooltip = widget.getIsOverflown()),
+      onExit: (_) => setState(() => _showTooltip = false),
+      child: ZwapTooltip(
+        position: TooltipPosition.bottom,
+        borderColor: ZwapColors.text65,
+        backgroundColor: ZwapColors.primary900Dark,
+        simple: true,
+        style: ZwapTextType.mediumBodyRegular.copyWith(color: ZwapColors.shades0),
+        radius: 8,
+        transationOffset: const Offset(0, 12),
+        message: widget.text,
+        showTooltip: _showTooltip,
+        child: widget.child,
+      ),
+    );
   }
 }
 
 class _WrapWithEditTextTooltip extends StatefulWidget {
   final ZwapTranslation text;
-  final Text Function() builder;
+  final Widget Function() builder;
 
   const _WrapWithEditTextTooltip({
     required this.text,
