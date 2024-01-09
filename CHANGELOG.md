@@ -1263,5 +1263,8 @@ a
 * Added the auto show tooltip feature in [ZwapText] if [parentKey] and the related flag are provided
 
 ## 0.1.791
-* Fixed problem about infinite size in [ZwapButton]
 * Added [minExtent] and [maxExtent] properties to [ZwapRangeSlider]
+* Fixed problem about infinite size in [ZwapButton]
+
+## 0.1.792
+* Fixed typo in [Zwapbutton]

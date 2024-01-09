@@ -675,7 +675,7 @@ class _ZwapButtonState extends State<ZwapButton> {
                           child: _loading
                               ? Center(child: _loader)
                               : widget.buttonChild == null
-                                  ? SizedBox(
+                                  ? Center(
                                       key: _buttonContentKey,
                                       child: widget.child!(_currentStatus),
                                     )
