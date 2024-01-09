@@ -557,139 +557,143 @@ class _ZwapButtonState extends State<ZwapButton> {
       );
     }
 
-    final Widget _button = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.decelerate,
-              margin: (widget.margin ?? EdgeInsets.zero).add(
-                widget.hoverElevation != 0
-                    ? EdgeInsets.only(
-                        top: _hovered ? 0 : widget.hoverElevation,
-                        bottom: _hovered ? widget.hoverElevation : 0,
-                      )
-                    : EdgeInsets.zero,
-              ),
-              child: _wrapWithRightOptions(
-                AnimatedOpacity(
-                  key: _buttonKey,
-                  duration: const Duration(milliseconds: 200),
-                  opacity: widget.hide ? 0 : 1,
-                  child: GestureDetector(
-                    onTap: (_loading || _disabled)
-                        ? null
-                        : widget.onTap != ZwapButton.openOptions
-                            ? widget.onTap
-                            : () {
-                                if (_optionsKey.currentContext?.mounted != true) return;
-                                _optionsKey.currentState?.showOverlay();
-                              },
-                    onLongPress: () {
-                      if (_pressed) setState(() => _pressed = false);
-                      if (widget.onLongTap != null) widget.onLongTap!();
-                    },
-                    onTapDown: (_) => !_pressed ? setState(() => _pressed = true) : null,
-                    onTapUp: (_) => _pressed ? setState(() => _pressed = false) : null,
-                    child: FocusableActionDetector(
-                      focusNode: _focusNode,
-                      enabled: !widget.disabled,
-                      onShowFocusHighlight: (hasFocus) => setState(() => _focussed = hasFocus),
-                      onShowHoverHighlight: (hasHover) {
-                        if (!hasHover && _pressed) setState(() => _pressed = false);
-                        setState(() => _hovered = hasHover);
-                        if (widget.onHover != null) widget.onHover!(hasHover);
-                      },
-                      actions: _actions,
-                      shortcuts: _shortcuts,
-                      mouseCursor: widget.hide ? SystemMouseCursors.basic : SystemMouseCursors.click,
-                      child: AnimatedContainer(
-                        duration: _pressed ? Duration.zero : (_decorations.animationDuration ?? const Duration(milliseconds: 300)),
-                        curve: Curves.easeInOut,
-                        width: widget.width,
-                        height: widget.height,
-                        decoration: BoxDecoration(
-                          boxShadow: [if (_shadow != null) _shadow!],
-                          color: _color,
-                          gradient: _gradient,
-                          borderRadius: _borderRadius,
-                          border: _border?.withStrokeAlign(BorderSide.strokeAlignCenter),
-                        ),
-                        child: Stack(
-                          fit: StackFit.loose,
-                          children: [
-                            _FadeAway(
-                              show: _completion != 1,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Builder(
-                                  builder: (context) {
-                                    final double _width = _completion * (widget.width ?? 0);
+    Widget _wrapWithRowColumn(Widget child) {
+      if (widget.width != double.infinity) child = Row(mainAxisSize: MainAxisSize.min, children: [child]);
+      if (widget.height != double.infinity) child = Column(mainAxisSize: MainAxisSize.min, children: [child]);
+      return child;
+    }
 
-                                    Widget _wrapWithShaderMaskIfNeeded(Widget child) {
-                                      if (_decorations.gradient == null) return child;
+    final Widget _button = LayoutBuilder(builder: (context, size) {
+      return _wrapWithRowColumn(
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.decelerate,
+          margin: (widget.margin ?? EdgeInsets.zero).add(
+            widget.hoverElevation != 0
+                ? EdgeInsets.only(
+                    top: _hovered ? 0 : widget.hoverElevation,
+                    bottom: _hovered ? widget.hoverElevation : 0,
+                  )
+                : EdgeInsets.zero,
+          ),
+          child: _wrapWithRightOptions(
+            AnimatedOpacity(
+              key: _buttonKey,
+              duration: const Duration(milliseconds: 200),
+              opacity: widget.hide ? 0 : 1,
+              child: GestureDetector(
+                onTap: (_loading || _disabled)
+                    ? null
+                    : widget.onTap != ZwapButton.openOptions
+                        ? widget.onTap
+                        : () {
+                            if (_optionsKey.currentContext?.mounted != true) return;
+                            _optionsKey.currentState?.showOverlay();
+                          },
+                onLongPress: () {
+                  if (_pressed) setState(() => _pressed = false);
+                  if (widget.onLongTap != null) widget.onLongTap!();
+                },
+                onTapDown: (_) => !_pressed ? setState(() => _pressed = true) : null,
+                onTapUp: (_) => _pressed ? setState(() => _pressed = false) : null,
+                child: FocusableActionDetector(
+                  focusNode: _focusNode,
+                  enabled: !widget.disabled,
+                  onShowFocusHighlight: (hasFocus) => setState(() => _focussed = hasFocus),
+                  onShowHoverHighlight: (hasHover) {
+                    if (!hasHover && _pressed) setState(() => _pressed = false);
+                    setState(() => _hovered = hasHover);
+                    if (widget.onHover != null) widget.onHover!(hasHover);
+                  },
+                  actions: _actions,
+                  shortcuts: _shortcuts,
+                  mouseCursor: widget.hide ? SystemMouseCursors.basic : SystemMouseCursors.click,
+                  child: AnimatedContainer(
+                    duration: _pressed ? Duration.zero : (_decorations.animationDuration ?? const Duration(milliseconds: 300)),
+                    curve: Curves.easeInOut,
+                    width: widget.width == double.infinity
+                        ? size.maxWidth - (widget.margin?.horizontal ?? 0) - (widget.rightOptions != null ? 41 : 0)
+                        : widget.width,
+                    height: widget.height == double.infinity
+                        ? size.maxHeight - (widget.margin?.vertical ?? 0) - (widget.rightOptions != null ? 41 : 0)
+                        : widget.height,
+                    decoration: BoxDecoration(
+                      boxShadow: [if (_shadow != null) _shadow!],
+                      color: _color,
+                      gradient: _gradient,
+                      borderRadius: _borderRadius,
+                      border: _border?.withStrokeAlign(BorderSide.strokeAlignCenter),
+                    ),
+                    child: Stack(
+                      fit: StackFit.loose,
+                      children: [
+                        _FadeAway(
+                          show: _completion != 1,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Builder(
+                              builder: (context) {
+                                final double _width = _completion * (widget.width ?? 0);
 
-                                      return ShaderMask(
-                                        shaderCallback: (b) => _decorations.gradient!.createShader(b),
-                                        child: child,
-                                      );
-                                    }
+                                Widget _wrapWithShaderMaskIfNeeded(Widget child) {
+                                  if (_decorations.gradient == null) return child;
 
-                                    return _wrapWithShaderMaskIfNeeded(
-                                      ClipRRect(
-                                        borderRadius: _decorations.borderRadius ?? BorderRadius.zero,
-                                        child: Container(
-                                          width: widget.width,
-                                          alignment: Alignment.centerLeft,
-                                          child: AnimatedContainer(
-                                            duration: const Duration(milliseconds: 200),
-                                            curve: Curves.decelerate,
-                                            height: widget.height ?? 0,
-                                            width: _width,
-                                            decoration: BoxDecoration(
-                                              color: _decorations.gradient == null ? _decorations.backgroundColor : Colors.white,
-                                              borderRadius: BorderRadius.only(
-                                                topRight: _decorations.borderRadius?.topRight ?? Radius.circular(0),
-                                                bottomRight: _decorations.borderRadius?.bottomRight ?? Radius.circular(0),
-                                              ),
-                                            ),
+                                  return ShaderMask(
+                                    shaderCallback: (b) => _decorations.gradient!.createShader(b),
+                                    child: child,
+                                  );
+                                }
+
+                                return _wrapWithShaderMaskIfNeeded(
+                                  ClipRRect(
+                                    borderRadius: _decorations.borderRadius ?? BorderRadius.zero,
+                                    child: Container(
+                                      width: widget.width,
+                                      alignment: Alignment.centerLeft,
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 200),
+                                        curve: Curves.decelerate,
+                                        height: widget.height ?? 0,
+                                        width: _width,
+                                        decoration: BoxDecoration(
+                                          color: _decorations.gradient == null ? _decorations.backgroundColor : Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            topRight: _decorations.borderRadius?.topRight ?? Radius.circular(0),
+                                            bottomRight: _decorations.borderRadius?.bottomRight ?? Radius.circular(0),
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                              ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                            Padding(
-                              padding: _decorations.internalPadding,
-                              child: _loading
-                                  ? Center(child: _loader)
-                                  : widget.buttonChild == null
-                                      ? SizedBox(
-                                          key: _buttonContentKey,
-                                          child: widget.child!(_currentStatus),
-                                        )
-                                      : Center(
-                                          key: _buttonContentKey,
-                                          child: _buildZwapButtonChild(context),
-                                        ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
+                        Padding(
+                          padding: _decorations.internalPadding,
+                          child: _loading
+                              ? Center(child: _loader)
+                              : widget.buttonChild == null
+                                  ? SizedBox(
+                                      key: _buttonContentKey,
+                                      child: widget.child!(_currentStatus),
+                                    )
+                                  : Center(
+                                      key: _buttonContentKey,
+                                      child: _buildZwapButtonChild(context),
+                                    ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
             ),
-          ],
+          ),
         ),
-      ],
-    );
+      );
+    });
 
     if (widget.tooltip == null) return _button;
     if (widget.showTooltipOnlyOnDisabledState && !_disabled) return _button;

@@ -143,19 +143,48 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
     super.initState();
     _textController = StreamedTextController();
 
-    _getStream().listen((e) {
+    /* _getStream().listen((e) {
       if (e == '<done>') {
         _textController.loadingDone();
         return;
       }
 
       _textController.updateLoadingData(_textController.text + e);
-    });
+    }); */
   }
 
   @override
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
+
+    return Container(
+      width: 400,
+      child: Column(
+        children: [
+          ZwapRangeSlider(
+            value: ZwapRangeValues(min, max),
+            minValue: 5,
+            maxValue: 300,
+            thumbSize: 32,
+            lineWidth: 12,
+            lineBorderRadius: 100,
+            maxExtent: 100,
+            minExtent: 30,
+            onChange: (value) => setState(() {
+              min = double.parse(value.min.toStringAsFixed(5));
+              max = double.parse(value.max.toStringAsFixed(5));
+            }),
+          ),
+          //? Add text of current range slider
+          SizedBox(height: 15),
+          ZwapText(
+            text: '$min -- $max',
+            zwapTextType: ZwapTextType.bigBodyBold,
+            textColor: Colors.black,
+          ),
+        ],
+      ),
+    );
 
     return Center(
       child: SingleChildScrollView(

@@ -140,33 +140,29 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                       SizedBox(height: 24)
                     ]
                   : [
-                      Row(
-                        children: [
-                          ZwapButton(
-                            margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                            buttonChild: ZwapButtonChild.text(text: _textPiece),
-                            loading: _loading,
-                            disabled: _disabled,
-                            height: 55,
-                            width: 194,
-                            decorations: ZwapButtonDecorations.primaryLight(),
-                            onTap: ZwapButton.openOptions,
-                            rightOptions: ZwapButtonOptions(
-                              options: [
-                                ZwapButtonOption(
-                                  label: 'Deseleziona',
-                                  icon: Icons.remove_circle_outline,
-                                  onTap: () => print('Deseleziona'),
-                                ),
-                                ZwapButtonOption(
-                                  label: 'Scarta',
-                                  icon: Icons.cancel_outlined,
-                                  onTap: () => print('Scarta'),
-                                ),
-                              ],
+                      ZwapButton(
+                        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        buttonChild: ZwapButtonChild.text(text: _textPiece),
+                        loading: _loading,
+                        disabled: _disabled,
+                        height: 55,
+                        width: double.infinity,
+                        decorations: ZwapButtonDecorations.primaryLight(),
+                        onTap: ZwapButton.openOptions,
+                        rightOptions: ZwapButtonOptions(
+                          options: [
+                            ZwapButtonOption(
+                              label: 'Deseleziona',
+                              icon: Icons.remove_circle_outline,
+                              onTap: () => print('Deseleziona'),
                             ),
-                          ),
-                        ],
+                            ZwapButtonOption(
+                              label: 'Scarta',
+                              icon: Icons.cancel_outlined,
+                              onTap: () => print('Scarta'),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 24),
                       Container(

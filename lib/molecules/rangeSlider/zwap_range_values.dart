@@ -4,6 +4,8 @@ class ZwapRangeValues {
   final double min;
   final double max;
 
+  double get extent => max - min;
+
   const ZwapRangeValues(this.min, this.max);
 
   ZwapRangeValues copyWith({

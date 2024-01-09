@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
+import 'package:zwap_design_system/molecules/zwap_modal/zwap_modal.dart';
 
 part 'zwap_range_values.dart';
 
@@ -33,6 +34,14 @@ class ZwapRangeSlider extends StatefulWidget {
 
   final Function(ZwapRangeValues)? onChange;
 
+  /// The max extent of the range, if not provided
+  /// the max extent will be the [maxValue]
+  final double? maxExtent;
+
+  /// The min extent of the range, if not provided
+  /// the min extent will be 0
+  final double? minExtent;
+
   const ZwapRangeSlider({
     this.value,
     this.minValue = 0,
@@ -41,6 +50,8 @@ class ZwapRangeSlider extends StatefulWidget {
     this.onChange,
     this.lineWidth = 4,
     this.lineBorderRadius = 2,
+    this.maxExtent,
+    this.minExtent,
     Key? key,
   }) : super(key: key);
 
@@ -74,6 +85,9 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
   double get _thumbSize => widget.thumbSize;
   bool get _isDragging => _draggedThumb != null;
 
+  double get _maxExtent => widget.maxExtent ?? widget.maxValue;
+  double get _minExtent => widget.minExtent ?? widget.minValue;
+
   @override
   void initState() {
     super.initState();
@@ -94,6 +108,7 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
 
       WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _animationDuration = Duration.zero));
     }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -130,6 +145,61 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
   void _notifiyChange(double maxWidth) {
     if (widget.onChange == null) return;
     widget.onChange!(_currentValue);
+  }
+
+  double _fixMovingRigthThumb(double newOffset, double maxWidth) {
+    //? Here the user is moving the right thumb (ie: "max" thumb)
+    //? So the min value should be fixed
+
+    final double _offset = maxWidth - newOffset;
+
+    if (widget.maxExtent != null) {
+      final double _maxValue = _startThumbOffset + _convertValue(_maxExtent);
+
+      if (_offset > _maxValue) {
+        newOffset = maxWidth - _maxValue;
+      }
+    }
+
+    if (widget.minExtent != null) {
+      final double _minValue = _startThumbOffset + _convertValue(_minExtent);
+
+      if (_offset < _minValue) {
+        newOffset = maxWidth - _minValue;
+      }
+    }
+
+    return newOffset;
+  }
+
+  double _convertValue(double value) {
+    final double _dValue = widget.maxValue - widget.minValue;
+    return (_maxWidth! - _thumbSize) * (value / _dValue) + _thumbSize;
+  }
+
+  double _fixMovingLeftThumb(double newOffset, double maxWidth) {
+    //? Here the user is moving the left thumb (ie: "min" thumb)
+    //? So the max value should be fixed
+
+    final double _normalizedEndOffset = maxWidth - _endThumbOffset;
+
+    if (widget.maxExtent != null) {
+      final double _maxValue = _normalizedEndOffset - _convertValue(_maxExtent);
+
+      if (newOffset < _maxValue) {
+        newOffset = _maxValue;
+      }
+    }
+
+    if (widget.minExtent != null) {
+      final double _minValue = _normalizedEndOffset - _convertValue(_minExtent);
+
+      if (newOffset > _minValue) {
+        newOffset = _minValue;
+      }
+    }
+
+    return newOffset;
   }
 
   @override
@@ -191,6 +261,7 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
                           if (_draggedThumb != _ZwapRangeDraggingThumb.start) return;
 
                           double _newOffset = _startThumbOffset + details.delta.dx;
+                          _newOffset = _fixMovingLeftThumb(_newOffset, size.maxWidth);
                           _newOffset = max(0, min(_newOffset, size.maxWidth - _endThumbOffset - _thumbSize));
 
                           setState(() => _startThumbOffset = _newOffset);
@@ -233,6 +304,7 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
                           if (_draggedThumb != _ZwapRangeDraggingThumb.end) return;
 
                           double _newOffset = _endThumbOffset + -details.delta.dx;
+                          _newOffset = _fixMovingRigthThumb(_newOffset, size.maxWidth);
                           _newOffset = max(0, min(_newOffset, size.maxWidth - _startThumbOffset - _thumbSize));
 
                           setState(() => _endThumbOffset = _newOffset);
