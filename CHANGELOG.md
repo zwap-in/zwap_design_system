@@ -1268,3 +1268,6 @@ a
 
 ## 0.1.792
 * Fixed typo in [Zwapbutton]
+
+## 0.1.793
+* Fixed historical bug in [PageData]

@@ -33,15 +33,16 @@ class PageData<T> {
     if (json['next'] is int) _next = json['next'] > 0 ? 'not_empty_string' : null;
     if (json['next'] is bool) _next = json['next'] ? 'not_empty_string' : null;
 
-    if (json['previous'] is String) _next = json['previous'];
-    if (json['previous'] is int) _next = json['previous'] > 0 ? 'not_empty_string' : null;
-    if (json['previous'] is bool) _next = json['previous'] ? 'not_empty_string' : null;
+    if (json['previous'] is String) _previous = json['previous'];
+    if (json['previous'] is int) _previous = json['previous'] > 0 ? 'not_empty_string' : null;
+    if (json['previous'] is bool) _previous = json['previous'] ? 'not_empty_string' : null;
 
     return PageData(
-        data: List<T>.generate(json['results'].length, ((element) => callBack(json['results'][element]))),
-        count: json['count'] ?? 0,
-        next: _next,
-        previous: _previous);
+      data: List<T>.generate(json['results'].length, ((element) => callBack(json['results'][element]))),
+      count: json['count'] ?? 0,
+      next: _next,
+      previous: _previous,
+    );
   }
 
   @override

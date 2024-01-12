@@ -1,5 +1,6 @@
 library zwap.range_slider;
 
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -82,6 +83,8 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
   /// Used to know what thumb has being dragged right now
   _ZwapRangeDraggingThumb? _draggedThumb;
 
+  bool _showRightThumbError = false;
+
   double get _thumbSize => widget.thumbSize;
   bool get _isDragging => _draggedThumb != null;
 
@@ -157,6 +160,7 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
       final double _maxValue = _startThumbOffset + _convertValue(_maxExtent);
 
       if (_offset > _maxValue) {
+        //setState(() => _showRightThumbError = true);
         newOffset = maxWidth - _maxValue;
       }
     }
@@ -165,6 +169,7 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
       final double _minValue = _startThumbOffset + _convertValue(_minExtent);
 
       if (_offset < _minValue) {
+        // setState(() => _showRightThumbError = true);
         newOffset = maxWidth - _minValue;
       }
     }
@@ -271,7 +276,9 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
                           setState(() => _draggedThumb = null);
                           if (!_isAtSamePosition) return;
 
-                          setState(() => _showStartIfEquals = !_showStartIfEquals);
+                          setState(() {
+                            _showStartIfEquals = !_showStartIfEquals;
+                          });
                         },
                         child: Container(
                           height: _thumbSize,
@@ -311,17 +318,23 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
                           _notifiyChange(size.maxWidth);
                         },
                         onHorizontalDragEnd: (_) {
-                          setState(() => _draggedThumb = null);
+                          setState(() {
+                            _showRightThumbError = false;
+                            _draggedThumb = null;
+                          });
                           if (!_isAtSamePosition) return;
 
                           setState(() => _showStartIfEquals = !_showStartIfEquals);
                         },
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.decelerate,
                           height: _thumbSize,
                           width: _thumbSize,
                           decoration: BoxDecoration(
                             color: ZwapColors.shades0,
                             borderRadius: BorderRadius.circular(_thumbSize / 2),
+                            border: Border.all(color: _showRightThumbError ? ZwapColors.error200 : ZwapColors.shades0, width: 3),
                             boxShadow: [
                               BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
                               BoxShadow(offset: Offset(0, 3), color: Color(0xff091E42).withOpacity(0.2), blurRadius: 5),

@@ -161,19 +161,22 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
       width: 400,
       child: Column(
         children: [
-          ZwapRangeSlider(
-            value: ZwapRangeValues(min, max),
-            minValue: 5,
-            maxValue: 300,
-            thumbSize: 32,
-            lineWidth: 12,
-            lineBorderRadius: 100,
-            maxExtent: 100,
-            minExtent: 30,
-            onChange: (value) => setState(() {
-              min = double.parse(value.min.toStringAsFixed(5));
-              max = double.parse(value.max.toStringAsFixed(5));
-            }),
+          Container(
+            decoration: BoxDecoration(border: Border.all(color: ZwapColors.neutral600)),
+            child: ZwapRangeSlider(
+              value: ZwapRangeValues(min, max),
+              minValue: 5,
+              maxValue: 300,
+              thumbSize: 32,
+              lineWidth: 12,
+              lineBorderRadius: 100,
+              maxExtent: 100,
+              minExtent: 30,
+              onChange: (value) => setState(() {
+                min = double.parse(value.min.toStringAsFixed(5));
+                max = double.parse(value.max.toStringAsFixed(5));
+              }),
+            ),
           ),
           //? Add text of current range slider
           SizedBox(height: 15),

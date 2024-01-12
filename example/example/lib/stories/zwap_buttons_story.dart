@@ -145,9 +145,9 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                         buttonChild: ZwapButtonChild.text(text: _textPiece),
                         loading: _loading,
                         disabled: _disabled,
-                        height: 55,
+                        height: 24,
                         width: double.infinity,
-                        decorations: ZwapButtonDecorations.primaryLight(),
+                        decorations: ZwapButtonDecorations.primaryLight(internalPadding: EdgeInsets.symmetric(horizontal: 12)),
                         onTap: ZwapButton.openOptions,
                         rightOptions: ZwapButtonOptions(
                           options: [
