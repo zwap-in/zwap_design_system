@@ -1271,3 +1271,6 @@ a
 
 ## 0.1.793
 * Fixed historical bug in [PageData]
+
+## 0.1.794
+* Improved tooltip behaviours near screen edges

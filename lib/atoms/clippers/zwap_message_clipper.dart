@@ -1,6 +1,24 @@
 import 'package:flutter/widgets.dart';
 
-enum DecorationDirection { top, right, bottom, left }
+enum DecorationDirection {
+  top,
+  right,
+  bottom,
+  left;
+
+  DecorationDirection get reverse {
+    switch (this) {
+      case DecorationDirection.top:
+        return DecorationDirection.bottom;
+      case DecorationDirection.right:
+        return DecorationDirection.left;
+      case DecorationDirection.bottom:
+        return DecorationDirection.top;
+      case DecorationDirection.left:
+        return DecorationDirection.right;
+    }
+  }
+}
 
 /// Clip as rounded border rectangle with an "arrow" decoration
 class ZwapMessageClipper extends CustomClipper<Path> {

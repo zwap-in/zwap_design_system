@@ -44,13 +44,18 @@ class MyApp extends StatelessWidget {
               if (_loading)
                 return const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(ZwapColors.primary700), strokeWidth: 1.8));
 
+              ZwapTooltip.globalCorrectPosition = Offset(64, 54);
+
               return OKToast(
-                  child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const SizedBox(width: 64),
-                  Expanded(child: child!),
-                ],
+                  child: Padding(
+                padding: EdgeInsets.only(top: 54),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const SizedBox(width: 64),
+                    Expanded(child: child!),
+                  ],
+                ),
               ));
             },
           ),
