@@ -22,6 +22,31 @@ enum TooltipPosition {
         return DecorationDirection.top;
     }
   }
+
+  Alignment get alignment {
+    switch (this) {
+      case TooltipPosition.top:
+        return Alignment.topCenter;
+      case TooltipPosition.rigth:
+        return Alignment.centerRight;
+      case TooltipPosition.bottom:
+        return Alignment.bottomCenter;
+    }
+  }
+}
+
+extension on Alignment {
+  DecorationDirection get decorationDirection {
+    if (this == Alignment.topCenter)
+      return DecorationDirection.bottom;
+    else if (this == Alignment.centerRight)
+      return DecorationDirection.left;
+    else if (this == Alignment.bottomCenter) {
+      return DecorationDirection.top;
+    }
+
+    return DecorationDirection.right;
+  }
 }
 
 class ZwapTooltip extends StatefulWidget {
@@ -44,13 +69,22 @@ class ZwapTooltip extends StatefulWidget {
   ///
   /// Eg, if [position] in [TooltipPosition.rigth] the tooltip overlay
   /// will be showed to the rigth of the provided [child]
-  final TooltipPosition position;
+  final TooltipPosition? position;
 
   /// Use this argument to move the overlay around
   ///
   /// This offset will be summed to the relative offset
   /// of the tooltip overlay
-  final Offset transationOffset;
+  @Deprecated("User [offset] instead")
+  final Offset? transationOffset;
+
+  /// Use this argument to move the overlay around
+  /// of a custom amount
+  final Offset offset;
+
+  /// The alignment of the tooltip overlay
+  /// relative to the [child] provided
+  final Alignment tooltipAlignment;
 
   /// Use this to move the arrow decoration of the tooltip.
   ///
@@ -121,8 +155,10 @@ class ZwapTooltip extends StatefulWidget {
     this.decorationTranslation = 0,
     this.style,
     this.padding = const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-    this.position = TooltipPosition.bottom,
-    this.transationOffset = Offset.zero,
+    @Deprecated("Use [tooltipAlignment] instead") this.position,
+    @Deprecated("Use [offset] instead") this.transationOffset,
+    this.offset = Offset.zero,
+    this.tooltipAlignment = Alignment.bottomCenter,
     this.animationDuration = const Duration(milliseconds: 200),
     this.showTooltip = true,
     this.delay = Duration.zero,
@@ -146,8 +182,10 @@ class ZwapTooltip extends StatefulWidget {
     this.decorationTranslation = 0,
     this.style,
     this.padding = const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-    this.position = TooltipPosition.bottom,
-    this.transationOffset = Offset.zero,
+    @Deprecated("Use [tooltipAlignment] instead") this.position,
+    @Deprecated("Use [offset] instead") this.transationOffset,
+    this.offset = Offset.zero,
+    this.tooltipAlignment = Alignment.bottomCenter,
     this.animationDuration = const Duration(milliseconds: 200),
     this.showTooltip = true,
     this.delay = Duration.zero,
@@ -212,7 +250,7 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
           key: _overlayKey,
           backgroundColor: widget.backgroundColor,
           animationDuration: widget.animationDuration,
-          position: widget.position,
+          tooltipAlignment: widget.position?.alignment ?? widget.tooltipAlignment,
           style: widget.style ?? getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.shades0),
           message: widget.message,
           padding: widget.padding,
@@ -220,7 +258,7 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
           builder: widget.builder,
           simple: widget.simple,
           targetKey: _key,
-          translationOffset: widget.transationOffset,
+          offset: widget.transationOffset ?? widget.offset,
           borderColor: widget.borderColor,
           radius: widget.radius,
         ),
@@ -291,7 +329,6 @@ class _ZwapTooltipOverlay extends StatefulWidget {
 
   final TextStyle style;
 
-  final TooltipPosition position;
   final EdgeInsets padding;
 
   final Duration animationDuration;
@@ -304,20 +341,22 @@ class _ZwapTooltipOverlay extends StatefulWidget {
 
   final double radius;
 
-  final Offset translationOffset;
   final GlobalKey targetKey;
+
+  final Alignment tooltipAlignment;
+  final Offset offset;
 
   const _ZwapTooltipOverlay({
     required this.message,
     required this.builder,
     required this.style,
-    required this.position,
+    required this.tooltipAlignment,
     required this.padding,
     required this.animationDuration,
     required this.decorationOffset,
     required this.radius,
     required this.simple,
-    required this.translationOffset,
+    required this.offset,
     required this.targetKey,
     this.borderColor,
     this.backgroundColor,
@@ -353,46 +392,41 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
     _position = -ZwapTooltip.globalCorrectPosition;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final Rect? _targetRect = widget.targetKey.globalPaintBounds;
       final Rect? _rect = _key.globalPaintBounds;
+      if (_rect == null) return;
 
-      if (_targetRect != null && _rect != null) {
-        switch (widget.position) {
-          case TooltipPosition.top:
-            _position += _targetRect.topLeft - Offset((_rect.width - _targetRect.width) / 2, _rect.height + 4);
-            break;
-          case TooltipPosition.rigth:
-            _position += _targetRect.topLeft + Offset(_targetRect.width + 4, (_targetRect.height - _rect.height) / 2);
-            break;
-          case TooltipPosition.bottom:
-            _position += _targetRect.bottomLeft - Offset((_rect.width - _targetRect.width) / 2, -4);
-            break;
-        }
+      _position = _key.safePositionRelatedTo(
+            widget.targetKey,
+            position: widget.tooltipAlignment,
+            translate: widget.offset,
+            screenCorrection: ZwapTooltip.globalCorrectPosition,
+          ) ??
+          Offset.zero;
 
-        Size _screenSize = MediaQuery.of(context).size;
-        _screenSize = Size(_screenSize.width - ZwapTooltip.globalCorrectPosition.dx, _screenSize.height - ZwapTooltip.globalCorrectPosition.dy);
+      /* Size _screenSize = MediaQuery.of(context).size;
+      _screenSize = Size(_screenSize.width - ZwapTooltip.globalCorrectPosition.dx, _screenSize.height - ZwapTooltip.globalCorrectPosition.dy);
 
-        final Rect _updatedTooltipRect = _rect.translate(_position.dx, _position.dy);
+      final Rect _updatedTooltipRect = _rect.translate(_position.dx, _position.dy);
 
-        double _dx = 0;
-        double _dy = 0;
+      double _dx = 0;
+      double _dy = 0;
 
-        if (_updatedTooltipRect.left + _updatedTooltipRect.width > _screenSize.width) {
-          _dx = _screenSize.width - (_updatedTooltipRect.left + _updatedTooltipRect.width + 16);
-        } else if (_updatedTooltipRect.left < 0) {
-          _dx = -_updatedTooltipRect.left + 16;
-        }
-
-        if (_updatedTooltipRect.top + _updatedTooltipRect.height > _screenSize.height) {
-          _dy = _screenSize.height - (_updatedTooltipRect.top + _updatedTooltipRect.height + 16);
-        } else if (_updatedTooltipRect.top < 0) {
-          _dy = -_updatedTooltipRect.top + 16;
-        }
-
-        _extraOffset = Offset(_dx, _dy);
-      } else {
-        _extraOffset = Offset.zero;
+      if (_updatedTooltipRect.left + _updatedTooltipRect.width > _screenSize.width) {
+        _dx = _screenSize.width - (_updatedTooltipRect.left + _updatedTooltipRect.width + 16);
+      } else if (_updatedTooltipRect.left < 0) {
+        _dx = -_updatedTooltipRect.left + 16;
       }
+
+      if (_updatedTooltipRect.top + _updatedTooltipRect.height > _screenSize.height) {
+        _dy = _screenSize.height - (_updatedTooltipRect.top + _updatedTooltipRect.height + 16);
+      } else if (_updatedTooltipRect.top < 0) {
+        _dy = -_updatedTooltipRect.top + 16;
+      } */
+
+      // _extraOffset = Offset(_dx, _dy);
+      /*   } else {
+        _extraOffset = Offset.zero;
+      } */
 
       setState(() => _opacity = 1);
     });
@@ -405,7 +439,7 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
     if (widget.simple)
       _extraPadding = EdgeInsets.zero;
     else
-      switch (widget.position.decorationDirection) {
+      switch (widget.tooltipAlignment.decorationDirection) {
         case DecorationDirection.top:
           _extraPadding = EdgeInsets.only(top: 12);
           break;
@@ -445,7 +479,7 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
         else
           child = ClipPath(
             clipper: ZwapMessageClipper(
-              direction: widget.position.decorationDirection,
+              direction: widget.tooltipAlignment.decorationDirection,
               decorationOffset: widget.decorationOffset,
               radius: widget.radius + 1,
             ),
@@ -485,7 +519,7 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
         ClipPath(
           key: _key,
           clipper: ZwapMessageClipper(
-            direction: widget.position.decorationDirection,
+            direction: widget.tooltipAlignment.decorationDirection,
             decorationOffset: widget.decorationOffset,
             radius: widget.radius,
           ),

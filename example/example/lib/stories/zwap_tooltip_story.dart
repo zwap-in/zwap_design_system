@@ -38,9 +38,9 @@ class _ZwapTooltipStoryState extends State<ZwapTooltipStory> {
           _rowOf(
             ZwapTooltip(
               message: "Proident aute ea id velit eu mollit.",
-              transationOffset: Offset(100, 5),
               simple: true,
-              position: TooltipPosition.top,
+              tooltipAlignment: Alignment.center,
+              offset: Offset(20, 20),
               borderColor: Colors.white.withOpacity(.3),
               child: Container(
                 height: 70,
@@ -60,9 +60,8 @@ class _ZwapTooltipStoryState extends State<ZwapTooltipStory> {
           _rowOf(
             ZwapTooltip(
               message: "Proident aute ea id velit eu mollit.",
-              transationOffset: Offset(100, 5),
               simple: true,
-              position: TooltipPosition.rigth,
+              tooltipAlignment: Alignment.centerLeft,
               borderColor: Colors.white.withOpacity(.3),
               child: _Box(),
             ),
@@ -81,7 +80,6 @@ class _ZwapTooltipStoryState extends State<ZwapTooltipStory> {
               },
               child: ZwapTooltip.builder(
                 showTooltip: _showTooltip,
-                transationOffset: Offset(-70, 5),
                 radius: 5,
                 borderColor: Colors.white.withOpacity(.3),
                 builder: (_) => Container(

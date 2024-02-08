@@ -1274,3 +1274,6 @@ a
 
 ## 0.1.794
 * Improved tooltip behaviours near screen edges
+
+## 0.1.795
+* Improved tooltip behaviours: new offset and position logics

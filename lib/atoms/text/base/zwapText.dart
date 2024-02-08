@@ -522,7 +522,7 @@ class __CustomTooltipState extends State<_CustomTooltip> {
         simple: true,
         style: ZwapTextType.mediumBodyRegular.copyWith(color: ZwapColors.shades0),
         radius: 8,
-        transationOffset: const Offset(0, 12),
+        transationOffset: const Offset(0, 4),
         message: widget.text,
         showTooltip: _showTooltip,
         child: widget.child,
