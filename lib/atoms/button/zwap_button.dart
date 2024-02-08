@@ -563,6 +563,11 @@ class _ZwapButtonState extends State<ZwapButton> {
       return child;
     }
 
+    EdgeInsets _fixPaddingIfNeeded(EdgeInsets padding) {
+      if (padding.vertical == 0) return padding.copyWith(top: 4, bottom: 4);
+      return padding;
+    }
+
     final Widget _button = LayoutBuilder(builder: (context, size) {
       return _wrapWithRowColumn(
         AnimatedContainer(
@@ -673,7 +678,11 @@ class _ZwapButtonState extends State<ZwapButton> {
                         Padding(
                           padding: _decorations.internalPadding,
                           child: _loading
-                              ? Center(child: _loader)
+                              ? Padding(
+                                  padding: _fixPaddingIfNeeded(_selected ? _selectedDecorations.internalPadding : _decorations.internalPadding),
+                                  child: Center(
+                                      child: widget.width == null && widget.height == null ? _loader : AspectRatio(aspectRatio: 1, child: _loader)),
+                                )
                               : widget.buttonChild == null
                                   ? Center(
                                       key: _buttonContentKey,

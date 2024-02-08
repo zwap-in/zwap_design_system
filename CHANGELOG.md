@@ -1277,3 +1277,6 @@ a
 
 ## 0.1.795
 * Improved tooltip behaviours: new offset and position logics
+
+## 0.1.796
+* Added special padding management while loading inside [ZwapButton]
