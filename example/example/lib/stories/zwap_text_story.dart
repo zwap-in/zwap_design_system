@@ -151,7 +151,7 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
             ),
             ZwapExpandableText(
               text:
-                  "Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt.",
+                  "Consectetur ex amet elit nulla adipisicing spreadhttps://chat.openai.com/c/7bb544ad-780a-4f71-96c2-f8ef7791f206 labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. https://chat.openai.com/c/7bb544ad-780a-4f71-96c2-f8ef7791f206 Laboris eiusmod eiusmod cillum sunt.",
               maxClosedLines: 3,
               textType: ZwapTextType.bigBodyRegular,
               textColor: ZwapColors.neutral900,
@@ -245,6 +245,13 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 60),
+            ZwapText(
+              text:
+                  "Consectetur ex amet elit https://chat.openai.com/c/7bb544ad-780a-4f71-96c2-f8ef7791f206https://chat.openai.com/c/7bb544ad-780a-4f71-96c2-f8ef7791f206nulla adipisicing spreadhttps://chat.openai.com/c/7bb544ad-780a-4f71-96c2-f8ef7791f206 labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. Laboris eiusmod eiusmod cillum sunt. Consectetur ex amet elit nulla adipisicing labore et aliqua consequat. https://chat.openai.com/c/7bb544ad-780a-4f71-96c2-f8ef7791f206 Laboris eiusmod eiusmod https://chat.openai.com/c/7bb544ad-780a-4f71-96c2-f8ef7791f206 https://chat.openai.com/c/7bb544ad-780a-4f71-96c2-f8ef7791f206 cillum sunt.",
+              zwapTextType: ZwapTextType.mediumBodyRegular,
+              textColor: ZwapColors.shades100,
+              highlightUrls: true,
+            ),
           ],
         ),
       ),

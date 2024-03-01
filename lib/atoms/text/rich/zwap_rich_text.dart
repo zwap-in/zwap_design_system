@@ -237,6 +237,8 @@ class ZwapRichText extends StatefulWidget {
   /// Default to [TextOverflow.ellipsis]
   final TextOverflow textOverflow;
 
+  final bool selectable;
+
   @Deprecated("Use the ZwapRichText.safeText(...) instead. This will be removed in the future.")
   ZwapRichText({
     Key? key,
@@ -245,6 +247,7 @@ class ZwapRichText extends StatefulWidget {
     this.textAlign,
     this.maxLines,
     this.textOverflow = TextOverflow.clip,
+    this.selectable = false,
   })  : this.textSpans = [],
         this._isSafeText = false,
         super(key: key);
@@ -259,6 +262,7 @@ class ZwapRichText extends StatefulWidget {
     this.textAlign,
     this.maxLines,
     this.textOverflow = TextOverflow.clip,
+    this.selectable = false,
   })  : this.texts = {},
         this._isSafeText = true,
         super(key: key);
@@ -271,6 +275,7 @@ class ZwapRichText extends StatefulWidget {
     this.textAlign,
     this.maxLines,
     this.textOverflow = TextOverflow.ellipsis,
+    this.selectable = false,
   })  : this.texts = {},
         this.style = getTextStyle(textType).copyWith(color: textColor),
         this._isSafeText = true,
@@ -305,6 +310,25 @@ class _ZwapRichTextState extends State<ZwapRichText> {
 
     if (widget._isSafeText && widget.textSpans.any((t) => t.linkToUri != null))
       return _LinkedMultyStyleText(textSpans: widget.textSpans, textAlign: widget.textAlign);
+
+    if (widget.selectable) {
+      return Theme(
+        data: ThemeData(
+          textSelectionTheme: TextSelectionThemeData(
+            selectionColor: ZwapColors.primary400.withOpacity(.4),
+            selectionHandleColor: ZwapColors.primary400,
+          ),
+        ),
+        child: SelectableText.rich(
+          TextSpan(
+            children: List<InlineSpan>.generate(children.length, (index) => children[index]),
+            style: widget.style,
+          ),
+          textAlign: widget.textAlign ?? TextAlign.start,
+          maxLines: widget.maxLines,
+        ),
+      );
+    }
 
     return RichText(
       text: TextSpan(

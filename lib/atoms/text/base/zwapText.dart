@@ -1,8 +1,11 @@
 library zwap.text;
 
+import 'package:flutter/gestures.dart';
+
 /// IMPORTING THIRD PARTY PACKAGES
 import 'package:flutter/material.dart';
 import 'package:taastrap/taastrap.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:ui' as ui; // Importa 'dart:ui' per accedere a TextPainter e ParagraphStyle
 
 /// IMPORTING LOCAL PACKAGES
@@ -329,6 +332,8 @@ class ZwapText extends StatefulWidget implements ResponsiveWidget {
 
   final bool showTooltipIfOverflow;
 
+  final bool highlightUrls;
+
   static double convertFontSpacing(double percent, [double fontSize = 16]) => fontSize * percent / 100;
   static double convertFontHeight(double lineHeight, [double fontSize = 16]) => lineHeight / fontSize;
 
@@ -344,6 +349,7 @@ class ZwapText extends StatefulWidget implements ResponsiveWidget {
     this.letterSpacing,
     this.parentKey,
     this.showTooltipIfOverflow = false,
+    this.highlightUrls = false,
   })  : this.customTextStyle = null,
         _selectable = false,
         super(key: key);
@@ -359,6 +365,7 @@ class ZwapText extends StatefulWidget implements ResponsiveWidget {
     this.letterSpacing,
     this.parentKey,
     this.showTooltipIfOverflow = false,
+    this.highlightUrls = false,
   })  : assert(customTextStyle != null),
         this.zwapTextType = ZwapTextType.bodyRegular,
         _selectable = false,
@@ -378,6 +385,7 @@ class ZwapText extends StatefulWidget implements ResponsiveWidget {
     this.letterSpacing,
     this.parentKey,
     this.showTooltipIfOverflow = false,
+    this.highlightUrls = false,
   })  : this.customTextStyle = null,
         _selectable = true,
         super(key: key);
@@ -468,17 +476,55 @@ class _ZwapTextState extends State<ZwapText> {
         style: _textStyle,
       );
 
+    final RegExp urlRegExp = RegExp(
+      r"(http|https|ftp)://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?",
+      caseSensitive: false,
+    );
+
+    bool _containsUrls = actualText.contains(urlRegExp);
+
+    Widget _highlighText() {
+      final List<Match> matches = urlRegExp.allMatches(actualText).toList();
+      final List<String> _splittedText = actualText.split(urlRegExp);
+
+      return ZwapRichText.safeText(
+        selectable: widget.highlightUrls,
+        textSpans: _splittedText
+            .map((text) {
+              return ZwapTextSpan(
+                text: text,
+                textStyle: _textStyle,
+              );
+            })
+            .toList()
+            .spread(
+              matches.map((match) {
+                return ZwapTextSpan(
+                  text: match.group(0) ?? '',
+                  textStyle: _textStyle.copyWith(
+                    color: ZwapColors.primary400,
+                    decoration: TextDecoration.underline,
+                  ),
+                  gestureRecognizer: TapGestureRecognizer()..onTap = () => launchUrlString(match.group(0)!),
+                );
+              }).toList(),
+            ),
+      );
+    }
+
     Widget _text() => _CustomTooltip(
           text: actualText,
           getIsOverflown: () => isTextOverflowing,
-          child: Text(
-            actualText,
-            maxLines: widget.maxLines,
-            overflow: widget.textOverflow,
-            textScaleFactor: 1,
-            textAlign: this.widget.textAlign,
-            style: _textStyle,
-          ),
+          child: widget.highlightUrls && _containsUrls
+              ? _highlighText()
+              : Text(
+                  actualText,
+                  maxLines: widget.maxLines,
+                  overflow: widget.textOverflow,
+                  textScaleFactor: 1,
+                  textAlign: this.widget.textAlign,
+                  style: _textStyle,
+                ),
         );
 
     if (ZwapTranslation.enableEdits && isZwapTranslation)
@@ -589,5 +635,25 @@ class _WrapWithEditTextTooltipState extends State<_WrapWithEditTextTooltip> {
             )
           : widget.builder(),
     );
+  }
+}
+
+extension _Ext<T> on List<T> {
+  List<T> spread(List<T> content) {
+    final List<T> _new = [];
+    final List<T> _original = List.from(this);
+
+    while (_original.isNotEmpty) {
+      _new.add(_original.removeAt(0));
+      if (content.isNotEmpty) {
+        _new.add(content.removeAt(0));
+      }
+    }
+
+    if (content.isNotEmpty) {
+      _new.addAll(content);
+    }
+
+    return _new;
   }
 }

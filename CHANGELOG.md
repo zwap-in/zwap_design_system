@@ -1283,3 +1283,6 @@ a
 
 ## 0.1.797
 * Improvements on [ZwapInput]: now custom [onKeyEvent] on provided [FocusNode] will be called
+
+## 0.1.798
+* Addded [highlightUrls] proterty to [ZwapText]
