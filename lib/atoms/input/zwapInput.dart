@@ -350,7 +350,19 @@ class _ZwapInputState extends State<ZwapInput> {
             ? InitialTextController(
                 text: widget.initialValue, fixedInitialString: widget.fixedInitialText!, fixedInitialStringStyle: widget.fixedInitialTextStyle)
             : TextEditingController(text: widget.initialValue));
-    _focusNode = (widget.focusNode ?? FocusNode())..onKeyEvent = _handleKeyEvent;
+    _focusNode = (widget.focusNode ?? FocusNode());
+
+    if (_focusNode.onKeyEvent != null) {
+      var _originalHandler = _focusNode.onKeyEvent;
+      _focusNode.onKeyEvent = (node, event) {
+        final KeyEventResult _res = _handleKeyEvent(node, event);
+        if (_res != KeyEventResult.ignored) return _res;
+
+        return _originalHandler!(node, event);
+      };
+    } else {
+      _focusNode.onKeyEvent = _handleKeyEvent;
+    }
 
     _hasFocus = _focusNode.hasFocus;
 

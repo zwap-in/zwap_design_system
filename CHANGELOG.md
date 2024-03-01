@@ -1280,3 +1280,6 @@ a
 
 ## 0.1.796
 * Added special padding management while loading inside [ZwapButton]
+
+## 0.1.797
+* Improvements on [ZwapInput]: now custom [onKeyEvent] on provided [FocusNode] will be called
