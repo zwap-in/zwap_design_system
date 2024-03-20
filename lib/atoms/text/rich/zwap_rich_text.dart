@@ -33,12 +33,15 @@ class ZwapTextSpan {
   /// Used only if linkToUri != null
   final ZwapLinkTarget linkTarget;
 
+  final MouseCursor? cursor;
+
   ZwapTextSpan({
     required this.text,
     this.textStyle,
     this.children = const [],
     this.linkToUri,
     this.gestureRecognizer,
+    this.cursor,
     this.linkTarget = ZwapLinkTarget.defaultTarget,
   });
 
@@ -49,6 +52,7 @@ class ZwapTextSpan {
     this.linkToUri,
     this.children = const [],
     this.gestureRecognizer,
+    this.cursor,
     this.linkTarget = ZwapLinkTarget.defaultTarget,
   }) : this.textStyle = textType == null
             ? textColor != null
@@ -80,6 +84,7 @@ class ZwapTextSpan {
       return TextSpan(
         text: _t.getTranslation(),
         style: textStyle,
+        mouseCursor: cursor,
         onEnter: !_t.enableEdit || !ZwapTranslation.enableEdits
             ? null
             : (_) => ZwapToasts.showInfoToast(
@@ -95,6 +100,7 @@ class ZwapTextSpan {
     return TextSpan(
       text: text is String ? text as String : text.toString(),
       style: textStyle,
+      mouseCursor: cursor,
       recognizer: gestureRecognizer,
       children: this.children.map((zwapTS) => zwapTS._toInlineSpan(context, updateWidget)).toList(),
     );

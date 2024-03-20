@@ -504,7 +504,10 @@ class _ZwapTextState extends State<ZwapText> {
                   textStyle: _textStyle.copyWith(
                     color: ZwapColors.primary400,
                     decoration: TextDecoration.underline,
+                    decorationColor: ZwapColors.primary400,
+                    decorationThickness: 1.2, 
                   ),
+                  cursor: SystemMouseCursors.click,
                   gestureRecognizer: TapGestureRecognizer()..onTap = () => launchUrlString(match.group(0)!),
                 );
               }).toList(),

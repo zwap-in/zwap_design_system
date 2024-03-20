@@ -1286,3 +1286,7 @@ a
 
 ## 0.1.798
 * Addded [highlightUrls] proterty to [ZwapText]
+
+## 0.1.799
+* Added [cursor] propery to [ZwapTextSpan]
+* Changed decoration color and properties when [highlightUrls] of [ZwapText] is true
