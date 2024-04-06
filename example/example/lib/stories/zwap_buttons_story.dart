@@ -99,6 +99,7 @@ class _ZwapButtonsStoryState extends State<ZwapButtonsStory> {
                 gradient: ZwapColors.acquaGradient(),
                 thumbGradient: ZwapColors.violetGradient(),
                 draggingThumbExtent: -6,
+                thumbChild: (context, value) => Icon(Icons.star, color: value ? ZwapColors.shades0 : ZwapColors.shades100, size: 12),
               ),
               const SizedBox(height: 20),
               ZwapText(text: 'Text lenght: $_showedChars', zwapTextType: ZwapTextType.bigBodyRegular, textColor: ZwapColors.shades100),

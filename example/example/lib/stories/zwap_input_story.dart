@@ -157,7 +157,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
   Widget build(BuildContext context) {
     final bool _isApple = (html.window.navigator.platform?.startsWith('Mac') ?? false) || html.window.navigator.platform == 'iPhone';
 
-    return Container(
+    /* return Container(
       width: 400,
       child: Column(
         children: [
@@ -187,7 +187,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
           ),
         ],
       ),
-    );
+    ); */
 
     return Center(
       child: SingleChildScrollView(

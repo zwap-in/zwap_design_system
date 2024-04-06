@@ -50,6 +50,12 @@ class ZwapSwitch extends StatefulWidget {
   /// Default to max to make widget circular
   final double? borderRadiuns;
 
+  /// If thumbChild is not null, it will be used as decoration
+  /// of the thumb widget
+  ///
+  /// As parameter it will receive the current value of the switch
+  final Widget Function(BuildContext, bool)? thumbChild;
+
   const ZwapSwitch({
     this.value = false,
     this.onChange,
@@ -66,6 +72,7 @@ class ZwapSwitch extends StatefulWidget {
     this.thumbColor,
     this.thumbGradient,
     this.borderRadiuns,
+    this.thumbChild,
     Key? key,
   }) : super(key: key);
 
@@ -239,6 +246,7 @@ class _ZwapSwitchState extends State<ZwapSwitch> {
                           ),
                         ],
                       ),
+                      child: widget.thumbChild?.call(context, _value),
                     ),
                   ),
                 ),
