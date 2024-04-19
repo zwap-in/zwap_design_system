@@ -1,0 +1,16 @@
+on:
+    push:
+        branches: [ master ]
+
+name: Deploy search data module gcloud on ECR
+  
+jobs:
+    notify-slack:
+        name: "Notify Slack"
+        runs-on: ubuntu-latest
+        steps:
+          - name: Send Slack Notification
+            uses: zwapin/base_github_actions/notificate-commit-action@master
+            with:
+                emoji: ':art:'
+                slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_COMMITS }}

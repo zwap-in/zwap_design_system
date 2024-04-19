@@ -477,7 +477,15 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                     children: [
                       ZwapSwitch(
                         value: _gapOfHalf,
-                        onChange: (v) => setState(() => _gapOfHalf = v),
+                        onChange: (v) {
+                          final bool _shouldFail = Random().nextBool();
+                          if (_shouldFail) {
+                            print('failed');
+                            return false;
+                          }
+
+                          setState(() => _gapOfHalf = v);
+                        },
                       ),
                       const SizedBox(width: 12),
                       Container(

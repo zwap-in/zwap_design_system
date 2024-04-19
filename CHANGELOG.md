@@ -1290,3 +1290,9 @@ a
 ## 0.1.799
 * Added [cursor] propery to [ZwapTextSpan]
 * Changed decoration color and properties when [highlightUrls] of [ZwapText] is true
+
+## 0.1.800
+* New [thumbChild] property for [ZwapSwitch]
+
+## 0.1.801
+* Now [ZwapSwitch] value callback can fail and not change the switch state

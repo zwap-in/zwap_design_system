@@ -1,5 +1,6 @@
 /// IMPORTING THIRD PARTY PACKAGES
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -13,8 +14,10 @@ class ZwapSwitch extends StatefulWidget {
   /// Default to fales
   final bool value;
 
-  ///  Called each time user try to change the value
-  final Function(bool)? onChange;
+  /// Called each time user try to change the value
+  ///
+  /// If false is returned the switch will not change its value
+  final FutureOr<dynamic> Function(bool)? onChange;
 
   final Color? color;
   final Color? activeColor;
@@ -132,8 +135,15 @@ class _ZwapSwitchState extends State<ZwapSwitch> {
     _notifyListener();
   }
 
-  void _notifyListener() {
-    if (widget.onChange != null) widget.onChange!(_value);
+  void _notifyListener() async {
+    if (widget.onChange != null) {
+      final _res = await widget.onChange!(_value);
+
+      if (_res == false) {
+        _value = !_value;
+        _updateThumbPosition();
+      }
+    }
   }
 
   Color? get _switchColor {
