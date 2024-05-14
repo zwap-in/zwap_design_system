@@ -332,7 +332,13 @@ class ZwapText extends StatefulWidget implements ResponsiveWidget {
 
   final bool showTooltipIfOverflow;
 
+  @Deprecated("This field is now ignored, use [doNotHighlightHyperLinks] to remove the automatic highlight of urls")
   final bool highlightUrls;
+
+  /// If true, automatic highlight of urls will be disabled
+  ///
+  /// Default to false
+  final bool doNotHighlightHyperLinks;
 
   static double convertFontSpacing(double percent, [double fontSize = 16]) => fontSize * percent / 100;
   static double convertFontHeight(double lineHeight, [double fontSize = 16]) => lineHeight / fontSize;
@@ -350,6 +356,7 @@ class ZwapText extends StatefulWidget implements ResponsiveWidget {
     this.parentKey,
     this.showTooltipIfOverflow = false,
     this.highlightUrls = false,
+    this.doNotHighlightHyperLinks = false,
   })  : this.customTextStyle = null,
         _selectable = false,
         super(key: key);
@@ -366,6 +373,7 @@ class ZwapText extends StatefulWidget implements ResponsiveWidget {
     this.parentKey,
     this.showTooltipIfOverflow = false,
     this.highlightUrls = false,
+    this.doNotHighlightHyperLinks = false,
   })  : assert(customTextStyle != null),
         this.zwapTextType = ZwapTextType.bodyRegular,
         _selectable = false,
@@ -386,6 +394,7 @@ class ZwapText extends StatefulWidget implements ResponsiveWidget {
     this.parentKey,
     this.showTooltipIfOverflow = false,
     this.highlightUrls = false,
+    this.doNotHighlightHyperLinks = false,
   })  : this.customTextStyle = null,
         _selectable = true,
         super(key: key);
@@ -403,13 +412,6 @@ class ZwapText extends StatefulWidget implements ResponsiveWidget {
     );
 
     textPainter.layout(maxWidth: boundingRect.width);
-
-    final bool overflowWidth = textPainter.size.width > boundingRect.width;
-    final bool overflowHeight = maxLines == 1 ? false : textPainter.size.height > boundingRect.height;
-
-    // print('overflowWidth: $overflowWidth - overflowHeight: $overflowHeight');
-    // print('width: ${textPainter.} and max width: ${boundingRect.width}');
-
     return textPainter.didExceedMaxLines;
   }
 
@@ -451,6 +453,25 @@ class _ZwapTextState extends State<ZwapText> {
     return _isTextOverlowing!;
   }
 
+  final RegExp _urlRegExp = RegExp(
+    r"(http|https|ftp)://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(/\S*)?",
+    caseSensitive: false,
+  );
+
+  final RegExp _emailRegExp = RegExp(
+    r"([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)",
+    caseSensitive: false,
+  );
+
+  final RegExp _telRegExp = RegExp(
+    r'\+?\d[\d -]{8,12}\d',
+    caseSensitive: false,
+  );
+
+  RegExp get _globalRegExp {
+    return RegExp([_urlRegExp, _emailRegExp, _telRegExp].map((e) => '(${e.pattern})').join("|"), caseSensitive: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     TextStyle _textStyle = widget.customTextStyle ?? getTextStyle(this.widget.zwapTextType).apply(color: this.widget.textColor);
@@ -476,19 +497,14 @@ class _ZwapTextState extends State<ZwapText> {
         style: _textStyle,
       );
 
-    final RegExp urlRegExp = RegExp(
-      r"(http|https|ftp)://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?",
-      caseSensitive: false,
-    );
-
-    bool _containsUrls = actualText.contains(urlRegExp);
+    bool _containsUrls = actualText.contains(_globalRegExp);
 
     Widget _highlighText() {
-      final List<Match> matches = urlRegExp.allMatches(actualText).toList();
-      final List<String> _splittedText = actualText.split(urlRegExp);
+      final List<Match> matches = _globalRegExp.allMatches(actualText).toList();
+      final List<String> _splittedText = actualText.split(_globalRegExp);
 
       return ZwapRichText.safeText(
-        selectable: widget.highlightUrls,
+        selectable: _splittedText.length > 1,
         textSpans: _splittedText
             .map((text) {
               return ZwapTextSpan(
@@ -499,16 +515,29 @@ class _ZwapTextState extends State<ZwapText> {
             .toList()
             .spread(
               matches.map((match) {
+                final bool isEmail = _emailRegExp.hasMatch(match.group(0) ?? '');
+                final bool isTel = !isEmail && _telRegExp.hasMatch(match.group(0) ?? '');
+
                 return ZwapTextSpan(
                   text: match.group(0) ?? '',
                   textStyle: _textStyle.copyWith(
                     color: ZwapColors.primary400,
-                    decoration: TextDecoration.underline,
+                    decoration: isEmail|| isTel ? null : TextDecoration.underline,
                     decorationColor: ZwapColors.primary400,
-                    decorationThickness: 1.2, 
+                    decorationThickness: 1.2,
                   ),
                   cursor: SystemMouseCursors.click,
-                  gestureRecognizer: TapGestureRecognizer()..onTap = () => launchUrlString(match.group(0)!),
+                  gestureRecognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      if (isEmail) {
+                        launchUrlString("mailto:${match.group(0)}");
+                        return;
+                      } else if (isTel) {
+                        launchUrlString("tel:${match.group(0)}");
+                        return;
+                      }
+                      launchUrlString(match.group(0)!);
+                    },
                 );
               }).toList(),
             ),
@@ -518,7 +547,7 @@ class _ZwapTextState extends State<ZwapText> {
     Widget _text() => _CustomTooltip(
           text: actualText,
           getIsOverflown: () => isTextOverflowing,
-          child: widget.highlightUrls && _containsUrls
+          child: !widget.doNotHighlightHyperLinks && _containsUrls
               ? _highlighText()
               : Text(
                   actualText,

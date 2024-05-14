@@ -1296,3 +1296,6 @@ a
 
 ## 0.1.801
 * Now [ZwapSwitch] value callback can fail and not change the switch state
+
+## 0.1.802
+* Add support for email and phone number in [ZwapText], so auto highlighted
