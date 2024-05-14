@@ -488,15 +488,6 @@ class _ZwapTextState extends State<ZwapText> {
       );
     }
 
-    if (widget._selectable)
-      return SelectableText(
-        actualText,
-        maxLines: widget.maxLines,
-        textScaleFactor: 1,
-        textAlign: this.widget.textAlign,
-        style: _textStyle,
-      );
-
     bool _containsUrls = actualText.contains(_globalRegExp);
 
     Widget _highlighText() {
@@ -522,7 +513,7 @@ class _ZwapTextState extends State<ZwapText> {
                   text: match.group(0) ?? '',
                   textStyle: _textStyle.copyWith(
                     color: ZwapColors.primary400,
-                    decoration: isEmail|| isTel ? null : TextDecoration.underline,
+                    decoration: isEmail || isTel ? null : TextDecoration.underline,
                     decorationColor: ZwapColors.primary400,
                     decorationThickness: 1.2,
                   ),
@@ -549,14 +540,22 @@ class _ZwapTextState extends State<ZwapText> {
           getIsOverflown: () => isTextOverflowing,
           child: !widget.doNotHighlightHyperLinks && _containsUrls
               ? _highlighText()
-              : Text(
-                  actualText,
-                  maxLines: widget.maxLines,
-                  overflow: widget.textOverflow,
-                  textScaleFactor: 1,
-                  textAlign: this.widget.textAlign,
-                  style: _textStyle,
-                ),
+              : widget._selectable
+                  ? SelectableText(
+                      actualText,
+                      maxLines: widget.maxLines,
+                      textScaleFactor: 1,
+                      textAlign: this.widget.textAlign,
+                      style: _textStyle,
+                    )
+                  : Text(
+                      actualText,
+                      maxLines: widget.maxLines,
+                      overflow: widget.textOverflow,
+                      textScaleFactor: 1,
+                      textAlign: this.widget.textAlign,
+                      style: _textStyle,
+                    ),
         );
 
     if (ZwapTranslation.enableEdits && isZwapTranslation)

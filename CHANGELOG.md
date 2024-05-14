@@ -1299,3 +1299,6 @@ a
 
 ## 0.1.802
 * Add support for email and phone number in [ZwapText], so auto highlighted
+
+## 0.1.803
+* Fiexed a problem with urls + selectable text in [ZwapText]
