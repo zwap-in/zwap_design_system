@@ -1302,3 +1302,6 @@ a
 
 ## 0.1.803
 * Fiexed a problem with urls + selectable text in [ZwapText]
+
+## 0.1.804
+* Improved behaviour of [ZwapTooltip]

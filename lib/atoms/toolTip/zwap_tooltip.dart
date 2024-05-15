@@ -208,6 +208,7 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
   OverlayEntry? _entry;
 
   late bool _showTooltip;
+  bool _isTooltipHovered = false;
 
   /// When user enter the hover region this value is set to true.
   /// If the user exit this area this will be setted to false.
@@ -248,6 +249,14 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
       _entry = OverlayEntry(
         builder: (context) => _ZwapTooltipOverlay(
           key: _overlayKey,
+          onHover: (h) async {
+            _isTooltipHovered = h;
+            if (!h) {
+              await Future.delayed(const Duration(milliseconds: 100));
+              if (_shouldShowTooltip) return;
+              _hideOverlay();
+            }
+          },
           backgroundColor: widget.backgroundColor,
           animationDuration: widget.animationDuration,
           tooltipAlignment: widget.position?.alignment ?? widget.tooltipAlignment,
@@ -273,6 +282,9 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
   void _hideOverlay() async {
     _disappearTimer?.cancel();
     if (_entry == null) return;
+
+    await Future.delayed(const Duration(milliseconds: 100));
+    if (_isTooltipHovered) return;
 
     await _overlayKey.currentState?.close();
     _entry?.remove();
@@ -324,6 +336,8 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
 }
 
 class _ZwapTooltipOverlay extends StatefulWidget {
+  final Function(bool) onHover;
+
   final String? message;
   final Widget Function(BuildContext)? builder;
 
@@ -347,6 +361,7 @@ class _ZwapTooltipOverlay extends StatefulWidget {
   final Offset offset;
 
   const _ZwapTooltipOverlay({
+    required this.onHover,
     required this.message,
     required this.builder,
     required this.style,
@@ -487,9 +502,15 @@ class _ZwapTooltipOverlayState extends State<_ZwapTooltipOverlay> {
           );
       }
 
-      return IgnorePointer(
-        child: Material(
-          color: ZwapColors.transparent,
+      return Material(
+        color: ZwapColors.transparent,
+        child: InkWell(
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {},
+          onHover: widget.onHover,
           child: AnimatedOpacity(
             opacity: _opacity,
             duration: widget.animationDuration,
