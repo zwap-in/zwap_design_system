@@ -1305,3 +1305,6 @@ a
 
 ## 0.1.804
 * Improved behaviour of [ZwapTooltip]
+
+## 0.1.805
+* Updated intl version
