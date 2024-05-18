@@ -1308,3 +1308,6 @@ a
 
 ## 0.1.805
 * Updated intl version
+
+## 0.1.805
+* Removed deprecated code (flutter 3.22)

@@ -8,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:zwap_design_system/atoms/atoms.dart';
 
 import 'package:zwap_utils/zwap_utils.dart';
 
@@ -1214,7 +1215,7 @@ class _YearPickerState extends State<YearPicker> {
     } else {
       textColor = colorScheme.onSurface.withOpacity(0.87);
     }
-    final TextStyle? itemStyle = textTheme.bodyText1?.apply(color: textColor);
+    final TextStyle itemStyle = ZwapTextType.mediumBodyRegular.copyWith().apply(color: textColor);
 
     BoxDecoration? decoration;
     if (isSelected) {
