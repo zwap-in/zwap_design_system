@@ -532,6 +532,9 @@ class _ZwapTextState extends State<ZwapText> {
                 );
               }).toList(),
             ),
+        maxLines: widget.maxLines,
+        textOverflow: widget.textOverflow ?? TextOverflow.ellipsis,
+        textAlign: widget.textAlign,
       );
     }
 
