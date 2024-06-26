@@ -16,6 +16,21 @@ class PageData<T> {
 
   PageData({required this.data, required this.count, required this.next, required this.previous});
 
+  int? get nextPage => int.tryParse(next ?? '');
+  int? get previousPage => int.tryParse(previous ?? '');
+
+  /// Deduce the current page number from the next and previous page numbers
+  /// 
+  /// If there is no next or previous page, it will return 1
+  /// 
+  /// ! If [next] or [previous] are not numbers, it will return 1
+  int get decodeCurrentPage {
+    if (nextPage == null && previousPage == null) return 1;
+    if (nextPage == null && previousPage != null) return previousPage! + 1;
+    if (nextPage != null) return nextPage! - 1;
+    return 1;
+  }
+
   factory PageData.empty() => PageData(count: 0, data: [], next: null, previous: null);
 
   factory PageData.fromList(List<T> values, {bool thereAreMore = true}) => PageData(
@@ -30,12 +45,12 @@ class PageData<T> {
     String? _previous;
 
     if (json['next'] is String) _next = json['next'];
-    if (json['next'] is int) _next = json['next'] > 0 ? 'not_empty_string' : null;
-    if (json['next'] is bool) _next = json['next'] ? 'not_empty_string' : null;
+    if (json['next'] is int) _next = json['next'] > 0 ? '${json['next']}' : null;
+    if (json['next'] is bool) _next = json['next'] ? 'true' : null;
 
     if (json['previous'] is String) _previous = json['previous'];
-    if (json['previous'] is int) _previous = json['previous'] > 0 ? 'not_empty_string' : null;
-    if (json['previous'] is bool) _previous = json['previous'] ? 'not_empty_string' : null;
+    if (json['previous'] is int) _previous = json['previous'] > 0 ? '${json['previous']}' : null;
+    if (json['previous'] is bool) _previous = json['previous'] ? 'true' : null;
 
     return PageData(
       data: List<T>.generate(json['results'].length, ((element) => callBack(json['results'][element]))),

@@ -1308,3 +1308,6 @@ a
 
 ## 0.1.808
 * Fix some problems in [ZwapText]
+
+## 0.1.809
+* Improved some behaviours in [PageData]
