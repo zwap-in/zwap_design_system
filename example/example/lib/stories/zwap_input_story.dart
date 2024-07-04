@@ -193,6 +193,23 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            Container(
+              color: const Color(0xff0C0C2F),
+              padding: const EdgeInsets.all(32),
+              child: ZwapCalendarInput(
+                selectedDate: DateTime(2022, 11, 12),
+                onlyFutureDates: true,
+                borderColor: ZwapColors.primary700,
+                radius: 12,
+                backgroundColor: Colors.transparent,
+                textColor: Colors.white,
+                width: double.infinity,
+                label: "Ciaocicao ciao",
+                labelBackgroundColor: const Color(0xff0C0C2F),
+                labelTextColor: Colors.green,
+              ),
+            ),
+            SizedBox(height: 20),
             ZwapText(
               text: 'Rich input',
               zwapTextType: ZwapTextType.mediumBodyRegular,
@@ -784,11 +801,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                     selectedYear: _year,
                     hintText: 'Seleziona l\'anno di nascita',
                   ),
-                  SizedBox(height: 20),
-                  ZwapCalendarInput(
-                    selectedDate: DateTime(2022, 11, 12),
-                    onlyFutureDates: true,
-                  ),
+
                   SizedBox(height: 20),
                   ZwapDynamicInput(
                     content: Container(

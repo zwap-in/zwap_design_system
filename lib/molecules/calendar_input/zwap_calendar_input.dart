@@ -2,6 +2,7 @@ library zwap.calendar_input;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
@@ -58,6 +59,17 @@ class ZwapCalendarInput extends StatefulWidget {
   /// If not provided default copy will be used
   final String Function(String)? translateText;
 
+  final Color? borderColor;
+  final Color? backgroundColor;
+  final double radius;
+  final Alignment textAlign;
+
+  final Color? textColor;
+
+  final String? label;
+  final Color? labelTextColor;
+  final Color? labelBackgroundColor;
+
   /// Date are compared only with day, month and year. So DateTime(2022, 10, 4, 23, 53)
   /// is the same date of DateTime(2022, 10, 4, 8, 12, 33)
   const ZwapCalendarInput({
@@ -69,6 +81,14 @@ class ZwapCalendarInput extends StatefulWidget {
     this.width,
     this.onlyFutureDates = false,
     this.translateText,
+    this.borderColor,
+    this.backgroundColor,
+    this.radius = 8,
+    this.textAlign = Alignment.centerLeft,
+    this.textColor,
+    this.label,
+    this.labelTextColor,
+    this.labelBackgroundColor,
     Key? key,
   }) : super(key: key);
 
@@ -161,46 +181,78 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
             builder: (context) {
               final DateTime? _selectedDate = context.select<_ZwapCalendarInputProvider, DateTime?>((pro) => pro.selectedDate);
 
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.decelerate,
-                key: _inputKey,
-                width: widget.width ?? 140,
-                height: _height,
-                decoration: BoxDecoration(
-                  color: _hovered ? ZwapColors.primary100 : ZwapColors.shades0,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    if (_hovered)
-                      BoxShadow(
-                        offset: Offset(0, 2),
-                        blurRadius: 2,
-                        spreadRadius: 0,
-                        color: ZwapColors.primary900Dark.withOpacity(0.05),
+              return Stack(
+                children: [
+                  Positioned(
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      margin: widget.label == null ? null : const EdgeInsets.only(top: 8),
+                      curve: Curves.decelerate,
+                      key: _inputKey,
+                      width: widget.width ?? 140,
+                      height: _height,
+                      decoration: BoxDecoration(
+                        color: widget.backgroundColor ?? (_hovered ? ZwapColors.primary100 : ZwapColors.shades0),
+                        border: widget.borderColor == null ? null : Border.all(color: widget.borderColor!),
+                        borderRadius: BorderRadius.circular(widget.radius ?? 8),
+                        boxShadow: [
+                          if (widget.backgroundColor == null && _hovered)
+                            BoxShadow(
+                              offset: Offset(0, 2),
+                              blurRadius: 2,
+                              spreadRadius: 0,
+                              color: ZwapColors.primary900Dark.withOpacity(0.05),
+                            ),
+                        ],
                       ),
-                  ],
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: ZwapText(
-                          text: _selectedDate == null ? widget.placeholder ?? '' : DateFormat(widget.dateFormatString).format(_selectedDate),
-                          zwapTextType: ZwapTextType.mediumBodyRegular,
-                          textColor: _hovered ? ZwapColors.primary700 : ZwapColors.primary900Dark,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      child: Align(
+                        alignment: widget.textAlign,
+                        child: Row(
+                          mainAxisSize: widget.width == double.infinity ? MainAxisSize.max : MainAxisSize.min,
+                          children: [
+                            if (widget.width == double.infinity)
+                              Expanded(
+                                child: ZwapText(
+                                  text: _selectedDate == null ? widget.placeholder ?? '' : DateFormat(widget.dateFormatString).format(_selectedDate),
+                                  zwapTextType: ZwapTextType.mediumBodyRegular,
+                                  textColor: widget.textColor ?? (_hovered ? ZwapColors.primary700 : ZwapColors.primary900Dark),
+                                ),
+                              )
+                            else
+                              Flexible(
+                                child: ZwapText(
+                                  text: _selectedDate == null ? widget.placeholder ?? '' : DateFormat(widget.dateFormatString).format(_selectedDate),
+                                  zwapTextType: ZwapTextType.mediumBodyRegular,
+                                  textColor: widget.textColor ?? (_hovered ? ZwapColors.primary700 : ZwapColors.primary900Dark),
+                                ),
+                              ),
+                            const SizedBox(width: 12),
+                            ZwapIcons.icons(
+                              'calendar',
+                              iconSize: 16,
+                              iconColor: widget.textColor ?? (_hovered ? ZwapColors.primary700 : ZwapColors.primary900Dark),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      ZwapIcons.icons(
-                        'calendar',
-                        iconSize: 16,
-                        iconColor: _hovered ? ZwapColors.primary700 : ZwapColors.primary900Dark,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  if (widget.label != null)
+                    Positioned(
+                      left: 12,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        color: widget.labelBackgroundColor ?? widget.backgroundColor,
+                        child: ZwapText(
+                          text: widget.label!,
+                          zwapTextType: ZwapTextType.smallBodyRegular,
+                          textColor: widget.labelTextColor ?? widget.textColor ?? Colors.grey,
+                        ),
+                      ),
+                    ),
+                ],
               );
             },
           ),

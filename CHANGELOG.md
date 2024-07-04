@@ -1311,3 +1311,6 @@ a
 
 ## 0.1.809
 * Improved some behaviours in [PageData]
+
+## 0.1.810
+* Add extra decorations to [ZwapCalendarInput]
