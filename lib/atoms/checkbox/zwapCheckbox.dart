@@ -139,12 +139,15 @@ class ZwapCheckBox extends StatefulWidget {
 
   final ZwapCheckBoxDecorations decorations;
 
+  final double? size;
+
   ZwapCheckBox({
     Key? key,
     this.value,
     this.disabled = false,
     this.error = false,
     this.onCheckBoxClick,
+    this.size,
     this.decorations = const ZwapCheckBoxDecorations(),
   }) : super(key: key);
 
@@ -249,8 +252,8 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
           padding: EdgeInsets.only(right: 4),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            height: getMultipleConditions<double>(17, 17, 16, 15, 15) + 4,
-            width: getMultipleConditions<double>(17, 17, 16, 15, 15) + 4,
+            height: widget.size ?? (getMultipleConditions<double>(17, 17, 16, 15, 15) + 4),
+            width: widget.size ?? getMultipleConditions<double>(17, 17, 16, 15, 15) + 4,
             decoration: BoxDecoration(
               color: _currentColor,
               border: _currentBorder,
@@ -272,14 +275,14 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
                       Icons.remove_rounded,
                       key: UniqueKey(),
                       color: ZwapColors.shades0,
-                      size: getMultipleConditions<double>(17, 17, 16, 15, 15),
+                      size: widget.size != null ? (widget.size! * .8) : getMultipleConditions<double>(17, 17, 16, 15, 15),
                     )
                   : _value!
                       ? Icon(
                           Icons.check_rounded,
                           key: UniqueKey(),
                           color: ZwapColors.shades0,
-                          size: getMultipleConditions<double>(17, 17, 16, 15, 15),
+                          size: widget.size != null ? (widget.size! * .8) : getMultipleConditions<double>(17, 17, 16, 15, 15),
                         )
                       : Container(),
             ),

@@ -1314,3 +1314,6 @@ a
 
 ## 0.1.810
 * Add extra decorations to [ZwapCalendarInput]
+
+## 0.1.811
+* New [size] field in ZwapCheckbox
