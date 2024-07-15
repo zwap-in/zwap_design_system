@@ -102,7 +102,6 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
 
   late final _ZwapCalendarInputProvider _calendarProvider;
 
-  late DateTime? _date;
   bool _hovered = false;
 
   OverlayEntry? _calendarEntry;
@@ -111,17 +110,22 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
   @override
   void initState() {
     super.initState();
-    _date = widget.selectedDate.pureDate;
+
     _calendarProvider = _ZwapCalendarInputProvider(
       onDatePicked: widget.onDateSelected,
       translateText: widget.translateText,
-      initialDate: _date,
+      initialDate: widget.selectedDate,
     );
   }
 
   @override
   void didUpdateWidget(covariant ZwapCalendarInput oldWidget) {
-    if (!_date.isEqualTo(widget.selectedDate)) setState(() => _date = widget.selectedDate);
+    print({widget.selectedDate, oldWidget.selectedDate});
+    if ((widget.selectedDate == null) != (_calendarProvider.selectedDate == null)) {
+      _calendarProvider.selectedDate = widget.selectedDate;
+    } else if (widget.selectedDate != null && _calendarProvider.selectedDate?.isAtSameMomentAs(widget.selectedDate!) == false) {
+      _calendarProvider.selectedDate = widget.selectedDate;
+    }
 
     super.didUpdateWidget(oldWidget);
   }

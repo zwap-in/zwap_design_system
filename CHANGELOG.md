@@ -1317,3 +1317,6 @@ a
 
 ## 0.1.811
 * New [size] field in ZwapCheckbox
+
+## 0.1.812
+* Fixed problem in [ZwapCalendarInput]

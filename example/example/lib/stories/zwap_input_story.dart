@@ -138,10 +138,14 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
 
   late StreamedTextController _textController;
 
+  DateTime _date2 = DateTime(2022, 11, 12);
+
   @override
   void initState() {
     super.initState();
     _textController = StreamedTextController();
+
+    Future.delayed(const Duration(milliseconds: 1000), () => setState(() => _date2 = DateTime(2024, 1, 23)));
 
     /* _getStream().listen((e) {
       if (e == '<done>') {
@@ -197,7 +201,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
               color: const Color(0xff0C0C2F),
               padding: const EdgeInsets.all(32),
               child: ZwapCalendarInput(
-                selectedDate: DateTime(2022, 11, 12),
+                selectedDate: _date2,
                 onlyFutureDates: true,
                 borderColor: ZwapColors.primary700,
                 radius: 12,
