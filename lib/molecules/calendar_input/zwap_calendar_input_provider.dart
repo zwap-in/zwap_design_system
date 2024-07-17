@@ -22,4 +22,9 @@ class _ZwapCalendarInputProvider extends ChangeNotifier {
     DateTime? initialDate,
   })  : this._selectedDate = initialDate,
         super();
+
+  void updateDate(DateTime? value) {
+    _selectedDate = value;
+    notifyListeners();
+  }
 }

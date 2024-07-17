@@ -120,11 +120,10 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
 
   @override
   void didUpdateWidget(covariant ZwapCalendarInput oldWidget) {
-    print({widget.selectedDate, oldWidget.selectedDate});
     if ((widget.selectedDate == null) != (_calendarProvider.selectedDate == null)) {
-      _calendarProvider.selectedDate = widget.selectedDate;
+      _calendarProvider.updateDate(widget.selectedDate);
     } else if (widget.selectedDate != null && _calendarProvider.selectedDate?.isAtSameMomentAs(widget.selectedDate!) == false) {
-      _calendarProvider.selectedDate = widget.selectedDate;
+      _calendarProvider.updateDate(widget.selectedDate);
     }
 
     super.didUpdateWidget(oldWidget);

@@ -200,17 +200,29 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
             Container(
               color: const Color(0xff0C0C2F),
               padding: const EdgeInsets.all(32),
-              child: ZwapCalendarInput(
-                selectedDate: _date2,
-                onlyFutureDates: true,
-                borderColor: ZwapColors.primary700,
-                radius: 12,
-                backgroundColor: Colors.transparent,
-                textColor: Colors.white,
-                width: double.infinity,
-                label: "Ciaocicao ciao",
-                labelBackgroundColor: const Color(0xff0C0C2F),
-                labelTextColor: Colors.green,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ZwapCalendarInput(
+                      selectedDate: _date2,
+                      onlyFutureDates: true,
+                      borderColor: ZwapColors.primary700,
+                      radius: 12,
+                      onDateSelected: (date) => setState(() => _date2 = date ?? DateTime.now()),
+                      backgroundColor: Colors.transparent,
+                      textColor: Colors.white,
+                      width: double.infinity,
+                      label: "Ciaocicao ciao",
+                      labelBackgroundColor: const Color(0xff0C0C2F),
+                      labelTextColor: Colors.green,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  ZwapButton(
+                    buttonChild: ZwapButtonChild.text(text: "resetta"),
+                    onTap: () => setState(() => _date2 = DateTime.now()),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 20),
