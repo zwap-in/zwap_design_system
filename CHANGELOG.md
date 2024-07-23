@@ -1323,3 +1323,6 @@ a
 
 ## 0.1.813
 * Fixed problem in [ZwapCalendarInput]
+
+## 0.1.814
+* Extended package support of [intl] package
