@@ -1214,7 +1214,7 @@ class _YearPickerState extends State<YearPicker> {
     } else {
       textColor = colorScheme.onSurface.withOpacity(0.87);
     }
-    final TextStyle? itemStyle = textTheme.bodyText1?.apply(color: textColor);
+    final TextStyle? itemStyle = textTheme.bodyMedium?.apply(color: textColor);
 
     BoxDecoration? decoration;
     if (isSelected) {

@@ -1326,3 +1326,6 @@ a
 
 ## 0.1.814
 * Extended package support of [intl] package
+
+## 0.1.815
+* Fixed new flutter version compatibility issues

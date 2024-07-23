@@ -8,6 +8,5 @@ ThemeData zwapThemeData = ThemeData(
   highlightColor: Colors.transparent,
   focusColor: Colors.transparent,
   scaffoldBackgroundColor: Colors.transparent,
-  backgroundColor: Colors.transparent,
   primaryColor: ZwapColors.shades0,
 );
