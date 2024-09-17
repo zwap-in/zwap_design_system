@@ -1,11 +1,9 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
-import 'package:collection/collection.dart';
 
 class ZwapInlineSelect<T> extends StatefulWidget {
   final List<T> items;
@@ -14,11 +12,24 @@ class ZwapInlineSelect<T> extends StatefulWidget {
 
   final Function(T item)? onSelected;
 
+  final double radius;
+  final double selectedRadius;
+  final Color? backgroundColor;
+  final Color? selectedColor;
+  final double itemHeight;
+  final double padding;
+
   const ZwapInlineSelect({
     required this.items,
     required this.selectedItem,
     required this.builder,
     this.onSelected,
+    this.radius = 12,
+    this.backgroundColor,
+    this.selectedColor,
+    this.selectedRadius = 12,
+    this.itemHeight = 48,
+    this.padding = 4,
     super.key,
   });
 
@@ -31,6 +42,8 @@ class _ZwapInlineSelectState<T> extends State<ZwapInlineSelect<T>> {
 
   double _offset = 0;
   double _width = 0;
+
+  bool _isDragging = false;
 
   GlobalKey _selectKey = GlobalKey();
   List<GlobalKey> _keys = [];
@@ -160,34 +173,35 @@ class _ZwapInlineSelectState<T> extends State<ZwapInlineSelect<T>> {
           child: Container(
             key: _selectKey,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: ZwapColors.neutral100,
+              borderRadius: BorderRadius.circular(widget.radius),
+              color: widget.backgroundColor ?? ZwapColors.neutral100,
             ),
           ),
         ),
         AnimatedPositioned(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.fastLinearToSlowEaseIn,
-          top: 4,
+          duration: _isDragging ? Duration.zero : const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          top: widget.padding,
           left: _offset,
           width: _currentWidth,
-          height: 48,
+          height: widget.itemHeight,
           child: Container(
             decoration: BoxDecoration(
-              color: ZwapColors.shades0,
-              borderRadius: BorderRadius.circular(12),
+              color: widget.selectedColor ?? ZwapColors.shades0,
+              borderRadius: BorderRadius.circular(widget.selectedRadius),
             ),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(4),
+          padding: EdgeInsets.all(widget.padding),
           child: GestureDetector(
-            onHorizontalDragStart: (_) {},
+            onHorizontalDragStart: (_) => _isDragging = true,
             onHorizontalDragUpdate: (details) {
               if (!mounted) return;
               setState(() => _offset += details.delta.dx);
             },
             onHorizontalDragEnd: (_) {
+              _isDragging = false;
               _updatePositions();
             },
             child: Row(

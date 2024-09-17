@@ -1329,3 +1329,7 @@ a
 
 ## 0.1.815
 * Fixed new flutter version compatibility issues
+
+## 0.1.816
+* Removed [flutter_sticky_header] direct dependency (waiting for a fix in the package by the author)
+* Added decorations and improved behaviour in [ZwapInlineSelect]

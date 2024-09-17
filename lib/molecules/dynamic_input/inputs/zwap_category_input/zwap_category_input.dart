@@ -1,10 +1,14 @@
 library zwap.dynamic_inputs.category_input;
 
+
+
+export '../decorations/zwap_input_decorations.dart';
+
+/* 
 import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
@@ -12,8 +16,7 @@ import 'package:zwap_design_system/molecules/dynamic_input/inputs/zwap_search_pi
 
 import '../../zwap_dynamic_input.dart';
 import '../decorations/zwap_input_decorations.dart';
-
-export '../decorations/zwap_input_decorations.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 part 'zwap_category_provider.dart';
 
@@ -371,3 +374,4 @@ class _SingleItemWidgetState<T, S> extends State<_SingleItemWidget<T, S>> {
     );
   }
 }
+ */

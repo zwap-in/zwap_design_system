@@ -49,6 +49,8 @@ class ZwapInputStory extends StatefulWidget {
 }
 
 class _ZwapInputStoryState extends State<ZwapInputStory> {
+  MyEnum _filter = MyEnum.a;
+
   final Map<String, List<String>> _categories = {
     "Design": [
       "Design case",
@@ -455,7 +457,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  Container(
+                  /* Container(
                     color: Color(0xff000013).withOpacity(.9),
                     padding: const EdgeInsets.all(20),
                     child: ZwapCategoryInput<String, String>(
@@ -476,7 +478,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                       translateKey: (k) => 'Nessun risultato per sadf',
                       placeholder: 'Seleziona un elemento',
                     ),
-                  ),
+                  ), */
                   SizedBox(height: 55),
                   ZwapText(
                     text: 'Category input',
@@ -484,7 +486,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                     textColor: ZwapColors.primary900Dark,
                   ),
                   SizedBox(height: 5),
-                  ZwapCategoryInput<String, String>(
+                  /* ZwapCategoryInput<String, String>(
                     label: "Category",
                     selectedValue: _selectedIntValue,
                     values: _categories,
@@ -497,7 +499,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                     onSelected: (i) => setState(() => _selectedIntValue = i),
                     translateKey: (k) => 'Nessun risultato per sadf',
                     placeholder: 'Seleziona un elemento',
-                  ),
+                  ), */
                   SizedBox(height: 25),
                   ZwapText(
                     text: 'Time picker',
@@ -560,7 +562,35 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                     zwapTextType: ZwapTextType.mediumBodyRegular,
                     textColor: ZwapColors.primary900Dark,
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 15),
+                  SizedBox(
+                    height: 28,
+                    child: ZwapInlineSelect<MyEnum>(
+                      backgroundColor: const Color(0xff262646),
+                      selectedColor: const Color(0xff000025),
+                      radius: 8,
+                      selectedRadius: 6,
+                      itemHeight: 24,
+                      padding: 2,
+                      items: MyEnum.values.sublist(0, 4),
+                      builder: (context, item, key) => SizedBox(
+                        key: key,
+                        width: 91,
+                        height: 24,
+                        child: Center(
+                          child: ZwapText(
+                            text: item.name.split('.').last,
+                            zwapTextType: ZwapTextType.mediumBodyMedium,
+                            textColor: ZwapColors.neutral200,
+                            lineHeight: 16.94,
+                          ),
+                        ),
+                      ),
+                      selectedItem: _filter,
+                      onSelected: (item) => setState(() => _filter = item),
+                    ),
+                  ),
+                  SizedBox(height: 15),
                   Container(
                     height: 56,
                     child: ZwapInlineSelect<int>(
