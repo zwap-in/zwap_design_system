@@ -590,6 +590,15 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                       onSelected: (item) => setState(() => _filter = item),
                     ),
                   ),
+                  SizedBox(height: 4),
+                  InkWell(
+                    onTap: () => setState(() => _filter = MyEnum.b),
+                    child: ZwapText(
+                      text: "Resetta",
+                      zwapTextType: ZwapTextType.mediumBodyRegular,
+                      textColor: Colors.white,
+                    ),
+                  ),
                   SizedBox(height: 15),
                   Container(
                     height: 56,

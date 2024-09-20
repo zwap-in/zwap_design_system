@@ -1333,3 +1333,6 @@ a
 ## 0.1.816
 * Removed [flutter_sticky_header] direct dependency (waiting for a fix in the package by the author)
 * Added decorations and improved behaviour in [ZwapInlineSelect]
+
+## 0.1.817
+* Added didUpdateWidget in [ZwapInlineSelect] to support external changes

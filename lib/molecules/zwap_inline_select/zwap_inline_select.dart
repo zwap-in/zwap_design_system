@@ -64,6 +64,16 @@ class _ZwapInlineSelectState<T> extends State<ZwapInlineSelect<T>> {
     _keys = List.generate(widget.items.length, (i) => GlobalKey());
   }
 
+  @override
+  void didUpdateWidget(covariant ZwapInlineSelect<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.selectedItem != widget.selectedItem && widget.selectedItem != __selectedItem) {
+      __selectedItem = widget.selectedItem;
+      _updatePositionsBySelected();
+    }
+  }
+
   double _getOffsetOf(int x) {
     if (x < 0) return 0;
     if (x >= widget.items.length) return _keys[_keys.length - 1].globalOffset?.dx ?? 0 - (_selectKey.globalOffset?.dx ?? 0);
