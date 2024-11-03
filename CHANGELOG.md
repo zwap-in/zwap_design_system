@@ -1336,3 +1336,6 @@ a
 
 ## 0.1.817
 * Added didUpdateWidget in [ZwapInlineSelect] to support external changes
+
+## 0.1.818
+* Changed link type detection order in [ZwapText]

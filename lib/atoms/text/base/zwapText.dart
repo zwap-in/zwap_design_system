@@ -507,13 +507,13 @@ class _ZwapTextState extends State<ZwapText> {
             .spread(
               matches.map((match) {
                 final bool isEmail = _emailRegExp.hasMatch(match.group(0) ?? '');
-                final bool isTel = !isEmail && _telRegExp.hasMatch(match.group(0) ?? '');
+                final bool isUrl = !isEmail && _urlRegExp.hasMatch(match.group(0) ?? '');
 
                 return ZwapTextSpan(
                   text: match.group(0) ?? '',
                   textStyle: _textStyle.copyWith(
                     color: ZwapColors.primary400,
-                    decoration: isEmail || isTel ? null : TextDecoration.underline,
+                    decoration: isUrl ? TextDecoration.underline : null,
                     decorationColor: ZwapColors.primary400,
                     decorationThickness: 1.2,
                   ),
@@ -523,11 +523,11 @@ class _ZwapTextState extends State<ZwapText> {
                       if (isEmail) {
                         launchUrlString("mailto:${match.group(0)}");
                         return;
-                      } else if (isTel) {
-                        launchUrlString("tel:${match.group(0)}");
+                      } else if (isUrl) {
+                        launchUrlString(match.group(0)!);
                         return;
                       }
-                      launchUrlString(match.group(0)!);
+                      launchUrlString("tel:${match.group(0)}");
                     },
                 );
               }).toList(),
