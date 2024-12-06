@@ -1339,3 +1339,6 @@ a
 
 ## 0.1.818
 * Changed link type detection order in [ZwapText]
+
+## 0.1.819
+* Fixed problem with overflow and overlay color in [ZwapTimePicker]

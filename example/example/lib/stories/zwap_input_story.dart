@@ -537,7 +537,7 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                           backgroundColor: Colors.transparent,
                           borderActiveColor: ZwapColors.primary400,
                           borderDefaultColor: const Color(0xff808092),
-                          overlayColor: ZwapColors.primary900Dark,
+                          overlayColor: const Color(0xff000128),
                           titleColor: ZwapColors.shades0,
                           valueColor: ZwapColors.shades0,
                         ),

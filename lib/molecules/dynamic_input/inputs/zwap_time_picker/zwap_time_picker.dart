@@ -188,12 +188,12 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
                   const SizedBox(width: 16),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 9),
+                      padding: const EdgeInsets.only(bottom: 2),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 7),
                           ZwapText.customStyle(
                             text: widget.title,
                             customTextStyle: ZwapTextType.smallBodySemibold.copyWith(
@@ -223,7 +223,10 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
                   ),
                 ],
               ),
-              overlay: _TimePickerOverlay(),
+              overlay: _TimePickerOverlay(
+                overlayColor: widget.overlayColor,
+                titleColor: widget.titleColor,
+              ),
               showDeleteIcon: widget.showClear && _selectedItem != null,
               onDelete: () {
                 context.read<_ZwapTimePickerProvider>().updateValue(null);
@@ -247,7 +250,14 @@ class _ZwapTimePickerState extends State<ZwapTimePicker> {
 }
 
 class _TimePickerOverlay extends StatefulWidget {
-  const _TimePickerOverlay({super.key});
+  final Color? overlayColor;
+  final Color? titleColor;
+
+  const _TimePickerOverlay({
+    required this.overlayColor,
+    required this.titleColor,
+    super.key,
+  });
 
   @override
   State<_TimePickerOverlay> createState() => _TimePickerOverlayState();
@@ -267,13 +277,19 @@ class _TimePickerOverlayState extends State<_TimePickerOverlay> {
           context.read<_ZwapTimePickerProvider>().suspendFocusOutListener = hovered;
         },
         child: Container(
-          color: ZwapColors.shades0,
+          color: widget.overlayColor ?? ZwapColors.shades0,
           constraints: BoxConstraints(maxHeight: 240),
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: _suggestedTimes.map((time) => _SingleTimeWidget(time: time)).toList(),
+              children: _suggestedTimes
+                  .map((time) => _SingleTimeWidget(
+                        time: time,
+                        overrideColor: widget.overlayColor,
+                        textColor: widget.titleColor,
+                      ))
+                  .toList(),
             ),
           ),
         ),
@@ -285,8 +301,13 @@ class _TimePickerOverlayState extends State<_TimePickerOverlay> {
 class _SingleTimeWidget extends StatefulWidget {
   final TimeOfDay time;
 
+  final Color? overrideColor;
+  final Color? textColor;
+
   const _SingleTimeWidget({
     required this.time,
+    required this.overrideColor,
+    required this.textColor,
     super.key,
   });
 
@@ -309,10 +330,16 @@ class _SingleTimeWidgetState extends State<_SingleTimeWidget> {
         height: 40,
         padding: const EdgeInsets.only(left: 20),
         alignment: Alignment.centerLeft,
-        color: _hover ? ZwapColors.primary50 : ZwapColors.shades0,
+        color: widget.overrideColor != null
+            ? widget.overrideColor!.withOpacity(_hover ? .8 : 1)
+            : _hover
+                ? ZwapColors.primary50
+                : ZwapColors.shades0,
         child: ZwapText.customStyle(
           text: context.read<_ZwapTimePickerProvider>().formatTime(widget.time),
-          customTextStyle: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(color: ZwapColors.primary900Dark),
+          customTextStyle: getTextStyle(ZwapTextType.mediumBodyRegular).copyWith(
+            color: widget.textColor ?? ZwapColors.primary900Dark,
+          ),
         ),
       ),
     );
