@@ -1342,3 +1342,6 @@ a
 
 ## 0.1.819
 * Fixed problem with overflow and overlay color in [ZwapTimePicker]
+
+## 0.1.820
+* Improve on [PageData] fromJson constructor adding a [safe] option to avoid exception for a single item

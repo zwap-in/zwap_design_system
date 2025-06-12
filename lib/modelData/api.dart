@@ -20,9 +20,9 @@ class PageData<T> {
   int? get previousPage => int.tryParse(previous ?? '');
 
   /// Deduce the current page number from the next and previous page numbers
-  /// 
+  ///
   /// If there is no next or previous page, it will return 1
-  /// 
+  ///
   /// ! If [next] or [previous] are not numbers, it will return 1
   int get decodeCurrentPage {
     if (nextPage == null && previousPage == null) return 1;
@@ -40,7 +40,9 @@ class PageData<T> {
         previous: null,
       );
 
-  factory PageData.fromJson(Map<String, dynamic> json, T callBack(Map<String, dynamic> json)) {
+  /// If [safe] is true and [callback] throws and exception, the single element is skipped, otherwise
+  /// if [safe] is false, the exception is re-thrown
+  factory PageData.fromJson(Map<String, dynamic> json, T callBack(Map<String, dynamic> json), {bool safe = true}) {
     String? _next;
     String? _previous;
 
@@ -53,7 +55,18 @@ class PageData<T> {
     if (json['previous'] is bool) _previous = json['previous'] ? 'true' : null;
 
     return PageData(
-      data: List<T>.generate(json['results'].length, ((element) => callBack(json['results'][element]))),
+      data: List<T?>.generate(
+        json['results'].length,
+        ((element) {
+          try {
+            return callBack(json['results'][element]);
+          } catch (e) {
+            if (kDebugMode) print('[PAGE DATA] Error while parsing json: $json');
+            if (safe) return null;
+            rethrow;
+          }
+        }),
+      ).whereType<T>().toList(),
       count: json['count'] ?? 0,
       next: _next,
       previous: _previous,
