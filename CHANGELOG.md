@@ -1345,3 +1345,6 @@ a
 
 ## 0.1.820
 * Improve on [PageData] fromJson constructor adding a [safe] option to avoid exception for a single item
+
+## 0.1.821
+* Improved [ZwapCalendarInput] widget with custom height and internal padding

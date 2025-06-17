@@ -70,6 +70,9 @@ class ZwapCalendarInput extends StatefulWidget {
   final Color? labelTextColor;
   final Color? labelBackgroundColor;
 
+  final double? height;
+  final EdgeInsets? internalPadding;
+
   /// Date are compared only with day, month and year. So DateTime(2022, 10, 4, 23, 53)
   /// is the same date of DateTime(2022, 10, 4, 8, 12, 33)
   const ZwapCalendarInput({
@@ -89,6 +92,8 @@ class ZwapCalendarInput extends StatefulWidget {
     this.label,
     this.labelTextColor,
     this.labelBackgroundColor,
+    this.height,
+    this.internalPadding,
     Key? key,
   }) : super(key: key);
 
@@ -98,7 +103,7 @@ class ZwapCalendarInput extends StatefulWidget {
 
 class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
   final GlobalKey _inputKey = GlobalKey();
-  final double _height = 40;
+  late final double _height;
 
   late final _ZwapCalendarInputProvider _calendarProvider;
 
@@ -110,7 +115,7 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
   @override
   void initState() {
     super.initState();
-
+    _height = widget.height ?? 40;
     _calendarProvider = _ZwapCalendarInputProvider(
       onDatePicked: widget.onDateSelected,
       translateText: widget.translateText,
@@ -208,7 +213,7 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
                             ),
                         ],
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      padding: widget.internalPadding ?? const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                       child: Align(
                         alignment: widget.textAlign,
                         child: Row(
