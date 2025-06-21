@@ -5,7 +5,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:zwap_design_system/atoms/atoms.dart';
-import 'package:zwap_design_system/molecules/zwap_modal/zwap_modal.dart';
 
 part 'zwap_range_values.dart';
 
@@ -13,6 +12,54 @@ part 'zwap_range_values.dart';
 /// FEATURE: decorations
 
 enum _ZwapRangeDraggingThumb { start, end }
+
+class ZwapRangeSliderDecorations {
+  /// The size of the thumbs. Default to 16
+  final double thumbSize;
+
+  /// The width of the main line. Default to 4
+  final double lineWidth;
+
+  /// The bored circular radius of the main line. Default to 2
+  final double lineBorderRadius;
+
+  final Color? lineColor;
+  final Color? activeLineColor;
+  final Color? thumbColor;
+
+  const ZwapRangeSliderDecorations({
+    required this.thumbSize,
+    required this.lineWidth,
+    required this.lineBorderRadius,
+    this.lineColor,
+    this.activeLineColor,
+    this.thumbColor,
+  });
+
+  static ZwapRangeSliderDecorations defaultDecorations = ZwapRangeSliderDecorations(
+    thumbSize: 16,
+    lineWidth: 4,
+    lineBorderRadius: 2,
+  );
+
+  ZwapRangeSliderDecorations copyWith({
+    double? thumbSize,
+    double? lineWidth,
+    double? lineBorderRadius,
+    Color? lineColor,
+    Color? activeLineColor,
+    Color? thumbColor,
+  }) {
+    return ZwapRangeSliderDecorations(
+      thumbSize: thumbSize ?? this.thumbSize,
+      lineWidth: lineWidth ?? this.lineWidth,
+      lineBorderRadius: lineBorderRadius ?? this.lineBorderRadius,
+      lineColor: lineColor ?? this.lineColor,
+      activeLineColor: activeLineColor ?? this.activeLineColor,
+      thumbColor: thumbColor ?? this.thumbColor,
+    );
+  }
+}
 
 class ZwapRangeSlider extends StatefulWidget {
   /// The current value of this range slider, if not
@@ -27,11 +74,18 @@ class ZwapRangeSlider extends StatefulWidget {
   final double maxValue;
 
   /// The size of the thumbs, default to 16
-  final double thumbSize;
+  @Deprecated('Use decorations instead')
+  final double? thumbSize;
 
-  final double lineWidth;
+  @Deprecated('Use decorations instead')
+  final double? lineWidth;
 
-  final double lineBorderRadius;
+  @Deprecated('Use decorations instead')
+  final double? lineBorderRadius;
+
+  /// Range slider decorations, if not provided [ZwapRangeSliderDecorations.defaultDecorations]
+  /// is used
+  final ZwapRangeSliderDecorations? decorations;
 
   final Function(ZwapRangeValues)? onChange;
 
@@ -47,12 +101,13 @@ class ZwapRangeSlider extends StatefulWidget {
     this.value,
     this.minValue = 0,
     this.maxValue = 5,
-    this.thumbSize = 16,
+    @Deprecated('Use decorations') this.thumbSize = 16,
     this.onChange,
-    this.lineWidth = 4,
-    this.lineBorderRadius = 2,
+    @Deprecated('Use decorations') this.lineWidth = 4,
+    @Deprecated('Use decorations') this.lineBorderRadius = 2,
     this.maxExtent,
     this.minExtent,
+    this.decorations,
     Key? key,
   }) : super(key: key);
 
@@ -85,7 +140,9 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
 
   bool _showRightThumbError = false;
 
-  double get _thumbSize => widget.thumbSize;
+  ZwapRangeSliderDecorations get _decorations => widget.decorations ?? ZwapRangeSliderDecorations.defaultDecorations;
+
+  double get _thumbSize => widget.thumbSize ?? _decorations.thumbSize;
   bool get _isDragging => _draggedThumb != null;
 
   double get _maxExtent => widget.maxExtent ?? widget.maxValue;
@@ -211,6 +268,9 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, size) {
+        final double _lineWidth = widget.lineWidth ?? _decorations.lineWidth;
+        final double _lineRadiuns = widget.lineBorderRadius ?? _decorations.lineBorderRadius;
+
         _maxWidth = size.maxWidth;
         final bool _isAtSamePosition = (_startThumbOffset + _thumbSize / 2) == size.maxWidth - _endThumbOffset - _thumbSize / 2;
 
@@ -223,14 +283,14 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
               children: [
                 //? Placeholder line
                 Positioned(
-                  top: (_thumbSize / 2) - (widget.lineWidth / 2),
+                  top: (_thumbSize / 2) - (_lineWidth / 2),
                   left: 1,
                   right: 1,
                   child: Container(
-                    height: widget.lineWidth,
+                    height: _lineWidth,
                     decoration: BoxDecoration(
-                      color: ZwapColors.neutral200,
-                      borderRadius: BorderRadius.circular(widget.lineBorderRadius),
+                      color: _decorations.lineColor ?? ZwapColors.neutral200,
+                      borderRadius: BorderRadius.circular(_lineRadiuns),
                     ),
                   ),
                 ),
@@ -238,15 +298,15 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
                 AnimatedPositioned(
                   duration: _animationDuration,
                   curve: Curves.decelerate,
-                  top: (_thumbSize / 2) - (widget.lineWidth / 2),
+                  top: (_thumbSize / 2) - (_lineWidth / 2),
                   left: _startThumbOffset + 1,
                   right: _endThumbOffset + 1,
                   child: Container(
                     width: double.infinity,
-                    height: widget.lineWidth,
+                    height: _lineWidth,
                     decoration: BoxDecoration(
-                      color: ZwapColors.primary700,
-                      borderRadius: BorderRadius.circular(widget.lineBorderRadius),
+                      color: _decorations.activeLineColor ?? ZwapColors.primary700,
+                      borderRadius: BorderRadius.circular(_lineRadiuns),
                     ),
                   ),
                 ),
@@ -284,7 +344,7 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
                           height: _thumbSize,
                           width: _thumbSize,
                           decoration: BoxDecoration(
-                            color: ZwapColors.shades0,
+                            color: _decorations.thumbColor ?? ZwapColors.shades0,
                             borderRadius: BorderRadius.circular(_thumbSize / 2),
                             boxShadow: [
                               BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
@@ -332,9 +392,8 @@ class _ZwapRangeSliderState extends State<ZwapRangeSlider> {
                           height: _thumbSize,
                           width: _thumbSize,
                           decoration: BoxDecoration(
-                            color: ZwapColors.shades0,
+                            color: _decorations.thumbColor ?? ZwapColors.shades0,
                             borderRadius: BorderRadius.circular(_thumbSize / 2),
-                            border: Border.all(color: _showRightThumbError ? ZwapColors.error200 : ZwapColors.shades0, width: 3),
                             boxShadow: [
                               BoxShadow(color: Color(0xff091E42).withOpacity(0.31), blurRadius: 1),
                               BoxShadow(offset: Offset(0, 3), color: Color(0xff091E42).withOpacity(0.2), blurRadius: 5),

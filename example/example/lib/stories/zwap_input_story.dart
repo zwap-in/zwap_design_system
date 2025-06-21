@@ -772,9 +772,14 @@ class _ZwapInputStoryState extends State<ZwapInputStory> {
                       value: ZwapRangeValues(min, max),
                       minValue: 5,
                       maxValue: 300,
-                      thumbSize: 32,
-                      lineWidth: 12,
-                      lineBorderRadius: 100,
+                      decorations: ZwapRangeSliderDecorations(
+                        thumbSize: 32,
+                        lineWidth: 12,
+                        lineBorderRadius: 100,
+                        activeLineColor: const Color(0xff000123),
+                        lineColor: const Color(0xffababab),
+                        thumbColor: Color.fromARGB(255, 246, 25, 25)
+                      ),
                       onChange: (value) => setState(() {
                         min = value.min.floorToDouble();
                         max = value.max.floorToDouble();

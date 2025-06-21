@@ -1348,3 +1348,6 @@ a
 
 ## 0.1.821
 * Improved [ZwapCalendarInput] widget with custom height and internal padding
+
+## 0.1.822
+* Added [ZwapRangeSliderDecorations] to [ZwapRangeSlider] widget
