@@ -1351,3 +1351,6 @@ a
 
 ## 0.1.822
 * Added [ZwapRangeSliderDecorations] to [ZwapRangeSlider] widget
+
+## 0.1.823
+* Removed font awesome support
