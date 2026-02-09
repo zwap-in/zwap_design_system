@@ -1354,3 +1354,6 @@ a
 
 ## 0.1.823
 * Removed font awesome support
+
+## 0.1.824
+* Updates text component's regex

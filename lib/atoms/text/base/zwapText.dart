@@ -175,7 +175,12 @@ class FontSizeDevice {
   /// The font size for the mobile S version
   final double mobileS;
 
-  FontSizeDevice({required this.desktopM, required this.desktopS, required this.tablet, required this.mobileM, required this.mobileS});
+  FontSizeDevice(
+      {required this.desktopM,
+      required this.desktopS,
+      required this.tablet,
+      required this.mobileM,
+      required this.mobileS});
 
   /// It retrieves the correct font size in base of the device type
   double getFontSize() {
@@ -275,15 +280,16 @@ TextStyle getTextStyle(ZwapTextType typeText) {
 
 /// It plots the text size in base of the current style and current chars
 Size getTextSize(String text, ZwapTextType textType, {double? maxWidth}) {
-  final TextPainter textPainter =
-      TextPainter(text: TextSpan(text: text, style: getTextStyle(textType)), maxLines: 1, textDirection: TextDirection.ltr)
-        ..layout(minWidth: 0, maxWidth: maxWidth ?? double.infinity);
+  final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: getTextStyle(textType)), maxLines: 1, textDirection: TextDirection.ltr)
+    ..layout(minWidth: 0, maxWidth: maxWidth ?? double.infinity);
   return textPainter.size;
 }
 
 Size getTextSizeFromCustomStyle(String text, TextStyle textStyle, {double? maxWidth}) {
-  final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: textStyle), maxLines: 1, textDirection: TextDirection.ltr)
-    ..layout(minWidth: 0, maxWidth: maxWidth ?? double.infinity);
+  final TextPainter textPainter =
+      TextPainter(text: TextSpan(text: text, style: textStyle), maxLines: 1, textDirection: TextDirection.ltr)
+        ..layout(minWidth: 0, maxWidth: maxWidth ?? double.infinity);
   return textPainter.size;
 }
 
@@ -454,18 +460,25 @@ class _ZwapTextState extends State<ZwapText> {
   }
 
   final RegExp _urlRegExp = RegExp(
-    r"(http|https|ftp)://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(/\S*)?",
+    r'''\b(?:(?:https?|ftp)://)?(?:[a-z0-9._~%!$&\'()*+,;=:-]+(?::[a-z0-9._~%!$&\'()*+,;=:-]*)?@)?(?:localhost|(?:\d{1,3}(?:\.\d{1,3}){3})|(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]{2,59}))(?:\:\d{1,5})?(?:[/?#](?:[^\s<>"\)\]\}\,]|,(?=\S))*)?(?:(?=\S)|(?<![:;!?])(?=\s|$))''',
     caseSensitive: false,
   );
 
   final RegExp _emailRegExp = RegExp(
-    r"([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)",
+    r'(?<![a-z0-9._%+\-])'
+    r'([a-z0-9._%+\-]+@'
+    r'(?:[a-z0-9](?:[a-z0-9\-]{0,61}[a-z0-9])?\.)+'
+    r'[a-z]{2,63})'
+    r'(?![a-z0-9_%+\-])',
     caseSensitive: false,
   );
 
   final RegExp _telRegExp = RegExp(
-    r'\+?\d[\d -]{8,12}\d',
-    caseSensitive: false,
+    r'(?<!\d)(?!\d{1,3}(?:\.\d{1,3}){3}(?!\d))'
+    r'(?:\+|00)?[ \t]*\d{1,3}[ \t.-]*'
+    r'(?:\(?\d{1,4}\)?[ \t.-]*)?'
+    r'(?:\d[\d \t.-]{6,18}\d)'
+    r'(?!\d)',
   );
 
   RegExp get _globalRegExp {
@@ -474,7 +487,8 @@ class _ZwapTextState extends State<ZwapText> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle _textStyle = widget.customTextStyle ?? getTextStyle(this.widget.zwapTextType).apply(color: this.widget.textColor);
+    TextStyle _textStyle =
+        widget.customTextStyle ?? getTextStyle(this.widget.zwapTextType).apply(color: this.widget.textColor);
 
     if (widget.lineHeight != null) {
       _textStyle = _textStyle.copyWith(

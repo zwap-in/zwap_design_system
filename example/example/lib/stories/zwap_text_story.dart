@@ -144,14 +144,14 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                     )),
                   ),
                   Expanded(
-                    child: Center(child: ZwapText(text: "Test two", textColor: _firstColor, zwapTextType: _firstTextType)),
+                    child:
+                        Center(child: ZwapText(text: "Test two", textColor: _firstColor, zwapTextType: _firstTextType)),
                   ),
                 ],
               ),
             ),
             ZwapExpandableText(
-              text:
-                  "",
+              text: "",
               maxClosedLines: 3,
               textType: ZwapTextType.bigBodyRegular,
               textColor: ZwapColors.neutral900,
@@ -174,7 +174,9 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
                       text: "  <in bb>  ",
                     ),
                     ZwapTextSpan.fromZwapTypography(text: "  <in verde>  ", textColor: ZwapColors.success400),
-                    ZwapTextSpan(text: "  <ciao>  ", textStyle: TextStyle(fontWeight: FontWeight.w200, decoration: TextDecoration.lineThrough)),
+                    ZwapTextSpan(
+                        text: "  <ciao>  ",
+                        textStyle: TextStyle(fontWeight: FontWeight.w200, decoration: TextDecoration.lineThrough)),
                     ZwapTextSpan(text: "...."),
                   ],
                 ),
@@ -247,10 +249,9 @@ class _ZwapTextStoryState extends State<ZwapTextStory> {
             SizedBox(height: 60),
             ZwapText(
               text:
-                  "sdafasd",
+                  "Ciao! Ti lascio i riferimenti: per la guida usa https://docs.demo-example.com/setup?env=prod#install, (https://docs.demo-example.com/setup?env=prod#install) e, se ti serve la console locale, apri anche [http://localhost:3000/admin](http://localhost:3000/admin) (in staging invece c’è [https://staging.demo-example.com/app?user=test%2B1](https://staging.demo-example.com/app?user=test%2B1)). Per qualsiasi dubbio scrivi pure a [dev.team+qa@demo-example.com](mailto:dev.team+qa@demo-example.com) oppure, in alternativa, a [support@demo-example.com](mailto:support@demo-example.com); se rispondi in thread, evita di incollare “[info@demo-example.com](mailto:info@demo-example.com),” con la virgola finale. Se preferisci chiamare, prova al +99 345 678 9012 o al fisso (+99) 12 3456 7890, mentre il vecchio 0099 345-678-9012 non è più affidabile. Nota: nel log può comparire un IP 192.168.1.10 che non è un telefono, è solo l’indirizzo della macchina. In ogni caso l’endpoint è [https://api.demo-example.com/v1/items?a=1,b=2](https://api.demo-example.com/v1/items?a=1,b=2) e qui la virgola va tenuta perché non è seguita da spazio.",
               zwapTextType: ZwapTextType.mediumBodyRegular,
               textColor: ZwapColors.shades100,
-              highlightUrls: true,
             ),
           ],
         ),
