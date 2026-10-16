@@ -10,6 +10,97 @@ import 'package:zwap_design_system/atoms/text_controller/initial_text_controller
 import 'package:zwap_design_system/extensions/globalKeyExtension.dart';
 import 'package:zwap_design_system/utils/streamed_text_controller.dart';
 
+/// Optional colors for the parts of [ZwapInput] that have no dedicated
+/// parameter. Every null field keeps the default Zwap color.
+class ZwapInputColors {
+  /// Prefix and suffix icon color
+  final Color? iconColor;
+
+  /// Suffix icon and min lenght indicator color in the success state
+  final Color? successColor;
+
+  /// Text selection and focus accent color
+  final Color? selectionColor;
+
+  /// The value text color, used when [ZwapInput.textStyle] is null
+  final Color? textColor;
+
+  /// The value text color when disabled, used when [ZwapInput.disabledTextStyle] is null
+  final Color? disabledTextColor;
+
+  /// The placeholder color, used when [ZwapInput.placeholderStyle] is null
+  final Color? placeholderColor;
+
+  /// The label color, used when [ZwapInput.labelTextStyle] is null
+  final Color? labelColor;
+
+  /// The label color when disabled, used when [ZwapInput.labelTextStyle] is null
+  final Color? disabledLabelColor;
+
+  /// The helper text color when [ZwapInput.helperTextIsError] is true
+  final Color? helperErrorColor;
+
+  /// The helper text color when [ZwapInput.helperTextIsError] is false
+  final Color? helperSuccessColor;
+
+  /// The subtitle color (collapsed input only)
+  final Color? subtitleColor;
+
+  /// The "clear all" action color
+  final Color? actionColor;
+
+  /// The floating label background (collapsed input only)
+  final Color? floatingLabelBackgroundColor;
+
+  /// The floating label text color when hovered or focussed (collapsed input only)
+  final Color? floatingLabelActiveColor;
+
+  /// The floating label text color when idle (collapsed input only)
+  final Color? floatingLabelColor;
+
+  /// Fallback of [ZwapInput.backgroundColor]
+  final Color? backgroundColor;
+
+  /// Fallback of [ZwapInput.enabledBorderColor]
+  final Color? borderColor;
+
+  /// Fallback of [ZwapInput.hoveredBorderColor]
+  final Color? hoveredBorderColor;
+
+  /// Fallback of [ZwapInput.focussedBorderColor]
+  final Color? focussedBorderColor;
+
+  /// Fallback of [ZwapInput.disabledBorderColor]
+  final Color? disabledBorderColor;
+
+  /// Fallback of [ZwapInput.cursorColor]
+  final Color? cursorColor;
+
+  const ZwapInputColors({
+    this.backgroundColor,
+    this.borderColor,
+    this.hoveredBorderColor,
+    this.focussedBorderColor,
+    this.disabledBorderColor,
+    this.cursorColor,
+    this.iconColor,
+    this.successColor,
+    this.selectionColor,
+    this.textColor,
+    this.disabledTextColor,
+    this.placeholderColor,
+    this.labelColor,
+    this.disabledLabelColor,
+    this.helperErrorColor,
+    this.helperSuccessColor,
+    this.subtitleColor,
+    this.actionColor,
+    this.floatingLabelBackgroundColor,
+    this.floatingLabelActiveColor,
+    this.floatingLabelColor,
+  });
+}
+
 /// Custom component for a standard input with a predefined Zwap style
 class ZwapInput extends StatefulWidget {
   final bool _isCollapsed;
@@ -194,6 +285,9 @@ class ZwapInput extends StatefulWidget {
   final TextAlign? textAlign;
   final TextAlignVertical? textAlignVertical;
 
+  /// Colors for the parts without a dedicated parameter, see [ZwapInputColors]
+  final ZwapInputColors? colors;
+
   ZwapInput({
     Key? key,
     this.controller,
@@ -254,6 +348,7 @@ class ZwapInput extends StatefulWidget {
     this.scrollPadding,
     this.textAlign,
     this.textAlignVertical,
+    this.colors,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = false,
@@ -318,6 +413,7 @@ class ZwapInput extends StatefulWidget {
     this.scrollPadding,
     this.textAlign,
     this.textAlignVertical,
+    this.colors,
   })  : assert(fixedInitialText == null || controller == null),
         assert(((minLenght != 0 || showClearAll) && translateKey != null) || (minLenght == 0 && !showClearAll)),
         this._isCollapsed = true,
@@ -386,6 +482,30 @@ class _ZwapInputState extends State<ZwapInput> {
     }
   }
 
+  @override
+  void didUpdateWidget(ZwapInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    final TextEditingController _currentController = _controller;
+    if (_currentController is InitialTextController && widget.fixedInitialTextStyle != oldWidget.fixedInitialTextStyle) {
+      _currentController.fixedInitialStringStyle = widget.fixedInitialTextStyle;
+    }
+  }
+
+  /// Explicit [ZwapInput.colors], then the app wide [ZwapComponentsTheme]
+  ZwapInputColors get _colors => widget.colors ?? ZwapComponentsTheme.maybeOf(context)?.inputColors ?? const ZwapInputColors();
+
+  Color get _background => widget.backgroundColor ?? _colors.backgroundColor ?? ZwapColors.shades0;
+  Color get _enabledBorder => widget.enabledBorderColor ?? _colors.borderColor ?? ZwapColors.neutral300;
+  Color get _hoveredBorder => widget.hoveredBorderColor ?? _colors.hoveredBorderColor ?? ZwapColors.primary200;
+  Color get _focussedBorder => widget.focussedBorderColor ?? _colors.focussedBorderColor ?? ZwapColors.primary300;
+  Color get _disabledBorder => widget.disabledBorderColor ?? _colors.disabledBorderColor ?? ZwapColors.neutral200;
+
+  Color get _helperColor =>
+      widget.helperTextIsError ? (_colors.helperErrorColor ?? ZwapColors.error400) : (_colors.helperSuccessColor ?? ZwapColors.success400);
+
+  Color get _floatingLabelBackground => _colors.floatingLabelBackgroundColor ?? _background;
+
   void _focusListener() {
     if (_hasFocus != _focusNode.hasFocus) {
       setState(() => _hasFocus = _focusNode.hasFocus);
@@ -441,24 +561,24 @@ class _ZwapInputState extends State<ZwapInput> {
     return InputDecoration(
       enabledBorder: _getZwapInputBorder(
         _getBorderColor((_focusNode.hasFocus || _isHovered)
-            ? (widget.hoveredBorderColor ?? ZwapColors.primary200)
-            : (widget.enabledBorderColor ?? ZwapColors.neutral300)),
+            ? _hoveredBorder
+            : _enabledBorder),
       ),
       focusedBorder: _getZwapInputBorder(
-        _getBorderColor(widget.focussedBorderColor ?? ZwapColors.primary300),
+        _getBorderColor(_focussedBorder),
       ),
       disabledBorder: _getZwapInputBorder(
         _getBorderColor(
           (_focusNode.hasFocus || _isHovered)
-              ? (widget.hoveredBorderColor ?? ZwapColors.primary200)
-              : (widget.disabledBorderColor ?? ZwapColors.neutral200),
+              ? _hoveredBorder
+              : _disabledBorder,
           errorColor: ZwapColors.error50,
           successColor: ZwapColors.success200,
         ),
       ),
       contentPadding: widget.internalPadding,
       filled: true,
-      fillColor: widget.backgroundColor ?? ZwapColors.shades0,
+      fillColor: _background,
       hoverColor: ZwapColors.whiteTransparent,
       prefixText: widget.prefixText,
       labelText: widget.dynamicLabel,
@@ -482,18 +602,18 @@ class _ZwapInputState extends State<ZwapInput> {
               },
             ),
       hintText: widget.placeholder,
-      hintStyle: widget.placeholderStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
+      hintStyle: widget.placeholderStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: _colors.placeholderColor ?? ZwapColors.neutral400),
       prefixIcon: widget.prefixIcon != null
           ? Icon(
               widget.prefixIcon,
-              color: ZwapColors.neutral400,
+              color: _colors.iconColor ?? ZwapColors.neutral400,
               size: 24,
             )
           : widget.prefixWidget,
       suffixIcon: (widget.showSuccess && widget.showCheckboxOnSuccessState) || widget.suffixIcon != null
           ? Icon(
               widget.showSuccess ? Icons.check : widget.suffixIcon,
-              color: widget.showSuccess ? ZwapColors.success800 : ZwapColors.neutral700,
+              color: widget.showSuccess ? (_colors.successColor ?? ZwapColors.success800) : (_colors.iconColor ?? ZwapColors.neutral700),
               size: 24,
             )
           : widget.suffixWidget,
@@ -508,7 +628,9 @@ class _ZwapInputState extends State<ZwapInput> {
     }
 
     return Theme(
-      data: Theme.of(context).copyWith(colorScheme: Theme.of(context).colorScheme.copyWith(primary: ZwapColors.primary400)),
+      data: Theme.of(context).copyWith(
+        colorScheme: Theme.of(context).colorScheme.copyWith(primary: _colors.selectionColor ?? ZwapColors.primary400),
+      ),
       child: TextField(
         scrollController: _scrollController,
         controller: this._controller,
@@ -520,13 +642,13 @@ class _ZwapInputState extends State<ZwapInput> {
         autofillHints: widget.autofillHints,
         onChanged: widget.onChanged != null ? (String newValue) => widget.onChanged!(_getOnChangedValue(newValue)) : null,
         textCapitalization: widget.textCapitalization ?? TextCapitalization.sentences,
-        cursorColor: widget.cursorColor ?? ZwapColors.shades100,
+        cursorColor: widget.cursorColor ?? _colors.cursorColor ?? ZwapColors.shades100,
         obscureText: (widget.autoObscureIfPassword && widget.textInputType == TextInputType.visiblePassword) || widget.obscure,
         textAlign: widget.textAlign ?? TextAlign.start,
         focusNode: widget.readOnly ? FocusNode() : _focusNode,
         style: widget.disabled
-            ? widget.disabledTextStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral300)
-            : widget.textStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral700),
+            ? widget.disabledTextStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: _colors.disabledTextColor ?? ZwapColors.neutral300)
+            : widget.textStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: _colors.textColor ?? ZwapColors.neutral700),
         decoration: decorations,
         onSubmitted: widget.keyCallBackFunction,
         readOnly: widget.readOnly,
@@ -550,7 +672,7 @@ class _ZwapInputState extends State<ZwapInput> {
             text: widget.label!,
             customTextStyle: widget.labelTextStyle ??
                 ZwapTextType.bodySemiBold.copyWith(
-                  color: widget.disabled ? ZwapColors.neutral300 : ZwapColors.neutral600,
+                  color: widget.disabled ? (_colors.disabledLabelColor ?? ZwapColors.neutral300) : (_colors.labelColor ?? ZwapColors.neutral600),
                 ),
           ),
         ),
@@ -565,7 +687,11 @@ class _ZwapInputState extends State<ZwapInput> {
         duration: const Duration(milliseconds: 200),
         curve: Curves.decelerate,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: _realTextLenght >= widget.minLenght ? ZwapColors.success300 : ZwapColors.neutral300),
+          borderRadius: BorderRadius.circular(20),
+          color: _realTextLenght >= widget.minLenght
+              ? (_colors.successColor ?? ZwapColors.success300)
+              : _enabledBorder,
+        ),
         height: 2,
         width: _realTextLenght >= widget.minLenght
             ? _containerKey.globalPaintBounds?.width ?? 0
@@ -596,16 +722,17 @@ class _ZwapInputState extends State<ZwapInput> {
                   child: Container(
                     key: _containerKey,
                     decoration: BoxDecoration(
-                      color: widget.backgroundColor ?? ZwapColors.shades0,
+                      color: _background,
                       borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
                       border: widget.forceNoBorders
                           ? null
                           : Border.all(
                               color: widget.disabled
-                                  ? _getBorderColor(ZwapColors.neutral200, errorColor: ZwapColors.error50, successColor: ZwapColors.success200)
+                                  ? _getBorderColor(_disabledBorder,
+                                      errorColor: ZwapColors.error50, successColor: ZwapColors.success200)
                                   : (_focusNode.hasFocus || _isHovered)
-                                      ? _getBorderColor(ZwapColors.primary300)
-                                      : _getBorderColor(ZwapColors.neutral300),
+                                      ? _getBorderColor(widget.focussedBorderColor ?? widget.hoveredBorderColor ?? _focussedBorder)
+                                      : _getBorderColor(_enabledBorder),
                               width: 1,
                               style: BorderStyle.solid,
                             ),
@@ -629,15 +756,16 @@ class _ZwapInputState extends State<ZwapInput> {
                           child: _getInputWidget(
                             decorations: InputDecoration.collapsed(
                               hintText: widget.placeholder!,
-                              hintStyle: widget.placeholderStyle ?? getTextStyle(ZwapTextType.bodyRegular).apply(color: ZwapColors.neutral400),
+                              hintStyle: widget.placeholderStyle ??
+                                  getTextStyle(ZwapTextType.bodyRegular).apply(color: _colors.placeholderColor ?? ZwapColors.neutral400),
                               enabled: !widget.disabled,
                               border: _getZwapInputBorder(
                                 _getBorderColor((_focusNode.hasFocus || _isHovered)
-                                    ? (widget.hoveredBorderColor ?? ZwapColors.primary200)
-                                    : (widget.enabledBorderColor ?? ZwapColors.neutral300)),
+                                    ? _hoveredBorder
+                                    : _enabledBorder),
                               ),
                               filled: true,
-                              fillColor: widget.backgroundColor ?? ZwapColors.shades0,
+                              fillColor: _background,
                             ),
                           ),
                         ),
@@ -655,7 +783,7 @@ class _ZwapInputState extends State<ZwapInput> {
                 ZwapText(
                   text: widget.subtitle!,
                   zwapTextType: ZwapTextType.smallBodyRegular,
-                  textColor: ZwapColors.neutral400,
+                  textColor: _colors.subtitleColor ?? ZwapColors.neutral400,
                 ),
               ],
               if (widget.minLenght > 0 || widget.showClearAll) ...[
@@ -667,6 +795,8 @@ class _ZwapInputState extends State<ZwapInput> {
                   showClearAll: widget.showClearAll,
                   showMinLenghtIndicator: widget.showMinLenghtIndicator,
                   translateKey: widget.translateKey!,
+                  textColor: _colors.subtitleColor,
+                  actionColor: _colors.actionColor,
                 ),
               ],
               Container(
@@ -677,7 +807,7 @@ class _ZwapInputState extends State<ZwapInput> {
                       ? Padding(
                           padding: EdgeInsets.only(top: 7),
                           child: ZwapText(
-                            textColor: widget.helperTextIsError ? ZwapColors.error400 : ZwapColors.success400,
+                            textColor: _helperColor,
                             zwapTextType: ZwapTextType.bodyRegular,
                             text: widget.helperText!,
                           ),
@@ -696,11 +826,11 @@ class _ZwapInputState extends State<ZwapInput> {
                 alignment: Alignment.topLeft,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: ZwapColors.shades0,
+                    color: _floatingLabelBackground,
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [ZwapColors.whiteTransparent, ZwapColors.shades0],
+                      colors: [_floatingLabelBackground.withOpacity(0), _floatingLabelBackground],
                       stops: [0, 0.47],
                     ),
                     borderRadius: BorderRadius.circular(3),
@@ -710,10 +840,10 @@ class _ZwapInputState extends State<ZwapInput> {
                     text: widget.label!,
                     customTextStyle: getTextStyle(ZwapTextType.extraSmallBodyRegular).copyWith(
                       color: _isHovered
-                          ? ZwapColors.primary400
+                          ? (_colors.floatingLabelActiveColor ?? ZwapColors.primary400)
                           : _hasFocus
-                              ? ZwapColors.primary700
-                              : ZwapColors.neutral500,
+                              ? (_colors.floatingLabelActiveColor ?? ZwapColors.primary700)
+                              : (_colors.floatingLabelColor ?? ZwapColors.neutral500),
                       fontSize: 11,
                       letterSpacing: 0.1,
                     ),
@@ -746,6 +876,8 @@ class _ZwapInputState extends State<ZwapInput> {
             showClearAll: widget.showClearAll,
             showMinLenghtIndicator: widget.showMinLenghtIndicator,
             translateKey: widget.translateKey!,
+            textColor: _colors.subtitleColor,
+            actionColor: _colors.actionColor,
           ),
         Container(
           width: double.infinity,
@@ -756,7 +888,7 @@ class _ZwapInputState extends State<ZwapInput> {
                     ? Padding(
                         padding: EdgeInsets.only(top: 7),
                         child: ZwapText(
-                          textColor: widget.helperTextIsError ? ZwapColors.error400 : ZwapColors.success400,
+                          textColor: _helperColor,
                           zwapTextType: ZwapTextType.bodyRegular,
                           text: widget.helperText!,
                         ),
@@ -779,6 +911,9 @@ class _BottomContentWidget extends StatefulWidget {
   final String Function(String) translateKey;
   final Function() onClearAll;
 
+  final Color? textColor;
+  final Color? actionColor;
+
   const _BottomContentWidget({
     required this.showClearAll,
     required this.minLength,
@@ -786,6 +921,8 @@ class _BottomContentWidget extends StatefulWidget {
     required this.showMinLenghtIndicator,
     required this.translateKey,
     required this.currentTextLenght,
+    this.textColor,
+    this.actionColor,
     Key? key,
   }) : super(key: key);
 
@@ -824,11 +961,17 @@ class _BottomContentWidgetState extends State<_BottomContentWidget> {
                   ZwapTextSpan.fromZwapTypography(
                     text: "${widget.translateKey('zwap_input_write_at_least')} ",
                     textType: ZwapTextType.smallBodyRegular,
+                    textColor: widget.textColor,
                   ),
-                  ZwapTextSpan.fromZwapTypography(text: "$_leftChars", textType: ZwapTextType.smallBodyBold),
+                  ZwapTextSpan.fromZwapTypography(
+                    text: "$_leftChars",
+                    textType: ZwapTextType.smallBodyBold,
+                    textColor: widget.textColor,
+                  ),
                   ZwapTextSpan.fromZwapTypography(
                     text: " ${widget.translateKey('zwap_input_characters')}",
                     textType: ZwapTextType.smallBodyRegular,
+                    textColor: widget.textColor,
                   ),
                 ],
               ),
@@ -844,7 +987,7 @@ class _BottomContentWidgetState extends State<_BottomContentWidget> {
             child: ZwapText(
               text: widget.translateKey('zwap_input_clear_all'),
               zwapTextType: ZwapTextType.smallBodyRegular,
-              textColor: ZwapColors.primary700,
+              textColor: widget.actionColor ?? ZwapColors.primary700,
             ),
           ),
       ],

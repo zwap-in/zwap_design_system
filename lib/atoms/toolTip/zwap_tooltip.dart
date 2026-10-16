@@ -237,6 +237,10 @@ class _ZwapTooltipState extends State<ZwapTooltip> {
           setState(() => _showTooltip = widget.showTooltip);
         },
       );
+    } else if (_entry?.mounted ?? false) {
+      // The overlay reads [widget] in its own entry: rebuild it so an open
+      // tooltip picks up new colors or message from the parent.
+      WidgetsBinding.instance.addPostFrameCallback((_) => _entry?.markNeedsBuild());
     }
 
     super.didUpdateWidget(oldWidget);

@@ -1357,3 +1357,15 @@ a
 
 ## 0.1.824
 * Updates text component's regex
+
+## 0.1.825
+* [ZwapButton] reads its decorations on every build, so a parent rebuild (e.g. a theme change) is applied without remounting it
+* Added container colors to [ZwapButtonOptions]; open options, tooltips, calendars and dynamic input overlays now rebuild when their parent changes
+* Added [ZwapInputColors] to [ZwapInput] for icons, selection, texts, helper and floating label; the collapsed input now uses the border color params
+* [ZwapCheckBox] uses the icon colors of its decorations, and [ZwapCheckBoxStateDecoration.copyWith] keeps every field
+* Added [ZwapTextColors] to theme links, overflow tooltip and selection of [ZwapText] and [ZwapRichText]; selectable rich texts keep the ambient theme
+* Added background, divider and button decorations to [NewModal], [NewModalTopRightWidget] and [NewModalBottomWidget]
+* Added [ZwapCalendarOverlayColors] to [ZwapCalendarInput] and [ZwapDatePicker] (days, controls, arrows and years included), plus input colors to [ZwapDatePicker]
+* Added optional `backgroundColor` and `contentColor` to the [ZwapToasts] show methods
+* The [ZwapDynamicInput] delete icon follows `activeColor`
+* Added [ZwapComponentsTheme], an inherited widget with the app wide defaults of [ZwapInput], [NewModal], [NewModalTopRightWidget], [ZwapCalendarInput] and [ZwapDatePicker]: components read it during build, so they follow theme changes without passing colors at every call site. Their color params are now nullable and fall back to it

@@ -16,6 +16,12 @@ class NewModalBottomWidget extends StatelessWidget {
 
   final Color? loaderColor;
 
+  /// Decorations of the main button, default to [ZwapButtonDecorations.primaryLight]
+  final ZwapButtonDecorations? buttonDecorations;
+
+  /// Decorations of the second button, default to [ZwapButtonDecorations.tertiary]
+  final ZwapButtonDecorations? secondButtonDecorations;
+
   NewModalBottomWidget.loader({
     required this.loaderColor,
     Key? key,
@@ -27,6 +33,8 @@ class NewModalBottomWidget extends StatelessWidget {
         this.secondButtonText = null,
         this.enabled = false,
         this.secondEnabled = false,
+        this.buttonDecorations = null,
+        this.secondButtonDecorations = null,
         super(key: key);
 
   /// All value must be not null
@@ -34,6 +42,7 @@ class NewModalBottomWidget extends StatelessWidget {
     required this.buttonText,
     required this.onTapButton,
     this.enabled = true,
+    this.buttonDecorations,
     Key? key,
   })  : assert(buttonText != null),
         this._type = _NewModalBottomWidgetType.singleButton,
@@ -41,6 +50,7 @@ class NewModalBottomWidget extends StatelessWidget {
         this.onTapSecondButton = null,
         this.secondButtonText = null,
         this.secondEnabled = false,
+        this.secondButtonDecorations = null,
         super(key: key);
 
   NewModalBottomWidget.doubleButton({
@@ -50,11 +60,19 @@ class NewModalBottomWidget extends StatelessWidget {
     required this.secondButtonText,
     this.enabled = true,
     this.secondEnabled = true,
+    this.buttonDecorations,
+    this.secondButtonDecorations,
     Key? key,
   })  : assert(buttonText != null && secondButtonText != null),
         this._type = _NewModalBottomWidgetType.doubleButton,
         this.loaderColor = null,
         super(key: key);
+
+  ZwapButtonDecorations get _buttonDecorations =>
+      buttonDecorations ?? ZwapButtonDecorations.primaryLight(internalPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20));
+
+  ZwapButtonDecorations get _secondButtonDecorations =>
+      secondButtonDecorations ?? ZwapButtonDecorations.tertiary(internalPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20));
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +86,7 @@ class NewModalBottomWidget extends StatelessWidget {
             width: double.infinity,
             height: 50,
             buttonChild: ZwapButtonChild.text(text: buttonText!),
-            decorations: ZwapButtonDecorations.primaryLight(internalPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20)),
+            decorations: _buttonDecorations,
             disabled: !enabled,
             onTap: enabled ? onTapButton : null,
           ),
@@ -83,7 +101,7 @@ class NewModalBottomWidget extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 buttonChild: ZwapButtonChild.text(text: buttonText!),
-                decorations: ZwapButtonDecorations.primaryLight(internalPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20)),
+                decorations: _buttonDecorations,
                 disabled: !enabled,
                 onTap: enabled ? onTapButton : null,
               ),
@@ -94,7 +112,7 @@ class NewModalBottomWidget extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 buttonChild: ZwapButtonChild.text(text: secondButtonText!),
-                decorations: ZwapButtonDecorations.tertiary(internalPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20)),
+                decorations: _secondButtonDecorations,
                 disabled: !enabled,
                 onTap: secondEnabled ? onTapSecondButton : null,
               ),

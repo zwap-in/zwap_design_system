@@ -318,11 +318,14 @@ class _ZwapRichTextState extends State<ZwapRichText> {
       return _LinkedMultyStyleText(textSpans: widget.textSpans, textAlign: widget.textAlign);
 
     if (widget.selectable) {
+      final Color _selectionColor = ZwapTextColors.of(context).selectionColor;
+
       return Theme(
-        data: ThemeData(
+        // copyWith keeps the ambient theme, only the selection colors change
+        data: Theme.of(context).copyWith(
           textSelectionTheme: TextSelectionThemeData(
-            selectionColor: ZwapColors.primary400.withOpacity(.4),
-            selectionHandleColor: ZwapColors.primary400,
+            selectionColor: _selectionColor.withOpacity(.4),
+            selectionHandleColor: _selectionColor,
           ),
         ),
         child: SelectableText.rich(

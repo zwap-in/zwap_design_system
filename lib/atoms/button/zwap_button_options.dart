@@ -26,10 +26,22 @@ class ZwapButtonOptions {
 
   final bool openOnBottom;
 
+  /// Background of the options overlay
+  final Color backgroundColor;
+
+  /// Border of the options overlay
+  final Color borderColor;
+
+  /// Divider between normal and destructive options
+  final Color dividerColor;
+
   const ZwapButtonOptions({
     this.defaultDecorations = const ZwapButtonOptionDecorations.defaultDecoration(),
     required this.options,
     this.openOnBottom = false,
+    this.backgroundColor = const Color(0xff19193B),
+    this.borderColor = ZwapColors.text65,
+    this.dividerColor = const Color(0x1AFFFFFF),
   });
 }
 
@@ -140,6 +152,14 @@ class _ZwapButtonOptionsAppendiceState extends State<_ZwapButtonOptionsAppendice
   }
 
   @override
+  void didUpdateWidget(_ZwapButtonOptionsAppendice oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // The overlay is built in its own entry: rebuild it so an open menu
+    // picks up new options or colors from the parent.
+    if (_isOpened) WidgetsBinding.instance.addPostFrameCallback((_) => _entry?.markNeedsBuild());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       key: _key,
@@ -211,13 +231,13 @@ class _ZwapButtonOptionOverlay extends StatelessWidget {
         width: 200,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: const Color(0xff19193B),
+          color: options.backgroundColor,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(color: ZwapColors.shades100.withOpacity(.2), offset: const Offset(0, 20), blurRadius: 60),
             BoxShadow(color: ZwapColors.shades100.withOpacity(.3), offset: const Offset(0, 30), blurRadius: 60, spreadRadius: -4),
           ],
-          border: Border.all(color: ZwapColors.text65),
+          border: Border.all(color: options.borderColor),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -237,7 +257,7 @@ class _ZwapButtonOptionOverlay extends StatelessWidget {
               Divider(
                 height: 32,
                 thickness: 1,
-                color: ZwapColors.shades0.withOpacity(.1),
+                color: options.dividerColor,
               ),
             ..._destructiveOptions.mapIndexed(
               (i, o) => Padding(
