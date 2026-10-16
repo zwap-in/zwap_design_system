@@ -4,11 +4,21 @@ import 'package:flutter/material.dart';
 
 class InitialTextController extends TextEditingController {
   final String fixedInitialString;
-  final TextStyle? fixedInitialStringStyle;
+  TextStyle? _fixedInitialStringStyle;
 
-  InitialTextController({String? text, required this.fixedInitialString, this.fixedInitialStringStyle})
-      : super(text: '$fixedInitialString${text ?? ''}') {
+  InitialTextController({String? text, required this.fixedInitialString, TextStyle? fixedInitialStringStyle})
+      : _fixedInitialStringStyle = fixedInitialStringStyle,
+        super(text: '$fixedInitialString${text ?? ''}') {
     super.value = value.copyWith(selection: TextSelection.collapsed(offset: fixedInitialString.length));
+  }
+
+  TextStyle? get fixedInitialStringStyle => _fixedInitialStringStyle;
+
+  /// Updating the style repaints the fixed prefix (e.g. after a theme change)
+  set fixedInitialStringStyle(TextStyle? style) {
+    if (style == _fixedInitialStringStyle) return;
+    _fixedInitialStringStyle = style;
+    notifyListeners();
   }
 
   @override

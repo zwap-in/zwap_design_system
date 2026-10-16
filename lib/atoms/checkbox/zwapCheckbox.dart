@@ -91,12 +91,30 @@ class ZwapCheckBoxStateDecoration {
     Color? hoverColor,
     Color? disabledColor,
     Color? errorColor,
+    Border? border,
+    Border? hoverBorder,
+    Border? disabledBorder,
+    Border? errorBorder,
+    Radius? borderRadius,
+    Color? iconColor,
+    Color? iconHoverColor,
+    Color? iconDisabledColor,
+    Color? iconErrorColor,
   }) {
     return ZwapCheckBoxStateDecoration(
       color: color ?? this.color,
       hoverColor: hoverColor ?? this.hoverColor,
       disabledColor: disabledColor ?? this.disabledColor,
       errorColor: errorColor ?? this.errorColor,
+      border: border ?? this.border,
+      hoverBorder: hoverBorder ?? this.hoverBorder,
+      disabledBorder: disabledBorder ?? this.disabledBorder,
+      errorBorder: errorBorder ?? this.errorBorder,
+      borderRadius: borderRadius ?? this.borderRadius,
+      iconColor: iconColor ?? this.iconColor,
+      iconHoverColor: iconHoverColor ?? this.iconHoverColor,
+      iconDisabledColor: iconDisabledColor ?? this.iconDisabledColor,
+      iconErrorColor: iconErrorColor ?? this.iconErrorColor,
     );
   }
 }
@@ -206,6 +224,19 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
                       ? _decorations.unselected.hoverColor
                       : _decorations.unselected.color;
 
+  Color get _currentIconColor {
+    final ZwapCheckBoxStateDecoration _state = _value == null ? _decorations.indeterminate : _decorations.selected;
+    final Color? _color = _disabled
+        ? _state.iconDisabledColor
+        : _error
+            ? _state.iconErrorColor
+            : _isHovered
+                ? _state.iconHoverColor
+                : _state.iconColor;
+
+    return _color ?? ZwapColors.shades0;
+  }
+
   Border? get _currentBorder => _value == null
       ? _disabled
           ? _decorations.indeterminate.disabledBorder
@@ -274,14 +305,14 @@ class _ZwapCheckBoxState extends State<ZwapCheckBox> {
                   ? Icon(
                       Icons.remove_rounded,
                       key: UniqueKey(),
-                      color: ZwapColors.shades0,
+                      color: _currentIconColor,
                       size: widget.size != null ? (widget.size! * .8) : getMultipleConditions<double>(17, 17, 16, 15, 15),
                     )
                   : _value!
                       ? Icon(
                           Icons.check_rounded,
                           key: UniqueKey(),
-                          color: ZwapColors.shades0,
+                          color: _currentIconColor,
                           size: widget.size != null ? (widget.size! * .8) : getMultipleConditions<double>(17, 17, 16, 15, 15),
                         )
                       : Container(),

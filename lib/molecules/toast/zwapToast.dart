@@ -115,6 +115,8 @@ class ZwapToasts {
     Duration? duration,
     bool showDismiss = false,
     Function()? onDismiss,
+    Color? backgroundColor,
+    Color? contentColor,
   }) {
     if (_instance._lastToast != null) {
       _instance._lastToast!.dismiss();
@@ -125,6 +127,8 @@ class ZwapToasts {
         type: type,
         text: message,
         showDismiss: showDismiss,
+        backgroundColor: backgroundColor ?? type.bgColor,
+        contentColor: contentColor ?? type.contentColor,
         onDismiss: () {
           _instance._lastToast?.dismiss(showAnim: true);
           if (onDismiss != null) onDismiss();
@@ -141,12 +145,16 @@ class ZwapToasts {
   }
 
   /// Show a [ZwapToastType.success] toast
+  ///
+  /// [backgroundColor] and [contentColor] override the [ZwapToastType] defaults
   static void showSuccessToast(
     String message, {
     required BuildContext context,
     Duration? duration,
     bool showDismiss = false,
     Function()? onDismiss,
+    Color? backgroundColor,
+    Color? contentColor,
   }) =>
       _showToast(
         ZwapToastType.success,
@@ -155,15 +163,21 @@ class ZwapToasts {
         duration: duration,
         onDismiss: onDismiss,
         showDismiss: showDismiss,
+        backgroundColor: backgroundColor,
+        contentColor: contentColor,
       );
 
   /// Show a [ZwapToastType.error] toast
+  ///
+  /// [backgroundColor] and [contentColor] override the [ZwapToastType] defaults
   static void showErrorToast(
     String message, {
     required BuildContext context,
     Duration? duration,
     bool showDismiss = true,
     Function()? onDismiss,
+    Color? backgroundColor,
+    Color? contentColor,
   }) =>
       _showToast(
         ZwapToastType.error,
@@ -172,15 +186,21 @@ class ZwapToasts {
         duration: duration,
         onDismiss: onDismiss,
         showDismiss: showDismiss,
+        backgroundColor: backgroundColor,
+        contentColor: contentColor,
       );
 
   /// Show a [ZwapToastType.warning] toast
+  ///
+  /// [backgroundColor] and [contentColor] override the [ZwapToastType] defaults
   static void showWarningToast(
     String message, {
     required BuildContext context,
     Duration? duration,
     bool showDismiss = false,
     Function()? onDismiss,
+    Color? backgroundColor,
+    Color? contentColor,
   }) =>
       _showToast(
         ZwapToastType.warning,
@@ -189,15 +209,21 @@ class ZwapToasts {
         duration: duration,
         onDismiss: onDismiss,
         showDismiss: showDismiss,
+        backgroundColor: backgroundColor,
+        contentColor: contentColor,
       );
 
   /// Show a [ZwapToastType.info] toast
+  ///
+  /// [backgroundColor] and [contentColor] override the [ZwapToastType] defaults
   static void showInfoToast(
     String message, {
     required BuildContext context,
     Duration? duration,
     bool showDismiss = false,
     Function()? onDismiss,
+    Color? backgroundColor,
+    Color? contentColor,
   }) =>
       _showToast(
         ZwapToastType.info,
@@ -206,6 +232,8 @@ class ZwapToasts {
         duration: duration,
         onDismiss: onDismiss,
         showDismiss: showDismiss,
+        backgroundColor: backgroundColor,
+        contentColor: contentColor,
       );
 }
 
@@ -216,11 +244,16 @@ class _ZwapToast extends StatelessWidget {
   final bool showDismiss;
   final Function() onDismiss;
 
+  final Color backgroundColor;
+  final Color contentColor;
+
   const _ZwapToast({
     required this.type,
     required this.text,
     required this.showDismiss,
     required this.onDismiss,
+    required this.backgroundColor,
+    required this.contentColor,
     super.key,
   });
 
@@ -234,20 +267,20 @@ class _ZwapToast extends StatelessWidget {
           constraints: BoxConstraints(maxWidth: min(700, MediaQuery.of(context).size.width - 50)),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(21),
-            color: type.bgColor,
+            color: backgroundColor,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(type.icon, color: type.contentColor, size: 16),
+              Icon(type.icon, color: contentColor, size: 16),
               const SizedBox(width: 8),
               Flexible(
                 child: Transform.translate(
                   offset: const Offset(0, -1),
                   child: ZwapText(
                     text: text,
-                    textColor: type.contentColor,
+                    textColor: contentColor,
                     zwapTextType: ZwapTextType.mediumBodyMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -257,7 +290,7 @@ class _ZwapToast extends StatelessWidget {
                 const SizedBox(width: 8),
                 InkWell(
                   onTap: onDismiss,
-                  child: Icon(Icons.close, color: type.contentColor, size: 16),
+                  child: Icon(Icons.close, color: contentColor, size: 16),
                 ),
               ],
             ],

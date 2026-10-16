@@ -1,4 +1,5 @@
 export 'theme/zwapTheme.dart';
+export 'theme/zwap_components_theme.dart';
 export 'colors/zwapColors.dart';
 export 'constants/zwapConstants.dart';
 export 'hover/zwapHover.dart';

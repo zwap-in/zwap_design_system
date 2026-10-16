@@ -23,6 +23,60 @@ extension _DateExt on DateTime? {
   }
 }
 
+/// Colors of the calendar overlay opened by [ZwapCalendarInput] and [ZwapDatePicker].
+/// Every null field keeps the default Zwap color.
+class ZwapCalendarOverlayColors {
+  /// Overlay surface
+  final Color? backgroundColor;
+
+  /// Selected day highlight
+  final Color? selectionColor;
+
+  /// Days, weekdays and month/year controls text color
+  final Color? textColor;
+
+  /// Text color of the selected day
+  final Color? selectedTextColor;
+
+  /// Text color of the disabled days
+  final Color? disabledTextColor;
+
+  /// Decorations of the "Done" button, default to [ZwapButtonDecorations.primaryLight]
+  final ZwapButtonDecorations? doneButtonDecorations;
+
+  const ZwapCalendarOverlayColors({
+    this.backgroundColor,
+    this.selectionColor,
+    this.textColor,
+    this.selectedTextColor,
+    this.disabledTextColor,
+    this.doneButtonDecorations,
+  });
+
+  calendar.CalendarDatePicker2Config get config => calendar.CalendarDatePicker2Config(
+        selectedDayHighlightColor: selectionColor ?? ZwapColors.primary700,
+        disabledDayTextStyle: disabledTextColor == null ? null : TextStyle(color: disabledTextColor),
+      );
+
+  /// The calendar reads days, weekdays, controls, arrows and years from the
+  /// Material [ColorScheme]: wrap it so every part uses these colors.
+  Widget wrapCalendar(BuildContext context, Widget calendar) {
+    final ThemeData theme = Theme.of(context);
+
+    return Theme(
+      data: theme.copyWith(
+        // Null fields keep the ambient scheme, as before these colors existed
+        colorScheme: theme.colorScheme.copyWith(
+          primary: selectionColor ?? ZwapColors.primary700,
+          onPrimary: selectedTextColor,
+          onSurface: textColor,
+        ),
+      ),
+      child: calendar,
+    );
+  }
+}
+
 class ZwapCalendarInput extends StatefulWidget {
   final DateTime? selectedDate;
   final void Function(DateTime?)? onDateSelected;
@@ -73,9 +127,13 @@ class ZwapCalendarInput extends StatefulWidget {
   final double? height;
   final EdgeInsets? internalPadding;
 
+  /// Colors of the calendar overlay, default from [ZwapComponentsTheme]
+  final ZwapCalendarOverlayColors? overlayColors;
+
   /// Date are compared only with day, month and year. So DateTime(2022, 10, 4, 23, 53)
   /// is the same date of DateTime(2022, 10, 4, 8, 12, 33)
   const ZwapCalendarInput({
+    this.overlayColors,
     this.canRemoveDate = false,
     this.dateFormatString = 'dd/MM/yyyy',
     this.onDateSelected,
@@ -131,6 +189,10 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
       _calendarProvider.updateDate(widget.selectedDate);
     }
 
+    // The overlay reads [widget] in its own entry: rebuild it so an open
+    // calendar picks up new colors from the parent.
+    if (_isCalendarOpen) WidgetsBinding.instance.addPostFrameCallback((_) => _calendarEntry?.markNeedsBuild());
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -160,6 +222,7 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
               child: _CalendarPickerOverlay(
                 onlyFutureDates: widget.onlyFutureDates,
                 onDonePressed: () => _closeCalendar(),
+                colors: widget.overlayColors,
               ),
             ),
           ),
@@ -273,10 +336,12 @@ class _ZwapCalendarInputState extends State<ZwapCalendarInput> {
 class _CalendarPickerOverlay extends StatefulWidget {
   final bool onlyFutureDates;
   final Function() onDonePressed;
+  final ZwapCalendarOverlayColors? colors;
 
   const _CalendarPickerOverlay({
     required this.onDonePressed,
     required this.onlyFutureDates,
+    required this.colors,
     Key? key,
   }) : super(key: key);
 
@@ -313,6 +378,8 @@ class _CalendarPickerOverlayState extends State<_CalendarPickerOverlay> {
     final String Function(String)? _translateText = context.select<_ZwapCalendarInputProvider, String Function(String)?>((pro) => pro.translateText);
 
     final String _doneCTA = _translateText == null ? _defaultCopy : _translateText('done_cta');
+    final ZwapCalendarOverlayColors colors =
+        widget.colors ?? ZwapComponentsTheme.maybeOf(context)?.calendarColors ?? const ZwapCalendarOverlayColors();
 
     return Material(
       color: ZwapColors.transparent,
@@ -337,23 +404,27 @@ class _CalendarPickerOverlayState extends State<_CalendarPickerOverlay> {
               padding: const EdgeInsets.only(bottom: 10),
               width: 300,
               decoration: BoxDecoration(
-                color: ZwapColors.shades0,
+                color: colors.backgroundColor ?? ZwapColors.shades0,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  calendar.CalendarDatePicker2(
-                    config: calendar.CalendarDatePicker2Config(selectedDayHighlightColor: ZwapColors.primary700),
-                    initialValue: [_selectedDate],
-                    selectableDayPredicate: widget.onlyFutureDates ? (date) => date.isAfter(DateTime.now().subtract(const Duration(days: 1))) : null,
-                    onValueChanged: (date) => context.read<_ZwapCalendarInputProvider>().selectedDate = date.firstOrNull,
+                  colors.wrapCalendar(
+                    context,
+                    calendar.CalendarDatePicker2(
+                      config: colors.config,
+                      initialValue: [_selectedDate],
+                      selectableDayPredicate:
+                          widget.onlyFutureDates ? (date) => date.isAfter(DateTime.now().subtract(const Duration(days: 1))) : null,
+                      onValueChanged: (date) => context.read<_ZwapCalendarInputProvider>().selectedDate = date.firstOrNull,
+                    ),
                   ),
                   ZwapButton(
                     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     width: double.infinity,
                     height: 44,
-                    decorations: ZwapButtonDecorations.primaryLight(),
+                    decorations: colors.doneButtonDecorations ?? ZwapButtonDecorations.primaryLight(),
                     buttonChild: ZwapButtonChild.text(text: _doneCTA, fontSize: 15, fontWeight: FontWeight.w500),
                     onTap: widget.onDonePressed,
                   ),

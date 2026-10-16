@@ -279,8 +279,14 @@ class _ZwapButtonState extends State<ZwapButton> {
   final GlobalKey _buttonContentKey = GlobalKey();
 
   late final FocusNode _focusNode;
-  late final ZwapButtonDecorations _decorations;
-  late final ZwapButtonDecorations _selectedDecorations;
+
+  /// Always read from [widget] so a parent rebuild with new decorations
+  /// (e.g. after a theme change) is applied without remounting the button.
+  ///
+  /// The default is built on access: [ZwapButtonDecorations.primaryLight]
+  /// reads [ZwapButtonDecorations.primaryColor], which can change at runtime.
+  ZwapButtonDecorations get _decorations => widget.decorations ?? ZwapButtonDecorations.primaryLight();
+  ZwapButtonDecorations get _selectedDecorations => widget.selectedDecorations ?? ZwapButtonDecorations.primaryLight();
 
   late final Map<Type, Action<Intent>>? _actions;
   late final Map<ShortcutActivator, Intent>? _shortcuts;
@@ -304,8 +310,6 @@ class _ZwapButtonState extends State<ZwapButton> {
     super.initState();
 
     _focusNode = widget.focusNode ?? FocusNode();
-    _decorations = widget.decorations ?? ZwapButtonDecorations.primaryLight();
-    _selectedDecorations = widget.selectedDecorations ?? ZwapButtonDecorations.primaryLight();
 
     _completion = widget.completionValue;
 

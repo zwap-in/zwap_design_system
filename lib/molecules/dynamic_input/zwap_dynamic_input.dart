@@ -152,6 +152,7 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
     if (_focussed != widget.focussed) setState(() => _focussed = widget.focussed);
     if (_dynamicLabel != widget.dynamicLabel) setState(() => _dynamicLabel = widget.dynamicLabel);
     if (_showDeleteIcon != widget.showDeleteIcon) setState(() => _showDeleteIcon = widget.showDeleteIcon);
+    if (_isOverlayOpen) WidgetsBinding.instance.addPostFrameCallback((_) => _entry?.markNeedsBuild());
     super.didUpdateWidget(oldWidget);
   }
 
@@ -187,25 +188,29 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
     if (_overlayBottomOffset != null) _overlayBottomOffset = _overlayBottomOffset! + widget.translateOffset.dy;
     if (_overlayLeftOffset != null) _overlayLeftOffset = _overlayLeftOffset! + widget.translateOffset.dx;
 
-    final Widget _child = ZwapOverlayEntryWidget(
-      onAutoClose: _closeOverlay,
-      child: ZwapOverlayEntryChild(
-        key: _entryKey,
-        top: _overlayTopOffset,
-        bottom: _overlayBottomOffset,
-        left: _overlayLeftOffset,
-        child: _ZwapDynamicInputOverlay(
-          child: widget.overlay,
-          width: max(widget.minOverlayWidth ?? 220, _inputRect.width),
-          color: widget.overlayColor,
-        ),
-      ),
-      entity: _entry,
-    );
+    final double _overlayWidth = max(widget.minOverlayWidth ?? 220, _inputRect.width);
+
+    // Built inside the entry builder so [markNeedsBuild] picks up the
+    // current [widget.overlay] and [widget.overlayColor].
+    Widget _buildChild() => ZwapOverlayEntryWidget(
+          onAutoClose: _closeOverlay,
+          child: ZwapOverlayEntryChild(
+            key: _entryKey,
+            top: _overlayTopOffset,
+            bottom: _overlayBottomOffset,
+            left: _overlayLeftOffset,
+            child: _ZwapDynamicInputOverlay(
+              child: widget.overlay,
+              width: _overlayWidth,
+              color: widget.overlayColor,
+            ),
+          ),
+          entity: _entry,
+        );
 
     Overlay.of(context).insert(
       _entry = OverlayEntry(
-        builder: (_) => widget.builder != null ? widget.builder!(context, _child) : _child,
+        builder: (_) => widget.builder != null ? widget.builder!(context, _buildChild()) : _buildChild(),
       ),
     );
 
@@ -283,7 +288,7 @@ class ZwapDynamicInputState extends State<ZwapDynamicInput> {
                           margin: const EdgeInsets.symmetric(horizontal: 8),
                           decorations: ZwapButtonDecorations.quaternary(
                             internalPadding: EdgeInsets.zero,
-                            contentColor: ZwapColors.primary900Dark,
+                            contentColor: widget.activeColor ?? ZwapColors.primary900Dark,
                             backgroundColor: ZwapColors.whiteTransparent,
                           ),
                           buttonChild: ZwapButtonChild.customIcon(

@@ -503,6 +503,7 @@ class _ZwapTextState extends State<ZwapText> {
     }
 
     bool _containsUrls = actualText.contains(_globalRegExp);
+    final Color _linkColor = ZwapTextColors.of(context).linkColor;
 
     Widget _highlighText() {
       final List<Match> matches = _globalRegExp.allMatches(actualText).toList();
@@ -526,9 +527,9 @@ class _ZwapTextState extends State<ZwapText> {
                 return ZwapTextSpan(
                   text: match.group(0) ?? '',
                   textStyle: _textStyle.copyWith(
-                    color: ZwapColors.primary400,
+                    color: _linkColor,
                     decoration: isUrl ? TextDecoration.underline : null,
-                    decorationColor: ZwapColors.primary400,
+                    decorationColor: _linkColor,
                     decorationThickness: 1.2,
                   ),
                   cursor: SystemMouseCursors.click,
@@ -606,15 +607,17 @@ class __CustomTooltipState extends State<_CustomTooltip> {
 
   @override
   Widget build(BuildContext context) {
+    final ZwapTextColors _colors = ZwapTextColors.of(context);
+
     return MouseRegion(
       onEnter: (isHovering) => setState(() => _showTooltip = widget.getIsOverflown()),
       onExit: (_) => setState(() => _showTooltip = false),
       child: ZwapTooltip(
         position: TooltipPosition.bottom,
-        borderColor: ZwapColors.text65,
-        backgroundColor: ZwapColors.primary900Dark,
+        borderColor: _colors.tooltipBorderColor,
+        backgroundColor: _colors.tooltipBackgroundColor,
         simple: true,
-        style: ZwapTextType.mediumBodyRegular.copyWith(color: ZwapColors.shades0),
+        style: ZwapTextType.mediumBodyRegular.copyWith(color: _colors.tooltipTextColor),
         radius: 8,
         transationOffset: const Offset(0, 4),
         message: widget.text,

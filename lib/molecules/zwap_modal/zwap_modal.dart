@@ -66,8 +66,16 @@ class NewModal extends StatefulWidget {
 
   final bool showDivider;
 
+  /// Modal surface color, default from [ZwapComponentsTheme] then white
+  final Color? backgroundColor;
+
+  /// Color of the divider under the title section, default from [ZwapComponentsTheme]
+  final Color? dividerColor;
+
   NewModal({
     required this.width,
+    this.backgroundColor,
+    this.dividerColor,
     this.topLeftWidget,
     this.title,
     this.topRightWidget,
@@ -173,7 +181,7 @@ class _NewModalState extends State<NewModal> {
       padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
       child: Material(
         borderRadius: BorderRadius.circular(8),
-        color: ZwapColors.shades0,
+        color: widget.backgroundColor ?? ZwapComponentsTheme.maybeOf(context)?.modalBackgroundColor ?? ZwapColors.shades0,
         child: Container(
           width: widget.width,
           constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.2, maxHeight: MediaQuery.of(context).size.height * 0.8),
@@ -184,7 +192,12 @@ class _NewModalState extends State<NewModal> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _getTitleSection(),
-              if (widget.showDivider) Divider(height: 2, thickness: 1, color: ZwapColors.neutral300),
+              if (widget.showDivider)
+                Divider(
+                  height: 2,
+                  thickness: 1,
+                  color: widget.dividerColor ?? ZwapComponentsTheme.maybeOf(context)?.modalDividerColor ?? ZwapColors.neutral300,
+                ),
               _getSingleBodySection(),
               if (widget.bottomWidget != null)
                 AnimatedSwitcher(
